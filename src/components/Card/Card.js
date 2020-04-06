@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Card.module.css';
-
+/// rotem
 // show the details of each card that in the garage right now
 const card = ( props ) => {
     const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
