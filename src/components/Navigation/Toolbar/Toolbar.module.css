@@ -4,7 +4,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #69B18D;
+    background-color: whitesmoke;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,6 +23,7 @@
 
 @media (max-width: 499px) {
     .DesktopOnly {
+        
         display: none;
     }
 }

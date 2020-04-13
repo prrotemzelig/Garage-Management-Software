@@ -25,7 +25,7 @@ class Layout extends Component{
 
     render(){
         return(
-            <Aux>  
+            <Aux >  
             <Toolbar
                 isAuth={this.props.isAuthenticated}
                 drawerToggleClicked={this.sideDrawerToggleHandler}/>
@@ -39,6 +39,8 @@ class Layout extends Component{
         </Aux>)
     }
 } 
+
+
 
 const mapStateToProps = state => {
     return {

@@ -104,20 +104,22 @@ class Auth extends Component {
             authRedirect = <Redirect to={this.props.authRedirectPath}/>
         }
 
-        return (       
+        return (   
+        
+        <div className={ classes.backgroundImage}>   
             <div className={classes.Auth}>
                  <p>הכנס פרטים להתחברות</p>
                 {authRedirect}
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
-                    <Button btnType="Success">SUBMIT</Button>
+                    <Button btnType="Success">כניסה</Button>
                 </form>
                 <Button
                     clicked={this.switchAuthModeHandler} 
-                    btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+                    btnType="Danger">{this.state.isSignup ? 'הרשמה':'התחברות'}</Button>
             </div>
-
+         </div> 
         );
     }
 }

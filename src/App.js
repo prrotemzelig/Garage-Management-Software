@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 import classes from './App.module.css';
 import Layout from './hoc/Layout/Layout';
@@ -8,6 +9,7 @@ import OpeningPage from './containers/openingPage/openingPage';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 const asyncCards = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/Cards/Cards');
@@ -21,6 +23,10 @@ const asyncOpenCard = asyncComponent(() => {
   return import('./containers/OpenNewCard/OpenNewCard');
 });
 
+const asyncOpenTwo = asyncComponent(() => {
+  return import('./containers/OpenNewCard/openNew');
+});
+
 
 class App extends Component {
   
@@ -29,6 +35,7 @@ class App extends Component {
   }
 
   render () {
+    
     let routes = (
       <Switch>
         <Route path="/" exact component={OpeningPage} />
@@ -45,6 +52,7 @@ class App extends Component {
           <Route path="/logout" component={Logout} />
           <Route path="/auth" component={asyncAuth} />
           <Route path="/CardOpening" exact component={asyncOpenCard} />
+          <Route path="/UpdateTicketStatus" component={asyncOpenTwo} />
           <Redirect to="/" />
         </Switch>
       );
@@ -52,11 +60,12 @@ class App extends Component {
       // <switch is for : only  load 1 of these routes each time the first one which matches a path, the given path
 
     return (
-      <div>
+      
+        
         <Layout>
           {routes}
         </Layout>
-      </div>
+    
     );
   }
 }

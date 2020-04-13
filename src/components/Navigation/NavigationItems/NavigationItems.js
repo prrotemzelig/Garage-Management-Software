@@ -15,6 +15,7 @@ const navigationItems = (props ) => (
         {props.isAuthenticated ? <NavigationItem link="/UpdateTicketStatus">עדכון כרטיס </NavigationItem> : null}
         {props.isAuthenticated ? <NavigationItem link="/openCards">כרטיסים פתוחים</NavigationItem> : null}
         {props.isAuthenticated ? <NavigationItem link="/CardOpening">פתיחת כרטיס</NavigationItem> : null}
+        
         <NavigationItem link="/" exact> ראשי</NavigationItem> 
 
 

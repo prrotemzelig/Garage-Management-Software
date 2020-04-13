@@ -10,7 +10,7 @@
   font-weight: bold;
 }
 
-.backgroundImage {
+.backgroundImageOld {
   background-image: url('images.jfif');
   height: 100%;
   margin-top: 100px;
@@ -20,5 +20,7 @@
   width: 100%;
   margin-left: auto;
 }
+
+
 
 

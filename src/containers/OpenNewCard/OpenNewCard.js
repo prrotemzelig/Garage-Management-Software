@@ -192,7 +192,9 @@ class OpenNewCard extends Component {
         let formIsValid = true;
         for (let inputIdentifier in updatedCardForm) {
             formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+           
         }
+        //console.log("line 195 " + formIsValid);
         this.setState({cardForm: updatedCardForm, formIsValid: formIsValid});
     }
 
@@ -204,6 +206,7 @@ class OpenNewCard extends Component {
                 config: this.state.cardForm[key]
             });
         }
+        console.log("line 209 " + this.state.formIsValid);
         let form = (
             <form onSubmit={this.cardOpeningHandler}>
                 {formElementsArray.map(formElement => (
@@ -218,20 +221,26 @@ class OpenNewCard extends Component {
                         touched={formElement.config.touched}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button btnType="Success" disabled={!this.state.formIsValid}>שמירה</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid}>שמירה </Button>
             </form>
+            ////   <Button btnType="Success" disabled={!this.state.formIsValid}>שמירה</Button>
         );
+        console.log("line 228 " + this.state.formIsValid);
+
         if ( this.props.loading ) {
             form = <Spinner />;
         }
         return (
+            
             <div className={classes.OpenNewCard}>
-                <h4>כרטיס עבודה</h4>
+                <h4 style={{color: "gray" }}>כרטיס עבודה</h4>
                 {form}
             </div>
         );
     }
 }
+
+
 
 const mapStateToProps = state => {
     return {

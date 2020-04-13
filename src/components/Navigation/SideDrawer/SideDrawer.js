@@ -5,7 +5,7 @@ import NavigationItems from '../NavigationItems/NavigationItems';
 import classes from './SideDrawer.module.css';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 import Aux from '../../../hoc/Auxn/Auxn';
-
+//sideDrawer    
 const sideDrawer = ( props ) => {
     let attachedClasses = [classes.SideDrawer, classes.Close];
     if (props.open) { // if this is true, the attachedClasses should actually not have to Close class but the Open class

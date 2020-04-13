@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Button.module.css';
+//import { Button } from "reactstrap";
 
 
 /*this is a functional component which receive some props where we return some JSX 
@@ -8,13 +9,22 @@ onClick listener for sure where we need to execute props.clicked,
 we need different style links for different types of buttons, a cancel button, a continue button or something like that.
 */
 const button = (props) => (
-<button
-    className={[classes.Button,classes[props.btnType]].join(' ')}
-    onClick={props.clicked}>{props.children}</button>
-
+    <button
+        
+        className={[classes.Button, classes[props.btnType]].join(' ')}
+        onClick={props.clicked}>{props.children}</button>
 );
 
 export default button;
+
+//her
+//disabled={props.disabled}
+
+//css:
+// .Button:disabled {
+//     color: #ccc;
+//     cursor: not-allowed;
+// }
 
 /*in className={} we have to pass the string in the end
 we add inside an array because we always want to assign the button class but then conditionally, we will add the success or danger class,
