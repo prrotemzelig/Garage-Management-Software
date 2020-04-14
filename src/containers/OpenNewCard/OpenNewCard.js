@@ -194,7 +194,7 @@ class OpenNewCard extends Component {
             formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
            
         }
-        console.log("check rotem " );
+        console.log("check rotem hey " );
         this.setState({cardForm: updatedCardForm, formIsValid: formIsValid});
     }
 
