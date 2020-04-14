@@ -4,6 +4,7 @@ import Button from '../../components/UI/MenuButton/MenuButton';
 
 
 class openingPage extends Component {
+    
     render() {
         return ( 
             <div  className={ classes.backgroundImage}> 
