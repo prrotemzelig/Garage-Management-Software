@@ -24,14 +24,15 @@ const card = ( props ) => {
                 display: 'inline-block',
                 margin: '0 8px',
                 border: '1px solid #ccc',
-                padding: '5px'
+                padding: '5px',
+                color: 'black'
                 }}
             key={ig.name}>{ig.name} ({ig.data})</span>;
     });
 
     return (
         <div className={classes.Card}>
-            <p>פרטי הרכב </p>
+            <p style={{color:'black'}}>פרטי הרכב </p>
             <p> {cardsDetailsOutput}</p>
         </div>
     );
