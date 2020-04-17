@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { Col, Row, Button, Form, FormGroup, Label,Input } from 'reactstrap';
 
 const Example = (props) => {
@@ -60,10 +60,8 @@ const Example = (props) => {
 
   );
 }
-
 export default Example;
-
-
+*/
 
 
   
