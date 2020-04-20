@@ -1,5 +1,6 @@
 import React from 'react';
-import { Col, Row, Button, Form, FormGroup, Label,Input} from 'reactstrap';
+import { Col, Row, Button, Form, FormGroup, Label,Input } from 'reactstrap';
+
 
 const Example = (props) => {
     //style={{direction: "rtl"}}
@@ -203,10 +204,8 @@ const Example = (props) => {
 
   );
 }
-
 export default Example;
-
-
+*/
 
 
   

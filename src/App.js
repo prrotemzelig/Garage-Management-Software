@@ -24,8 +24,8 @@ const asyncOpenCard = asyncComponent(() => {
   return import('./containers/OpenNewCard/OpenNewCard');
 });
 
-const asyncOpenTwo = asyncComponent(() => {
-  return import('./containers/OpenNewCard/openNew');
+const asyncUpdateCard = asyncComponent(() => {
+  return import('./containers/UpdateCard/UpdateCard');
 });
 
 class App extends Component {
@@ -63,6 +63,9 @@ class App extends Component {
           <Route path="/settings" component={OpeningPage} />
 
           <Redirect to="/main" />
+          <Route path="/CardOpening" exact component={asyncOpenCard} />
+          <Route path="/UpdateTicketStatus" component={asyncUpdateCard} />
+          <Redirect to="/" />
         </Switch>
       );
     } // <switch is for : only  load 1 of these routes each time the first one which matches a path, the given path
