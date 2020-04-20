@@ -106,7 +106,7 @@ class Auth extends Component {
 
         return (   
         
-        <div className={ classes.backgroundImage}>   
+        <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
             <div className={classes.Auth}>
                  <p>הכנס פרטים להתחברות</p>
                 {authRedirect}

@@ -10,7 +10,6 @@ we need different style links for different types of buttons, a cancel button, a
 */
 const button = (props) => (
     <button
-        
         className={[classes.Button, classes[props.btnType]].join(' ')}
         onClick={props.clicked}>{props.children}</button>
 );
@@ -18,7 +17,7 @@ const button = (props) => (
 export default button;
 
 //her
-//disabled={props.disabled}
+//disabled={props.disabled} -> to allow using this button we need to put this in the css line 12
 
 //css:
 // .Button:disabled {

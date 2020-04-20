@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import classes from './openingPage.module.css';
-import Button from '../../components/UI/MenuButton/MenuButton';
 
 
 class openingPage extends Component {
     
     render() {
         return ( 
-            <div  className={ classes.backgroundImage}> 
+            <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}> 
             <form className={classes.Opening}>
                 <p><strong>ברוכים הבאים למוסכניק</strong></p> 
                 <p> האתר הטוב ביותר לניהול המוסך שלך</p> 

@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
-import classes from './App.module.css';
+import './App.module.css';
 import Layout from './hoc/Layout/Layout';
 import OpeningPage from './containers/openingPage/openingPage';
+import UserHomePage from './containers/UserHomePage/UserHomePage';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
@@ -27,13 +28,18 @@ const asyncOpenTwo = asyncComponent(() => {
   return import('./containers/OpenNewCard/openNew');
 });
 
-
-
 class App extends Component {
-  
+
   componentDidMount () {
     this.props.onTryAutoSignup();
+    window.addEventListener('resize', this.resize);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+}
+
+    resize = () => this.forceUpdate();
 
   render () {
     
@@ -48,25 +54,24 @@ class App extends Component {
     if ( this.props.isAuthenticated ) {
       routes = (
         <Switch>
-          <Route path="/" exact component={OpeningPage} />
+          <Route path="/main" exact component={UserHomePage} />
           <Route path="/openCards" component={asyncCards} />
           <Route path="/logout" component={Logout} />
           <Route path="/auth" component={asyncAuth} />
-          <Route path="/CardOpening" exact component={asyncOpenCard} />
-          <Route path="/UpdateTicketStatus" component={asyncOpenTwo} />
-          <Redirect to="/" />
+          <Route path="/cardOpening" exact component={asyncOpenCard} />
+          <Route path="/updateTicketStatus" component={asyncOpenTwo} />
+          <Route path="/settings" component={OpeningPage} />
+
+          <Redirect to="/main" />
         </Switch>
       );
-    }
-      // <switch is for : only  load 1 of these routes each time the first one which matches a path, the given path
+    } // <switch is for : only  load 1 of these routes each time the first one which matches a path, the given path
 
     return (
-      
-        
+      // style={{direction: "rtl"}}
         <Layout>
           {routes}
-        </Layout>
-    
+        </Layout> 
     );
   }
 }

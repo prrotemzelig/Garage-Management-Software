@@ -31,7 +31,7 @@ const card = ( props ) => {
     });
 
     return (
-        <div className={classes.Card}>
+        <div className={classes.Card} >
             <p style={{color:'black'}}>פרטי הרכב </p>
             <p> {cardsDetailsOutput}</p>
         </div>

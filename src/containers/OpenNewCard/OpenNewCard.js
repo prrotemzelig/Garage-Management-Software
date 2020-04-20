@@ -233,7 +233,7 @@ class OpenNewCard extends Component {
         return (
             
             <div className={classes.OpenNewCard}>
-                <h4 style={{color: "gray" }}>כרטיס עבודה</h4>
+                <h4 style={{color: "gray",fontFamily: 'Alef Hebrew'}}>כרטיס עבודה</h4>
                 {form}
             </div>
         );

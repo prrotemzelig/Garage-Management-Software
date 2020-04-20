@@ -11,6 +11,7 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/react": "16.9.23",
+    "aphrodite": "^2.4.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-v4-rtl": "^4.4.1-1",
@@ -35,9 +36,11 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-spinners": "^0.8.1",
+    "react-svg-line-chart": "^2.0.2",
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "simple-flexbox": "^2.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

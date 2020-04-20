@@ -1,13 +1,13 @@
 .Opening {
     margin: 20px auto;
     margin: auto;
-    width: 80%;
+    width: 50%;    
     text-align: center;
     box-shadow: 0 10px 15px #ccc;
-    
     border: 1px solid #eee;
     padding: 10px;
     box-sizing: border-box;
+    margin-top: 90px;
 }
 
 .backgroundImage {
@@ -16,7 +16,7 @@
     width: 100%;
     position: absolute;
     height: 100%;
-    top: 50px;
+    top: 0;
     left: 0;
     padding-top: 10rem;
     padding-bottom: calc(10rem - 4.5rem);
@@ -28,9 +28,9 @@
   }
 
 
-@media (min-width: 600px) {
+@media (max-width: 600px) {
     .Opening {
-        width: 500px;
+        width: auto;
     }
 
 }

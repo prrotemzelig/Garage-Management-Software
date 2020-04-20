@@ -1,31 +1,46 @@
 .Toolbar {
-    height: 56px;
-    width: 100%;
+
     position: fixed;
+    width: 255px;
+    padding-top: 32px;
+    height: calc(110% - 32px);
+    width: 250px;
+    max-width: 70%;
+    right: 0;
     top: 0;
-    left: 0;
-    background-color: whitesmoke;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    box-sizing: border-box;
-    z-index: 90;
-    direction: rtl;
+    z-index: 200;
+    background-color: rgb(54, 55, 64);
+    padding: 32px 16px;
+    transition: transform 0.3s ease-out;
+
+   
 }
+
+
 
 .Toolbar nav {
     
     height: 100%;
 }
 
+.Open {
+    transform: translateX(0);
+}
+
+.Close {
+    transform: translateX(150%);
+}
 .Logo {
-    height: 80%;
+    height: 50px;
+    width: 90px;
+    direction: rtl;
 }
 
 @media (max-width: 499px) {
-    .DesktopOnly {
+    .Toolbar {
         
         display: none;
+        margin-top: 52;
+
     }
 }
