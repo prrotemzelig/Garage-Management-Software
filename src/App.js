@@ -28,6 +28,12 @@ const asyncUpdateCard = asyncComponent(() => {
   return import('./containers/UpdateCard/UpdateCard');
 });
 
+const asyncOpenTwo = asyncComponent(() => {
+  return import('./containers/OpenNewCard/openNew');
+});
+
+
+
 class App extends Component {
 
   componentDidMount () {
@@ -60,11 +66,10 @@ class App extends Component {
           <Route path="/auth" component={asyncAuth} />
           <Route path="/cardOpening" exact component={asyncOpenCard} />
           <Route path="/updateTicketStatus" component={asyncOpenTwo} />
+          <Route path="/UpdateTicketStatusAriel" component={asyncUpdateCard} />
           <Route path="/settings" component={OpeningPage} />
 
           <Redirect to="/main" />
-          <Route path="/CardOpening" exact component={asyncOpenCard} />
-          <Route path="/UpdateTicketStatus" component={asyncUpdateCard} />
           <Redirect to="/" />
         </Switch>
       );

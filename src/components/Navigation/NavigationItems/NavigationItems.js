@@ -24,7 +24,8 @@ const navigationItems = (props ) => (
 
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening">פתיחת כרטיס   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/openCards">כרטיסים פתוחים   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatus">עדכון כרטיס   </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatus">פתיחת כרטיס 2 רותם   </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatusAriel">עדכון כרטיס אריאל   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/dailyUpdates">עדכונים יומיים   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}

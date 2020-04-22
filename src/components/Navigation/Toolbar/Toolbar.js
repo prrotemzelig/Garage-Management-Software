@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './Toolbar.module.css';
-import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems.js';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle';
 import LogoComponent from '../../sidebar/LogoComponent'
@@ -11,9 +10,7 @@ const toolbar = (props) => (
     <DrawerToggle clicked={props.drawerToggleClicked}/>
 
     <header className={classes.Toolbar} >
-
         <LogoComponent />
-      
         <nav className={classes.DesktopOnly}>
         <DrawerToggle clicked={props.drawerToggleClicked}/>
 
