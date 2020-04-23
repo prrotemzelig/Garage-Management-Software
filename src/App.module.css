@@ -1,26 +1,5 @@
-.App {
-  height: 100vh;
-  margin-top: 15px;
-  background-position: top center;
-  background-size: cover;
-  background-repeat:no-repeat ;
-}
-
-.App .navbar-brand {
-  font-weight: bold;
-}
-
-.backgroundImageOld {
-  background-image: url('images.jfif');
-  height: 100%;
-  margin-top: 100px;
-  background-position: top center;
-  background-size: cover;
-  background-repeat:no-repeat ;
-  width: 100%;
-  margin-left: auto;
-}
-
-
-
+@import url('https://fonts.googleapis.com/css?family=Muli');
+@import url('https://dl.dropboxusercontent.com/u/15746367/fonts/carmela/style.css');
+@import url('https://fonts.googleapis.com/earlyaccess/alefhebrew.css');
+@import url('https://fonts.googleapis.com/earlyaccess/opensanshebrewcondensed.css');
 

@@ -1,12 +1,32 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
+import { Column, Row } from 'simple-flexbox';
+import { StyleSheet, css } from 'aphrodite';
+
 import Aux from '../Auxn/Auxn';
 import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
+import HeaderComponent from '../../components/header/HeaderComponent';
+
+const styles = StyleSheet.create({
+    container: {
+        height: '100%',
+        minHeight: '100vh'
+    },
+    content: {
+        marginTop: 54
+    },
+    mainBlock: {
+        backgroundColor: '#F7F8FC',
+        padding: 25,
+        paddingLeft: 20
+    }
+});
 
 class Layout extends Component{
+
 
     state = { // state should essentially contain information if the sideDrawer is visible or not
         showSideDrawer: false
@@ -26,16 +46,27 @@ class Layout extends Component{
     render(){
         return(
             <Aux >  
+            <Row className={css(styles.container)}>
             <Toolbar
                 isAuth={this.props.isAuthenticated}
                 drawerToggleClicked={this.sideDrawerToggleHandler}/>
             <SideDrawer 
                 isAuth={this.props.isAuthenticated}
                 open={this.state.showSideDrawer}
-                closed={this.sideDrawerClosedHandler}/>
+                closed={this.sideDrawerClosedHandler}/> 
+            <Column flexGrow={1} className={css(styles.mainBlock)}>
+
             <main className={classes.Content}>
+                {this.props.isAuthenticated ?
+            <HeaderComponent title="hey 'user name' " style={{direction: "rtl"}}/>
+            : null
+                }
                 {this.props.children}
             </main>
+            </Column>
+
+            </Row>
+
         </Aux>)
     }
 } 

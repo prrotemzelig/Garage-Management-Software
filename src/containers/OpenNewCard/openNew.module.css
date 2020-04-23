@@ -1,0 +1,61 @@
+.container {
+      background-color: #FFFFFF;
+      border: 1px solid #DFE0EB;
+      border-radius: 4;
+      cursor: pointer;
+      height: 100px;
+      max-width: 350;
+      width: 100px;
+      display: inline;
+      padding: 24px 32px 24px 32px;
+      flex-grow: 1;
+      margin-right: 30;
+   
+}
+
+.cardsContainer {
+    margin-right: -30;
+    margin-top: -30;
+    flex-flow: row;
+}
+
+.cardRow{
+    margin-top: 30;
+    @media (max-width: 768px) {
+        margin-top: 0;
+    }
+}
+
+      @media (max-width: 768px) {
+          .container{
+        margin-top: 30;
+        max-width: none;
+    }
+}
+    
+
+  .title {
+      color: #9FA2B4;
+      font-family: Alef Hebrew;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 19;
+      line-height: 24px;
+      letter-spacing: 0.4px;
+      margin-bottom: 12;
+      min-width: 102;
+      text-align: right;
+      width: 100px;
+      display: inline;
+  }
+
+  .value {
+      color: #252733;
+      font-family: Alef Hebrew;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 40;
+      letter-spacing: 1px;
+      line-height: 50px;
+      text-align: center;
+  }

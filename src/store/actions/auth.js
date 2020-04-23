@@ -61,7 +61,7 @@ export const auth = (email, password, isSignup) => { // that will  be the one ho
         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
             .then(response => { // success case!
                 console.log(response);
-                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 100000); // was 1000 for 1 hour
                 localStorage.setItem('token', response.data.idToken);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
@@ -97,7 +97,8 @@ export const authCheckState = () => {
             } else {
                 const userId = localStorage.getItem('userId');
                 dispatch(authSuccess(token, userId));
-                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000 )); // here we pass the amount of seconds until we should be logged out.
+                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 100000 )); // here we pass the amount of seconds until we should be logged out.
+                //was 1000 for 1 hour
             }   
         }
     };

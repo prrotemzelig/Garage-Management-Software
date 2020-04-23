@@ -1,4 +1,17 @@
 .Content {
     
-    margin-top: 72px;
+    margin-right: 230px;
+    flex-flow: column nowrap;
+    display: flex;
+    flex-grow: 1;
+}
+
+@media (max-width: 500px) {
+    .Content {
+        flex-flow: row;
+        margin-right: 0px;
+        flex-flow: column nowrap;
+        display: flex;
+        flex-grow: 1;
+    }
 }

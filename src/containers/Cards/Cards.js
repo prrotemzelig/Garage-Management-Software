@@ -25,7 +25,7 @@ class Cards extends Component {
             ) )
         }
         return (
-            <div>
+            <div >
                 {cards} 
             </div>
         );
