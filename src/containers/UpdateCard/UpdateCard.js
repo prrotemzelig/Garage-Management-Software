@@ -36,7 +36,14 @@ class SearchBar extends React.Component {
     width: 10px;
     border-radius: 8px;
   }
-  
+  <button id="unique-id" onClick={this.handleClick}><FaSearch></FaSearch></button>
+   .button {
+    background-color: #555555; 
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    border-radius: 12px;
+  }
   <div className="search-icon">
                 <FaSearch></FaSearch>
               </div> 
@@ -56,7 +63,7 @@ class SearchBar extends React.Component {
               onChange={event=>this.onInputChange(event.target.value)} 
               onKeyPress={this.props.onKeyPress|| null}/>
             </div>
-            <button id="unique-id" onClick={this.handleClick}><FaSearch></FaSearch></button>
+            
             </div>
             <div>
               <Search

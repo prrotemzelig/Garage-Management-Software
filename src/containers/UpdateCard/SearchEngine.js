@@ -12,7 +12,7 @@ class Search extends React.Component {
         super(props);
         this.state = {
           carNumber:'',
-          count:0
+          //count:0
         }
       }
   
@@ -23,10 +23,10 @@ class Search extends React.Component {
     render () {
       let cards;
       this.state.carNumber= this.props.value;
-      this.state.count=this.props.data;
+      //this.state.count=this.props.data;
       //console.log(this.state.carNumber+" ");
       //console.log(this.state.count+" ");
-      if(this.state.count === 1){
+      //if(this.state.count === 1){
           if(this.state.carNumber!== "" ){
             cards = <Spinner />;
             //console.log(this.state.count+" ");
@@ -39,7 +39,7 @@ class Search extends React.Component {
                ) )
             }
           }
-      }
+      //}
       return (
           <div >
               {cards} 

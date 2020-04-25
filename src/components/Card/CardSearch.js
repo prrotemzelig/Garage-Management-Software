@@ -4,12 +4,12 @@ import classes from './Card.module.css';
 // show the details of each card that in the garage right now
 
 var temp=0;
-  
+
 const cardSearch = ( props ) => {
     const number=props.data;
     //console.log(number);
-    const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
     if(props.cardData.carNumber===number){
+        const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         temp=1;
         for ( let fieldName in props.cardData ) {
             cardDetails.push( //the object we are pushing into this array
@@ -19,9 +19,7 @@ const cardSearch = ( props ) => {
             }
             );
         }
-    }
-
-    //after we pushed into the cards array, 
+        //after we pushed into the cards array, 
     //we can map my cards to text basically in the return ->  <p> {cardsDetailsOutput}</p>
     const cardsDetailsOutput = cardDetails.map(ig => {
         // here we return some JSX
@@ -37,20 +35,18 @@ const cardSearch = ( props ) => {
             key={ig.name}>{ig.name} ({ig.data})</span>;
     });
 
-    if(temp==1){
+    
     return (
         <div className={classes.Card} >
             <p style={{color:'black'}}>פרטי הרכב </p>
             <p> {cardsDetailsOutput}</p>
         </div>
     );
-    }else{
+    }
+    else{
         return (
-            <div className={classes.Card} >
-                <p style={{color:'black'}}>לא נמצא היסטוריה עבור רכב זה </p>
-            </div>
+            <div></div>
         );
     }
 };
-
 export default cardSearch;
