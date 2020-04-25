@@ -1,10 +1,23 @@
 import React, { Component } from 'react'
 import './UpdateCard.css'
 import { FaSearch } from 'react-icons/fa';
+import Search from './SearchEngine.js';
+
+
 class SearchBar extends React.Component {
+  
   constructor(props){
     super(props);
-    this.state={term:''};
+    this.state={
+      term:'',
+      counter:0
+      };
+    this.handleClick = this.handleClick.bind(this);
+  }
+ 
+  handleClick(event) {
+    const id = event.target.id;
+    this.state.counter=1;
   }
   onInputChange(term){
     const name = this.props.searchBoxName || undefined
@@ -13,14 +26,27 @@ class SearchBar extends React.Component {
       this.props.onSearchTermChange({name,term})
     }
   }
+  
+
+/**
+ * .search-icon {
+    float: left;
+    color: #000;
+    size: 30px;
+    width: 10px;
+    border-radius: 8px;
+  }
+  
+  <div className="search-icon">
+                <FaSearch></FaSearch>
+              </div> 
+ */
     render() {
       const name = this.props.searchBoxName || undefined
         return (
+          <div>
           <div className="search-box">
             <div style={{direction: "rtl" ,color: "gray" }}>
-              <div className="search-icon">
-                <FaSearch></FaSearch>
-              </div> 
               <input 
               name={name} className="search-input" 
               id="search" 
@@ -30,11 +56,20 @@ class SearchBar extends React.Component {
               onChange={event=>this.onInputChange(event.target.value)} 
               onKeyPress={this.props.onKeyPress|| null}/>
             </div>
+            <button id="unique-id" onClick={this.handleClick}><FaSearch></FaSearch></button>
+            </div>
+            <div>
+              <Search
+                value={this.state.term}
+                data={this.state.counter}
+                />
+            </div>
           </div>
 
         );
     }
 }
+
  
 export default SearchBar;
 
