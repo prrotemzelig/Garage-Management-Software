@@ -22,7 +22,47 @@ const toolbar = (props) => (
     </header></div>
 );
 
+{/* <div>
+    <DrawerToggle clicked={props.drawerToggleClicked}/>
+
+    <header className={classes.Toolbar} >
+        <LogoComponent />
+        <nav className={classes.DesktopOnly}>
+        <DrawerToggle clicked={props.drawerToggleClicked}/>
+
+            <NavigationItems isAuthenticated={props.isAuth}/>
+        </nav>
+        
+        
+   
+    </header></div> */}
+
+
+
+// const toolbar = (props) => (
+    
+//     <div>
+//         <DrawerToggle clicked={props.drawerToggleClicked}/>
+    
+//         <header className={classes.Toolbar} >
+//             <LogoComponent />
+//             <nav className={classes.DesktopOnly}>
+//             <DrawerToggle clicked={props.drawerToggleClicked}/>
+    
+//                 <NavigationItems isAuthenticated={props.isAuth}/>
+//             </nav>
+            
+            
+       
+//         </header></div>
+//     );
+    
+
 /*this going to be a functional component because it don't need to manage any state in there.
 we expect to get some props there and then, outputting some jsx. */
 
 export default toolbar;
+
+//    width: 255px;
+//    max-width: 70%;
+//    width: 250px;

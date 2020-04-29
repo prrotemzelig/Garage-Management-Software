@@ -54,7 +54,7 @@ class UserHomePage extends Component {
     
     render() { 
         return ( 
-            <Column style= {{marginRight: "20px", marginTop: "40px"}}>
+            <Column style= {{marginRight: "20px", marginTop: "10px",marginLeft: "20px"}}>
             <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
                     <MiniCardComponent className={css(styles.miniCardContainer)} title="משימות" value="60" />

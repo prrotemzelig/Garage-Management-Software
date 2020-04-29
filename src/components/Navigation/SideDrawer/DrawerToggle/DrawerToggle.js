@@ -17,9 +17,11 @@ const styles = StyleSheet.create({
     burgerIcon: {
         cursor: 'pointer',
         position: 'absolute',
-        right: 24,
-        top: 34,
-        '@media (min-width: 500px)': {
+        right: 10,
+        top: 12,
+        //right: 24,
+       // top: 34,
+        '@media (min-width: 999px)': {
             display: 'none'
 
         }

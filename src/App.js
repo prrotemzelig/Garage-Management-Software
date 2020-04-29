@@ -11,6 +11,8 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 //import 'bootstrap/dist/css/bootstrap.min.css';
+//import './styles/reduction.scss';
+
 
 const asyncCards = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/Cards/Cards');

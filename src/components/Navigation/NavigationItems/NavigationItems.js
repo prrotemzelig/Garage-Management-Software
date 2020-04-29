@@ -45,3 +45,5 @@ const navigationItems = (props ) => (
 
 export default navigationItems;
 
+// {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatus">פתיחת כרטיס 2 רותם   </NavigationItem> : null}
+// {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatusAriel">עדכון כרטיס אריאל   </NavigationItem> : null}

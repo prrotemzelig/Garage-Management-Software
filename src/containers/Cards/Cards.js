@@ -21,16 +21,39 @@ class Cards extends Component {
             cards = this.props.cards.map( card => (
                 <Card
                     key={card.id}
-                    cardData={card.cardData}/>
+                    cardData={card.cardData}
+                    customerData={card.customerData}
+                    carData={card.carData}
+                    />
             ) )
         }
         return (
-            <div >
-                {cards} 
-            </div>
+         
+            <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
+                <thead>
+                    <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+                        <td scope="col" >מספר רישוי</td>
+                        <td scope="col" >מספר כרטיס</td>
+                        <td scope="col" >שם לקוח</td>
+                        <td scope="col" >תיאור רכב</td>
+                        <td scope="col" >תאריך פתיחה</td>
+    
+                    </tr>
+                </thead>
+
+                <tbody style={{direction: "rtl"}}>
+                    {cards } 
+                </tbody>
+            </table> 
         );
     }
 }
+
+// return (
+//     <div >
+//         {cards} 
+//     </div>
+// );
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
     return {

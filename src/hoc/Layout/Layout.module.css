@@ -1,17 +1,18 @@
 .Content {
     
-    margin-right: 230px;
+    width: 83%;    
     flex-flow: column nowrap;
     display: flex;
     flex-grow: 1;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 999px) {
     .Content {
         flex-flow: row;
-        margin-right: 0px;
+        width: 100%;    
         flex-flow: column nowrap;
         display: flex;
         flex-grow: 1;
     }
 }
+

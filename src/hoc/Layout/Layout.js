@@ -9,19 +9,23 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
+//import Header from '../../components/header/Header';
+import DrawerToggle from '../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle';
+import LogoComponent from '../../components/sidebar/LogoComponent';
 
 const styles = StyleSheet.create({
     container: {
         height: '100%',
         minHeight: '100vh'
+        
     },
     content: {
         marginTop: 54
     },
     mainBlock: {
         backgroundColor: '#F7F8FC',
-        padding: 25,
-        paddingLeft: 20
+        padding: 10,
+        paddingLeft: 5
     }
 });
 
@@ -42,6 +46,7 @@ class Layout extends Component{
             return { showSideDrawer: !prevState.showSideDrawer };
         } );
     }
+//    margin-right: 230px;
 
     render(){
         return(
@@ -54,13 +59,15 @@ class Layout extends Component{
                 isAuth={this.props.isAuthenticated}
                 open={this.state.showSideDrawer}
                 closed={this.sideDrawerClosedHandler}/> 
+
             <Column flexGrow={1} className={css(styles.mainBlock)}>
 
             <main className={classes.Content}>
-                {this.props.isAuthenticated ?
-            <HeaderComponent title="hey 'user name' " style={{direction: "rtl"}}/>
+            {this.props.isAuthenticated ?
+            <HeaderComponent title="HEY" style={{direction: "rtl"}}/>
             : null
-                }
+            }
+             
                 {this.props.children}
             </main>
             </Column>
@@ -71,6 +78,10 @@ class Layout extends Component{
     }
 } 
 
+// {this.props.isAuthenticated ?
+//     <HeaderComponent title="hey 'user name' " style={{direction: "rtl"}}/>
+//     : null
+//         }
 
 
 const mapStateToProps = state => {

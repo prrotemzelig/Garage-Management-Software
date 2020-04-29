@@ -4,6 +4,7 @@ import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
+import DrawerToggle from '../Navigation/SideDrawer/DrawerToggle/DrawerToggle';
 
 const styles = StyleSheet.create({
     avatar: {
@@ -15,6 +16,7 @@ const styles = StyleSheet.create({
     },
     container: {
         height: 40,
+        width: '95%',        
         marginBottom: '20px'
     },
     cursorPointer: {
@@ -70,7 +72,9 @@ function HeaderComponent(props) {
     const { icon, title, ...otherProps } = props;
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
+
             <span className={css(styles.title)}>{title}</span>
+            
             <Row vertical="center">
                 <div className={css(styles.iconStyles)}>
                     <IconSearch />
@@ -83,6 +87,7 @@ function HeaderComponent(props) {
                     <span className={css(styles.name, styles.cursorPointer)}>user name</span>
                     <img src={require("../../assets/anime3.png")} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
+
             </Row>
         </Row>
     );

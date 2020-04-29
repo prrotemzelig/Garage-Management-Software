@@ -5,8 +5,8 @@ import Logo from '../../assets/icon-logo';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 32,
-        marginRight: 32
+       // marginLeft: 32,
+        //marginRight: 32
     },
     title: {
         fontFamily: 'Alef Hebrew',
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         letterSpacing: '0.4px',
         color: '#A4A6B3',
         opacity: 0.7,
-        marginLeft: 12
+        marginRight: 12
     }
 });
 
