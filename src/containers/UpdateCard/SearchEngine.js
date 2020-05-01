@@ -12,7 +12,6 @@ class Search extends React.Component {
         super(props);
         this.state = {
           carNumber:'',
-          //count:0
         }
       }
   
@@ -20,26 +19,22 @@ class Search extends React.Component {
       this.props.onFetchCards(this.props.token, this.props.userId);
       
   }
+  
     render () {
       let cards;
+      console.log(this.props.value);
       this.state.carNumber= this.props.value;
-      //this.state.count=this.props.data;
-      //console.log(this.state.carNumber+" ");
-      //console.log(this.state.count+" ");
-      //if(this.state.count === 1){
           if(this.state.carNumber!== "" ){
             cards = <Spinner />;
-            //console.log(this.state.count+" ");
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards = this.props.cards.map( card => (
               <Card
                   data={this.state.carNumber}
                   key={card.id}
-                  cardData={card.cardData}/>
-               ) )
+                  cardData={card.cardData}/> 
+               ))
             }
           }
-      //}
       return (
           <div >
               {cards} 
