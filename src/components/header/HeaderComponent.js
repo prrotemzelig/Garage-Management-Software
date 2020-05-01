@@ -4,7 +4,7 @@ import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
-import DrawerToggle from '../Navigation/SideDrawer/DrawerToggle/DrawerToggle';
+//import DrawerToggle from '../Navigation/SideDrawer/DrawerToggle/DrawerToggle';
 
 const styles = StyleSheet.create({
     avatar: {

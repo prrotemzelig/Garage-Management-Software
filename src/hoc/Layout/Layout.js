@@ -10,8 +10,8 @@ import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
 //import Header from '../../components/header/Header';
-import DrawerToggle from '../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle';
-import LogoComponent from '../../components/sidebar/LogoComponent';
+//import DrawerToggle from '../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle';
+//import LogoComponent from '../../components/sidebar/LogoComponent';
 
 const styles = StyleSheet.create({
     container: {

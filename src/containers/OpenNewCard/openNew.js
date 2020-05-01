@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import classes from './openNew.module.css';
+//import classes from './openNew.module.css';
 import DatePicker from "react-datepicker";
-import Calendar from 'react-calendar';
+//import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 import "react-datepicker/dist/react-datepicker.css";
+import Aux from '../../hoc/Auxn/Auxn.js';
 
 import Button from '../../components/UI/Button/Button';
-import Spinner from '../../components/UI/Spinner/Spinner';
+//import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
 import Input from '../../components/UI/Input/Input';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
@@ -28,7 +29,8 @@ class openNew extends Component  {
     myDate: new Date(),
     reportStartDate: getDateTime(),
     formIsValid: false,
- 
+    //showWorkModel: false,
+
     cardForm: { 
       licenseNumber: {
         value: '',
@@ -285,7 +287,7 @@ for (let formElementIdentifier in this.state.customerDetails) {
         cardData: formData,
         carData: carData, 
         customerData: customerData,
-        userId: this.props.userId
+        userId: this.props.userId,
     }   
     this.props.onCardOpening(card, this.props.token); // this contains all the data of card 
 }
@@ -363,6 +365,12 @@ this.setState({customerDetails: updatedCardForm, formIsValid: formIsValid});
 
 onChange = date => this.setState({ date })
 
+handleShowWorkModel = () => {
+  this.setState( { showWorkModel: true } );
+  console.log("370" + this.showWorkModel);
+}
+
+
   render () {
 
     // const formElementsArray = [];
@@ -376,7 +384,7 @@ onChange = date => this.setState({ date })
  
 
   return (
-
+    <Aux>
           <form  onSubmit={this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >
   
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
@@ -633,6 +641,7 @@ onChange = date => this.setState({ date })
                   <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" onChange={(date) => this.inputChangedHandler(date)}/>
                 </div>
               </div> 
+              
             </div>   
           </div>  
    
@@ -650,18 +659,21 @@ onChange = date => this.setState({ date })
         </div>
 
         </form>
-
-          <span><a class="btn btn-secondary btn-lg" href="#" role="button">עבודות</a>  </span>
+   
+          <span><a class="btn btn-secondary btn-lg" href="#" role="button" >עבודות</a>  </span>
           <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
           <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
           <span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span>
               
+        
+
+
           <Button  btnType="Success" disabled={this.state.formIsValid}>שמירה  </Button>
 
         </form>
 
       </form>
-
+      </Aux>
     );
   }
 }
@@ -671,6 +683,7 @@ onChange = date => this.setState({ date })
 const mapStateToProps = state => {
   return {
       loading: state.card.loading, // the loading is coming from the card
+      
       token: state.auth.token,
       userId: state.auth.userId
   }

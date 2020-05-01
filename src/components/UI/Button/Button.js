@@ -14,6 +14,10 @@ const button = (props) => (
         onClick={props.clicked}>{props.children}</button>
 );
 
+{/* <button
+className={[classes.Button, classes[props.btnType]].join(' ')} // for mergeing the danger or sucess color and then know witch one to show 
+onClick={props.clicked}>{props.children}</button> */}
+
 export default button;
 
 //her

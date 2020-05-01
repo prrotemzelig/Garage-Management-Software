@@ -4,7 +4,9 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
     cards: [], // all my cards
     loading: false, // we want to know if we are in a process of open new card or if we are done - true if we done open card **
-    purchased: false 
+    purchased: false ,
+    //showWorkModel: false
+ 
 };
 
 const purchaseInit = ( state, action ) => {

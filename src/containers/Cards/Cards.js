@@ -16,8 +16,13 @@ class Cards extends Component {
     // here we want to output multiple cards, as many cards as needed
     //and the cards I need to output of curse should be fetched from the backend
     render () {
-        let cards = <Spinner />;
-        if ( !this.props.loading ) { // if it not true - if we not loading
+        let cards;
+
+        if (this.props.loading) {
+            cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
+        }
+
+        else if ( !this.props.loading ) { // if it not true - if we not loading
             cards = this.props.cards.map( card => (
                 <Card
                     key={card.id}
@@ -41,8 +46,9 @@ class Cards extends Component {
                     </tr>
                 </thead>
 
-                <tbody style={{direction: "rtl"}}>
-                    {cards } 
+                <tbody >
+                    {cards}
+                    
                 </tbody>
             </table> 
         );

@@ -1,5 +1,5 @@
-import $ from 'jquery';
-import Popper from 'popper.js';
+//import $ from 'jquery';
+//import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

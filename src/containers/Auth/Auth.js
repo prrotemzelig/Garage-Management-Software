@@ -12,11 +12,26 @@ import { updateObject, checkValidity} from '../../shared/utility';
 class Auth extends Component {
     state = {
         controls: {
+            garageID: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'הכנס/י מספר מוסך'
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 1
+                },
+                valid: false,
+                touched: false,
+                text: ' מספר מוסך'
+            },
             email: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
-                    placeholder: 'Mail Address'
+                    placeholder: 'הכנס/י מייל'
                 },
                 value: '',
                 validation: {
@@ -24,13 +39,14 @@ class Auth extends Component {
                     isEmail: true
                 },
                 valid: false,
-                touched: false
+                touched: false,
+                text: ' כתובת מייל'
             },
             password: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Password'
+                    placeholder: 'הכנס/י סיסמא'
                 },
                 value: '',
                 validation: {
@@ -38,7 +54,8 @@ class Auth extends Component {
                     minLength: 6
                 },
                 valid: false,
-                touched: false
+                touched: false,
+                text: ' סיסמא'
             }
         },
         isSignup: true
@@ -76,8 +93,10 @@ class Auth extends Component {
         }
 
         let form = formElementsArray.map( formElement => (  // here we looped through all our formElementsArray to create our form ( we map this into an array of jsx elements)
+        
             <Input
                 key={formElement.id}
+                text={formElement.config.text}
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
                 value={formElement.config.value}
@@ -85,10 +104,11 @@ class Auth extends Component {
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
                 changed={( event ) => this.inputChangedHandler( event, formElement.id )} />
+               
         ) );
 
         if (this.props.loading) {
-            form = <Spinner />
+            form = <Spinner /> 
         }
 
         let errorMessage = null;
@@ -105,21 +125,30 @@ class Auth extends Component {
         }
 
         return (   
-        
+           
+                
         <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
             <div className={classes.Auth}>
-                 <p>הכנס פרטים להתחברות</p>
+                <div style= {{textAlign: "center"}}> 
+                 <h3 style={{ paddingBottom: "20px"}}>התחברות</h3>
                 {authRedirect}
-                {errorMessage}
+                {errorMessage}</div>
                 <form onSubmit={this.submitHandler}>
                     {form}
-                    <Button btnType="Success">כניסה</Button>
+
+                    <div style= {{textAlign: "center"}}> 
+                    <Button btnType="Success">כניסה</Button></div>
                 </form>
-                <Button
+                <div style= {{textAlign: "center"}}> 
+                <Button style= {{textAlign: "center"}}
                     clicked={this.switchAuthModeHandler} 
-                    btnType="Danger">{this.state.isSignup ? 'הרשמה':'התחברות'}</Button>
+                    btnType="Danger">{this.state.isSignup ? 'הרשמה':'התחברות'}</Button></div>
+                    
             </div>
+            
+            
          </div> 
+          
         );
     }
 }
