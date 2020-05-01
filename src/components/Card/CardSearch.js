@@ -1,14 +1,12 @@
 import React from 'react';
 import classes from './Card.module.css';
-/// rotem
-// show the details of each card that in the garage right now
 
 var temp=0;
 
 const cardSearch = ( props ) => {
     const number=props.data;
     //console.log(number);
-    if(props.cardData.carNumber===number){
+    if(props.cardData.licenseNumber===number){
         const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         temp=1;
         for ( let fieldName in props.cardData ) {

@@ -10,15 +10,10 @@ class SearchBar extends React.Component {
     super(props);
     this.state={
       term:'',
-      counter:0
       };
-    this.handleClick = this.handleClick.bind(this);
   }
  
-  handleClick(event) {
-    const id = event.target.id;
-    this.state.counter=1;
-  }
+
   onInputChange(term){
     const name = this.props.searchBoxName || undefined
     this.setState({term});
@@ -28,26 +23,6 @@ class SearchBar extends React.Component {
   }
   
 
-/**
- * .search-icon {
-    float: left;
-    color: #000;
-    size: 30px;
-    width: 10px;
-    border-radius: 8px;
-  }
-  <button id="unique-id" onClick={this.handleClick}><FaSearch></FaSearch></button>
-   .button {
-    background-color: #555555; 
-    color: white;
-    text-align: center;
-    font-size: 25px;
-    border-radius: 12px;
-  }
-  <div className="search-icon">
-                <FaSearch></FaSearch>
-              </div> 
- */
     render() {
       const name = this.props.searchBoxName || undefined
         return (
@@ -68,7 +43,6 @@ class SearchBar extends React.Component {
             <div>
               <Search
                 value={this.state.term}
-                data={this.state.counter}
                 />
             </div>
           </div>
