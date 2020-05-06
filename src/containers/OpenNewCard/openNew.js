@@ -21,7 +21,9 @@ import { updateObject, checkValidity} from '../../shared/utility'; //
 //import Button from 'react-bootstrap/Button';
 //import Modal from "react-bootstrap/Modal";
 //import "bootstrap/dist/css/bootstrap.min.css";
-
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 const getDateTime = () => {
   let tempDate = new Date();
   let date = tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds() +' '+ tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear(); 
@@ -36,6 +38,7 @@ class openNew extends Component   {
  
     
     this.state = {
+    rows: [],
     userCarNumber:'',
     dataBaseCarNumber:'',
     cardDetails:{},
@@ -251,6 +254,64 @@ class openNew extends Component   {
         valid: false,
         touched: false
       }
+    },
+
+    cardWork:{
+   
+      JobDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      time:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
+
+    },
+  
+    cardParts:{
+      partDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      amount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
     }
 
    }; 
@@ -410,6 +471,24 @@ open = (event) => {
 
   //this.setState({ showWorkModel: true });
 };
+
+
+
+handleAddRow = () => {
+  
+  this.setState((prevState, props) => {
+    const row = {jobDescription: "1",time: "2",gross: "3",discount: "4",net: "5" };
+    return { rows: [...prevState.rows, row] };
+  });
+};
+
+handleRemoveRow = () => {
+  this.setState((prevState, props) => {
+    return { rows: prevState.rows.slice(1) };
+  });
+};
+
+
   render () {
 //    const showWorkModel = this.state.showWorkModel;
 
@@ -420,6 +499,7 @@ open = (event) => {
     //         config: this.state.cardForm[key]         
     //     });
     // }
+
 
     let cards;
     if(this.state.userCarNumber!==""){
@@ -1094,54 +1174,78 @@ open = (event) => {
          </Modal.Body>
          <div className={classes.separator}></div>
          <Modal.Body  style={{ backgroundColor:"#6c757d", padding:"6px" }}   >
-         <div style={{ color: "white" ,fontSize: "14px" ,textAlign: "center", fontWeight: "bold"}}>הוספת עבודות לכרטיס</div> 
 
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות:</div> 
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
 
+
       </Modal.Body>
       
-       <Modal.Body>
+       <Modal.Body style={{padding: "0px"}}>
 
-       <div class="container">
-        
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+      
+        <div class="table-wrapper" style={{direction: "rtl"}}>
+           
+            <table class="table table-bordered" style={{marginBottom: "0px"}} >
+                <thead >
+                    <tr >
+                        <th  scope="col" style={{ textAlign: "right"}}>תיאור עבודה</th>
+                        <th  scope="col" style={{ textAlign: "right"}}>זמן</th>
+                        <th  scope="col" style={{ textAlign: "right"}}>ברוטו</th>
+                        <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
+                        <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>טיפול</td>
+                        <td>00:00</td>
+                        <td>3$</td>
+                        <td>10%</td>
+
+                        <td>
+							              <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons" ><AddIcon style={{fontSize:"large"}}/></i></a>
+                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons"><EditIcon style={{fontSize:"large"}}/></i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons"><DeleteIcon style={{fontSize:"large"}}/></i></a>
+                        </td>
+                    </tr>
+           
+            
+                </tbody>
+                <tbody>
+            {this.state.rows.map(row => (
+              <tr>
+                <td>{row.jobDescription}</td>
+                <td>{row.time}</td>
+                <td>{row.gross}</td>
+                <td>{row.discount}</td>
+                <td>{row.net}</td>
+
+              </tr>
+            ))}
+          
+          </tbody>
+            </table>
+
+
+        </div>
+      
+
+      
          
 
 
        </Modal.Body>
        <Modal.Footer>
+
+
+         
          <Button onClick={this.close} >יציאה</Button>
-         <span></span>
+    
          <Button onClick={this.close}>עדכון</Button>
          <Button onClick={this.close}>מחיקה</Button>
-         <Button onClick={this.close}>הוספה</Button>
+         <Button onClick={this.handleAddRow} >הוספה</Button>
 
        </Modal.Footer>
      </Modal>
@@ -1149,7 +1253,7 @@ open = (event) => {
       </span>
 
 
-      <Button bsStyle="secondary" disabled={!this.state.formIsValid}  >חלקים</Button> {' '}
+      <Button bsStyle="secondary"  disabled={!this.state.formIsValid}  >חלקים</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
       <Button2 btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
