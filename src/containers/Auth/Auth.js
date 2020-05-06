@@ -142,7 +142,7 @@ class Auth extends Component {
                 <div style= {{textAlign: "center"}}> 
                 <Button style= {{textAlign: "center"}}
                     clicked={this.switchAuthModeHandler} 
-                    btnType="Danger">{this.state.isSignup ? 'הרשמה':'התחברות'}</Button></div>
+                    btnType="Danger" >{this.state.isSignup ? 'הרשמה':'התחברות'}</Button></div>
                     
             </div>
             

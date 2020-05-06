@@ -20,14 +20,22 @@
 .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
+    
 }
 
 
 
 .Success {
-  color: white
+  color: white; 
+   
 }
 
 .Danger {
     color: white;
 }
+
+
+ .Button:disabled {
+     color: #ccc;
+     cursor: not-allowed;
+ }

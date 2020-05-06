@@ -4,9 +4,20 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
     cards: [], // all my cards
     loading: false, // we want to know if we are in a process of open new card or if we are done - true if we done open card **
-    purchased: false ,
+    purchased: false,
+//    modalShow: false,
+    showWorkModel: false
+//    showModal: false
     //showWorkModel: false
  
+};
+
+const purchaseWorksInit = ( state, action ) => {
+    return updateObject( state, { showWorkModel: true } );
+};
+
+const purchaseWorksCancel = ( state, action ) => {
+    return updateObject( state, { showWorkModel: false } ); 
 };
 
 const purchaseInit = ( state, action ) => {
@@ -25,6 +36,8 @@ const cardOpeningSuccess = ( state, action ) => {
         cards: state.cards.concat( newCard ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
     } );
 };
+
+
 
 const cardOpeningFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
@@ -54,6 +67,11 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.FETCH_CARDS_START: return fetchCardsStart( state, action );
         case actionTypes.FETCH_CARDS_SUCCESS: return fetchCardsSuccess( state, action );
         case actionTypes.FETCH_CARDS_FAIL: return fetchCardsFail( state, action );
+
+        case actionTypes.PURCHASE_WORKS_INIT: return purchaseWorksInit( state, action );
+        case actionTypes.WORKS_MODAL_CLOSE: return purchaseWorksCancel( state, action );
+
+        
         default: return state; // return the current state
     }
 };

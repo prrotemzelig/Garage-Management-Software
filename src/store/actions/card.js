@@ -1,6 +1,40 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-cards';
 
+
+export const purchaseWorksInit = () => { // this will be dispatched whenever we load the checkout page //** */
+    return {
+        type: actionTypes.PURCHASE_WORKS_INIT // just return an action
+    };
+};
+
+export const purchaseWorksCancel = () => { // this will be dispatched whenever we load the checkout page //** */
+    return {
+        type: actionTypes.WORKS_MODAL_CLOSE // just return an action
+    };
+};
+
+//this is the async action one
+//this is the action we dispatched from the container once we click that save card button.
+export const workModalOpening = (  token ) => { 
+    return dispatch => {
+        dispatch( purchaseWorksInit() ); // dispatch to the store - we need to do that to set setModalShow to true!
+        
+    };
+};
+
+
+//this is the async action one
+//this is the action we dispatched from the container once we click that save card button.
+export const workModalClose = (  token ) => { 
+    return dispatch => {
+        dispatch( purchaseWorksCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
+        
+    };
+};
+
+
+
 // this synchronous action creators
 export const cardOpeningSuccess = ( id, cardData ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
     //also I want the cardData
@@ -51,6 +85,7 @@ export const purchaseInit = () => { // this will be dispatched whenever we load 
         type: actionTypes.PURCHASE_INIT // just return an action
     };
 };
+
 
 export const fetchCardsSuccess = ( cards ) => { // we expect to get the cards as an argument
     return { // return a new object
