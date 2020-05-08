@@ -18,12 +18,11 @@ import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
 //import {  AppBar,  Toolbar,  Typography,  CardContent,  NativeSelect,  Table,  TableCell,  TableBody,  TableRow} from '@material-ui/core';
 import { updateObject, checkValidity} from '../../shared/utility'; //
-//import Button from 'react-bootstrap/Button';
-//import Modal from "react-bootstrap/Modal";
-//import "bootstrap/dist/css/bootstrap.min.css";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 const getDateTime = () => {
   let tempDate = new Date();
   let date = tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds() +' '+ tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear(); 
@@ -38,6 +37,7 @@ class openNew extends Component   {
  
     
     this.state = {
+    identifiedCardID:'',
     rows: [],
     userCarNumber:'',
     dataBaseCarNumber:'',
@@ -49,6 +49,7 @@ class openNew extends Component   {
     myDate: new Date(),
     reportStartDate: getDateTime(),
     formIsValid: false,
+    isAddNewWorkOpen: false,
 //    showWorkModel: false,
 
     cardForm: { 
@@ -257,7 +258,7 @@ class openNew extends Component   {
     },
 
     cardWork:{
-   
+
       JobDescription:{
         value: '',
         valid: false,
@@ -324,6 +325,7 @@ class openNew extends Component   {
 //   };
 
   cardOpeningHandler = ( event ) => {
+    console.log("327");
     event.preventDefault(); // with that we get the Card details
    // this.setState( { loading: true } ); // set the state to loading initially to show a spinner
     const formData = {};
@@ -352,7 +354,7 @@ for (let formElementIdentifier in this.state.customerDetails) {
 }
 
 inputChangedHandler = (event) => { 
-  console.log("318 " + event.target.id);
+  //console.log("318 " + event.target.id);
 
   const updatedFormElement = updateObject(this.state.cardForm[event.target.id], { 
       // here we pass my cardForm and there (inputIdentifier) -> it show the control 
@@ -383,6 +385,11 @@ inputChangedHandler = (event) => {
     this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
 
   }
+  
+
+
+
+
 
 inputCarChangedHandler = (event) => { 
 
@@ -423,6 +430,24 @@ const updatedCardForm = updateObject(this.state.customerDetails, {
 this.setState({customerDetails: updatedCardForm}); //, formIsValid: formIsValid
 }
 
+inputNewWorkChangedHandler = (event) => { 
+  const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+  
+      value: event.target.value,
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      touched: true
+  });
+  const updatedCardForm = updateObject(this.state.cardWork, { 
+      [event.target.id]: updatedFormElement 
+  });
+  
+  // let formIsValid = true;
+  // for (let inputIdentifier in updatedCardForm) {
+  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+  // }
+  this.setState({cardWork: updatedCardForm}); //, formIsValid: formIsValid
+}
+
  handleChange = date => {
   this.setState({
     startDate: date
@@ -436,6 +461,9 @@ check(data){
     this.state.carDetails=data.carData;
     this.state.cardDetails=data.cardData;
     this.state.customer_details=data.customerData;
+    this.state.identifiedCardID=data.id;
+    console.log("465" + this.state.identifiedCardID);
+
     //console.log(this.state.carDetails);
     //console.log(this.state.cardDetails);
     //console.log(this.state.customer_details);   
@@ -475,7 +503,8 @@ open = (event) => {
 
 
 handleAddRow = () => {
-  
+  this.setState( { isAddNewWorkOpen: true } );
+
   this.setState((prevState, props) => {
     const row = {jobDescription: "1",time: "2",gross: "3",discount: "4",net: "5" };
     return { rows: [...prevState.rows, row] };
@@ -488,8 +517,73 @@ handleRemoveRow = () => {
   });
 };
 
+closeAddButton = () => {
+  this.setState( { isAddNewWorkOpen: false } );
+
+};
 
   render () {
+
+    let workButtons;
+    let { isAddNewWorkOpen } = this.state;
+    if (!isAddNewWorkOpen) {
+    //  console.log("497" + isAddNewWorkOpen);
+      workButtons =
+      <div >
+          <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
+            <div> 
+              <Button onClick={this.close} >יציאה</Button>{' '}
+              <Button onClick={this.close}>עדכון</Button>{' '}
+              <Button onClick={this.close}>מחיקה</Button>{' '}
+              <Button onClick={this.handleAddRow} >הוספה</Button> 
+            </div>
+          </form>
+      </div>;
+    }
+
+    else {
+      workButtons = 
+      <div > 
+        <form  class="form-group" style={{fontSize: "11px", marginBottom: "4px"}} >
+          <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
+            <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
+              <label for="JobDescription" >תיאור עבודה</label>
+              <input type="text" id="JobDescription" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+            </div>
+
+            <div class="form-group col-md-1" style={{ marginBottom: "4px"}}  >
+              <label for="time">זמן תקן</label>
+              <input type="text" id="time" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+            </div>
+
+            <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
+             <label for="gross">ברוטו</label>
+             <input type="text" id="gross" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+            </div>
+
+            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
+              <label for="discount">הנחה %</label>
+              <input type="text" id="discount" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+            </div>
+
+            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
+              <label for="net">נטו</label>
+              <input type="text" id="net" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+            </div>
+
+          </div>
+        </form>
+        
+        <form  onSubmit={this.cardOpeningHandler}  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px", justifyContent: "left"}} >
+          <div  >  
+            <Button bsStyle="secondary" onClick={this.cardOpeningHandler}> <CheckIcon/> אישור </Button> {' '}
+            <Button bsStyle="secondary" onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> {' '}
+          </div>
+         </form>
+      </div>
+      ;
+
+    }
 //    const showWorkModel = this.state.showWorkModel;
 
     // const formElementsArray = [];
@@ -567,17 +661,17 @@ handleRemoveRow = () => {
 
                 <div class="form-group col-md-3" >
                   <label for="carDescription">תאור הרכב</label>
-                  <input type="carDescription" id="carDescription" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input type="carDescription" id="carDescription" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="speedometer">מד אוץ</label>
-                  <input  type="text"  id="speedometer" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text"  id="speedometer" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="engineCapacity">נפח מנוע</label>
-                  <input  type="text"  id="engineCapacity" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text"  id="engineCapacity" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
@@ -587,17 +681,17 @@ handleRemoveRow = () => {
   
                 <div class="form-group col-md-3" >
                   <label for="chalkModel">דגם גיר</label>
-                  <input  type="text" id="chalkModel" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text" id="chalkModel" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="lastVisit">ביקור אחרון</label>
-                  <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline"  onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="manufactureYear">שנת יצור</label>
-                  <select  id="manufactureYear" class="form-control" onChange={(event) => this.inputCarChangedHandler(event)}>
+                  <select  id="manufactureYear" class="form-control" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}>
                     <option selected></option>
                     <option>2020</option>
                     <option>2019</option>
@@ -610,22 +704,22 @@ handleRemoveRow = () => {
 
                 <div class="form-group col-md-3" >
                   <label for="deliveryDate" >תאריך מסירה</label> 
-                  <input type="text" id="deliveryDate" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input type="text" id="deliveryDate" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="driverName">שם הנהג</label>
-                  <input  type="text" id="driverName" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text" id="driverName" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="code">קודן</label>
-                  <input  type="text" id="code" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text" id="code" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="carNote">הערה לרכב</label>
-                  <input  type="text"  id="carNote" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input  type="text"  id="carNote" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
               </div> 
             </div>  
@@ -648,51 +742,51 @@ handleRemoveRow = () => {
   
                 <div class="form-group col-md-3" >
                   <label for="address">כתובת</label>
-                  <input type="text" id="address" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="address" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="city">עיר</label>
-                  <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
                 <div class="form-group col-md-3" >
                   <label for="postalCode" >מיקוד</label>
-                  <input type="text" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="homePhone">טלפון בית</label>
-                  <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="cellphone">סלולרי</label>
-                  <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="workingPhone">טלפון עבודה</label>
-                  <input type="text"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
                 
                 <div class="form-group col-md-3" >
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
-                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="mailAdress">כתובת מייל</label>
-                  <input type="text" id="mailAdress" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="mailAdress" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="orderNumber">מספר הזמנה</label>
-                  <input type="text" id="orderNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text" id="orderNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="customerNote">הערה ללקוח</label>
-                  <input type="text"  id="customerNote" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input type="text"  id="customerNote" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
 
               </div> 
@@ -706,32 +800,32 @@ handleRemoveRow = () => {
               <div class="form-row" > 
                 <div class="form-group col-md-3" >
                   <label for="insuranceAgent" >סוכן ביטוח</label>
-                  <input type="text" id="insuranceAgent" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text" id="insuranceAgent" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="appraiser">שמאי</label>
-                  <input type="text" id="appraiser" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text" id="appraiser" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="insuranceCompany">חברת ביטוח</label>
-                  <input type="text" id="insuranceCompany" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text" id="insuranceCompany" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="customerParticipation">השתתפות הלקוח</label>
-                  <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
                   <label for="policyNumber">מס. פוליסה</label>
-                  <input type="text" id="policyNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text" id="policyNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                   <label for="claimNumber">תביעה</label>
-                  <input type="text"  id="claimNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text"  id="claimNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
@@ -750,7 +844,7 @@ handleRemoveRow = () => {
               <div class="form-row" > 
                 <div class="form-group col-md-3" >
                   <label for="customerRequests" >תלונות/בקשות הלקוח</label>
-                  <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" onChange={(date) => this.inputChangedHandler(date)}/>
+                  <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(date) => this.inputChangedHandler(date)}/>
                 </div>
               </div> 
               
@@ -762,12 +856,12 @@ handleRemoveRow = () => {
 
         <div class="custom-file" >
           <input type="file" class="custom-file-input" id="customFiles"/>
-          <label class="custom-file-label" for="customFiles"> מסמכים להעלאה</label>
+          <label class="custom-file-label" for="customFiles" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}> מסמכים להעלאה</label>
 
         </div>
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="customImages"/>
-          <label class="custom-file-label" for="customImages"> תמונות להעלאה</label>
+          <label class="custom-file-label" for="customImages" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}> תמונות להעלאה</label>
         </div>
 
         </form>
@@ -777,8 +871,8 @@ handleRemoveRow = () => {
 
      <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} > עבודות </Button> {' '}
 
-     <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.your} 
-         style={{maxWidth: "900px"}}  >
+     <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.ModalDialog} 
+           >
        <Modal.Header closeButton style={{ backgroundColor:"#6c757d"}}   >
          <Modal.Title  >
          </Modal.Title>
@@ -820,7 +914,7 @@ handleRemoveRow = () => {
             <div class="form-group col-md-3" >
               <label for="licenseNumber" >מספר רישוי</label>
               <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline" 
-              value={this.state.userCarNumber}
+              value2={this.state.userCarNumber}
               />
             </div>
 
@@ -1086,39 +1180,39 @@ handleRemoveRow = () => {
         
         <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} >עבודות</Button> {' '}
 
-        <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.your} 
-         style={{maxWidth: "900px", display: "flex"  }}  >
-       <Modal.Header closeButton style={{ padding: "5px"}}   >
+        <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.ModalDialog} 
+         style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
+       <Modal.Header closeButton style={{ padding: "5px", textAlign:"right"}}   >
          <Modal.Title  >עבודות לכרטיס</Modal.Title>   
        </Modal.Header>
 
-       <Modal.Body  style={{ backgroundColor:"#6c757d", display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"6px"}}   >
+       <Modal.Body  style={{ backgroundColor:"#6c757d", display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"3px",flex: "none"}}   >
         
          <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
 
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="licenseNumber" style={{marginLeft: "10px"}} >מספר רישוי</label>
+            <div class="form-group col-md-3"   style={{ marginBottom: "4px"}}  > 
+              <label for="licenseNumber" >מספר רישוי</label>
               <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline"  style={{marginLeft: "10px"}} 
-              value={this.state.userCarNumber}
+              value2={this.state.userCarNumber}
               />
             </div>
 
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="ticketNumber" style={{marginLeft: "10px"}}>מספר כרטיס</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="ticketNumber" >מספר כרטיס</label>
               <input type="text" id="ticketNumber" value={this.state.cardDetails.ticketNumber} style={{marginLeft: "10px"}} 
               class="form-control" aria-describedby="passwordHelpInline"/>
             </div>
 
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="cardType" style={{marginLeft: "10px"}}>סוג כרטיס</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="cardType" >סוג כרטיס</label>
               <select id="inputState" class="form-control" style={{marginLeft: "10px"}}  onChange={(event) => this.inputChangedHandler(event)}>
                 <option selected>ביטוח</option>
                 <option>פרטי</option>
               </select>
             </div>
 
-            <div className="form-group form-inline" style={{ display: "contents"}}>
-            <label htmlFor="openingDate" style={{marginLeft: "10px"}}  >תאריך פתיחה</label>
+            <div class="form-group col-md-3"   style={{ marginBottom: "4px"}}  > 
+            <label htmlFor="openingDate"  >תאריך פתיחה</label>
             <input  type="text" name="openingDate" className="form-control" style={{marginLeft: "10px"}}  value={this.state.cardDetails.openingDate} />
           </div>
           </div> 
@@ -1126,45 +1220,45 @@ handleRemoveRow = () => {
       
          <div className={classes.separator}></div>
 
-       <Modal.Body  style={{ backgroundColor:"#6c757d" , display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"6px"}}   >
+       <Modal.Body  style={{ backgroundColor:"#6c757d" , display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none"}}   >
       
          <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto"}}> 
         
-         <div class="form-group form-inline" style={{ width:"50%"}} >
-              <label for="customerRequests" style={{marginLeft: "10px"}} >תיאור העבודה</label>
-              <input type="text" id="customerRequests" class="form-control " style={{marginLeft: "10px", width:"77%"}}  
+         <div class="form-group col-md-6"  style={{ marginBottom: "4px"}}   > 
+              <label for="customerRequests"  >תיאור העבודה</label>
+              <input type="text" id="customerRequests" class="form-control " style={{marginLeft: "10px"}}  
               aria-describedby="passwordHelpInline" value={this.state.cardDetails.customerRequests}/>
             </div>
 
-            <div class="form-group form-inline" style={{   width:"50%"}} >
-              <label for="customerName" style={{marginLeft: "10px"}}>שם לקוח</label>
-              <input type="text" id="customerName" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px", width:"85%"}} 
+            <div class="form-group col-md-6"  style={{ marginBottom: "4px"}}   > 
+              <label for="customerName" >שם לקוח</label>
+              <input type="text" id="customerName" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}} 
               value={this.state.customer_details.customerName}/>
             </div>
             </div>
 
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
 
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="cellphone" style={{marginLeft: "10px"}}>סלולרי</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="cellphone" >סלולרי</label>
               <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}} 
               value={this.state.customer_details.cellphone}/>
             </div>
   
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="homePhone" style={{marginLeft: "10px"}}>טלפון בית</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="homePhone" >טלפון בית</label>
               <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}}  
               value={this.state.customer_details.homePhone}/>
             </div>
 
-            <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="orderNumber" style={{marginLeft: "10px"}}>הזמנה</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="orderNumber" >הזמנה</label>
               <input type="text" id="orderNumber" class="form-control" aria-describedby="passwordHelpInline"  style={{marginLeft: "10px"}} 
               value={this.state.customer_details.orderNumber}/>
             </div>
 
-         <div class="form-group form-inline" style={{ display: "contents"}} >
-              <label for="speedometer" style={{marginLeft: "10px"}}>מד אוץ</label>
+            <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
+              <label for="speedometer" >מד אוץ</label>
               <input  type="text"  id="speedometer" class="form-control" style={{marginLeft: "10px"}}  
               aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
             </div>
@@ -1173,7 +1267,7 @@ handleRemoveRow = () => {
 
          </Modal.Body>
          <div className={classes.separator}></div>
-         <Modal.Body  style={{ backgroundColor:"#6c757d", padding:"6px" }}   >
+         <Modal.Body  style={{ backgroundColor:"#6c757d", padding:"3px",flex: "none" }}   >
 
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות:</div> 
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
@@ -1181,12 +1275,12 @@ handleRemoveRow = () => {
 
       </Modal.Body>
       
-       <Modal.Body style={{padding: "0px"}}>
+       <Modal.Body style={{padding: "0px",flex: "auto"}}>
 
       
         <div class="table-wrapper" style={{direction: "rtl"}}>
            
-            <table class="table table-bordered" style={{marginBottom: "0px"}} >
+            <table class="table table-bordered" style={{marginBottom: "1px"}} >
                 <thead >
                     <tr >
                         <th  scope="col" style={{ textAlign: "right"}}>תיאור עבודה</th>
@@ -1237,15 +1331,12 @@ handleRemoveRow = () => {
 
 
        </Modal.Body>
-       <Modal.Footer>
+       <Modal.Footer style={{padding: "5px", display: "block"}}>
 
+            {workButtons}
+      
 
-         
-         <Button onClick={this.close} >יציאה</Button>
-    
-         <Button onClick={this.close}>עדכון</Button>
-         <Button onClick={this.close}>מחיקה</Button>
-         <Button onClick={this.handleAddRow} >הוספה</Button>
+      
 
        </Modal.Footer>
      </Modal>
@@ -1253,6 +1344,7 @@ handleRemoveRow = () => {
       </span>
 
 
+       
       <Button bsStyle="secondary"  disabled={!this.state.formIsValid}  >חלקים</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
@@ -1266,6 +1358,13 @@ handleRemoveRow = () => {
   }
   }
 }
+
+{/* <Button onClick={this.close} >יציאה</Button>
+    
+<Button onClick={this.close}>עדכון</Button>
+<Button onClick={this.close}>מחיקה</Button>
+<Button onClick={this.handleAddRow} >הוספה</Button> */}
+
 
 {/* <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
 <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
