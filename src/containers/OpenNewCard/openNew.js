@@ -2,27 +2,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-//import classes from './openNew.module.css';
+import classes from './openNew.module.css';
 import DatePicker from "react-datepicker";
-//import Calendar from 'react-calendar';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { database } from 'firebase';
 
 import "react-datepicker/dist/react-datepicker.css";
-import Button2 from '../../components/UI/Button/Button';
+import Image from './images.js';
+import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
+import Input from '../../components/UI/Input/Input';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../store/actions/index';
-//import { Navbar, Jumbotron ,Modal} from 'react-bootstrap';
-import { Modal ,Button } from 'react-bootstrap';
-///import Toast from 'react-bootstrap/Toast'
-import classes from '../../components/UI/Modal/Modal.module.css';
-//import {  AppBar,  Toolbar,  Typography,  CardContent,  NativeSelect,  Table,  TableCell,  TableBody,  TableRow} from '@material-ui/core';
 import { updateObject, checkValidity} from '../../shared/utility'; //
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import card from '../../components/Card/Card';
+import { FaThinkPeaks } from 'react-icons/fa';
+
 const getDateTime = () => {
   let tempDate = new Date();
   let date = tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds() +' '+ tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear(); 
@@ -39,10 +41,15 @@ class openNew extends Component   {
     this.state = {
     identifiedCardID:'',
     rows: [],
+    term:'',
+    cards:{},
+    book:[],
     userCarNumber:'',
     dataBaseCarNumber:'',
     cardDetails:{},
     carDetails:{},
+    ImageFiles:[],
+    DocFiles:[],
     found: false,
     customer_details:{},
     startDate: new Date(),
@@ -55,12 +62,6 @@ class openNew extends Component   {
     cardForm: { 
       licenseNumber: {
         value: '',
-        validation: {
-          required: true,
-          minLength: 3, //need to change to 7 
-          maxLength: 10, //need to change to 8 
-          isNumeric: true
-      },
         valid: false,
         touched: false
       }, 
@@ -135,6 +136,16 @@ class openNew extends Component   {
 
     vehicleData: { 
 
+      manufacturer:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      model:{
+        value: '',
+        valid: false,
+        touched: false
+     },
       carDescription:{
         value: '',
         valid: false,
@@ -145,7 +156,21 @@ class openNew extends Component   {
         valid: false,
         touched: false
       },
- 
+      engineHours:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      chassisNumber:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      engineNumber:{
+        value: '',
+        valid: false,
+        touched: false
+      },
       engineCapacity:{
         value: '',
         valid: false,
@@ -314,9 +339,8 @@ class openNew extends Component   {
         touched: false
       }
     }
-
-   }; 
-  }
+  }; 
+}
 //    constructor(props){
 //      super(props);
 //      this.state = {
@@ -324,10 +348,12 @@ class openNew extends Component   {
 //           }
 //   };
 
+   
+
   cardOpeningHandler = ( event ) => {
     console.log("327");
     event.preventDefault(); // with that we get the Card details
-   // this.setState( { loading: true } ); // set the state to loading initially to show a spinner
+    //this.setState( { loading: true } ); // set the state to loading initially to show a spinner
     const formData = {};
     for (let formElementIdentifier in this.state.cardForm) {
       formData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
@@ -348,7 +374,7 @@ for (let formElementIdentifier in this.state.customerDetails) {
         cardData: formData,
         carData: carData, 
         customerData: customerData,
-        userId: this.props.userId,
+        userId: this.props.userId
     }   
     this.props.onCardOpening(card, this.props.token); // this contains all the data of card 
 }
@@ -361,35 +387,25 @@ inputChangedHandler = (event) => {
       // this.state.cardForm[inputIdentifier] -> this is the old object
       // the second object it a java script object
       value: event.target.value,
-      valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
       touched: true
   });
-
-
   const updatedCardForm = updateObject(this.state.cardForm, { // here we want to update the overall card for a given input identifer
       [event.target.id]: updatedFormElement // here we need to pass javascript object and pass a new properties and it should be dynamic input identifier where we pick a specific control.
   });
 
   let formIsValid = true;
-  if (event.target.id === 'licenseNumber'   ) { // the user must enter valid car number! the rest does not matter
-      formIsValid = updatedCardForm[event.target.id].valid;  
-  }
-  // let formIsValid = true;
-  // for (let inputIdentifier in updatedCardForm) {
-  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-  // }
-
-  if(event.target.id==='licenseNumber')    
-    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
-  else
-    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
-
+  for (let inputIdentifier in updatedCardForm) {
+      formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+     
   }
   
 
 
 
 
+  this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
+}
 
 inputCarChangedHandler = (event) => { 
 
@@ -404,14 +420,17 @@ const updatedCardForm = updateObject(this.state.vehicleData, {
     [event.target.id]: updatedFormElement 
 });
 
-// let formIsValid = true;
-// for (let inputIdentifier in updatedCardForm) {
-//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-// }
-this.setState({vehicleData: updatedCardForm}); //, formIsValid: formIsValid
+let formIsValid = true;
+for (let inputIdentifier in updatedCardForm) {
+    formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+   
+}
+this.setState({vehicleData: updatedCardForm, formIsValid: formIsValid});
 }
 
 inputCusChangedHandler = (event) => { //inputIdentifier
+
+  //console.log("299" + state);
 
 const updatedFormElement = updateObject(this.state.customerDetails[event.target.id], { 
 
@@ -419,15 +438,17 @@ const updatedFormElement = updateObject(this.state.customerDetails[event.target.
     //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
     touched: true
 });
+
 const updatedCardForm = updateObject(this.state.customerDetails, { 
     [event.target.id]: updatedFormElement 
 });
 
-// let formIsValid = true;
-// for (let inputIdentifier in updatedCardForm) {
-//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-// }
-this.setState({customerDetails: updatedCardForm}); //, formIsValid: formIsValid
+let formIsValid = true;
+for (let inputIdentifier in updatedCardForm) {
+    formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+   
+}
+this.setState({customerDetails: updatedCardForm, formIsValid: formIsValid});
 }
 
 inputNewWorkChangedHandler = (event) => { 
@@ -454,6 +475,16 @@ inputNewWorkChangedHandler = (event) => {
   });
 };
 
+fetchBooks = () => {
+  fetch('https://console.firebase.google.com/project/garage-management-softwa/database/data/')
+  .then((response) => response.json())
+  .then(booksList => {
+      this.setState({ cards: booksList });
+      
+  });
+  console.log(this.state.book);
+}
+
 check(data){
   if(data.cardData.licenseNumber===this.state.userCarNumber){
     this.state.found=true;
@@ -466,22 +497,29 @@ check(data){
 
     //console.log(this.state.carDetails);
     //console.log(this.state.cardDetails);
-    //console.log(this.state.customer_details);   
+    //console.log(this.state.customer_details); 
   }
 }
+
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
   this.props.onFetchCards(this.props.token, this.props.userId);
+  
+  
 }
 
-onChange = date => this.setState({ date })
 
-handleShowWorkModel = () => {
-  this.setState( { showWorkModel: true } );
-  console.log("370" + this.showWorkModel);
+componentWillUpdate(nextProps, nextState) {
+  console.log(nextProps.cards);
+  console.log(nextState);
+  //console.log(this.fetchData(this.props.cards));
+  this.state.cards=nextProps.cards;
+  //this.setState({books: nextProps.cards});
 }
 
-getInitialState() {
-  return { showWorkModel: false };
+componentDidUpdate(preProps,preState){
+  console.log(preProps.cards);
+  console.log(preState);
+  this.fetchBooks();
 }
 
 close = (event) => {
@@ -585,15 +623,41 @@ closeAddButton = () => {
 
     }
 //    const showWorkModel = this.state.showWorkModel;
+change(term){
+  const name = this.props.searchBoxName || undefined
+    this.setState({term});
+    if(this.props.onSearchTermChange){
+      this.props.onSearchTermChange({name,term})
+    }
+  //this.setState(event.target.value);
+  //console.log(event.target.value);
+  
+}
 
-    // const formElementsArray = [];
-    // for (let key in this.state.cardForm) {
-    //     formElementsArray.push({
-    //         id: key,
-    //         config: this.state.cardForm[key]         
-    //     });
-    // }
+fileSelectedHandler = (e) => {
+  for ( let fieldName in e.target.files ) {
+    if(e.target.files[fieldName].type==="image/jpeg"){
+      this.state.ImageFiles.push(e.target.files[fieldName]);
+    }
+  }
+  for ( let fieldName in e.target.files ) {
+    if(e.target.type === "file" && e.target.files[fieldName].type!=="image/jpeg"){
+      this.state.DocFiles.push(e.target.files[fieldName]);
+    }
+  }
+  for(let g in this.state.DocFiles){
+    if(this.state.DocFiles[g].type==='undefined'){
+      console.log(this.state.DocFiles[g].type);
+    }
+  }
+  console.log(this.state.ImageFiles);
+  console.log(this.state.DocFiles);
+}
 
+
+onChange = date => this.setState({ date })
+
+  render () {
 
     let cards;
     if(this.state.userCarNumber!==""){
@@ -601,23 +665,10 @@ closeAddButton = () => {
         this.check(card)
       ))
     }
-
-  //   if ( this.props.loading ) {
-  //     return(
-  //         <Toast>
-  //           <Toast.Header>
-  //           <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-  //            <strong className="mr-auto">Bootstrap</strong>
-  //             <small>11 mins ago</small>
-  //         </Toast.Header>
-  //         <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-  //       </Toast>
-  //     );
-  // }
-
+  
   if(!this.state.found){
   return (
-   
+    
           <form  onSubmit={this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >
   
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
@@ -631,7 +682,6 @@ closeAddButton = () => {
                   value2={this.state.userCarNumber}
                   onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
-  
                 <div class="form-group col-md-3" >
                   <label for="ticketNumber">מספר כרטיס</label>
                   <input type="text" id="ticketNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
@@ -651,7 +701,9 @@ closeAddButton = () => {
               </div>
               </div> 
             </div>
+    
           </div>
+
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             <div class="card-header" style={{fontSize: "14px"}}>עדכון פרטי רכב</div>
@@ -660,6 +712,16 @@ closeAddButton = () => {
               <div class="form-row" > 
 
                 <div class="form-group col-md-3" >
+                  <label for="manufacturer" >יצרן</label>
+                  <input  type="text" id="manufacturer" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                </div>
+  
+                <div class="form-group col-md-3" >
+                  <label for="model">דגם</label>
+                  <input  type="text" id="model" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                </div>
+  
+                <div class="form-group col-md-3" >
                   <label for="carDescription">תאור הרכב</label>
                   <input type="carDescription" id="carDescription" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
@@ -667,6 +729,21 @@ closeAddButton = () => {
                 <div class="form-group col-md-3" >
                   <label for="speedometer">מד אוץ</label>
                   <input  type="text"  id="speedometer" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}/>
+                </div>
+  
+                <div class="form-group col-md-3" >
+                  <label for="engineHours" >שעות מנוע</label>
+                  <input  type="text" id="engineHours" class="form-control " aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                </div>
+  
+                <div class="form-group col-md-3" >
+                  <label for="chassisNumber">מספר שלדה</label>
+                  <input  type="text" id="chassisNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                </div>
+  
+                <div class="form-group col-md-3" >
+                  <label for="engineNumber">מספר מנוע</label>
+                  <input  type="text" id="engineNumber" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -831,7 +908,6 @@ closeAddButton = () => {
                 <div class="form-group col-md-3" >
                   <label for="dateOfDamage">תאריך נזק</label>
                   <DatePicker name="dateOfDamage" style={{input: "input"}} class="form-control" aria-describedby="passwordHelpInline" selected={this.state.startDate} onChange={(event) => this.inputChangedHandler(event)} />
-
                 </div>
               </div> 
             </div>
@@ -850,7 +926,23 @@ closeAddButton = () => {
               
             </div>   
           </div>  
-   
+          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+            <div class="card-header" style={{fontSize: "14px"}}>העלאת תמונות וקבצים</div>
+              <div class="card-body text-dark bg-white" >
+                <div class="form-row" > 
+                  <div class="form-group col-md-3" >
+                  <form>
+                    <h5>תמונות:</h5>
+                        <input type="file" multiple onChange={this.fileSelectedHandler}/>
+                  </form>
+                  <form>
+                    <h5>מסמכים:</h5>
+                        <input type="file" multiple onChange={this.fileSelectedHandler} />
+                  </form>
+                  </div>
+                </div>  
+              </div>  
+            </div>  
         <form class="form-group" > 
         <form class="form-group" style={{display: "flex"}} > 
 
@@ -894,28 +986,33 @@ closeAddButton = () => {
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
 
           <Button2  btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
+          <span><a class="btn btn-secondary btn-lg" href="#" role="button">עבודות</a>  </span>
+          <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
+          <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
+          <span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span>
+              
+          <Button  btnType="Success" disabled={this.state.formIsValid}>שמירה  </Button>
 
         </form>
 
       </form>
- 
     );
   }
   else{
     return (
-
       <form  onSubmit={this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >
 
       <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
         <div class="card-header" style={{fontSize: "14px"}}>פרטים</div>
         
-        <div class="card-body text-dark bg-white"    >
+        <div class="card-body text-dark bg-white" >
           <div class="form-row" > 
             <div class="form-group col-md-3" >
               <label for="licenseNumber" >מספר רישוי</label>
               <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline" 
               value2={this.state.userCarNumber}
               />
+              onChange={(event) => this.inputChangedHandler(event)}/>
             </div>
 
             <div class="form-group col-md-3" >
@@ -943,20 +1040,64 @@ closeAddButton = () => {
 
 
       <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-        <div class="card-header" style={{fontSize: "14px"}}>עדכון פרטי רכב</div> 
+        <div class="card-header" style={{fontSize: "14px"}}>עדכון פרטי רכב</div>
+        
         <div class="card-body text-dark bg-white" >
           <div class="form-row" > 
 
             <div class="form-group col-md-3" >
+              <label for="manufacturer" >יצרן</label>
+              <input  type="text" id="manufacturer" class="form-control " aria-describedby="passwordHelpInline" 
+              value={this.state.carDetails.manufacturer}
+              />
+              {(() => {
+                if(true){}
+              })()}
+            </div>
+
+            <div class="form-group col-md-3" >
+              <label for="model">דגם</label>
+              <input  type="text" id="model" class="form-control" aria-describedby="passwordHelpInline" 
+              value={this.state.carDetails.model}
+              />
+            </div>
+            <div class="form-group col-md-3" >
+            {(() => {
+                if(this.state.term!==''){
+
+                  this.state.carDetails.carDescription=this.state.term;
+                }
+                 
+              })()}
               <label for="carDescription">תאור הרכב</label>
               <input type="carDescription" id="carDescription" class="form-control" aria-describedby="passwordHelpInline" 
-              value={this.state.carDetails.carDescription}/>
+              value={this.state.carDetails.carDescription}
+              onChange={event => this.change(event.target.value)}
+              />
             </div>
 
             <div class="form-group col-md-3" >
               <label for="speedometer">מד אוץ</label>
               <input  type="text"  id="speedometer" class="form-control" 
               aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
+            </div>
+
+            <div class="form-group col-md-3" >
+              <label for="engineHours" >שעות מנוע</label>
+              <input  type="text" id="engineHours" class="form-control " aria-describedby="passwordHelpInline" 
+              value={this.state.carDetails.engineHours}/>
+            </div>
+
+            <div class="form-group col-md-3" >
+              <label for="chassisNumber">מספר שלדה</label>
+              <input  type="text" id="chassisNumber" class="form-control" aria-describedby="passwordHelpInline" 
+              value={this.state.carDetails.chassisNumber}/>
+            </div>
+
+            <div class="form-group col-md-3" >
+              <label for="engineNumber">מספר מנוע</label>
+              <input  type="text" id="engineNumber" class="form-control" aria-describedby="passwordHelpInline" 
+              value={this.state.carDetails.engineNumber}/>
             </div>
 
             <div class="form-group col-md-3" >
@@ -1144,7 +1285,6 @@ closeAddButton = () => {
             </div>
           </div> 
         </div>
-
       </div>
 
       <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
@@ -1156,11 +1296,26 @@ closeAddButton = () => {
               <input type="text" id="customerRequests" class="form-control " 
               aria-describedby="passwordHelpInline" value={this.state.cardDetails.customerRequests}/>
             </div>
-          </div> 
-          
+          </div>   
         </div>   
       </div>  
-
+      <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+            <div class="card-header" style={{fontSize: "14px"}}>העלאת תמונות וקבצים</div>
+              <div class="card-body text-dark bg-white" >
+                <div class="form-row" > 
+                  <div class="form-group col-md-3" >
+                  <form>
+                    <h5>תמונות:</h5>
+                        <input type="file" multiple onChange={this.fileSelectedHandler}/>
+                  </form>
+                  <form>
+                    <h5>מסמכים:</h5>
+                        <input type="file" multiple onChange={this.fileSelectedHandler} />
+                  </form>
+                  </div>
+                </div>  
+              </div>  
+            </div> 
     <form class="form-group" > 
     <form class="form-group" style={{display: "flex"}} > 
 
@@ -1349,64 +1504,61 @@ closeAddButton = () => {
       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
       <Button2 btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
+    
+
+      <span><a class="btn btn-secondary btn-lg" href="#" role="button">עבודות</a>  </span>
+      <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
+      <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
+      <span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span>
+      
+      <Button  btnType="Success" disabled={this.state.formIsValid}>עדכון  </Button>
 
     </form>
 
   </form>
-
   );
   }
   }
 }
 
-{/* <Button onClick={this.close} >יציאה</Button>
+/* <Button onClick={this.close} >יציאה</Button>
     
 <Button onClick={this.close}>עדכון</Button>
 <Button onClick={this.close}>מחיקה</Button>
-<Button onClick={this.handleAddRow} >הוספה</Button> */}
+<Button onClick={this.handleAddRow} >הוספה</Button> */
 
 
-{/* <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
+/* <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
 <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
-<span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span> */}
+<span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span> */
 
 
 //  <DatePicker style={{input: "input"}} class="form-control" aria-describedby="passwordHelpInline" selected={this.state.startDate} onChange={this.handleChange}/>
+/*
+ * <button 
+              type="submit" 
+              className="btn btn-md btn-primary sign-in-button"
+              onClick={() => this.updateTitle()}
+            >
+              Post
+      </button>
+ */
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
   return {
-   
       cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
-      loading: state.card.loading,// the loading is coming from the card
+      loading: state.card.loading,
       token: state.auth.token,
-      userId: state.auth.userId, 
-      showWorkModel: state.card.showWorkModel
+      userId: state.auth.userId
   };
 };
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
-  return { // we need to return a map of props to functions
+  return {
     onFetchCards: (token,userId) => dispatch( actions.fetchCards(token, userId) ),
     onCardOpening: (cardData, token) => dispatch(actions.cardOpening(cardData, token)),
-    workModalOpening: (token ) =>  dispatch(actions.workModalOpening(token)),
-    workModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
 
-    
-
-    //  return a map to map my props to dispatchable functions
-      //here we want to execute an anonymous function where we eventually dispatch the action we just created it
-      // note - we need to execute this function - "fetchCards()" to really get the action
   };
 };
 
-/*const mapDispatchToProps = dispatch => {
-  return { // we need to return a map of props to functions
-      onCardOpening: (cardData, token) => dispatch(actions.cardOpening(cardData, token)) 
-  };
-};*/
-
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(openNew,axios));
-
-
-
-

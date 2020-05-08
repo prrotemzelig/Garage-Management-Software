@@ -39,8 +39,8 @@ class SearchBar extends React.Component {
               onKeyPress={this.props.onKeyPress|| null}/>
             </div>
             
-            </div>
-            <div>
+          </div>
+          <div>  
               <Search
                 value={this.state.term}
                 />

@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-
+import classes from '../../components/Card/Card.module.css';
 import Card from '../../components/Card/CardSearch';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
-
+import './Serch.css'
 class Search extends React.Component {
     constructor(props){
         super(props);
         this.state = {
           carNumber:'',
+          found: false,
         }
       }
   
@@ -19,6 +20,19 @@ class Search extends React.Component {
       this.props.onFetchCards(this.props.token, this.props.userId);
       
   }
+  check(data){
+    if(data.cardData.licenseNumber===this.state.carNumber){
+      this.state.found=true;
+      //this.state.dataBaseCarNumber=data.cardData.licenseNumber;
+      //this.state.carDetails=data.carData;
+      //this.state.cardDetails=data.cardData;
+      //this.state.customer_details=data.customerData;
+      //console.log(this.state.carDetails);
+      //console.log(this.state.cardDetails);
+      //console.log(this.state.customer_details); 
+    }
+  }
+  
   
     render () {
       let cards;
@@ -28,18 +42,49 @@ class Search extends React.Component {
             cards = <Spinner />;
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards = this.props.cards.map( card => (
+                this.check(card),
               <Card
                   data={this.state.carNumber}
                   key={card.id}
                   cardData={card.cardData}/> 
                ))
+               //this.check(card)
             }
           }
+      //if(this.state.found && this.state.carNumber!==''){
+      if(!this.state.found && this.state.carNumber!==''){
+        return ( 
+          <div style={{
+            alignitems: 'center',
+            justifycontent: 'center'}}>
+            <h5>לא נמצאה היסטוריה עבור רכב זה </h5></div>
+         
+      );
+      }else{
       return (
           <div >
               {cards} 
           </div>
       );
+      }
+      /*}if(!this.state.found && this.state.carNumber!==''){
+        return (
+          
+          <div >
+            <div className={classes.Card} >
+              <div className="result">
+              <h5>לא נמצאה היסטוריה לרכב זה</h5>
+              </div>
+            </div>
+          </div>
+      );
+
+      }
+      else{
+        return(
+          <div></div>
+        );
+      }*/
     }
   
 }
