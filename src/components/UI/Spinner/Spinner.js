@@ -2,11 +2,11 @@
 import React from 'react';
 import { Spinner } from "reactstrap";
 
-import classes from './Spinner.module.css';
+//import classes from './Spinner.module.css';
 
 const spinner = () => (
-<div>
-    <Spinner color="secondary" style={{ width: '10rem', height: '10rem' }} />
+<div  style= {{textAlign: "center",position: "center"}}> 
+    <Spinner color="secondary" style={{ width: '10rem', height: '10rem' , position: "center", textAlign: "center"}} />
 </div>
 
     //<div className={classes.Loader}>Loading...</div>

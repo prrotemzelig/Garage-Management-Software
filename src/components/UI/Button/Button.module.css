@@ -9,20 +9,33 @@
     margin: 10px;
     font-weight: bold;
     font-family: Alef Hebrew;
+    background-color: rgb(54, 55, 64);
+    border-color: #2e6da4;
+    width: 50%;
+   
+    cursor: pointer;
 
 }
 
 .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
+    
 }
 
 
 
 .Success {
-    color: #5C9210;
+  color: white; 
+   
 }
 
 .Danger {
-    color: #944317;
+    color: white;
 }
+
+
+ .Button:disabled {
+     color: #ccc;
+     cursor: not-allowed;
+ }

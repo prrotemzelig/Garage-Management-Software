@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './Card.module.css';
+//import classes from './Card.module.css';
 /// rotem
 // show the details of each card that in the garage right now
 const card = ( props ) => {
@@ -93,7 +93,7 @@ const card = ( props ) => {
 //   </tr>
     return (
     
-        <tr  style={{fontSize: "18px"}}>
+        <tr  style={{fontSize: "18px", direction: "rtl"}}>
     
         {cardsDetailsOutput}
         </tr>  

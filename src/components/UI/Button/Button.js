@@ -9,10 +9,15 @@ onClick listener for sure where we need to execute props.clicked,
 we need different style links for different types of buttons, a cancel button, a continue button or something like that.
 */
 const button = (props) => (
-    <button
+    <button 
+        disabled={props.disabled}
         className={[classes.Button, classes[props.btnType]].join(' ')}
         onClick={props.clicked}>{props.children}</button>
 );
+
+{/* <button
+className={[classes.Button, classes[props.btnType]].join(' ')} // for mergeing the danger or sucess color and then know witch one to show 
+onClick={props.clicked}>{props.children}</button> */}
 
 export default button;
 

@@ -1,18 +1,20 @@
-import $ from 'jquery';
-import Popper from 'popper.js';
+//import $ from 'jquery';
+//import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'; //compose allows us to compose our own set of enhancers and middleware is just one kind of enhancer
 import thunk from 'redux-thunk';
-
+import './index.module.css';
+//import 'bootstrap/dist/css/bootstrap.css';
+//import 'bootstrap/dist/css/bootstrap-theme.css';
 
 //import '@fortawesome/fontawesome-free/css/all.min.css';
 //import 'bootstrap-css-only/css/bootstrap.min.css';
 //import 'mdbreact/dist/css/mdb.css';
 
-import './index.module.css';
+//import './index.module.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker.js';
 import cardReducer from './store/reducers/card';

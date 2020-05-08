@@ -13,7 +13,7 @@ import IconSettings from '../../assets/icon-settings';
 import IconSubscription from '../../assets/icon-subscription';
 import IconBurger from '../../assets/icon-burger';
 
-import NavigationItem from '../Navigation/NavigationItems/NavigationItem/NavigationItem';
+//import NavigationItem from '../Navigation/NavigationItems/NavigationItem/NavigationItem';
 
 const styles = StyleSheet.create({
     burgerIcon: {

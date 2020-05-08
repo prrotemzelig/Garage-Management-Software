@@ -1,20 +1,18 @@
 .Input {
     width: 100%;
-    padding: 10px;
+    padding: 3px;
     box-sizing: border-box;
     position: center;
     margin: auto;
-    margin-left: 50px;
-    margin-right: 50px;
-    display: flex;
+    display: inherit;
     
 }
 
 
 .Label {
     width: 80%;
-    font-weight: bold;
-    display: flex;
+    font-weight: 100;
+    display: inline;
     margin-bottom: 8px;
 }
 
@@ -37,8 +35,9 @@
 }
 .text {
     width: 20%;
-    width: 250px;
+    width: 100px;
     padding: inherit;
+    text-align:inherit ;    
 }
 .Invalid {
     border: 1px solid red;

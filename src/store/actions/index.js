@@ -2,7 +2,9 @@
 export {
     cardOpening,
     purchaseInit,
-    fetchCards
+    fetchCards,
+    workModalOpening,
+    workModalClose
 } from './card';
 export {
     auth, // import the auth method itself
