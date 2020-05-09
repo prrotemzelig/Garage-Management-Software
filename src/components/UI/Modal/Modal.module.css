@@ -3,59 +3,49 @@
     z-index: 500;
     background-color: white;
     width: 70%;
-    border: 1px solid #ccc;
+    border: 10px solid white;
     box-shadow: 1px 1px 1px black;
-    padding: 16px;
+ 
     left: 15%;
     top: 30%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
+    text-align: center;
+
 }
 
 @media (min-width: 400px) {
     .Modal {
-        width: 600px;
+        width: 500px;
         left: calc(50% - 250px);
        
     }
-    .modalDialog {
-        max-width: 800px;
+      
+    .ModalDialog {
+        display: block; 
+        width: 1200px; 
+        overflow-y:none;
+        max-width: 100%;
+        height: auto;
     }
-
-    
-.your {
-    display: block; 
-    width: 1200px; 
-    padding-left: 25px;
-    max-width: fit-content;
-    overflow-y:none
-}
 }
 
 
-
-.modal-dialog {
-    width: 800px;
-    margin: 30px auto;
-    justify-content: center;
-
-}
-
-.your {
+.ModalDialog {
     display: inline-block;
-    position: fixed;
     vertical-align: middle;
-
     flex-flow: wrap;
     display: flex;
     flex-grow: 1;
     justify-content: center;
     max-height: 100%;
     overflow-y: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 20px;
 }
 
 .separator {
     border-top: 1px solid #DDE2FF;
-    
     opacity: 0.06;
 }
