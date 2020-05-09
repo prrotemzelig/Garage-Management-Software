@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import DatePicker from "react-datepicker";
 //import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-//import { database } from 'firebase';
+import { database } from 'firebase';
 import "react-datepicker/dist/react-datepicker.css";
 import Image from './images.js';
 import Button2 from '../../components/UI/Button/Button';
@@ -14,13 +14,13 @@ import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; //
-import card from '../../components/Card/Card';
-import { FaThinkPeaks } from 'react-icons/fa';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import card from '../../components/Card/Card';
+import { FaThinkPeaks } from 'react-icons/fa';
 import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
 
@@ -29,11 +29,10 @@ const getDateTime = () => {
   let date = tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds() +' '+ tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear(); 
   return date;
 }
-
-class openNew extends Component  {
+class openNew extends Component   {
   
-  constructor(props) {
-    super(props)
+    constructor(props) {
+        super(props)
     this.state = {
     identifiedCardID:'',
     rows: [],
@@ -341,8 +340,8 @@ class openNew extends Component  {
         touched: false
       }
     }
-   };
-  }
+  }; 
+}
 //    constructor(props){
 //      super(props);
 //      this.state = {
@@ -405,7 +404,7 @@ inputChangedHandler = (event) => {
   else
     this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
 
-}
+  }
 
 inputCarChangedHandler = (event) => { 
 
@@ -500,7 +499,7 @@ check(data){
 }
 
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-  this.props.onFetchCards(this.props.token, this.props.userId);  
+  this.props.onFetchCards(this.props.token, this.props.userId);
 }
 
 componentWillUpdate(nextProps, nextState) {
@@ -781,7 +780,7 @@ onChange = date => this.setState({ date })
   
                 <div class="form-group col-md-3" >
                   <label for="lastVisit">ביקור אחרון</label>
-                  <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline"  onChange={(event) => this.inputCarChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -866,7 +865,7 @@ onChange = date => this.setState({ date })
                 
                 <div class="form-group col-md-3" >
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
-                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" onChange={(event) => this.inputCusChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -895,7 +894,7 @@ onChange = date => this.setState({ date })
               <div class="form-row" > 
                 <div class="form-group col-md-3" >
                   <label for="insuranceAgent" >סוכן ביטוח</label>
-                  <input type="text" id="insuranceAgent" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputChangedHandler(event)}/>
+                  <input type="text" id="insuranceAgent" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -961,10 +960,10 @@ onChange = date => this.setState({ date })
                 </div>  
               </div>  
             </div>  
-
-
-   <form class="form-group" > 
-        <span>
+     
+     
+        <form class="form-group" > 
+        <span>       
      <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} > עבודות </Button> {' '}
 
      <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.ModalDialog} 
@@ -1008,6 +1007,7 @@ onChange = date => this.setState({ date })
               <label for="licenseNumber" >מספר רישוי</label>
               <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline" 
               value2={this.state.userCarNumber}
+              
               onChange={(event) => this.inputChangedHandler(event)}/>
             </div>
 
@@ -1312,7 +1312,7 @@ onChange = date => this.setState({ date })
                 </div>  
               </div>  
             </div> 
-            <form class="form-group" > 
+    <form class="form-group" > 
     <span>    
         <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} >עבודות</Button> {' '}
 
@@ -1467,10 +1467,9 @@ onChange = date => this.setState({ date })
   </form>
   );
   }
-
+  
 }
 }
-
 
 // <form class="form-group" style={{display: "flex"}} > 
 
@@ -1527,6 +1526,9 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     workModalOpening: (token ) =>  dispatch(actions.workModalOpening(token)),
     workModalClose: (token ) =>  dispatch(actions.workModalClose(token))
 
+        //  return a map to map my props to dispatchable functions
+      //here we want to execute an anonymous function where we eventually dispatch the action we just created it
+      // note - we need to execute this function - "fetchCards()" to really get the action
 
   };
 };
