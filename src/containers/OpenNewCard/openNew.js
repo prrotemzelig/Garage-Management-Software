@@ -1,16 +1,14 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import classes from './openNew.module.css';
+//import dd from './openNew.module.css';
 import DatePicker from "react-datepicker";
-import Calendar from 'react-calendar';
+//import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { database } from 'firebase';
-
 import "react-datepicker/dist/react-datepicker.css";
 import Image from './images.js';
-import Button from '../../components/UI/Button/Button';
+import Button2 from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
 import Input from '../../components/UI/Input/Input';
@@ -24,20 +22,18 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import card from '../../components/Card/Card';
 import { FaThinkPeaks } from 'react-icons/fa';
+import { Modal ,Button } from 'react-bootstrap';
+import classes from '../../components/UI/Modal/Modal.module.css';
 
 const getDateTime = () => {
   let tempDate = new Date();
   let date = tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds() +' '+ tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear(); 
   return date;
 }
-
-
 class openNew extends Component   {
   
     constructor(props) {
         super(props)
- 
-    
     this.state = {
     identifiedCardID:'',
     rows: [],
@@ -62,6 +58,12 @@ class openNew extends Component   {
     cardForm: { 
       licenseNumber: {
         value: '',
+        validation: {
+          required: true,
+          minLength: 3, //need to change to 7 
+          maxLength: 10, //need to change to 8 
+          isNumeric: true
+      },
         valid: false,
         touched: false
       }, 
@@ -348,10 +350,7 @@ class openNew extends Component   {
 //           }
 //   };
 
-   
-
   cardOpeningHandler = ( event ) => {
-    console.log("327");
     event.preventDefault(); // with that we get the Card details
     //this.setState( { loading: true } ); // set the state to loading initially to show a spinner
     const formData = {};
@@ -369,7 +368,6 @@ for (let formElementIdentifier in this.state.customerDetails) {
   customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
 }
 
-
     const card = { // here we  prepare the card data
         cardData: formData,
         carData: carData, 
@@ -380,14 +378,13 @@ for (let formElementIdentifier in this.state.customerDetails) {
 }
 
 inputChangedHandler = (event) => { 
-  //console.log("318 " + event.target.id);
 
   const updatedFormElement = updateObject(this.state.cardForm[event.target.id], { 
       // here we pass my cardForm and there (inputIdentifier) -> it show the control 
       // this.state.cardForm[inputIdentifier] -> this is the old object
       // the second object it a java script object
       value: event.target.value,
-      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
       touched: true
   });
   const updatedCardForm = updateObject(this.state.cardForm, { // here we want to update the overall card for a given input identifer
@@ -395,17 +392,20 @@ inputChangedHandler = (event) => {
   });
 
   let formIsValid = true;
-  for (let inputIdentifier in updatedCardForm) {
-      formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-     
+  if (event.target.id === 'licenseNumber'   ) { // the user must enter valid car number! the rest does not matter
+      formIsValid = updatedCardForm[event.target.id].valid;  
   }
-  
+  // let formIsValid = true;
+  // for (let inputIdentifier in updatedCardForm) {
+  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+  // }
 
+  if(event.target.id==='licenseNumber')    
+    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
+  else
+    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
 
-
-
-  this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
-}
+  }
 
 inputCarChangedHandler = (event) => { 
 
@@ -420,12 +420,12 @@ const updatedCardForm = updateObject(this.state.vehicleData, {
     [event.target.id]: updatedFormElement 
 });
 
-let formIsValid = true;
-for (let inputIdentifier in updatedCardForm) {
-    formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-   
-}
-this.setState({vehicleData: updatedCardForm, formIsValid: formIsValid});
+// let formIsValid = true;
+// for (let inputIdentifier in updatedCardForm) {
+//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+// }
+
+this.setState({vehicleData: updatedCardForm}); //, formIsValid: formIsValid
 }
 
 inputCusChangedHandler = (event) => { //inputIdentifier
@@ -443,12 +443,11 @@ const updatedCardForm = updateObject(this.state.customerDetails, {
     [event.target.id]: updatedFormElement 
 });
 
-let formIsValid = true;
-for (let inputIdentifier in updatedCardForm) {
-    formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-   
-}
-this.setState({customerDetails: updatedCardForm, formIsValid: formIsValid});
+// let formIsValid = true;
+// for (let inputIdentifier in updatedCardForm) {
+//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+// }
+this.setState({customerDetails: updatedCardForm}); //, formIsValid: formIsValid
 }
 
 inputNewWorkChangedHandler = (event) => { 
@@ -475,6 +474,7 @@ inputNewWorkChangedHandler = (event) => {
   });
 };
 
+//////////////////ariel
 fetchBooks = () => {
   fetch('https://console.firebase.google.com/project/garage-management-softwa/database/data/')
   .then((response) => response.json())
@@ -492,9 +492,7 @@ check(data){
     this.state.carDetails=data.carData;
     this.state.cardDetails=data.cardData;
     this.state.customer_details=data.customerData;
-    this.state.identifiedCardID=data.id;
-    console.log("465" + this.state.identifiedCardID);
-
+    this.state.identifiedCardID=data.id;//rotem
     //console.log(this.state.carDetails);
     //console.log(this.state.cardDetails);
     //console.log(this.state.customer_details); 
@@ -503,10 +501,7 @@ check(data){
 
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
   this.props.onFetchCards(this.props.token, this.props.userId);
-  
-  
 }
-
 
 componentWillUpdate(nextProps, nextState) {
   console.log(nextProps.cards);
@@ -522,9 +517,17 @@ componentDidUpdate(preProps,preState){
   this.fetchBooks();
 }
 
+handleShowWorkModel = () => {
+  this.setState( { showWorkModel: true } );
+  console.log("370" + this.showWorkModel);
+}
+
+getInitialState() {
+  return { showWorkModel: false };
+}
+
 close = (event) => {
   this.props.workModalClose(this.props.token); // this contains all the data of card 
-
 // this.setState({ showWorkModel: false });
 };
 
@@ -534,11 +537,8 @@ open = (event) => {
       this.props.workModalOpening(this.props.token); // this contains all the data of card 
 
   //return updateObject( this, { showWorkModel: true } );
-
   //this.setState({ showWorkModel: true });
 };
-
-
 
 handleAddRow = () => {
   this.setState( { isAddNewWorkOpen: true } );
@@ -559,6 +559,39 @@ closeAddButton = () => {
   this.setState( { isAddNewWorkOpen: false } );
 
 };
+
+change(term){
+  const name = this.props.searchBoxName || undefined
+    this.setState({term});
+    if(this.props.onSearchTermChange){
+      this.props.onSearchTermChange({name,term})
+    }
+  //this.setState(event.target.value);
+  //console.log(event.target.value);
+  
+}
+
+fileSelectedHandler = (e) => {
+  for ( let fieldName in e.target.files ) {
+    if(e.target.files[fieldName].type==="image/jpeg"){
+      this.state.ImageFiles.push(e.target.files[fieldName]);
+    }
+  }
+  for ( let fieldName in e.target.files ) {
+    if(e.target.type === "file" && e.target.files[fieldName].type!=="image/jpeg"){
+      this.state.DocFiles.push(e.target.files[fieldName]);
+    }
+  }
+  for(let g in this.state.DocFiles){
+    if(this.state.DocFiles[g].type==='undefined'){
+      console.log(this.state.DocFiles[g].type);
+    }
+  }
+  console.log(this.state.ImageFiles);
+  console.log(this.state.DocFiles);
+}
+
+onChange = date => this.setState({ date })
 
   render () {
 
@@ -623,48 +656,33 @@ closeAddButton = () => {
 
     }
 //    const showWorkModel = this.state.showWorkModel;
-change(term){
-  const name = this.props.searchBoxName || undefined
-    this.setState({term});
-    if(this.props.onSearchTermChange){
-      this.props.onSearchTermChange({name,term})
-    }
-  //this.setState(event.target.value);
-  //console.log(event.target.value);
-  
-}
 
-fileSelectedHandler = (e) => {
-  for ( let fieldName in e.target.files ) {
-    if(e.target.files[fieldName].type==="image/jpeg"){
-      this.state.ImageFiles.push(e.target.files[fieldName]);
-    }
-  }
-  for ( let fieldName in e.target.files ) {
-    if(e.target.type === "file" && e.target.files[fieldName].type!=="image/jpeg"){
-      this.state.DocFiles.push(e.target.files[fieldName]);
-    }
-  }
-  for(let g in this.state.DocFiles){
-    if(this.state.DocFiles[g].type==='undefined'){
-      console.log(this.state.DocFiles[g].type);
-    }
-  }
-  console.log(this.state.ImageFiles);
-  console.log(this.state.DocFiles);
-}
-
-
-onChange = date => this.setState({ date })
-
-  render () {
-
+    // const formElementsArray = [];
+    // for (let key in this.state.cardForm) {
+    //     formElementsArray.push({
+    //         id: key,
+    //         config: this.state.cardForm[key]         
+    //     });
+    // }
     let cards;
     if(this.state.userCarNumber!==""){
       cards = this.props.cards.map( card => (
         this.check(card)
       ))
     }
+
+//   if ( this.props.loading ) {
+  //     return(
+  //         <Toast>
+  //           <Toast.Header>
+  //           <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+  //            <strong className="mr-auto">Bootstrap</strong>
+  //             <small>11 mins ago</small>
+  //         </Toast.Header>
+  //         <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+  //       </Toast>
+  //     );
+  // }
   
   if(!this.state.found){
   return (
@@ -943,24 +961,10 @@ onChange = date => this.setState({ date })
                 </div>  
               </div>  
             </div>  
-        <form class="form-group" > 
-        <form class="form-group" style={{display: "flex"}} > 
-
-        <div class="custom-file" >
-          <input type="file" class="custom-file-input" id="customFiles"/>
-          <label class="custom-file-label" for="customFiles" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}> מסמכים להעלאה</label>
-
-        </div>
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customImages"/>
-          <label class="custom-file-label" for="customImages" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}> תמונות להעלאה</label>
-        </div>
-
-        </form>
-   
-        <span>
      
-
+     
+        <form class="form-group" > 
+        <span>       
      <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} > עבודות </Button> {' '}
 
      <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.ModalDialog} 
@@ -981,20 +985,13 @@ onChange = date => this.setState({ date })
      </Modal>
    </span>
 
-   <Button bsStyle="secondary" disabled={!this.state.formIsValid} >חלקים</Button> {' '}
+       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >חלקים</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
 
           <Button2  btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
-          <span><a class="btn btn-secondary btn-lg" href="#" role="button">עבודות</a>  </span>
-          <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
-          <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
-          <span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span>
-              
-          <Button  btnType="Success" disabled={this.state.formIsValid}>שמירה  </Button>
 
         </form>
-
       </form>
     );
   }
@@ -1011,7 +1008,7 @@ onChange = date => this.setState({ date })
               <label for="licenseNumber" >מספר רישוי</label>
               <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline" 
               value2={this.state.userCarNumber}
-              />
+              
               onChange={(event) => this.inputChangedHandler(event)}/>
             </div>
 
@@ -1317,22 +1314,7 @@ onChange = date => this.setState({ date })
               </div>  
             </div> 
     <form class="form-group" > 
-    <form class="form-group" style={{display: "flex"}} > 
-
-    <div class="custom-file" >
-      <input type="file" class="custom-file-input" id="customFiles"/>
-      <label class="custom-file-label" for="customFiles"> מסמכים להעלאה</label>
-
-    </div>
-    <div class="custom-file">
-      <input type="file" class="custom-file-input" id="customImages"/>
-      <label class="custom-file-label" for="customImages"> תמונות להעלאה</label>
-    </div>
-
-    </form>
-    <span>
-        
-        
+    <span>    
         <Button bsStyle="secondary" onClick={this.open} disabled={!this.state.formIsValid} >עבודות</Button> {' '}
 
         <Modal show={this.props.showWorkModel} onHide={this.close}  dialogClassName={classes.ModalDialog} 
@@ -1342,7 +1324,6 @@ onChange = date => this.setState({ date })
        </Modal.Header>
 
        <Modal.Body  style={{ backgroundColor:"#6c757d", display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"3px",flex: "none"}}   >
-        
          <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
 
             <div class="form-group col-md-3"   style={{ marginBottom: "4px"}}  > 
@@ -1427,14 +1408,10 @@ onChange = date => this.setState({ date })
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות:</div> 
          <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
 
-
       </Modal.Body>
-      
-       <Modal.Body style={{padding: "0px",flex: "auto"}}>
 
-      
+       <Modal.Body style={{padding: "0px",flex: "auto"}}>
         <div class="table-wrapper" style={{direction: "rtl"}}>
-           
             <table class="table table-bordered" style={{marginBottom: "1px"}} >
                 <thead >
                     <tr >
@@ -1443,7 +1420,6 @@ onChange = date => this.setState({ date })
                         <th  scope="col" style={{ textAlign: "right"}}>ברוטו</th>
                         <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
                         <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -1459,8 +1435,6 @@ onChange = date => this.setState({ date })
                             <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons"><DeleteIcon style={{fontSize:"large"}}/></i></a>
                         </td>
                     </tr>
-           
-            
                 </tbody>
                 <tbody>
             {this.state.rows.map(row => (
@@ -1470,56 +1444,47 @@ onChange = date => this.setState({ date })
                 <td>{row.gross}</td>
                 <td>{row.discount}</td>
                 <td>{row.net}</td>
-
               </tr>
             ))}
           
           </tbody>
             </table>
-
-
         </div>
-      
-
-      
-         
-
-
        </Modal.Body>
        <Modal.Footer style={{padding: "5px", display: "block"}}>
-
             {workButtons}
-      
-
-      
-
        </Modal.Footer>
      </Modal>
-
-      </span>
-
-
-       
+      </span>     
       <Button bsStyle="secondary"  disabled={!this.state.formIsValid}  >חלקים</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
       <Button2 btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
-    
 
-      <span><a class="btn btn-secondary btn-lg" href="#" role="button">עבודות</a>  </span>
-      <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
-      <span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
-      <span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span>
-      
-      <Button  btnType="Success" disabled={this.state.formIsValid}>עדכון  </Button>
+      <Button  btnType="secondary" disabled={this.state.formIsValid}>עדכון  </Button>
 
     </form>
 
   </form>
   );
   }
-  }
+  
 }
+}
+
+// <form class="form-group" style={{display: "flex"}} > 
+
+// <div class="custom-file" >
+//   <input type="file" class="custom-file-input" id="customFiles"/>
+//   <label class="custom-file-label" for="customFiles"> מסמכים להעלאה</label>
+
+// </div>
+// <div class="custom-file">
+//   <input type="file" class="custom-file-input" id="customImages"/>
+//   <label class="custom-file-label" for="customImages"> תמונות להעלאה</label>
+// </div>
+
+// </form>
 
 /* <Button onClick={this.close} >יציאה</Button>
     
@@ -1549,7 +1514,9 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
       loading: state.card.loading,
       token: state.auth.token,
-      userId: state.auth.userId
+      userId: state.auth.userId,
+      showWorkModel: state.card.showWorkModel
+
   };
 };
 
@@ -1557,6 +1524,12 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
   return {
     onFetchCards: (token,userId) => dispatch( actions.fetchCards(token, userId) ),
     onCardOpening: (cardData, token) => dispatch(actions.cardOpening(cardData, token)),
+    workModalOpening: (token ) =>  dispatch(actions.workModalOpening(token)),
+    workModalClose: (token ) =>  dispatch(actions.workModalClose(token))
+
+        //  return a map to map my props to dispatchable functions
+      //here we want to execute an anonymous function where we eventually dispatch the action we just created it
+      // note - we need to execute this function - "fetchCards()" to really get the action
 
   };
 };
