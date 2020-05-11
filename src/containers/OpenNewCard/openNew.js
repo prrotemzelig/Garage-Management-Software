@@ -584,7 +584,7 @@ fileSelectedHandler = (e) => {
   }
   for(let g in this.state.DocFiles){
     if(this.state.DocFiles[g].type==='undefined'){
-      console.log(this.state.DocFiles[g].type);
+      //console.log(this.state.DocFiles[g].type);
     }
   }
   console.log(this.state.ImageFiles);
@@ -1462,7 +1462,7 @@ onChange = date => this.setState({ date })
       <Button bsStyle="secondary" disabled={!this.state.formIsValid} >הדפסת כרטיס</Button> {' '}
       <Button bsStyle="secondary" disabled={!this.state.formIsValid}>סגירת כרטיס</Button> {' '}
       <Button2 btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>
-
+      
       <Button  btnType="secondary" disabled={this.state.formIsValid}>עדכון  </Button>
 
     </form>
