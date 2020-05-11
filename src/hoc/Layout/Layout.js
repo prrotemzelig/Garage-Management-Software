@@ -9,9 +9,7 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
-//import Header from '../../components/header/Header';
-//import DrawerToggle from '../../components/Navigation/SideDrawer/DrawerToggle/DrawerToggle';
-//import LogoComponent from '../../components/sidebar/LogoComponent';
+
 
 const styles = StyleSheet.create({
     container: {
@@ -31,7 +29,6 @@ const styles = StyleSheet.create({
 
 class Layout extends Component{
 
-
     state = { // state should essentially contain information if the sideDrawer is visible or not
         showSideDrawer: false
     }
@@ -47,7 +44,6 @@ class Layout extends Component{
         } );
     }
 //    margin-right: 230px;
-
     render(){
         return(
             <Aux >  
@@ -64,10 +60,9 @@ class Layout extends Component{
 
             <main className={classes.Content}>
             {this.props.isAuthenticated ?
-            <HeaderComponent title="HEY" style={{direction: "rtl"}}/>
+            <HeaderComponent title={this.props.firstName}  style={{direction: "rtl"}}/>
             : null
-            }
-             
+            } 
                 {this.props.children}
             </main>
             </Column>
@@ -78,6 +73,9 @@ class Layout extends Component{
     }
 } 
 
+
+
+
 // {this.props.isAuthenticated ?
 //     <HeaderComponent title="hey 'user name' " style={{direction: "rtl"}}/>
 //     : null
@@ -86,7 +84,9 @@ class Layout extends Component{
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.token !== null // we need to find out if the user is authenticated . if it's not null so the user is authenticated
+        isAuthenticated: state.auth.token !== null, // we need to find out if the user is authenticated . if it's not null so the user is authenticated
+        firstName: state.auth.firstName
+
     };
 };
 

@@ -14,12 +14,10 @@ const card = ( props ) => {
     //     );
     // }
 
-    
         cardDetails.push( //the object we are pushing into this array
             {
                 name: props.cardData.licenseNumber, //store the name of the field 
                // data: "licenseNumber", // store the value of the field ( what the user entered)
-            
                 //name: props.cardData.licenseNumber, 
                 //data: props.cardData.licenseNumber[props.cardData.licenseNumber],
             }

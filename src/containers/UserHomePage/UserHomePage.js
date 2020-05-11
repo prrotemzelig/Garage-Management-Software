@@ -57,12 +57,12 @@ class UserHomePage extends Component {
             <Column style= {{marginRight: "20px", marginTop: "10px",marginLeft: "20px"}}>
             <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} title="משימות" value="60" />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} title="משימות" value="16" />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4db6ac" title="משימות" value="60" />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4dd0e1" title="משימות" value="16" />
                 </Row>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} title="כרטיסים שנפתחו" value="43" />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} title="כרטיסים שנסגרו" value="64" />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4fc3f7" title="כרטיסים שנפתחו" value="43" />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#64b5f6" title="כרטיסים שנסגרו" value="64" />
                 </Row>
             </Row>
           

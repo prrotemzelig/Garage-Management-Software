@@ -11,7 +11,6 @@ import Image from './images.js';
 import Button2 from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
-import Input from '../../components/UI/Input/Input';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; //
@@ -372,9 +371,10 @@ for (let formElementIdentifier in this.state.customerDetails) {
         cardData: formData,
         carData: carData, 
         customerData: customerData,
-        userId: this.props.userId
+        userId: this.props.userId,
+        branchNumber: this.props.branchNumber
     }   
-    this.props.onCardOpening(card, this.props.token); // this contains all the data of card 
+    this.props.onCardOpening(card, this.props.token, this.props.branchNumber); // this contains all the data of card 
 }
 
 inputChangedHandler = (event) => { 
@@ -474,16 +474,16 @@ inputNewWorkChangedHandler = (event) => {
   });
 };
 
-//////////////////ariel
-fetchBooks = () => {
-  fetch('https://console.firebase.google.com/project/garage-management-softwa/database/data/')
-  .then((response) => response.json())
-  .then(booksList => {
-      this.setState({ cards: booksList });
+// ////////////////ariel
+// fetchBooks = () => {
+//   fetch('https://console.firebase.google.com/project/garage-management-softwa/database/data/')
+//   .then((response) => response.json())
+//   .then(booksList => {
+//       this.setState({ cards: booksList });
       
-  });
-  console.log(this.state.book);
-}
+//   });
+//   console.log(this.state.book);
+// }
 
 check(data){
   if(data.cardData.licenseNumber===this.state.userCarNumber){
@@ -500,21 +500,21 @@ check(data){
 }
 
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-  this.props.onFetchCards(this.props.token, this.props.userId);
+  this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
 }
 
 componentWillUpdate(nextProps, nextState) {
-  console.log(nextProps.cards);
-  console.log(nextState);
+  //console.log(nextProps.cards);
+  //console.log(nextState);
   //console.log(this.fetchData(this.props.cards));
   this.state.cards=nextProps.cards;
   //this.setState({books: nextProps.cards});
 }
 
 componentDidUpdate(preProps,preState){
-  console.log(preProps.cards);
-  console.log(preState);
-  this.fetchBooks();
+ // console.log(preProps.cards);
+  //console.log(preState);
+  //this.fetchBooks();
 }
 
 handleShowWorkModel = () => {
@@ -697,6 +697,8 @@ onChange = date => this.setState({ date })
                 <div class="form-group col-md-3" >
                   <label for="licenseNumber" >מספר רישוי</label>
                   <input type="text"  id="licenseNumber" class="form-control" aria-describedby="passwordHelpInline" 
+
+                  
                   value2={this.state.userCarNumber}
                   onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
@@ -1493,9 +1495,7 @@ onChange = date => this.setState({ date })
 <Button onClick={this.handleAddRow} >הוספה</Button> */
 
 
-/* <span><a class="btn btn-secondary btn-lg" href="#" role="button">חלקים</a>   </span>
-<span><a class="btn btn-secondary btn-lg" href="#" role="button">הדפסת כרטיס</a>   </span>
-<span><a class="btn btn-secondary btn-lg" href="#" role="button">סגירת כרטיס</a>   </span> */
+
 
 
 //  <DatePicker style={{input: "input"}} class="form-control" aria-describedby="passwordHelpInline" selected={this.state.startDate} onChange={this.handleChange}/>
@@ -1515,15 +1515,15 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       loading: state.card.loading,
       token: state.auth.token,
       userId: state.auth.userId,
-      showWorkModel: state.card.showWorkModel
-
+      showWorkModel: state.card.showWorkModel,
+      branchNumber: state.auth.branchNumber
   };
 };
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
-    onFetchCards: (token,userId) => dispatch( actions.fetchCards(token, userId) ),
-    onCardOpening: (cardData, token) => dispatch(actions.cardOpening(cardData, token)),
+    onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
+    onCardOpening: (cardData, token,branchNumber) => dispatch(actions.cardOpening(cardData, token, branchNumber)),
     workModalOpening: (token ) =>  dispatch(actions.workModalOpening(token)),
     workModalClose: (token ) =>  dispatch(actions.workModalClose(token))
 

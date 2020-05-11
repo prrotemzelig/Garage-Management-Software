@@ -4,7 +4,7 @@ import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
-//import DrawerToggle from '../Navigation/SideDrawer/DrawerToggle/DrawerToggle';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
     avatar: {
@@ -73,7 +73,7 @@ function HeaderComponent(props) {
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
 
-            <span className={css(styles.title)}>{title}</span>
+            <span className={css(styles.title)}>שלום,{title}</span>
             
             <Row vertical="center">
                 <div className={css(styles.iconStyles)}>
@@ -84,7 +84,7 @@ function HeaderComponent(props) {
                 </div>
                 <div className={css(styles.separator)}></div>
                 <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>user name</span>
+                    <span className={css(styles.name, styles.cursorPointer)}>{props.branchNumber}</span>
                     <img src={require("../../assets/anime3.png")} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
 
@@ -97,4 +97,12 @@ HeaderComponent.propTypes = {
     title: string
 };
 
-export default HeaderComponent;
+const mapStateToProps = state => {
+    return {
+        firstName: state.auth.firstName,
+        branchNumber: state.auth.branchNumber
+    };
+};
+
+export default connect( mapStateToProps )( HeaderComponent );
+//export default HeaderComponent;

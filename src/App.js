@@ -14,6 +14,8 @@ import * as actions from './store/actions/index';
 //import './styles/reduction.scss';
 
 
+
+
 const asyncCards = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/Cards/Cards');
 });
@@ -34,6 +36,9 @@ const asyncOpenTwo = asyncComponent(() => {
   return import('./containers/OpenNewCard/openNew');
 });
 
+const asyncSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
+  return import('./containers/AdminSettings/AdminSettings');
+});
 
 
 class App extends Component {
@@ -69,7 +74,7 @@ class App extends Component {
           <Route path="/cardOpening" exact component={asyncOpenCard} />
           <Route path="/updateTicketStatus" component={asyncOpenTwo} />
           <Route path="/UpdateTicketStatusAriel" component={asyncUpdateCard} />
-          <Route path="/settings" component={OpeningPage} />
+          <Route path="/settings" component={asyncSettingPage} />
 
           <Redirect to="/main" />
           <Redirect to="/" />

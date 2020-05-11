@@ -63,10 +63,10 @@ export const cardOpeningStart = () => {
 
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
-export const cardOpening = ( cardData, token ) => { 
+export const cardOpening = ( cardData, token,branchNumber ) => { 
     return dispatch => {
         dispatch( cardOpeningStart() ); // dispatch to the store
-        axios.post( '/cards.json?auth=' + token, cardData ) // send the HTTP request 
+        axios.post(branchNumber + '/cards.json?auth=' + token, cardData ) // send the HTTP request 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
             console.log(response.data)
             dispatch(cardOpeningSuccess(response.data.name, cardData)); 
@@ -107,13 +107,16 @@ export const fetchCardsStart = () => {
     };
 };
 
-export const fetchCards = (token, userId) => { //here we run our async code
+export const fetchCards = (token, userId,branchNumber) => { //here we run our async code
     return dispatch => {
         dispatch(fetchCardsStart()); // we need to do that to set loading to true!
 
-        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'; 
-        axios.get( '/cards.json' + queryParams) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
+        const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
+        axios.get(branchNumber + '/cards.json' + queryParams) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
+            
             .then( res => { // when the data is there (in the node of cards in firebase)
+                console.log(res);
+
                 // so with the response I'm getting, I want to set some state which actually contain my cards and then outputs them.
                 const fetchedCards = []; 
                 //note!!! -> console.log(res.data); -> res.data will hold the data we get from firebase 

@@ -7,7 +7,8 @@ export {
     workModalClose
 } from './card';
 export {
-    auth, // import the auth method itself
+    authSignUp, // import the auth method itself
+    authSignIn,
     logout,
     setAuthRedirectPath,
     authCheckState

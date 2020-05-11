@@ -5,14 +5,43 @@ import { Redirect } from 'react-router-dom';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
 
+import classes from './AdminSettings.module.css';
 
-class Auth extends Component {
+
+class AdminSettings extends Component {
     state = {
         controls: {
+            firstName: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: ' הכנס/י שם פרטי'
+                },
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false,
+                text: ' שם פרטי'
+            },
+            lastName: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: ' הכנס/י שם משפחה'
+                },
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false,
+                touched: false,
+                text: ' שם משפחה'
+            },
             branchNumber: {
                 elementType: 'select',
                 elementConfig: {
@@ -26,7 +55,23 @@ class Auth extends Component {
                 validation: {},
                 valid: true,
                 touched: false,
-                text: ' סניף'
+                text: ' מספר סניף'
+            },
+            userPermissions: {
+                elementType: 'select',
+                elementConfig: {
+                    options: [
+                        {value: 'Admin', displayValue: 'מנהל'},
+                        {value: 'User', displayValue: 'משתמש'},
+                        {value: 'basic', displayValue: 'בסיסי'}
+                    ]
+                },
+
+                value: 'User',
+                validation: {},
+                valid: true,
+                touched: false,
+                text: ' הרשאות'
             },
             email: {
                 elementType: 'input',
@@ -58,8 +103,8 @@ class Auth extends Component {
                 touched: false,
                 text: ' סיסמא'
             }
-        },
-        isSignup: true
+        }//,
+        //isSignup: true
     }
 
     inputChangedHandler = ( event, controlName ) => {
@@ -77,17 +122,16 @@ class Auth extends Component {
     submitHandler = (event) => {
         //console.log("71" + this.state.controls.branchNumber.value);
         event.preventDefault(); // we call this to prevent the reloading of the page
-        
-        this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
+        this.props.onAuth(this.state.controls.firstName.value,this.state.controls.lastName.value,this.state.controls.branchNumber.value,this.state.controls.userPermissions.value, this.state.controls.email.value, this.state.controls.password.value); // pass email value and password value
         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
+
     }
 
-    switchAuthModeHandler = () => {
-        console.log("user clicked forget password");
-        // this.setState(prevState => {
-        //     return {isSignup: !prevState.isSignup};
-        // });
-    }
+    // switchAuthModeHandler = () => {
+    //     this.setState(prevState => {
+    //         return {isSignup: !prevState.isSignup};
+    //     });
+    // }
 
     render () {
         const formElementsArray = [];
@@ -119,19 +163,16 @@ class Auth extends Component {
 
         let errorMessage = null;
 
-        if (this.props.error) { // if it's not null -> // we get message from firebase. the error come from firebase and its given me a javascript object
-        //<p>{this.props.error.message}</p>
+        if (this.props.error) { // if it's not null
             errorMessage = (
-                <div> 
-                
-                <p>{this.props.error}</p>
-            </div>
-                );
+                <p>{this.props.error.message}</p>// we get message from firebase. the error come from firebase and its given me a javascript object
+            );
         }
 
         let authRedirect = null;
         if (this.props.isAuthenticated) {
-            authRedirect = <Redirect to={this.props.authRedirectPath}/>
+            //need to change this after the manager sign the new user to delete the details he wrote maybe
+            //authRedirect = <Redirect to={this.props.authRedirectPath}/>
         }
 
         return (   
@@ -140,50 +181,21 @@ class Auth extends Component {
         <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
             <div className={classes.Auth}>
                 <div style= {{textAlign: "center"}}> 
-                 <h3 style={{ paddingBottom: "20px"}}>התחברות</h3>
+                 <h3 style={{ paddingBottom: "20px"}}>הוספת משתמשים חדשים לסניף</h3>
                 {authRedirect}
                 {errorMessage}</div>
                 <form onSubmit={this.submitHandler}>
                     {form}
 
                     <div style= {{textAlign: "center"}}> 
-                    <Button btnType="Success">כניסה</Button></div>
-                </form>
-                <div style= {{textAlign: "center"}}> 
-                <Button style= {{textAlign: "center"}}
-                    clicked={this.switchAuthModeHandler} 
-                    btnType="Danger" >?שכחת סיסמא</Button></div>
-                    
+                    <Button btnType="Success">הוספת משתמש</Button></div>
+                </form>                    
             </div>
-            
          </div> 
           
         );
     }
 }
-
-
-// <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
-// <div className={classes.Auth}>
-//     <div style= {{textAlign: "center"}}> 
-//      <h3 style={{ paddingBottom: "20px"}}>התחברות</h3>
-//     {authRedirect}
-//     {errorMessage}</div>
-//     <form onSubmit={this.submitHandler}>
-//         {form}
-
-//         <div style= {{textAlign: "center"}}> 
-//         <Button btnType="Success">כניסה</Button></div>
-//     </form>
-//     <div style= {{textAlign: "center"}}> 
-//     <Button style= {{textAlign: "center"}}
-//         clicked={this.switchAuthModeHandler} 
-//         btnType="Danger" >{this.state.isSignup ? 'הרשמה':'התחברות'}</Button></div>
-        
-// </div>
-
-
-// </div> 
 
 const mapStateToProps = state => { // for displat the spinner
     return {
@@ -197,10 +209,11 @@ const mapStateToProps = state => { // for displat the spinner
 const mapDispatchToProps = dispatch => { // we do this to be able to dispatch something here via props in this component
     
     return {
-        onAuthSignIn: (email, password,branchNumber) => dispatch(actions.authSignIn(email, password,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
+
+        onAuth: (firstName,lastName,branchNumber,userPermissions,email, password) => dispatch(actions.authSignUp(firstName,lastName,branchNumber,userPermissions,email, password)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         //onAuth: (email, password, isSignup,branchNumber) => dispatch(actions.auth(email, password,isSignup,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
     };
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )( Auth );
+export default connect( mapStateToProps, mapDispatchToProps )( AdminSettings );
