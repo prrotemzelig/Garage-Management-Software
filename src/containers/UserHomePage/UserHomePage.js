@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     lastRow: {
-        marginTop: 30
+        marginTop: 30,
+        display: 'block'
     },
     unresolvedTickets: {
         marginRight: 30,
@@ -66,8 +67,7 @@ class UserHomePage extends Component {
                 </Row>
             </Row>
           
-            <Row horizontal="space-between" className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
-                <UnresolvedTicketsComponent containerStyles={styles.unresolvedTickets} />
+            <Row horizontal="space-between" style={{display: "block"}} className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
                 <TasksComponent containerStyles={styles.tasks} />
             </Row>
         </Column>  
@@ -77,4 +77,8 @@ class UserHomePage extends Component {
 export default UserHomePage;
 
 
-
+{/* <Row horizontal="space-between" className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
+<UnresolvedTicketsComponent containerStyles={styles.unresolvedTickets} />
+<TasksComponent containerStyles={styles.tasks} />
+</Row>
+ */}

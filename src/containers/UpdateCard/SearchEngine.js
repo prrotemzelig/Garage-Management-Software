@@ -17,7 +17,7 @@ class Search extends React.Component {
       }
   
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-      this.props.onFetchCards(this.props.token, this.props.userId);
+      this.props.onFetchCards(this.props.token, this.props.userId,this.props.branchNumber);
       
   }
   check(data){
@@ -93,13 +93,14 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
       loading: state.card.loading,
       token: state.auth.token,
-      userId: state.auth.userId
+      userId: state.auth.userId,
+      branchNumber: state.auth.branchNumber
   };
 };
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
-      onFetchCards: (token,userId) => dispatch( actions.fetchCards(token, userId) ) //  return a map to map my props to dispatchable functions
+      onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ) //  return a map to map my props to dispatchable functions
       //here we want to execute an anonymous function where we eventually dispatch the action we just created it
       // note - we need to execute this function - "fetchCards()" to really get the action
   };

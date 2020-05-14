@@ -15,7 +15,7 @@ export const authSignUpStart = () => { // essentially we use this action to set 
     };
 };
 
-export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,email,userPermissions) => { // this will get some database, and return javascript object
+export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey) => { // this will get some database, and return javascript object
     return {
         type: actionTypes.AUTH_SIGN_IN_SUCCESS,
         idToken: token,
@@ -24,7 +24,8 @@ export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,
         firstName: firstName,
         lastName: lastName,
         email: email,
-        userPermissions: userPermissions
+        userPermissions: userPermissions,
+        userKey: userKey
     };
 };
 
@@ -52,7 +53,7 @@ export const authSignUpFail = (error) => {
 
 
 // this will be a synchronous action creator
-export const logout = () => {
+export const logout = () => { //need to add
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('userId');
@@ -152,6 +153,11 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 localStorage.setItem('expirationDate', expirationDate); //post
                                 localStorage.setItem('userId', response.data.localId); //post
                                 localStorage.setItem('branchNumber', branchNumber); //post
+                                localStorage.setItem('firstName', res.data[key].firstName); //post
+                                localStorage.setItem('lastName', res.data[key].lastName); //post
+                                localStorage.setItem('email', res.data[key].email); //post
+                                localStorage.setItem('userPermissions', res.data[key].userPermissions); //post
+                                localStorage.setItem('userKey', key); //post
                                 //,firstName,lastName,email,userPermissions
                                 dispatch(authSignInSuccess(response.data.idToken, response.data.localId, branchNumber,res.data[key].firstName,res.data[key].lastName,res.data[key].email,res.data[key].userPermissions,key));  //post
                                 dispatch(checkAuthTimeout(response.data.expiresIn)); //post
@@ -200,10 +206,19 @@ export const authCheckState = () => {
             } else {
                 const userId = localStorage.getItem('userId');
                 const branchNumber = localStorage.getItem('branchNumber');
-                dispatch(authSignInSuccess(token, userId,branchNumber)); // check this! maybe need to add the rest values
+
+            
+                const firstName = localStorage.getItem('firstName');
+                const lastName = localStorage.getItem('lastName');
+                const email = localStorage.getItem('email');
+                const userPermissions = localStorage.getItem('userPermissions');
+                const userKey = localStorage.getItem('userKey');
+                dispatch(authSignInSuccess(token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey)); // check this! maybe need to add the rest values
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 100000 )); // here we pass the amount of seconds until we should be logged out.
                 //was 1000 for 1 hour
             }   
         }
     };
 };
+
+//(token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey)
