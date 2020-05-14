@@ -71,6 +71,12 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.PURCHASE_WORKS_INIT: return purchaseWorksInit( state, action );
         case actionTypes.WORKS_MODAL_CLOSE: return purchaseWorksCancel( state, action );
 
+        // case actionTypes.CARD_UPDATE_START: return purchaseWorksCancel( state, action );
+        // case actionTypes.CARD_UPDATE_SUCCESS: return purchaseWorksCancel( state, action );
+        // case actionTypes.CARD_UPDATE_FAIL: return purchaseWorksCancel( state, action );
+
+
+
         
         default: return state; // return the current state
     }

@@ -13,6 +13,7 @@ class Search extends React.Component {
         this.state = {
           carNumber:'',
           found: false,
+          data: [],
         }
       }
   
@@ -23,6 +24,7 @@ class Search extends React.Component {
   check(data){
     if(data.cardData.licenseNumber===this.state.carNumber){
       this.state.found=true;
+      //this.state.data.push(data);
       //this.state.dataBaseCarNumber=data.cardData.licenseNumber;
       //this.state.carDetails=data.carData;
       //this.state.cardDetails=data.cardData;
@@ -42,7 +44,7 @@ class Search extends React.Component {
             cards = <Spinner />;
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards = this.props.cards.map( card => (
-                this.check(card),
+                this.check(card),  
               <Card
                   data={this.state.carNumber}
                   key={card.id}
@@ -54,9 +56,7 @@ class Search extends React.Component {
       //if(this.state.found && this.state.carNumber!==''){
       if(!this.state.found && this.state.carNumber!==''){
         return ( 
-          <div style={{
-            alignitems: 'center',
-            justifycontent: 'center'}}>
+          <div >
             <h5>לא נמצאה היסטוריה עבור רכב זה </h5></div>
          
       );

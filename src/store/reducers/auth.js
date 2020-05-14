@@ -9,6 +9,7 @@ const initialState = { // javascript object
     lastName: null,
     email: null,
     userPermissions: null,
+    userKey: null,
     error: null,
     loading: false,
     authRedirectPath: '/'
@@ -31,6 +32,7 @@ const authSignInSuccess = (state, action) => {
         lastName: action.lastName,
         email: action.email,
         userPermissions: action.userPermissions,
+        userKey: action.userKey,
         error: null,
         loading: false // because we done!
      } );

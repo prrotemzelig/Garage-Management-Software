@@ -33,7 +33,72 @@ export const workModalClose = (  token ) => {
     };
 };
 
+// this synchronous action creators
+export const cardUpdateSuccess = ( id, cardData ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+    //also I want the cardData
+    return { // here we return object where I have a type
+        type: actionTypes.CARD_UPDATE_SUCCESS,
+        cardId: id, 
+        cardData: cardData 
+    };
+};
 
+// this synchronous action creators
+export const cardUpdateFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
+    return {
+        type: actionTypes.CARD_UPDATE_FAIL,
+        error: error // pass on the error
+    };
+}
+
+export const cardUpdateStart = () => {
+    return {// this being a async normal action reaches redux which has the reducer
+        type: actionTypes.CARD_UPDATE_START
+    };
+};
+
+//this is the async action one
+//this is the action we dispatched from the container once we click that save card button.
+export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,identifiedCardID ) => { 
+    console.log(branchNumber);
+    return dispatch => {
+        dispatch( cardUpdateStart() ); // dispatch to the store
+        axios.put('Talpiot/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
+        .then(res => {
+        console.log(res.data.name);
+        dispatch(cardUpdateSuccess(res.data.name, carData)); 
+
+        })
+        .catch( error => {
+            dispatch(cardUpdateFail(error));
+
+        } );
+
+       /* axios.put(branchNumber+'/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
+        .then(res => {
+        console.log(res.data.name);
+        dispatch(carUpdateSuccess(res.data.name, cardData)); 
+
+        })
+        .catch( error => {
+            dispatch(cardUpdateFail(error));
+
+
+        } );
+
+
+        axios.put(branchNumber+'/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
+        .then(res => {
+        console.log(res.data.name);
+        dispatch(customerUpdateSuccess(res.data.name, customerData)); 
+
+        })
+        .catch( error => {
+            dispatch(cardUpdateFail(error));
+
+        } );*/
+    };
+};
 
 // this synchronous action creators
 export const cardOpeningSuccess = ( id, cardData ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
@@ -59,10 +124,6 @@ export const cardOpeningStart = () => {
         type: actionTypes.CARD_OPENING_START
     };
 };
-
-
-//this is the async action one
-//this is the action we dispatched from the container once we click that save card button.
 export const cardOpening = ( cardData, token,branchNumber ) => { 
     return dispatch => {
         dispatch( cardOpeningStart() ); // dispatch to the store

@@ -2,6 +2,7 @@
 export {
     cardOpening,
     purchaseInit,
+    cardUpdate,
     fetchCards,
     workModalOpening,
     workModalClose
@@ -13,3 +14,7 @@ export {
     setAuthRedirectPath,
     authCheckState
 } from './auth';
+export {
+    taskOpening,
+    fetchTasks
+} from './task';

@@ -5,6 +5,7 @@ var temp=0;
 
 const cardSearch = ( props ) => {
     const number=props.data;
+
     //console.log(number);
     if(props.cardData.licenseNumber===number){
         const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
@@ -19,6 +20,7 @@ const cardSearch = ( props ) => {
         }
         //after we pushed into the cards array, 
     //we can map my cards to text basically in the return ->  <p> {cardsDetailsOutput}</p>
+    
     const cardsDetailsOutput = cardDetails.map(ig => {
         // here we return some JSX
         //we can use in ig.name as a unique key because it is unique here

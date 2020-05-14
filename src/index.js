@@ -19,6 +19,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker.js';
 import cardReducer from './store/reducers/card';
 import authReducer from './store/reducers/auth'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
+import taskReducer from './store/reducers/task'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
 
 
 //  "composeEnhancersjust" holds a function
@@ -26,7 +27,8 @@ const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX
 
 const rootReducer = combineReducers({  // here we pass a javascript object
   card: cardReducer,
-  auth: authReducer
+  auth: authReducer,
+  task: taskReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(
