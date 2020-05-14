@@ -28,6 +28,10 @@ const asyncOpenCard = asyncComponent(() => {
   return import('./containers/OpenNewCard/OpenNewCard');
 });
 
+const asyncReports = asyncComponent(() => {
+  return import('./containers/MonthlyReports/Report');
+});
+
 const asyncUpdateCard = asyncComponent(() => {
   return import('./containers/UpdateCard/UpdateCard');
 });
@@ -83,6 +87,7 @@ class App extends Component {
           <Route path="/UpdateTicketStatusAriel" component={asyncUpdateCard} />
           <Route path="/AdminSettings" component={asyncAdminSettingPage} />
           <Route path="/UserSettings" component={asyncUserSettingPage} />
+          <Route path="/dailyUpdates" component={asyncReports} />
 
           
 
