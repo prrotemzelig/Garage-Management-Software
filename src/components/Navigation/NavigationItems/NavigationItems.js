@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 
 import classes from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NavigationItem';
@@ -31,7 +33,9 @@ const navigationItems = (props ) => (
             
             <div className={classes.separator}></div>
             
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/settings">הגדרות   </NavigationItem> : null}
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל   </NavigationItem> : null}
+            {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconOverview} link="/UserSettings">הגדרות  </NavigationItem> : null}
+
             {!props.isAuthenticated
             ? <NavigationItem icon={IconOverview} link="/auth">התחברות   </NavigationItem>
             : <NavigationItem icon={IconOverview} link="/logout">יציאה   </NavigationItem>}
@@ -42,7 +46,17 @@ const navigationItems = (props ) => (
 
 //            <NavigationItem icon={IconOverview} link="/" exact>ראשי   </NavigationItem> 
 
-export default navigationItems;
+const mapStateToProps = state => {
+    return {
+        firstName: state.auth.firstName,
+        branchNumber: state.auth.branchNumber,
+        userPermissions: state.auth.userPermissions
+    };
+};
+
+export default connect( mapStateToProps )( navigationItems );
+
+//export default navigationItems;
 
 // {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatus">פתיחת כרטיס 2 רותם   </NavigationItem> : null}
 // {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatusAriel">עדכון כרטיס אריאל   </NavigationItem> : null}

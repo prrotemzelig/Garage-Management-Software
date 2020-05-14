@@ -28,6 +28,10 @@ const asyncOpenCard = asyncComponent(() => {
   return import('./containers/OpenNewCard/OpenNewCard');
 });
 
+const asyncReports = asyncComponent(() => {
+  return import('./containers/MonthlyReports/Report');
+});
+
 const asyncUpdateCard = asyncComponent(() => {
   return import('./containers/UpdateCard/UpdateCard');
 });
@@ -47,6 +51,13 @@ const asyncAdminSettingPage = asyncComponent(() => { // here we can define the p
 const asyncUserSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/openingPage/openingPage');
 });
+
+
+const asyncUserSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
+  return import('./containers/openingPage/openingPage');
+});
+
+
 
 
 class App extends Component {
@@ -86,7 +97,7 @@ class App extends Component {
           <Route path="/UserSettings" component={asyncUserSettingPage} />
           <Route path="/dailyUpdates" component={asyncReports} />
 
-
+          
           <Redirect to="/main" />
           <Redirect to="/" />
         </Switch>
