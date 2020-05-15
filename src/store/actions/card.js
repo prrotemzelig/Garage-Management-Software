@@ -63,7 +63,7 @@ export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,id
     console.log(branchNumber);
     return dispatch => {
         dispatch( cardUpdateStart() ); // dispatch to the store
-        axios.put('Talpiot/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
+        axios.patch('Talpiot/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
         .then(res => {
         console.log(res.data.name);
         dispatch(cardUpdateSuccess(res.data.name, carData)); 
@@ -74,10 +74,10 @@ export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,id
 
         } );
 
-       /* axios.put(branchNumber+'/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
+       axios.patch('Talpiot/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
         .then(res => {
         console.log(res.data.name);
-        dispatch(carUpdateSuccess(res.data.name, cardData)); 
+        dispatch(cardUpdateSuccess(res.data.name, cardData)); 
 
         })
         .catch( error => {
@@ -87,16 +87,16 @@ export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,id
         } );
 
 
-        axios.put(branchNumber+'/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
+        axios.patch('Talpiot/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
         .then(res => {
         console.log(res.data.name);
-        dispatch(customerUpdateSuccess(res.data.name, customerData)); 
+        dispatch(cardUpdateSuccess(res.data.name, customerData)); 
 
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
 
-        } );*/
+        } );
     };
 };
 
