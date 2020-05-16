@@ -36,10 +36,6 @@ const asyncUpdateCard = asyncComponent(() => {
   return import('./containers/UpdateCard/UpdateCard');
 });
 
-const asyncReports = asyncComponent(() => {
-  return import('./containers/MonthlyReports/Report');
-});
-
 const asyncOpenTwo = asyncComponent(() => {
   return import('./containers/OpenNewCard/openNew');
 });
@@ -47,11 +43,6 @@ const asyncOpenTwo = asyncComponent(() => {
 const asyncAdminSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/AdminSettings/AdminSettings');
 });
-
-const asyncUserSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
-  return import('./containers/openingPage/openingPage');
-});
-
 
 const asyncUserSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/openingPage/openingPage');

@@ -58,6 +58,11 @@ export const logout = () => { //need to add
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('userId');
     localStorage.removeItem('branchNumber');
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userPermissions');
+    localStorage.removeItem('userKey');
 
     return {
         type: actionTypes.AUTH_LOGOUT

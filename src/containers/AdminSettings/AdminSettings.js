@@ -182,6 +182,7 @@ class AdminSettings extends Component {
             <div className={classes.Auth}>
                 <div style= {{textAlign: "center"}}> 
                  <h3 style={{ paddingBottom: "20px"}}>הוספת משתמשים חדשים לסניף</h3>
+            
                 {authRedirect}
                 {errorMessage}</div>
                 <form onSubmit={this.submitHandler}>

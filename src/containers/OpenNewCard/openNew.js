@@ -672,6 +672,7 @@ handleRemoveRow = () => {
   });
 };
 
+
 closeAddButton = () => {
   this.setState( { isAddNewWorkOpen: false } );
 

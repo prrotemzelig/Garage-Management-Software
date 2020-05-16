@@ -16,5 +16,7 @@ export {
 } from './auth';
 export {
     taskOpening,
-    fetchTasks
+    fetchTasks,
+    taskUpdate,
+    taskDelete
 } from './task';

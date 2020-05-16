@@ -37,3 +37,12 @@ export const TASK_INIT = 'TASK_INIT'; // this will be dispatched whenever we loa
 export const FETCH_TASKS_START = 'FETCH_TASKS_START'; 
 export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS'; 
 export const FETCH_TASKS_FAIL = 'FETCH_TASKS_FAIL'; 
+
+export const TASK_UPDATE_START = 'TASK_UPDATE_START'; 
+export const TASK_UPDATE_SUCCESS = 'TASK_UPDATE_SUCCESS'; 
+export const TASK_UPDATE_FAIL = 'TASK_UPDATE_FAIL'; 
+
+export const TASK_DELETE_START = 'TASK_DELETE_START'; 
+export const TASK_DELETE_SUCCESS = 'TASK_DELETE_SUCCESS'; 
+export const TASK_DELETE_FAIL = 'TASK_DELETE_FAIL'; 
+
