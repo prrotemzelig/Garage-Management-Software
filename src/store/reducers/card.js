@@ -58,6 +58,21 @@ const fetchCardsFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
 
+const cardUpdateStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const cardUpdateSuccess = ( state, action ) => {
+    const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false,
+        purchased: true,
+    } );
+};
+const cardUpdateFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) { // here Ill write my different cases
         case actionTypes.PURCHASE_INIT: return purchaseInit( state, action );
@@ -67,10 +82,13 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.FETCH_CARDS_START: return fetchCardsStart( state, action );
         case actionTypes.FETCH_CARDS_SUCCESS: return fetchCardsSuccess( state, action );
         case actionTypes.FETCH_CARDS_FAIL: return fetchCardsFail( state, action );
-
+        
         case actionTypes.PURCHASE_WORKS_INIT: return purchaseWorksInit( state, action );
         case actionTypes.WORKS_MODAL_CLOSE: return purchaseWorksCancel( state, action );
 
+        case actionTypes.CARD_UPDATE_START: return cardUpdateStart( state, action );
+        case actionTypes.CARD_UPDATE_SUCCESS: return cardUpdateSuccess( state, action )
+        case actionTypes.CARD_UPDATE_FAIL: return cardUpdateFail( state, action );
         // case actionTypes.CARD_UPDATE_START: return purchaseWorksCancel( state, action );
         // case actionTypes.CARD_UPDATE_SUCCESS: return purchaseWorksCancel( state, action );
         // case actionTypes.CARD_UPDATE_FAIL: return purchaseWorksCancel( state, action );

@@ -36,10 +36,15 @@ class openNew extends Component   {
     constructor(props) {
         super(props)
     this.state = {
+    car_data:[],
+    card_data:[],
+    customer_data:[],
     branchNumber:'',
     identifiedCardID:'',
     rows: [],
-    term:'',
+    car_term:'',
+    card_term:'',
+    customer_term:'',
     cards:{},
     book:[],
     userCarNumber:'',
@@ -461,139 +466,55 @@ inputNewWorkChangedHandler = (event) => {
 };
 cardUpdateHandler = ( event ) => {
   event.preventDefault(); // with that we get the Card details
+ 
+  const carData =
+{
+    carDescription: this.state.car_data[0],
+    carNote: this.state.car_data[1],
+    chalkModel: this.state.car_data[2],
+    code: this.state.car_data[3],
+    color: this.state.car_data[4],
+    deliveryDate: this.state.car_data[5],
+    driverName: this.state.car_data[6],
+    engineCapacity: this.state.car_data[7],
+    lastVisit: this.state.car_data[8],
+    manufactureYear: this.state.car_data[9],
+    speedometer: this.state.car_data[10]
+  }
+  const cardData={
+    appraiser: this.state.card_data[0],
+    cardType: this.state.card_data[1],
+    claimNumber: this.state.card_data[2],
+    customerParticipation: this.state.card_data[3],
+    customerRequests: this.state.card_data[4],
+    dateOfDamage: this.state.card_data[5],
+    insuranceAgent: this.state.card_data[6],
+    insuranceCompany: this.state.card_data[7],
+    licenseNumber: this.state.cardDetails.licenseNumber,
+    openingDate: this.state.cardDetails.openingDate,
+    policyNumber: this.state.card_data[10],
+    ticketNumber: this.state.cardDetails.ticketNumber
 
-  const carData=this.state.carDetails;
-  const cardData=this.state.cardDetails;
-  const customerData=this.state.customer_details;
-  console.log(carData);
-  console.log(cardData);
-  console.log(customerData);
-  console.log(this.props.branchNumber);
+  }
+  const customerData={
+    address: this.state.customer_data[0],
+    cellphone: this.state.customer_data[1],
+    city: this.state.customer_data[2],
+    customerName: this.state.customer_data[3],
+    customerNote: this.state.customer_data[4],
+    customerNumber: this.state.customer_data[5],
+    homePhone: this.state.customer_data[6],
+    identificationNumber: this.state.customer_data[7],
+    mailAdress: this.state.customer_data[8],
+    orderNumber: this.state.customer_data[9],
+    postalCode: this.state.customer_data[10],
+    workingPhone: this.state.customer_data[11]
+  }
+  
+ 
   this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.state.branchNumber,this.state.identifiedCardID); // this contains all the data of card 
 
-/**axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/carData.json?auth=' + this.props.token, carData)
-        .then(res => {
-        console.log(res);
-        })
 
-    axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/cardData.json?auth=' + this.props.token, cardData)
-        .then(res => {
-        console.log(res);
-        })
-
-    axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/customerData.json?auth=' + this.props.token, customerData)
-        .then(res => {
-        console.log(res);
-        })
- *  */  
-
-  /*console.log(this.state.branchNumber);
-  console.log(this.state.identifiedCardID);
-  console.log(this.state.carDetails);
-  console.log(this.state.cardDetails);
-  console.log(this.state.customer_details);
-  console.log(this.state.term);
-  axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/carData.json?auth=' + this.props.token, this.state.carDetails)
-  .then(res => {
-  console.log(res);
-  })
-
-  axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/cardData.json?auth=' + this.props.token, this.state.cardDetails)
-  .then(res => {
-  console.log(res);
-  })
-
-  axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/customerData.json?auth=' + this.props.token, this.state.customer_details)
-  .then(res => {
-  console.log(res);
-  })*/
-  
-    
-    /*const carData=this.state.carDetails;
-    const cardData=this.state.cardDetails;
-    const customerData=this.state.customer_details;
-      
-      axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/carData.json?auth=' + this.props.token, carData)
-      .then(res => {
-      console.log(res);
-      })
-
-      axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/cardData.json?auth=' + this.props.token, cardData)
-      .then(res => {
-      console.log(res);
-      })
-
-      axios2.put(this.state.branchNumber+'/cards/'+this.state.identifiedCardID+'/customerData.json?auth=' + this.props.token, customerData)
-      .then(res => {
-      console.log(res);
-      })
-*/
-
-      
-    /*var card=1;
-      const carData=this.state.cards[card].carData;
-      const cardData=this.state.cards[card].cardData;
-      const customerData=this.state.cards[card].customerData;
-      
-      axios2.put(this.state.cards[card].branchNumber+'/cards/'+this.state.cards[card].id+'/carData.json?auth=' + this.props.token, carData)
-      .then(res => {
-      console.log(res);
-      })
-
-      axios2.put(this.state.cards[card].branchNumber+'/cards/'+this.state.cards[card].id+'/cardData.json?auth=' + this.props.token, cardData)
-      .then(res => {
-      console.log(res);
-      })
-
-      axios2.put(this.state.cards[card].branchNumber+'/cards/'+this.state.cards[card].id+'/customerData.json?auth=' + this.props.token, customerData)
-      .then(res => {
-      console.log(res);
-      })
-
-    
-*/
-    
-    /*axios2.put(this.state.cards[0].branchNumber+'/cards/'+this.state.cards[0].id+'/carData.json?auth=' + this.props.token, this.state.cards[0].carData)
-      .then(res => {
-      console.log(res);
-      })
- */
-  /**
-   * 
-   *   axios2.put(this.state.cards[0].branchNumber+'/cards/'+this.state.cards[0].id+'/cardData.json?auth=' + this.props.token, this.state.cards[0].cardData)
-    .then(res => {
-    console.log(res);
-    })
-    axios2.put(this.state.cards[0].branchNumber+'/cards/'+this.state.cards[0].id+'/customerData.json?auth=' + this.props.token, this.state.cards[0].customerData)
-    .then(res => {
-    console.log(res);
-    })
-   * 
-   *axios2.put('Talpiot/cards/-M7DmG6e-XZCy4mUN_vf/carData.json?auth=' + this.props.token, carData)
-    .then(res => {
-    console.log(res);
-  })
-   */
-  
- // const response = await axios.put('Talpiot/cards/-M78PZO7rO3pSazAY5YD/carData/carDescription.json', {carData})
-  //console.log(response)
-  //console.log(response.data)
-
-
-  /*const carData =
-    {
-        carDescription: this.state.cards[0].carData.carDescription,
-        carNote: this.state.cards[0].carData.carNote,
-        chalkModel: this.state.cards[0].carData.chalkModel,
-        code: this.state.cards[0].carData.code,
-        color: this.state.cards[0].carData.color,
-        deliveryDate: this.state.cards[0].carData.deliveryDate,
-        driverName: this.state.cards[0].carData.driverName,
-        engineCapacity: this.state.cards[0].carData.engineCapacity,
-        lastVisit: this.state.cards[0].carData.lastVisit,
-        manufactureYear: this.state.cards[0].carData.manufactureYear,
-        speedometer: this.state.cards[0].carData.speedometer
-    }*/
 }
 
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
@@ -624,9 +545,8 @@ componentWillUpdate(newProps, newState) {
   
   this.state.cards=newProps.cards;
   var i=0; 
-  console.log(this.state.cards);
-  
 
+  console.log(newState);
 }
 
 componentDidUpdate(preProps,preState){
@@ -679,6 +599,7 @@ closeAddButton = () => {
 };
 
 
+
 switchDivModeHandler = () => {
   this.setState(prevState => {
       return {showDetailsDiv: !prevState.showDetailsDiv};
@@ -717,22 +638,24 @@ switchDivModeHandlerDoc = () => {
 }
 
 
-updateInputValue(evt) {
-  this.setState({
-      term: evt.target.value
-  });
+updateCarInputValue=(evt,i)=> {
+  this.state.car_data[i]=evt.target.value;
+  console.log(this.state.car_data);
+
 }
 
-change(term){
-  const name = this.props.searchBoxName || undefined
-    this.setState({term});
-    if(this.props.onSearchTermChange){
-      this.props.onSearchTermChange({name,term})
-    }
-  //this.setState(event.target.value);
-  //console.log(event.target.value);
-  
+updateCardInputValue=(evt,i)=> {
+
+    this.state.card_data[i]=evt.target.value;
+    console.log(this.state.card_data);
+
 }
+
+updateCustomerInputValue(evt,i) {
+  this.state.customer_data[i]=evt.target.value;
+  console.log(this.state.customer_data);
+}
+
 
 fileSelectedHandler = (e) => {
   for ( let fieldName in e.target.files ) {
@@ -757,9 +680,7 @@ fileSelectedHandler = (e) => {
 onChange = date => this.setState({ date })
 
   render () {
-  console.log(this.state.branchNumber);
-  console.log(this.state.identifiedCardID);
-  //this.state.id=this.props.name; 
+  
     let workButtons;
     let { isAddNewWorkOpen } = this.state;
     let { licenseNumber , ticketNumber } = this.state;
@@ -837,7 +758,7 @@ onChange = date => this.setState({ date })
         this.check(card)
       ))
     }
-
+    
 //   if ( this.props.loading ) {
   //     return(
   //         <Toast>
@@ -850,16 +771,7 @@ onChange = date => this.setState({ date })
   //       </Toast>
   //     );
   // }
-  let button;
-  if (this.state.found) {
-    button =<Button2  btnType="Success" disabled={!this.state.formIsValid}>שמירה  </Button2>;
-  } else {
-    button = <Button2  btnType="Success" onClick={this.cardUpdateHandler}>עדכון  </Button2>;
-  }
-  
-  if(this.state.found){
-
-  }
+ 
   //if(!this.state.found){
   return (
     
@@ -918,27 +830,29 @@ onChange = date => this.setState({ date })
               <div class="form-row">              
                 <div class="form-group col-md-3" >
                 {(() => {
-                if(this.state.found){
+                if(this.state.found && this.state.term!=''){
                   this.state.vehicleData.carDescription.value=this.state.carDetails.carDescription;
+                  //this.g(this.state.carDetails.carDescription.value);
+                  //console.log(this.state.carDetails);
                 }    
-              })()}
+                })()}
                   <label for="carDescription">תאור הרכב</label>
                   <input type="carDescription" id="carDescription" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    value={this.state.vehicleData.carDescription.value} 
-                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateInputValue(evt)}/>
+                  defaultValue={this.state.carDetails.carDescription} 
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,0)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
                  {(() => {
-                   if(this.state.found){
+                   if(this.state.found && this.state.term!=''){
                     this.state.vehicleData.speedometer.value= this.state.carDetails.speedometer;
+                    //this.state.carDetails.speedometer=this.state.term;
                     }    
                  })()}
                   <label for="speedometer">מד אוץ</label>
                   <input  type="text"  id="speedometer" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                 value={this.state.vehicleData.speedometer.value}
-               
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.carDetails.speedometer}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,10)}/>
                 </div>
   
                
@@ -952,8 +866,8 @@ onChange = date => this.setState({ date })
                   <label for="engineCapacity">נפח מנוע</label>
                   <input  type="text"  id="engineCapacity" class="form-control" 
                   aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.engineCapacity.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.engineCapacity.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,7)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
@@ -964,8 +878,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="color" >צבע</label>
                   <input  type="text" id="color" class="form-control " aria-describedby="passwordHelpInline" 
-                  value={this.state.vehicleData.color.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.color.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,4)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -976,8 +890,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="chalkModel">דגם גיר</label>
                   <input  type="text" id="chalkModel" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.chalkModel.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.chalkModel.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,2)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -988,8 +902,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="lastVisit">ביקור אחרון</label>
                   <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline"  
-                  value={this.state.vehicleData.lastVisit.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.lastVisit.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,8)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1013,8 +927,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="deliveryDate" >תאריך מסירה</label> 
                   <input type="text" id="deliveryDate" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.deliveryDate.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.deliveryDate.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,5)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1025,8 +939,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="driverName">שם הנהג</label>
                   <input  type="text" id="driverName" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.driverName.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.driverName.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,6)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1037,8 +951,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="code">קודן</label>
                   <input  type="text" id="code" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.code.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.code.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,3)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1049,8 +963,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="carNote">הערה לרכב</label>
                   <input  type="text"  id="carNote" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.vehicleData.carNote.value}
-                  onChange={(event) => this.inputCarChangedHandler(event)}/>
+                  defaultValue={this.state.vehicleData.carNote.value}
+                  onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,1)}/>
                 </div>
               </div> 
             </div> 
@@ -1071,8 +985,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="customerNumber" >מספר לקוח</label>
                   <input type="text" id="customerNumber" class="form-control " aria-describedby="passwordHelpInline" 
-                  value={this.state.customerDetails.customerNumber.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.customerNumber.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,5)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1083,8 +997,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="customerName">שם לקוח</label>
                   <input type="text" id="customerName" class="form-control" aria-describedby="passwordHelpInline" 
-                  value={this.state.customerDetails.customerName.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.customerName.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,3)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1095,8 +1009,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="address">כתובת</label>
                   <input type="text" id="address" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.address.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.address.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,0)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1107,8 +1021,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="city">עיר</label>
                   <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.city.value}  
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.city.value}  
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,2)}/>
                 </div>
                 <div class="form-group col-md-3" >
                 {(() => {
@@ -1118,8 +1032,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="postalCode" >מיקוד</label>
                   <input type="text" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.postalCode.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.postalCode.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,10)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1130,8 +1044,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="homePhone">טלפון בית</label>
                   <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.homePhone.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.homePhone.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,6)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1142,8 +1056,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="cellphone">סלולרי</label>
                   <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.cellphone.value} 
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.cellphone.value} 
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,1)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1154,8 +1068,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="workingPhone">טלפון עבודה</label>
                   <input type="text"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.workingPhone.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.workingPhone.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,11)}/>
                 </div>
                 
                 <div class="form-group col-md-3" >
@@ -1166,8 +1080,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
                   <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
-                  value={this.state.customerDetails.identificationNumber.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.identificationNumber.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,7)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1178,8 +1092,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="mailAdress">כתובת מייל</label>
                   <input type="text" id="mailAdress" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.mailAdress.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.mailAdress.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,8)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1190,8 +1104,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="orderNumber">מספר הזמנה</label>
                   <input type="text" id="orderNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.orderNumber.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.orderNumber.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,9)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1202,8 +1116,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="customerNote">הערה ללקוח</label>
                   <input type="text"  id="customerNote" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.customerDetails.customerNote.value}
-                  onChange={(event) => this.inputCusChangedHandler(event)}/>
+                  defaultValue={this.state.customerDetails.customerNote.value}
+                  onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,4)}/>
                 </div>
 
               </div> 
@@ -1225,8 +1139,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="insuranceAgent" >סוכן ביטוח</label>
                   <input type="text" id="insuranceAgent" class="form-control " style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
-                  value={this.state.cardForm.insuranceAgent.value}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.insuranceAgent.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,6)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1237,8 +1151,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="appraiser">שמאי</label>
                   <input type="text" id="appraiser" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.appraiser.value}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.appraiser.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,0)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1249,8 +1163,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="insuranceCompany">חברת ביטוח</label>
                   <input type="text" id="insuranceCompany" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.insuranceCompany.value}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.insuranceCompany.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,7)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1261,8 +1175,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="customerParticipation">השתתפות הלקוח</label>
                   <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.customerParticipation.value}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.customerParticipation.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
@@ -1273,8 +1187,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="policyNumber">מס. פוליסה</label>
                   <input type="text" id="policyNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.policyNumber.value} 
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.policyNumber.value} 
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,10)}/>
                 </div>
   
                 <div class="form-group col-md-3" >
@@ -1285,8 +1199,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="claimNumber">תביעה</label>
                   <input type="text"  id="claimNumber" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.claimNumber.value}
-                  onChange={(event) => this.inputChangedHandler(event)}/>
+                  defaultValue={this.state.cardForm.claimNumber.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,2)}/>
                 </div>
 
                 <div class="form-group col-md-3" >
@@ -1297,8 +1211,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="dateOfDamage">תאריך נזק</label>
                   <DatePicker name="dateOfDamage" style={{input: "input"}} class="form-control" aria-describedby="passwordHelpInline" selected={this.state.startDate}  
-                  value={this.state.cardForm.dateOfDamage.value}
-                  onChange={(event) => this.inputChangedHandler(event)} />
+                  defaultValue={this.state.cardForm.dateOfDamage.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,5)}/>
                 </div>
               </div> 
             </div>
@@ -1319,8 +1233,8 @@ onChange = date => this.setState({ date })
                  })()}
                   <label for="customerRequests" >תלונות/בקשות הלקוח</label>
                   <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.cardForm.customerRequests.value}
-                  onChange={(date) => this.inputChangedHandler(date)}/>
+                  defaultValue={this.state.cardForm.customerRequests.value}
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/>
                 </div>
               </div> 
               
