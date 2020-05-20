@@ -42,8 +42,7 @@ export const taskOpeningStart = () => {
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
 export const taskOpening = ( taskData, token,branchNumber, userKey,list ) => { 
-    //console.log(list);
-    //console.log(userKey);
+
     return dispatch => {
         dispatch( taskOpeningStart() ); // dispatch to the store
         //axios.post(branchNumber + '/users/' + userKey + '/taskData.json' ,taskData ) // send the HTTP request 
@@ -90,7 +89,7 @@ export const fetchTasks = (token, userId,branchNumber,userKey) => { //here we ru
     return dispatch => {
         dispatch(fetchTasksStart()); // we need to do that to set loading to true!
 
-        const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
+    //    const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
         axios.get(branchNumber + '/users/'+ userKey +'/taskData.json' ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
             
             .then( res => { // when the data is there (in the node of cards in firebase)

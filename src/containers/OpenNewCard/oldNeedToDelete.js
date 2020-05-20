@@ -1,5 +1,17 @@
 
-  
+          // <div class="form-group col-md-3" >
+          // {(() => {
+          //    if(this.state.found){
+          //     this.state.cardForm.dateOfDamage.value= this.state.cardDetails.dateOfDamage;
+          //     }    
+          //  })()}
+          //   <label for="dateOfDamage">תאריך נזק</label>
+          //   <DatePicker name="dateOfDamage" style={{input: "input"}} class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" selected={this.state.startDate}  
+          //   defaultValue={this.state.cardForm.dateOfDamage.value}
+          //   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,5)}/>
+          // </div>
+     
+
   /*
   else{
     return (

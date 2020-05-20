@@ -11,7 +11,8 @@ export {
     GetAllCardData,
     WorkOrPartDelete,
     partModalOpening,
-    partModalClose
+    partModalClose,
+    workOrPartUpdate
 } from './card';
 export {
     authSignUp, // import the auth method itself

@@ -268,19 +268,14 @@ export const cardDelete = ( token,branchNumber,cardKey ,node,userId) => {
 
         const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
         axios.delete(branchNumber + '/' + node + '/'+ cardKey + '.json' + queryParams,null )
-        //axios.patch(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '/' + field + '/.json'  , finalTag)
-
-     //   axios.delete(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '.json?x-http-method-override=DELETE',null )
 
         .then(res => {
-       // console.log(res.data);
         dispatch(cardDeleteSuccess(res,node)); 
         dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
      
         })
         .catch( error => {
             console.log(error);
-            //console.log(error);
             dispatch(cardDeleteFail(error));
         } );
 
@@ -289,7 +284,6 @@ export const cardDelete = ( token,branchNumber,cardKey ,node,userId) => {
 
 // this synchronous action creators
 export const workOrPartsOpeningFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
-    //console.log(error);
     return {
         type: actionTypes.WORK_OR_PARTS_ADD_FAIL,
         error: error // pass on the error
@@ -298,7 +292,7 @@ export const workOrPartsOpeningFail = ( error ) => { // here we might get the er
 
 //id, taskData,list
 export const workOrPartsOpeningSuccess = (  ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
-    //console.log(list);
+
     //also I want the cardData
     return { // here we return object where I have a type
         type: actionTypes.WORK_OR_PARTS_ADD_SUCCESS,
@@ -327,8 +321,6 @@ export const workOrPartsOpening = ( formData, token,branchNumber, userId,kind,ca
     return dispatch => {
  
         dispatch( workOrPartsOpeningStart() ); // dispatch to the store
-        //axios.post(branchNumber + '/users/' + userKey + '/taskData.json' ,taskData ) // send the HTTP request 
-       // axios.post(branchNumber + '/' + node + '.json?auth=' + token, cardData ) // send the HTTP request 
         axios.post(branchNumber + '/cards/' + cardKey + '/' + kind + '.json?auth=' + token ,formData ) // send the HTTP request 
 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
@@ -337,7 +329,6 @@ export const workOrPartsOpening = ( formData, token,branchNumber, userId,kind,ca
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 
 
-           // (token,branchNumber,userId, kind,cardKey)
             // this.props.history.push( '/' ); // here we navigate away
         } )
         .catch( error => {
@@ -463,3 +454,51 @@ export const WorkOrPartDelete = (token,branchNumber,cardKey,itemKey,list,userId)
 
     };
 };
+
+
+export const workOrPartUpdateStart = () => {
+    return {// this being a async normal action reaches redux which has the reducer
+        type: actionTypes.WORK_OR_PARTS_UPDATE_START
+    };
+};
+
+
+export const workOrPartUpdateSuccess = ( id, cardData ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+    //also I want the cardData
+    return { // here we return object where I have a type
+        type: actionTypes.WORK_OR_PARTS_UPDATE_SUCCESS
+      //  cardId: id, 
+       // cardData: cardData 
+    };
+};
+
+export const workOrPartUpdateFail = ( error ) => { 
+    return {
+        type: actionTypes.WORK_OR_PARTS_UPDATE_FAIL,
+        error: error 
+    };
+}
+
+
+
+
+export const workOrPartUpdate = ( itemData, token,branchNumber,userId,list,kind,cardKey,itemKey ) => { 
+
+    return dispatch => {
+        dispatch( workOrPartUpdateStart() );
+
+        axios.patch(branchNumber+'/' + list + '/'+ cardKey + '/' + kind + '/' + itemKey + '/.json?auth=' + token, itemData) //'/' +'/carData.json?auth=' + token
+        .then(res => {            
+            console.log(res)
+            dispatch(workOrPartUpdateSuccess()); 
+            dispatch(fetchCards(token, userId, branchNumber)); 
+            dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 
+
+        })
+        .catch( error => {
+            dispatch(workOrPartUpdateFail(error));
+            console.log(error);
+        } );
+    };
+};
+

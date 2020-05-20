@@ -59,6 +59,8 @@ class openNew extends Component   {
     reportStartDate: getDateTime(),
     formIsValid: false,
     isAddNewWorkOrPartOpen: false,
+    isUpdateWorkOrPartOpen: false,
+    itemKeyForUpdateWorkOrPart: '',
     showDetailsDiv: true,
     showCarInfoDiv:true,
     showCustomerDetailsDiv: true,
@@ -389,30 +391,22 @@ inputChangedHandler = (event) => {
   //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
   // }
 
-  
-
-
   if(event.target.id==='licenseNumber')    
     this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
   else
     this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
 
-
     let cards;    
-    //console.log(event.target.value);
 
   if(event.target.value!==""){
-   // console.log("408");
     cards = this.props.cards.map( card => (
       this.check(card,event.target.value)
     ))
   }
 
     if(this.state.found === true){
-    //  console.log("859");
       this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
     }
-
   }
 
 inputCarChangedHandler = (event) => { 
@@ -433,6 +427,7 @@ const updatedCardForm = updateObject(this.state.vehicleData, {
 
 this.setState({vehicleData: updatedCardForm}); //, formIsValid: formIsValid
 }
+
 
 inputCusChangedHandler = (event) => { //inputIdentifier
 
@@ -473,6 +468,24 @@ inputNewWorkChangedHandler = (event) => {
   this.setState({cardWork: updatedCardForm}); //, formIsValid: formIsValid
 }
 
+updateWorkChangedHandler = (event) => { 
+  const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+      value: event.target.value,
+     // value: checkFormatNumbers(event.target.value),
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      touched: true
+  });
+  const updatedCardForm = updateObject(this.state.cardWork, { 
+      [event.target.id]: updatedFormElement 
+  });
+  
+  // let formIsValid = true;
+  // for (let inputIdentifier in updatedCardForm) {
+  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+  // }
+  console.log(event.target.value);
+  this.setState({cardWork: updatedCardForm}); //, formIsValid: formIsValid
+}
 
 
 inputNewPartChangedHandler = (event) => { 
@@ -492,97 +505,210 @@ inputNewPartChangedHandler = (event) => {
   this.setState({cardPart: updatedCardForm}); //, formIsValid: formIsValid
 }
 
-  workOrPartsOpeningHandler = ( event,kind ) => {
-        event.preventDefault(); // with that we get the task details
-        const formData = {};
-
-        if(kind === 'workData'){
-            formData['workDescription'] = this.state.cardWork.workDescription.value;
-            formData['time'] = this.state.cardWork.time.value;
-            formData['gross'] = this.state.cardWork.gross.value;
-            formData['discount'] = this.state.cardWork.discount.value;
-            formData['net'] = this.state.cardWork.net.value;
-            formData['kind'] = kind;
-        }
-
-        else if( kind === 'partsData'){// partDescription amount
-          formData['partDescription'] = this.state.cardPart.partDescription.value;
-          formData['amount'] = this.state.cardPart.amount.value;
-          formData['gross'] = this.state.cardPart.gross.value;
-          formData['discount'] = this.state.cardPart.discount.value;
-          formData['net'] = this.state.cardPart.net.value;
-          formData['kind'] = kind;
-
-        }
-        let cardKey = this.state.identifiedCardID;
-        this.props.onWorkOrPartsOpening(formData, this.props.token, this.props.branchNumber, this.props.userId, kind,cardKey ); // this contains all the data of card 
-       
-        if(kind ==='workData'){
-          let updateCardWork = {
-            workDescription:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            time:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            gross:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            discount:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            net:{
-              value: '',
-              valid: false,
-              touched: false
-            }
-          }
-          this.setState({cardWork: updateCardWork});
-        }
- 
-
-       else if(kind ==='partsData'){
-          let updateCardWork = {
-            partDescription:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            amount:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            gross:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            discount:{
-              value: '',
-              valid: false,
-              touched: false
-            },
-            net:{
-              value: '',
-              valid: false,
-              touched: false
-            }
-          }
-          this.setState({cardPart: updateCardWork});
-        }
-
-        this.setState( { isAddNewWorkOrPartOpen: false } );
-    }
+UpdatePartChangedHandler = (event) => { 
+  const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+      value: event.target.value,
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      touched: true
+  });
+  const updatedCardForm = updateObject(this.state.cardPart, { 
+      [event.target.id]: updatedFormElement 
+  });
+  
+  // let formIsValid = true;
+  // for (let inputIdentifier in updatedCardForm) {
+  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
+  // }
+  this.setState({cardPart: updatedCardForm}); //, formIsValid: formIsValid
+}
     
+
+workOrPartsOpeningHandler = ( event,kind ) => {
+      event.preventDefault(); // with that we get the task details
+      const formData = {};
+
+      if(kind === 'workData'){
+          formData['workDescription'] = this.state.cardWork.workDescription.value;
+          formData['time'] = this.state.cardWork.time.value;
+          formData['gross'] = this.state.cardWork.gross.value;
+          formData['discount'] = this.state.cardWork.discount.value;
+          formData['net'] = this.state.cardWork.net.value;
+          formData['kind'] = kind;
+      }
+
+      else if( kind === 'partsData'){// partDescription amount
+        formData['partDescription'] = this.state.cardPart.partDescription.value;
+        formData['amount'] = this.state.cardPart.amount.value;
+        formData['gross'] = this.state.cardPart.gross.value;
+        formData['discount'] = this.state.cardPart.discount.value;
+        formData['net'] = this.state.cardPart.net.value;
+        formData['kind'] = kind;
+
+      }
+      let cardKey = this.state.identifiedCardID;
+      this.props.onWorkOrPartsOpening(formData, this.props.token, this.props.branchNumber, this.props.userId, kind,cardKey ); // this contains all the data of card 
+     
+      if(kind ==='workData'){
+        let updateCardWork = {
+          workDescription:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          time:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          gross:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          discount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          net:{
+            value: '',
+            valid: false,
+            touched: false
+          }
+        }
+        this.setState({cardWork: updateCardWork});
+      }
+
+
+     else if(kind ==='partsData'){
+        let updateCardWork = {
+          partDescription:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          amount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          gross:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          discount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          net:{
+            value: '',
+            valid: false,
+            touched: false
+          }
+        }
+        this.setState({cardPart: updateCardWork});
+      }
+
+      this.setState( { isAddNewWorkOrPartOpen: false } );
+  }
+
+    workOrPartsUpdateHandler = ( event,kind ) => {
+      event.preventDefault(); // with that we get the task details
+      const itemData = {};
+
+      if(kind === 'workData'){
+        itemData['workDescription'] = this.state.cardWork.workDescription.value;
+        itemData['time'] = this.state.cardWork.time.value;
+        itemData['gross'] = this.state.cardWork.gross.value;
+        itemData['discount'] = this.state.cardWork.discount.value;
+        itemData['net'] = this.state.cardWork.net.value;
+        itemData['kind'] = kind;
+      }
+
+      else if( kind === 'partsData'){// partDescription amount
+        itemData['partDescription'] = this.state.cardPart.partDescription.value;
+        itemData['amount'] = this.state.cardPart.amount.value;
+        itemData['gross'] = this.state.cardPart.gross.value;
+        itemData['discount'] = this.state.cardPart.discount.value;
+        itemData['net'] = this.state.cardPart.net.value;
+        itemData['kind'] = kind;
+
+      }
+      let cardKey = this.state.identifiedCardID;
+      let itemKey = this.state.itemKeyForUpdateWorkOrPart;
+
+      this.props.onWorkOrPartUpdate(itemData, this.props.token, this.props.branchNumber, this.props.userId,'cards', kind,cardKey,itemKey ); // this contains all the data of card 
+     
+      if(kind ==='workData'){
+        let updateCardWork = {
+          workDescription:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          time:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          gross:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          discount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          net:{
+            value: '',
+            valid: false,
+            touched: false
+          }
+        }
+        this.setState({cardWork: updateCardWork});
+      }
+
+
+     else if(kind ==='partsData'){
+        let updateCardWork = {
+          partDescription:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          amount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          gross:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          discount:{
+            value: '',
+            valid: false,
+            touched: false
+          },
+          net:{
+            value: '',
+            valid: false,
+            touched: false
+          }
+        }
+        this.setState({cardPart: updateCardWork});
+      }
+
+      
+      this.setState( { isUpdateWorkOrPartOpen: false } );
+      this.setState( { isAddNewWorkOrPartOpen: false } );
+  }
+  
  handleChange = date => {
   this.setState({
     startDate: date
@@ -958,14 +1084,17 @@ componentDidUpdate(preProps,preState){
 }
 
 closeWorksModal = (event) => {
+
+  this.setState( { isAddNewWorkOrPartOpen: false } );
+  this.setState( { isUpdateWorkOrPartOpen: false } );
   this.props.onWorkModalClose(this.props.token); // this contains all the data of card 
 // this.setState({ showWorkModel: false });
 };
 
-
 closePartsModal = (event) => {
+  this.setState( { isAddNewWorkOrPartOpen: false } );
+  this.setState( { isUpdateWorkOrPartOpen: false } );
   this.props.onPartsModalClose(this.props.token); // this contains all the data of card 
-// this.setState({ showWorkModel: false });
 };
 
 
@@ -979,19 +1108,21 @@ openPartModal = (event,kind) => {
 this.props.onPartModalOpening( ); // this contains all the data of card //this.props.token
 };
 
+
 renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
 
   let workButtons;
   let { isAddNewWorkOrPartOpen } = this.state;
 
+  let { isUpdateWorkOrPartOpen } = this.state;
   if (!isAddNewWorkOrPartOpen) {
       workButtons =
       <div >
           <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
             <div> 
               <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.closeWorksModal} >יציאה</Button>{' '}
-              <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>עדכון</Button>{' '}
-              <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>מחיקה</Button>{' '}
+              {/* <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>עדכון</Button>{' '} */}
+              {/* <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>מחיקה</Button>{' '} */}
               <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.handleAddRow} >הוספה</Button> 
             </div>
           </form>
@@ -1005,36 +1136,54 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
           <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
               <label for="workDescription" >תיאור עבודה</label>
-              <input type="text" id="workDescription" class="form-control" value={this.state.cardWork.workDescription.value} autocomplete="off" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+              <input type="text" id="workDescription" class="form-control" value={this.state.cardWork.workDescription.value} autocomplete="off" aria-describedby="passwordHelpInline" 
+              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1" style={{ marginBottom: "4px"}}  >
               <label for="time">זמן תקן</label>
-              <input type="number" id="time" class="form-control" value={this.state.cardWork.time.value} autocomplete="off" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
-            </div>
+              <input type="number" id="time" class="form-control" value={this.state.cardWork.time.value} autocomplete="off"  aria-describedby="passwordHelpInline" 
+              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
+              </div>
 
             <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
-             <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+             <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" 
+             onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
-              <input type="number" id="discount" class="form-control" value={this.state.cardWork.discount.value} autocomplete="off" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+              <input type="number" id="discount" class="form-control" value={this.state.cardWork.discount.value} autocomplete="off" aria-describedby="passwordHelpInline" 
+              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
               <label for="net">נטו</label>
-              <input type="number" id="net" class="form-control" value={this.state.cardWork.net.value} autocomplete="off" aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewWorkChangedHandler(event)}/>
+              <input type="number" id="net" class="form-control" value={this.state.cardWork.net.value} autocomplete="off" aria-describedby="passwordHelpInline" 
+              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
             </div>
 
           </div>
         </form>
         {/* onSubmit={this.cardOpeningHandler}   */}
         <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px", justifyContent: "left"}} >
-          <div  >  
-            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'workData')}> <CheckIcon/> אישור </Button> {' '}
-            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> {' '}
+          <div>  
+
+            { isUpdateWorkOrPartOpen ?  
+            <div>            
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsUpdateHandler( event, 'workData')}> <CheckIcon/> עדכון </Button> 
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeEditButton}> <CloseIcon/> ביטול </Button> 
+           </div>  
+            :
+            <div>
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'workData')}> <CheckIcon/> אישור </Button> 
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           
+           </div>  
+           
+           }
+          
           </div>
          </form>
       </div>
@@ -1055,7 +1204,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
                <div class="form-group col-md-3"   style={{ marginBottom: "4px"}}  > 
                  <label for="licenseNumber" >מספר רישוי</label>
-                 <input type="text"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"  style={{marginLeft: "10px"}} 
+                 <input  type="text"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"  style={{marginLeft: "10px"}} 
                  value={this.state.cardForm.licenseNumber.value}
                  value2={this.state.userCarNumber}
                  />
@@ -1105,13 +1254,13 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cellphone" >סלולרי</label>
-                 <input type="text" id="cellphone" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}} 
+                 <input type="number" id="cellphone" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}} 
                  value={this.state.customer_details.cellphone}/>
                </div>
      
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="homePhone" >טלפון בית</label>
-                 <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}}  
+                 <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" style={{marginLeft: "10px"}}  
                  value={this.state.customer_details.homePhone}/>
                </div>
     
@@ -1123,7 +1272,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="speedometer" >מד אוץ</label>
-                 <input  type="text"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
+                 <input  type="number"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
                  aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
                </div>
     
@@ -1183,12 +1332,11 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
 }
 
 
-
-
 renderPartsModal = (list) => { /// *** parttttttt modal! ****
 
   let partButtons;
   let { isAddNewWorkOrPartOpen } = this.state;
+  let { isUpdateWorkOrPartOpen } = this.state;
 
   if (!isAddNewWorkOrPartOpen) {
       partButtons =
@@ -1196,8 +1344,8 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
           <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
             <div> 
               <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal} >יציאה</Button>{' '}
-              <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>עדכון</Button>{' '}
-              <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>מחיקה</Button>{' '}
+              {/* <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>עדכון</Button>{' '}
+              <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>מחיקה</Button>{' '} */}
               <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.handleAddRow} >הוספה</Button> 
             </div>
           </form>
@@ -1210,28 +1358,33 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
         <form  class="form-group" style={{fontSize: "11px", marginBottom: "4px"}}  >
           <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
-              <label for="partDescription" >תיאור חלק</label>    
-              <input type="text" id="partDescription" class="form-control" autocomplete="off" value={this.state.cardPart.partDescription.value} aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewPartChangedHandler(event)}/>
+              <label for="partDescription" >תיאור חלק</label>        
+              <input type="text" id="partDescription" class="form-control" autocomplete="off" value={this.state.cardPart.partDescription.value} aria-describedby="passwordHelpInline"
+               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1" style={{ marginBottom: "4px"}}  >
               <label for="amount">כמות</label>
-              <input type="number" id="amount" class="form-control" autocomplete="off" value={this.state.cardPart.amount.value} aria-describedby="passwordHelpInline" onChange={(event) => this.inputNewPartChangedHandler(event)}/>
+              <input type="number" id="amount" class="form-control" autocomplete="off" value={this.state.cardPart.amount.value} aria-describedby="passwordHelpInline" 
+               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
-             <input type="number" id="gross" class="form-control" value={this.state.cardPart.gross.value} aria-describedby="passwordHelpInline" autocomplete="off" onChange={(event) => this.inputNewPartChangedHandler(event)}/>
+             <input type="number" id="gross" class="form-control" value={this.state.cardPart.gross.value} aria-describedby="passwordHelpInline" autocomplete="off" 
+              onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
-              <input type="number" id="discount" class="form-control" value={this.state.cardPart.discount.value} aria-describedby="passwordHelpInline" autocomplete="off" onChange={(event) => this.inputNewPartChangedHandler(event)}/>
+              <input type="number" id="discount" class="form-control" value={this.state.cardPart.discount.value} aria-describedby="passwordHelpInline" autocomplete="off" 
+               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
               <label for="net">נטו</label>
-              <input type="number" id="net" class="form-control" value={this.state.cardPart.net.value} aria-describedby="passwordHelpInline" autocomplete="off" onChange={(event) => this.inputNewPartChangedHandler(event)}/>
+              <input type="number" id="net" class="form-control" value={this.state.cardPart.net.value} aria-describedby="passwordHelpInline" autocomplete="off" 
+               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
           </div>
@@ -1239,8 +1392,20 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
         {/* onSubmit={this.cardOpeningHandler}   */}
         <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px", justifyContent: "left"}} >
           <div>  
-            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'partsData')}> <CheckIcon/> אישור </Button> {' '}
-            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> {' '}
+
+          { isUpdateWorkOrPartOpen ?  
+            <div>            
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue", borderColor: "black"}}  onClick= {( event ) => this.workOrPartsUpdateHandler( event, 'partsData')}> <CheckIcon/> עדכון </Button> 
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           </div>  
+            :
+            <div>
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue", borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'partsData')}> <CheckIcon/> אישור </Button> 
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           
+           </div>  
+           
+           }
           </div>
          </form>
       </div>
@@ -1311,13 +1476,13 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cellphone" >סלולרי</label>
-                 <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{marginLeft: "10px"}} 
+                 <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{marginLeft: "10px"}} 
                  value={this.state.customer_details.cellphone}/>
                </div>
      
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="homePhone" >טלפון בית</label>
-                 <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{marginLeft: "10px"}}  
+                 <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{marginLeft: "10px"}}  
                  value={this.state.customer_details.homePhone}/>
                </div>
     
@@ -1329,7 +1494,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="speedometer" >מד אוץ</label>
-                 <input  type="text"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
+                 <input type="number"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
                  aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
                </div>
     
@@ -1399,9 +1564,81 @@ renderEditWorkOrPart = ( itemKey,list,workDescription,time,gross,discount,net) =
 }
 
 onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) =>  {
-  let cardKey = this.state.identifiedCardID;
+  this.setState({isUpdateWorkOrPartOpen: true});
+  this.setState({isAddNewWorkOrPartOpen: true});
+  this.setState({itemKeyForUpdateWorkOrPart: itemKey});
+ // this.setState({itemKeyForUpdateModalWorkOrPart: itemKey});
+  
+  if(list ==='workData'){
+    let updateCardWork = {
+      workDescription:{
+        value: workDescription,
+        valid: false,
+        touched: false
+      },
+      time:{
+        value: time,
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: gross,
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: discount,
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: net,
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardWork: updateCardWork});
+  }
+
+
+ else if(list ==='partsData'){
+    let updateCardWork = {
+      partDescription:{
+        value: workDescription,
+        valid: false,
+        touched: false
+      },
+      amount:{
+        value: time,
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: gross,
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: discount,
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: net,
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardPart: updateCardWork});
+  }
+  //let cardKey = this.state.identifiedCardID;
+  
+  // here will be the update work or part 
  // this.props.onWorkOrPartDelete(this.props.token, this.props.branchNumber,cardKey,itemKey ,list,this.props.userId); // this contains all the data of card 
 }      
+
+
+
 renderDeleteWorkOrPart = (itemKey,list) => { 
   return(
       <DeleteIcon 
@@ -1434,8 +1671,141 @@ handleRemoveRow = () => {
 
 closeAddButton = () => {
   this.setState( { isAddNewWorkOrPartOpen: false } );
+  this.setState( { isUpdateWorkOrPartOpen: false } );
+
+    let updateCardWork = {
+      workDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      time:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardWork: updateCardWork});
+  
+
+
+
+    let updateCardPart = {
+      partDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      amount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardPart: updateCardPart});
+  
 
 };
+
+closeEditButton = () => {
+  this.setState( { isAddNewWorkOrPartOpen: false } );
+  this.setState( { isUpdateWorkOrPartOpen: false } );
+
+
+    let updateCardWork = {
+      workDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      time:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false, 
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardWork: updateCardWork});
+  
+
+
+
+    let updateCardPart = {
+      partDescription:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      amount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      gross:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      discount:{
+        value: '',
+        valid: false,
+        touched: false
+      },
+      net:{
+        value: '',
+        valid: false,
+        touched: false
+      }
+    }
+    this.setState({cardPart: updateCardPart});
+  
+  
+};
+
 
 
 switchDivModeHandler = () => {
@@ -1556,7 +1926,7 @@ onChange = date => this.setState({ date })
               <div class="form-row" > 
                 <div class="form-group col-md-3" >
                   <label for="licenseNumber" >מספר רישוי</label>
-                  <input type="text"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" 
+                  <input  type="number"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{ webkitAppearance: "none" , margin: "0"}}
 
                   value={this.state.cardForm.licenseNumber.value}
                   value2={this.state.userCarNumber}
@@ -1621,7 +1991,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="speedometer">מד אוץ</label>
-                  <input  type="text"  id="speedometer" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input  type="number"  id="speedometer" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.carDetails.speedometer}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,10)}/>
                 </div>
@@ -1635,7 +2005,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="engineCapacity">נפח מנוע</label>
-                  <input  type="text"  id="engineCapacity" class="form-control" autocomplete="off"
+                  <input  type="number"  id="engineCapacity" class="form-control" autocomplete="off"
                   aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.vehicleData.engineCapacity.value}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,7)}/>
@@ -1802,7 +2172,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="postalCode" >מיקוד</label>
-                  <input type="text" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.postalCode.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,10)}/>
                 </div>
@@ -1814,7 +2184,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="homePhone">טלפון בית</label>
-                  <input type="text" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.homePhone.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,6)}/>
                 </div>
@@ -1826,7 +2196,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="cellphone">סלולרי</label>
-                  <input type="text" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.cellphone.value} 
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,1)}/>
                 </div>
@@ -1838,7 +2208,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="workingPhone">טלפון עבודה</label>
-                  <input type="text"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.workingPhone.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,11)}/>
                 </div>
@@ -1957,7 +2327,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="policyNumber">מס. פוליסה</label>
-                  <input type="text" id="policyNumber" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="policyNumber" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.cardForm.policyNumber.value} 
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,10)}/>
                 </div>
@@ -1974,20 +2344,25 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,2)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+            <div class="form-group col-md-3" >
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.dateOfDamage.value= this.state.cardDetails.dateOfDamage;
                     }    
                  })()}
                   <label for="dateOfDamage">תאריך נזק</label>
-                  <DatePicker name="dateOfDamage" style={{input: "input"}} class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" selected={this.state.startDate}  
+                  <input type="datetime-local" id="dateOfDamage" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} selected={this.state.startDate} 
                   defaultValue={this.state.cardForm.dateOfDamage.value}
+
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,5)}/>
-                </div>
-              </div> 
-            </div>
+              </div>
+           </div>
+           </div> 
+  
           : null }
+
+
+
 
           </div>
   
@@ -1996,7 +2371,7 @@ onChange = date => this.setState({ date })
             {this.state.showCustomerRequestsDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-12" >
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.customerRequests.value= this.state.cardDetails.customerRequests;
@@ -2085,22 +2460,23 @@ const mapStateToProps = state => { // here we get the state and return a javascr
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
+    
     onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
     onCardOpening: (cardData, token,branchNumber,node) => dispatch(actions.cardOpening(cardData, token, branchNumber,node)),
     onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID)), // this contains all the data of card 
+    onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
+
     onWorkModalOpening: ( ) =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
 
     onPartModalOpening: ( ) =>  dispatch(actions.partModalOpening()),   
+    onPartsModalClose: (token ) =>  dispatch(actions.partModalClose(token)),
 
-   // workModalOpening: (token,branchNumber,cardKey,userId,node,kind ) =>  dispatch(actions.workModalOpening(token,branchNumber,cardKey,userId,node,kind)),   
-
-   onPartsModalClose: (token ) =>  dispatch(actions.partModalClose(token)),
-
-    onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
     onWorkOrPartsOpening: (formData, token,branchNumber,userId, kind,cardKey) => dispatch(actions.workOrPartsOpening(formData, token, branchNumber,userId, kind,cardKey)),
-    onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
-    onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId))
+    onWorkOrPartUpdate: (itemData, token,branchNumber,userId,list, kind,cardKey,itemKey) => dispatch(actions.workOrPartUpdate(itemData, token,branchNumber,userId,list, kind,cardKey,itemKey)),
+    onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
+
+    onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey))
 
       //  return a map to map my props to dispatchable functions
       //here we want to execute an anonymous function where we eventually dispatch the action we just created it

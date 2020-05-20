@@ -69,10 +69,10 @@ const cardUpdateStart = ( state, action ) => {
 };
 
 const cardUpdateSuccess = ( state, action ) => {
-    const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
-        loading: false,
-        purchased: true,
+        loading: false
+      //  purchased: true,
     } );
 };
 
@@ -124,6 +124,23 @@ const workOrPartsOpeningFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
 
+
+const workOrPartUpdateStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const workOrPartUpdateSuccess = ( state, action ) => {
+    //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false
+    } );
+};
+
+const workOrPartUpdateFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+
 const GetAllCardDataStart = ( state, action ) => { 
     return updateObject( state, { loading: true } );
 };
@@ -149,7 +166,7 @@ const WorkOrPartDeleteFail = ( state, action ) => {
 };
 
 const WorkOrPartDeleteSuccess = ( state, action ) => {
-    const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+  //  const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     if(action.list === 'workData'){
         return updateObject( state, {
             loading: false
@@ -203,6 +220,12 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.WORK_OR_PARTS_DELETE_START: return WorkOrPartDeleteStart( state, action );
         case actionTypes.WORK_OR_PARTS_DELETE_SUCCESS: return WorkOrPartDeleteSuccess( state, action );
         case actionTypes.WORK_OR_PARTS_DELETE_FAIL: return WorkOrPartDeleteFail( state, action );
+
+
+        case actionTypes.WORK_OR_PARTS_UPDATE_START: return workOrPartUpdateStart( state, action ); 
+        case actionTypes.WORK_OR_PARTS_UPDATE_SUCCESS: return workOrPartUpdateSuccess( state, action );
+        case actionTypes.WORK_OR_PARTS_UPDATE_FAIL: return workOrPartUpdateFail( state, action );
+
 
         case actionTypes.GET_ALL_CARD_DATA_START: return GetAllCardDataStart( state, action );
         case actionTypes.GET_ALL_CARD_DATA_SUCCESS: return GetAllCardDataSuccess( state, action ); //GetAllCardDataSuccess
