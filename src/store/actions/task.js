@@ -63,12 +63,10 @@ export const taskOpening = ( taskData, token,branchNumber, userKey,list ) => {
 };
 
 export const fetchTasksSuccess = ( todo,doing,done ) => { // we expect to get the cards as an argument
-   // console.log(tasks);
-       console.log("67");
+
 
     return { // return a new object
         type: actionTypes.FETCH_TASKS_SUCCESS,
-        //tasks: tasks
         todo: todo,
         doing:doing,
         done:done
@@ -76,8 +74,6 @@ export const fetchTasksSuccess = ( todo,doing,done ) => { // we expect to get th
 };
 
 export const fetchTasksFail = ( error ) => {// get a potential error
-    console.log("79");
-
     return {
         type: actionTypes.FETCH_TASKS_FAIL,
         error: error
@@ -98,7 +94,6 @@ export const fetchTasks = (token, userId,branchNumber,userKey) => { //here we ru
         axios.get(branchNumber + '/users/'+ userKey +'/taskData.json' ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
             
             .then( res => { // when the data is there (in the node of cards in firebase)
-                console.log(res);                
                const todo = [] ; 
                const doing = [] ; 
                const done = [] ;
@@ -130,10 +125,6 @@ export const fetchTasks = (token, userId,branchNumber,userKey) => { //here we ru
                 }
             }
 
-                //console.log(todo);
-                //console.log(doing);
-               // console.log(done);
-
                 dispatch(fetchTasksSuccess(todo,doing,done));
             } )
             .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
@@ -142,12 +133,6 @@ export const fetchTasks = (token, userId,branchNumber,userKey) => { //here we ru
             } );
     };
 };
-
-
-
-
-
-
 
 export const taskUpdateStart = () => {
     return {// this being a async normal action reaches redux which has the reducer
@@ -177,8 +162,7 @@ export const taskUpdateFail = ( error ) => { // here we might get the error mess
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
 export const taskUpdate = ( updateData, token,branchNumber,userKey,taskKey ,list,field,userId) => { 
-   // console.log(branchNumber);
-    console.log(updateData);
+
 //    const finalTag = {  tag: updateData}
     let finalTag = '' ;
     if(field === 'tag'){
@@ -192,8 +176,6 @@ export const taskUpdate = ( updateData, token,branchNumber,userKey,taskKey ,list
     finalTag = {  isEdit: updateData};
 }
 
-
-    //const finalTag = {updateData}
     return dispatch => {
         dispatch( taskUpdateStart() ); // dispatch to the store
         //'/carData.json?auth=' + token,
@@ -207,18 +189,12 @@ export const taskUpdate = ( updateData, token,branchNumber,userKey,taskKey ,list
 
         })
         .catch( error => {
-            //console.log(error);
             dispatch(taskUpdateFail(error));
             console.log(error);
         } );
 
     };
 };
-
-
-
-
-
 
 export const taskDeleteStart = () => {
     return {// this being a async normal action reaches redux which has the reducer
@@ -249,19 +225,11 @@ export const taskDeleteFail = ( error ) => { // here we might get the error mess
 //this is the action we dispatched from the container once we click that save card button.
 
 export const taskDelete = ( token,branchNumber,userKey,taskKey ,list,userId) => { 
-    console.log(token);
-    console.log(branchNumber);
-    console.log(userKey);
-    console.log(taskKey);
-    console.log(list);
-    console.log(userId);
-
-
+ 
     return dispatch => {
         dispatch( taskDeleteStart() ); // dispatch to the store
         //'/carData.json?auth=' + token,
         axios.delete(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '.json?x-http-method-override=DELETE',null )
-        //axios.patch(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '/' + field + '/.json'  , finalTag)
 
         .then(res => {
         console.log(res.data);
@@ -270,7 +238,6 @@ export const taskDelete = ( token,branchNumber,userKey,taskKey ,list,userId) => 
 
         })
         .catch( error => {
-            //console.log(error);
             dispatch(taskDeleteFail(error));
             console.log(error);
         } );

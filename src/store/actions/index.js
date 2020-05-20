@@ -5,7 +5,13 @@ export {
     cardUpdate,
     fetchCards,
     workModalOpening,
-    workModalClose
+    workModalClose,
+    cardDelete,
+    workOrPartsOpening,
+    GetAllCardData,
+    WorkOrPartDelete,
+    partModalOpening,
+    partModalClose
 } from './card';
 export {
     authSignUp, // import the auth method itself
