@@ -24,11 +24,27 @@ export const purchaseWorksCancel = () => { // this will be dispatched whenever w
 };
 
 
+
+
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
 export const workModalClose = (  token ) => { 
     return dispatch => {
         dispatch( purchaseWorksCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
+        
+    };
+};
+
+export const purchaseToastCancel = () => { // this will be dispatched whenever we load the checkout page //** */
+    return {
+        type: actionTypes.TOAST_MODAL_CLOSE // just return an action
+    };
+};
+
+
+export const toastModalClose = (  ) => { 
+    return dispatch => {
+        dispatch( purchaseToastCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
         
     };
 };
@@ -70,6 +86,7 @@ export const cardUpdateSuccess = ( id, cardData ) => { // here we expect to get 
     return { // here we return object where I have a type
         type: actionTypes.CARD_UPDATE_SUCCESS,
         cardId: id, 
+        //showUpdateSuccessCase: true,
         cardData: cardData 
     };
 };
@@ -155,7 +172,8 @@ export const cardOpeningStart = () => {
         type: actionTypes.CARD_OPENING_START
     };
 };
-export const cardOpening = ( cardData, token,branchNumber,node ) => { 
+export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => { 
+    console.log(cardData);
     return dispatch => {
         dispatch( cardOpeningStart() ); // dispatch to the store
         // axios.post(branchNumber + '/cards.json?auth=' + token, cardData ) // send the HTTP request 
@@ -164,10 +182,12 @@ export const cardOpening = ( cardData, token,branchNumber,node ) => {
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
             console.log(response.data)
             dispatch(cardOpeningSuccess(response.data.name, cardData, node)); 
+            dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
 
             // this.props.history.push( '/' ); // here we navigate away
         } )
         .catch( error => {
+            console.log(error);
             dispatch(cardOpeningFail(error));
 
         } );
@@ -238,10 +258,11 @@ export const cardDeleteStart = () => {
 };
 
 // this synchronous action creators
-export const cardDeleteSuccess = ( id,list) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+export const cardDeleteSuccess = ( id,node) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
     //also I want the cardData
     return { // here we return object where I have a type
         type: actionTypes.CARD_DELETE_SUCCESS,
+        node: node
         //taskId: id, 
         //taskData: taskData,
        // list: list 

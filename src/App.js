@@ -49,8 +49,6 @@ const asyncUserSettingPage = asyncComponent(() => { // here we can define the pa
 });
 
 
-
-
 class App extends Component {
 
   componentDidMount () {
@@ -85,6 +83,7 @@ class App extends Component {
           <Route path="/updateTicketStatus" component={asyncOpenTwo} />
           <Route path="/UpdateTicketStatusAriel" component={asyncUpdateCard} />
           <Route path="/AdminSettings" component={asyncAdminSettingPage} />
+          
           <Route path="/UserSettings" component={asyncUserSettingPage} />
           <Route path="/dailyUpdates" component={asyncReports} />
 

@@ -12,7 +12,8 @@ export {
     WorkOrPartDelete,
     partModalOpening,
     partModalClose,
-    workOrPartUpdate
+    workOrPartUpdate,
+    toastModalClose
 } from './card';
 export {
     authSignUp, // import the auth method itself

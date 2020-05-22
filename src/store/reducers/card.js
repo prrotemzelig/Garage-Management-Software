@@ -3,10 +3,14 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
     cards: [], // all my cards
+    closeCards: [],
     loading: false, // we want to know if we are in a process of open new card or if we are done - true if we done open card **
     purchased: false,
     showWorkModel: false,   
-    showPartModel: false,   
+    showPartModel: false,
+    showSuccessCase: false,   
+    showCloseCardSuccessCase: false,
+    showUpdateSuccessCase: false,
     workData: [],
     partsData: []
 
@@ -19,6 +23,12 @@ const purchaseWorksInit = ( state, action ) => {
 const purchaseWorksCancel = ( state, action ) => {
     return updateObject( state, { showWorkModel: false } ); 
 };
+
+const purchaseToastCancel = ( state, action ) => {
+    return updateObject( state, { showSuccessCase: false ,showUpdateSuccessCase: false,showCloseCardSuccessCase: false} ); 
+};
+
+
 
 const purchasePartsInit = ( state, action ) => {
     return updateObject( state, { showPartModel: true } );
@@ -37,12 +47,29 @@ const cardOpeningStart = ( state, action ) => {
 };
 
 const cardOpeningSuccess = ( state, action ) => {
+    console.log("49");
+    if(action.node === 'cards'){
+        console.log("51");
     const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
         loading: false,
-        purchased: true,
+        //purchased: true,
+        showSuccessCase: true,
         cards: state.cards.concat( newCard ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
     } );
+}
+else if (action.node === 'closeCards'){
+    console.log("61");
+    const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false,
+      //  purchased: true,
+        showCloseCardSuccessCase: true,
+        closeCards: state.cards.concat( newCard ) 
+        //cards: state.cards.concat( newCard ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
+    } );
+}
+
 };
 
 const cardOpeningFail = ( state, action ) => {
@@ -71,7 +98,8 @@ const cardUpdateStart = ( state, action ) => {
 const cardUpdateSuccess = ( state, action ) => {
     //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
-        loading: false
+        loading: false,
+        showUpdateSuccessCase: true
       //  purchased: true,
     } );
 };
@@ -94,7 +122,8 @@ const cardDeleteSuccess = ( state, action ) => {
      // onlt need to update the old cards
     if(action.node === 'cards'){
         return updateObject( state, {
-            loading: false
+            loading: false,
+            showSuccessCase: true
             //  tasks: state.tasks.concat( newTask ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
            // todo: state.todo.concat( newTask )
            //onFetchTasks(token, userId, branchNumber,userKey)
@@ -212,6 +241,10 @@ const reducer = ( state = initialState, action ) => {
 
         case actionTypes.PURCHASE_PARTS_INIT: return purchasePartsInit( state, action );
         case actionTypes.PARTS_MODAL_CLOSE: return purchasePartsCancel( state, action );
+
+
+        case actionTypes.TOAST_MODAL_CLOSE: return purchaseToastCancel( state, action );
+
 
         case actionTypes.WORK_OR_PARTS_ADD_START: return workOrPartsOpeningStart( state, action );
         case actionTypes.WORK_OR_PARTS_ADD_SUCCESS: return workOrPartsOpeningSuccess( state, action ); 

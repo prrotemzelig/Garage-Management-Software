@@ -9,11 +9,17 @@ const initialState = { // javascript object
     lastName: null,
     email: null,
     userPermissions: null,
+    showSuccessCase: false, 
     userKey: null,
     error: null,
     loading: false,
     authRedirectPath: '/'
 };
+
+const purchaseToastCancel = ( state, action ) => {
+    return updateObject( state, { showSuccessCase: false} ); 
+};
+
 
 const authSignInStart = ( state, action ) => {
     return updateObject( state, { error: null, loading: true } ); // return my update state object
@@ -22,6 +28,10 @@ const authSignInStart = ( state, action ) => {
 const authSignUpStart = ( state, action ) => {
     return updateObject( state, { error: null, loading: true } ); // return my update state object
 };
+
+
+
+
 
 const authSignInSuccess = (state, action) => {
     return updateObject( state, { // in a success case we want to set the token,user ID, error,loading
@@ -33,6 +43,7 @@ const authSignInSuccess = (state, action) => {
         email: action.email,
         userPermissions: action.userPermissions,
         userKey: action.userKey,
+        
         error: null,
         loading: false // because we done!
      } );
@@ -41,6 +52,7 @@ const authSignInSuccess = (state, action) => {
 const authSignUpSuccess = (state, action) => {
     return updateObject( state, { // in a success case we want to set the token,user ID, error,loading
         error: null,
+        showSuccessCase: true,
         loading: false // because we done!
      } );
 };
@@ -80,6 +92,9 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.AUTH_SIGN_UP_START: return authSignUpStart(state, action);
         case actionTypes.AUTH_SIGN_UP_SUCCESS: return authSignUpSuccess(state, action);
         case actionTypes.AUTH_SIGN_UP_FAIL: return authSignUpFail(state, action);
+
+        case actionTypes.TOAST_MODAL_CLOSE: return purchaseToastCancel( state, action );
+
 
         case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state,action); // return the update path when this function gets executed
         default:

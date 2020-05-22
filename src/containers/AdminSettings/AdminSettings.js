@@ -7,10 +7,9 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
+import { Modal  } from 'react-bootstrap';
 
 import classes from './AdminSettings.module.css';
-
-
 class AdminSettings extends Component {
     state = {
         controls: {
@@ -127,6 +126,41 @@ class AdminSettings extends Component {
 
     }
 
+    closeToastModal = () => {
+
+        
+        this.props.onToastModalClose(); // this contains all the data of card 
+      // this.setState({ showWorkModel: false });
+      };
+      
+
+    renderToastModal = (message) => { ///*** TOAST modal! ****
+
+
+
+        let workButtons =
+            <div class="form-group" style={{marginBottom: "4px"}}>
+                <div  style={{ color: "white" ,fontSize: "16px", direction : "rtl"}}>{message}</div> 
+                  <div style={{textAlign:"left"}}> 
+                    <Button bsStyle="light" style={{borderColor: "black",color: "black"}} onClick={this.closeToastModal} >אישור</Button>{' '}
+                </div>
+            </div>;
+          
+          return (
+          
+              <Modal show={true} onHide={this.closeToastModal}  
+                  style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
+                <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+                  <Modal.Title  >הודעה</Modal.Title>   
+                </Modal.Header>
+             
+                <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
+                     {workButtons}
+                </Modal.Footer>
+              </Modal> 
+              );
+            
+      }
     // switchAuthModeHandler = () => {
     //     this.setState(prevState => {
     //         return {isSignup: !prevState.isSignup};
@@ -179,6 +213,10 @@ class AdminSettings extends Component {
            
                 
         <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
+           { this.props.showSuccessCase ?
+                    this.renderToastModal( 'משתמש נפתח בהצלחה')
+
+                :null }    
             <div className={classes.Auth}>
                 <div style= {{textAlign: "center"}}> 
                  <h3 style={{ paddingBottom: "20px"}}>הוספת משתמשים חדשים לסניף</h3>
@@ -190,8 +228,10 @@ class AdminSettings extends Component {
 
                     <div style= {{textAlign: "center"}}> 
                     <Button btnType="Success">הוספת משתמש</Button></div>
-                </form>                    
+                </form>  
+                           
             </div>
+       
          </div> 
           
         );
@@ -202,6 +242,7 @@ const mapStateToProps = state => { // for displat the spinner
     return {
         loading: state.auth.loading, // we take access to auth
         error: state.auth.error,
+        showSuccessCase: state.card.showSuccessCase,
         isAuthenticated: state.auth.token !== null,
         authRedirectPath: state.auth.authRedirectPath
     };
@@ -213,7 +254,9 @@ const mapDispatchToProps = dispatch => { // we do this to be able to dispatch so
 
         onAuth: (firstName,lastName,branchNumber,userPermissions,email, password) => dispatch(actions.authSignUp(firstName,lastName,branchNumber,userPermissions,email, password)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         //onAuth: (email, password, isSignup,branchNumber) => dispatch(actions.auth(email, password,isSignup,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+        onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
+
     };
 };
 
