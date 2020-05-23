@@ -35,7 +35,7 @@ class Datepic extends React.Component {
         return (
         <div class="form-row" style={{direction: "rtl"}} > 
            <div className="text-center"  style={{direction: "rtl"}} >
-             <form onSubmit={ this.onFormSubmit }>
+             <form onSubmit={ this.onFormSubmit } style={{direction: "rtl"}}>
                 <div className="form-group"  style={{direction: "rtl"}} >
                 <DatePicker
                         selected={ this.state.startDate }
