@@ -2,11 +2,9 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
-   // tasks: [],
     todo: [],
     doing:[],
     done:[],
-    //key: null,
     loading: false
 };
 
@@ -45,12 +43,9 @@ const taskOpeningSuccess = ( state, action ) => {
 
 };
 
-
 const taskOpeningFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
-
-
 
 const fetchTasksStart = ( state, action ) => { 
     return updateObject( state, { loading: true } );
@@ -58,7 +53,6 @@ const fetchTasksStart = ( state, action ) => {
 
 const fetchTasksSuccess = ( state, action ) => { 
     return updateObject( state, { // here we want to stor the cards we fetched so we need to get the state 
-        //tasks: action.tasks,
         todo: action.todo,
         doing: action.doing,
         done: action.done,
@@ -70,13 +64,6 @@ const fetchTasksFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
 
-
-
-
-
-
-
-
 const taskUpdateStart = ( state, action ) => {
     return updateObject( state, { loading: true } ); 
 };
@@ -86,7 +73,7 @@ const taskUpdateFail = ( state, action ) => {
 };
 
 const taskUpdateSuccess = ( state, action ) => {
-    const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+  //  const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     
     if(action.list === 'todo'){
         return updateObject( state, {
@@ -112,7 +99,6 @@ const taskUpdateSuccess = ( state, action ) => {
     }
 };
 
-
 const taskDeleteStart = ( state, action ) => {
     return updateObject( state, { loading: true } ); 
 };
@@ -122,7 +108,7 @@ const taskDeleteFail = ( state, action ) => {
 };
 
 const taskDeleteSuccess = ( state, action ) => {
-    const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+  //  const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     
     if(action.list === 'todo'){
         return updateObject( state, {
@@ -166,7 +152,6 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.TASK_DELETE_START: return taskDeleteStart( state, action );
         case actionTypes.TASK_DELETE_SUCCESS: return taskDeleteFail( state, action );
         case actionTypes.TASK_DELETE_FAIL: return taskDeleteSuccess( state, action );
-
 
         default: return state; // return the current state
     }

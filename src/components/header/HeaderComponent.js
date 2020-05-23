@@ -69,11 +69,25 @@ const styles = StyleSheet.create({
 });
 
 function HeaderComponent(props) {
+    let thisUserBranchNumber ='';
+    if(props.branchNumber==='Talpiot'){
+        thisUserBranchNumber='תלפיות';
+    }
+    else if(props.branchNumber==='GivatShaul'){
+        thisUserBranchNumber='גבעת שאול';
+
+    }
+
+    else if(props.branchNumber==='Modiin'){
+        thisUserBranchNumber='מודיעין';
+
+    }
+      
     const { icon, title, ...otherProps } = props;
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
 
-            <span className={css(styles.title)}>שלום,{title}</span>
+            <span className={css(styles.title)}>סניף {thisUserBranchNumber}</span>
             
             <Row vertical="center">
                 <div className={css(styles.iconStyles)}>
@@ -82,9 +96,9 @@ function HeaderComponent(props) {
                 <div className={css(styles.iconStyles)}>
                     <IconBellNew />
                 </div>
-                <div className={css(styles.separator)}></div>
+                <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>{props.branchNumber}</span>
+                    <span className={css(styles.name, styles.cursorPointer)}>שלום,{title}</span>
                     <img src={require("../../assets/anime3.png")} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
 

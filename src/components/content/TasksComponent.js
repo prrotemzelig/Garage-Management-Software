@@ -6,7 +6,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import axios from '../../axios-cards';
 import * as actions from '../../store/actions/index';
 
-import { Row } from 'simple-flexbox';
+import { Row } from 'simple-flexbox'; //Column
 import { StyleSheet, css } from 'aphrodite/no-important';
 import CardComponent from './CardComponent';
 import CheckboxOn from '../../assets/checkbox-on';
@@ -294,7 +294,7 @@ class TasksComponent extends React.Component {
         // console.log(newEdit);
         // this.props.onTaskUpdate(newEdit, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'isEdit',this.props.userId); // this contains all the data of card 
 
-        console.log(taskKey);
+       // console.log(taskKey);
 
 
 
@@ -330,7 +330,7 @@ class TasksComponent extends React.Component {
 
     onCheckboxClick = (checked,taskKey,list) => {
         const newChecked = !checked ;
-        console.log(newChecked);
+     //   console.log(newChecked);
         this.props.onTaskUpdate(newChecked, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'checked',this.props.userId); // this contains all the data of card 
 
     }
@@ -351,12 +351,12 @@ class TasksComponent extends React.Component {
         //onst items = prevState.items;
         const newTag = this.getNextTag(tag);
         
-        console.log(list);
-        console.log(tag);
+      //  console.log(list);
+     //   console.log(tag);
 
-        console.log(tag.text);
-        console.log(newTag);
-        console.log(newTag.text);
+      //  console.log(tag.text);
+      //  console.log(newTag);
+     //   console.log(newTag.text);
         this.props.onTaskUpdate(newTag.text, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'tag',this.props.userId); // this contains all the data of card 
 
     }       
@@ -376,14 +376,14 @@ class TasksComponent extends React.Component {
     taskOpeningHandler = ( event,list ) => {
         event.preventDefault(); // with that we get the task details
         const formData = {};
-        console.log();
+     //   console.log();
         if(list === 'todo'){
             formData['title'] = this.state.taskForm.toDoNewTask.title;
             formData['checked'] = this.state.taskForm.toDoNewTask.checked;
             formData['tag'] = this.state.taskForm.toDoNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
-            console.log(this.state.taskForm.toDoNewTask.tag.text);
+         //   console.log(this.state.taskForm.toDoNewTask.tag.text);
 
         }
         else if(list === 'doing'){
@@ -392,7 +392,7 @@ class TasksComponent extends React.Component {
             formData['tag'] = this.state.taskForm.doingNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
-            console.log(this.state.taskForm.doingNewTask.tag.text);
+           // console.log(this.state.taskForm.doingNewTask.tag.text);
         }
         else if(list === 'done'){
             formData['title'] = this.state.taskForm.doneNewTask.title;
@@ -400,7 +400,7 @@ class TasksComponent extends React.Component {
             formData['tag'] = this.state.taskForm.doneNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
-            console.log(this.state.taskForm.doneNewTask.tag.text);
+        //    console.log(this.state.taskForm.doneNewTask.tag.text);
         }
 
        // toDoNewTask  doingNewTask  doneNewTask

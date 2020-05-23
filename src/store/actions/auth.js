@@ -104,7 +104,7 @@ export const authSignUp = (firstName,lastName,branchNumber,userPermissions,email
         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
 
             .then(response => { // success case!
-                console.log("122" + response);
+            //    console.log("122" + response);
                 
                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
                 axios2.post(branchNumber + '/users.json' + queryParams , dataBaseUser )
@@ -138,21 +138,21 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
         axios2.get(branchNumber + '/users.json/'  + '?email=' + email ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
 
             .then(res => { // success case!
-                console.log(res.request); //get
-                console.log(res.data); //get
-                console.log(res.status); //get
-                console.log(res.statusText); //get
-                console.log(res.headers); //get
-                console.log(res.config); //get
-                console.log(res.response); //get
+           //     console.log(res.request); //get
+            //    console.log(res.data); //get
+           //     console.log(res.status); //get
+           //     console.log(res.statusText); //get
+            //    console.log(res.headers); //get
+             //   console.log(res.config); //get
+            //    console.log(res.response); //get
 
                 for ( let key in res.data ) {  //get
                     if(res.data[key].email === email && res.data[key].branchNumber === branchNumber ){ //get
-                        console.log(res.request); //get
+                      //  console.log(res.request); //get
                         userFound = true;
                         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
                             .then(response => { // success case! //get
-                                console.log(key);
+                            //    console.log(key);
                                 const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 100000); // was 1000 for 1 hour //post
                                 localStorage.setItem('token', response.data.idToken); //post
                                 localStorage.setItem('expirationDate', expirationDate); //post
@@ -171,7 +171,7 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 dispatch(authSignInFail(err.message)); //err.response.data.error //post
                             }); //post
                         
-                        console.log("success login with the right brance"); //get
+                     //   console.log("success login with the right brance"); //get
                         break; //get
                     }             
                     //console.log("185" + res.data[key].email + key );        
@@ -180,7 +180,7 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                 if(!userFound){
 
                     dispatch(authSignInFail("USER CANNOT LOGIN")); //err.response.data.error //get
-                    console.log("show some error we cannot find any match"  ); //get
+                  //  console.log("show some error we cannot find any match"  ); //get
                 }
 
                 }) //get
