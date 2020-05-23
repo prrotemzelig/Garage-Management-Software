@@ -16,6 +16,8 @@ class BarChart extends Component {
       date: '',
       countOpen:0,
       countClose:0,
+      countWork:0,
+      countParts:0,
       data:[],
       card:[]
     }
@@ -43,11 +45,12 @@ class BarChart extends Component {
 createReport(data){
  
   for(var i=0; i<data.length; i++){
-  let openingDateFromClose=data[i].cardData.openingDate;
+  let openingDate=data[i].cardData.openingDate;
   let closeDate=data[i].closeDate;
+  
   console.log(data[i].cardData.openingDate+'  '+data[i].cardData.licenseNumber);
   console.log(data[i].closeDate);
-    if(openingDateFromClose.includes(this.state.date)){
+    if(openingDate.includes(this.state.date)){
       this.state.countOpen+=1;
       if(closeDate === undefined || closeDate === null || closeDate === ''){
         console.log("aaa");
@@ -58,6 +61,48 @@ createReport(data){
         }
       }
     }
+  }
+  for(var i=0; i<data.length; i++){
+    let parts=[];
+    let parts_card;
+    parts=data[i].partsData;
+
+    let work=[];
+    let work_card;
+    work=data[i].workData;
+
+    let openingDate=data[i].cardData.openingDate;
+    if(openingDate.includes(this.state.date)){
+      if(parts === undefined || parts === null || parts === ''){
+        console.log("aaa");
+      }
+      else{
+        parts_card=Object.values(data[i].partsData);
+        for(var j=0;j<parts_card.length;j++){
+          console.log(parts_card[j]);
+          this.state.countParts+=parseInt(parts_card[j].amount, 10) ;
+        }
+      }
+    }  
+  }
+  for(var i=0; i<data.length; i++){
+    let work=[];
+    let work_card;
+    work=data[i].workData;
+
+    let openingDate=data[i].cardData.openingDate;
+    if(openingDate.includes(this.state.date)){
+      if(work === undefined || work === null || work === ''){
+        console.log("aaa");
+      }
+      else{
+        work_card=Object.values(data[i].workData);
+        for(var j=0;j<work_card.length;j++){
+          console.log(work_card[j]);
+          this.state.countWork+=1;
+        }
+      }
+    }  
   }
 }
 
@@ -87,7 +132,9 @@ createReport(data){
       this.state.click=false;
       this.state.countClose=0;
       this.state.countOpen=0;
-      
+      this.state.countWork=0;
+      this.state.countParts=0;
+
       for(var i=0;i<this.state.card[0].length;i++){
         cards.push(this.state.card[0][i]);
       }
@@ -104,19 +151,22 @@ createReport(data){
       labels: [
        'כרטיסים שנפתחו ביום זה',
        'כרטיסים שנסגרו ביום זה',
-       'חלקים שנמכרו ביום זה'
+       'חלקים שנמכרו ביום זה',
+       'עבודות שהתבצעו ביום זה'
       ],
       datasets: [{
-         data: [this.state.countOpen, this.state.countClose, 0,2],
+         data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,2],
          backgroundColor: [
            '#FF6384',
            '#36A2EB',
-           '#FFCE56'
+           '#FFCE56',
+           '#BD10E0'
       ],
       hoverBackgroundColor: [
         '#FF6384',
         '#36A2EB',
-        '#FFCE56'
+        '#FFCE56',
+        '#BD10E0'
       ]
     }]
    };
