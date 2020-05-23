@@ -12,7 +12,7 @@ const cardSearch = ( props ) => {
         cardDetails.push( {name: props.cardData.licenseNumber });
         cardDetails.push( {name: props.cardData.dateOfDamage});
         cardDetails.push( {name: props.cardData.ticketNumber });
-        cardDetails.push( {name: props.cardData.openingDate});
+        cardDetails.push( {name: props.closeDate});
        
     const cardsDetailsOutput = cardDetails.map(ig => {
         // here we return some JSX

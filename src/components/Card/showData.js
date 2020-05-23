@@ -32,20 +32,18 @@ class showData extends React.Component   {
       }
       
       componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-        this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
-      
+        this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber); 
       }
       
       render () {
         this.state.CarNumber=this.props.value;
-        console.log(this.state.CarNumber);
         let cards;
         if(this.state.userCarNumber!==""){
           cards = this.props.cards.map( card => (
             this.check(card)
           ))
         }
-      return (      
+          return (   
             <form onSubmit={this.cardUpdateHandler} class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >
       
             <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
@@ -301,7 +299,7 @@ class showData extends React.Component   {
               </div>   
             </div>  
         </form>
-        );
+          );
         }
 
 }
@@ -318,11 +316,7 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
         return {
-          onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),      
-              //  return a map to map my props to dispatchable functions
-            //here we want to execute an anonymous function where we eventually dispatch the action we just created it
-            // note - we need to execute this function - "fetchCards()" to really get the action
-      
+          onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) )
         };
       };
       

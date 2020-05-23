@@ -4,6 +4,7 @@ export {
     purchaseInit,
     cardUpdate,
     fetchCards,
+    fetchCloseCards,
     workModalOpening,
     workModalClose
 } from './card';

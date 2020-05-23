@@ -512,7 +512,7 @@ cardUpdateHandler = ( event ) => {
   }
   
  
-  this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.state.branchNumber,this.state.identifiedCardID); // this contains all the data of card 
+  this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID); // this contains all the data of card 
 
 
 }
