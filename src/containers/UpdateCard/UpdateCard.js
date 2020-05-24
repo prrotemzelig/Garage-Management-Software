@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './UpdateCard.css'
-import { FaSearch } from 'react-icons/fa';
 import Search from './SearchEngine.js';
 
 

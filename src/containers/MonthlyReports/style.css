@@ -1,0 +1,26 @@
+
+  
+  .text-center{
+    margin: 20px auto;
+    margin: auto;
+    width: 40%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  /*.date-input{
+    border: 0px;
+    padding: 5px 0px;
+    font-size: 1em;
+    position: relative;
+    outline: 0px;
+    width: 75%;
+    color: #000;
+
+  }*/
+   
+
+  
