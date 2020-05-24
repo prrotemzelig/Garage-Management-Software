@@ -25,16 +25,16 @@ const navigationItems = (props ) => (
 
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatus">כרטיס עבודה    </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/openCards">כרטיסים פתוחים   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/updateTicketStatusAriel">עדכון כרטיס אריאל   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/dailyUpdates">עדכונים יומיים   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
-            
+            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null}
+
             <div className={classes.separator}></div>
-            
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל   </NavigationItem> : null}
+
             {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
+
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null}
 
             {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconOverview} link="/UserSettings">הגדרות  </NavigationItem> : null}
 
@@ -45,7 +45,7 @@ const navigationItems = (props ) => (
     </ul>
 );
 
-
+//            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
 //            <NavigationItem icon={IconOverview} link="/" exact>ראשי   </NavigationItem> 
 
 const mapStateToProps = state => {

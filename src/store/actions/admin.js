@@ -163,7 +163,6 @@ export const addNewTaskForUserModalClose = (   ) => {
 
 
 
-
 export const purchaseAddNewUserInit = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
         type: actionTypes.PURCHASE_ADD_USER_MODAL_INIT // just return an action
@@ -341,5 +340,52 @@ export const deleteUserModalClose = (   ) => {
     return dispatch => {
         dispatch( deleteUserModalCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
         
+    };
+};
+
+
+
+export const taskOpeningSuccess = ( id, taskData,list ) => { 
+    return { 
+        type: actionTypes.TASK_OPENING_FOR_USER_SUCCESS,
+        taskId: id, 
+        taskData: taskData,
+        list: list
+    };
+};
+
+
+export const taskOpeningFail = ( error ) => { 
+    //console.log(error);
+    return {
+        type: actionTypes.TASK_OPENING_FOR_USER_FAIL,
+        error: error 
+    };
+}
+
+
+export const taskOpeningStart = () => {
+    return {
+        type: actionTypes.TASK_OPENING_FOR_USER_START
+    };
+};
+
+
+export const taskOpeningForUser = ( taskData, token,branchNumber, userKey,list) => { 
+
+    return dispatch => {
+        dispatch( taskOpeningStart() ); 
+
+        axios.post(branchNumber + '/users/' + userKey + '/taskData/' + list + '.json' ,taskData ) 
+
+        .then( response => {
+            console.log(response.data)
+            dispatch(taskOpeningSuccess(response.data.name, taskData,list)); 
+
+        } )
+        .catch( error => {
+            dispatch(taskOpeningFail(error));
+            console.log(error);
+        } );
     };
 };

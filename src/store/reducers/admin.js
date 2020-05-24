@@ -9,6 +9,7 @@ const initialState = {
     showDeleteSuccessCase: false,
     showAddNewTaskModal: false,
     showDeleteUserModal: false,
+    showAddTaskSuccessCase:false,
 
     // authRedirectPath: '/',
     TalpiotUsers: [],
@@ -157,9 +158,31 @@ const authSignUpSuccess = (state, action) => {
 };
 
 const purchaseToastCancel = ( state, action ) => {
-    return updateObject( state, { showSuccessCase: false,showDeleteSuccessCase: false} ); 
+    return updateObject( state, { showSuccessCase: false,showDeleteSuccessCase: false,showAddTaskSuccessCase: false} ); 
 };
 
+
+const taskOpeningStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+
+const taskOpeningSuccess = ( state, action ) => {
+   // const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); 
+        return updateObject( state, {
+            loading: false,
+            showAddNewTaskModal:false,
+            showAddTaskSuccessCase: true
+            //  tasks: state.tasks.concat( newTask ) 
+          //  todo: state.todo.concat( newTask )
+        });
+
+
+};
+
+const taskOpeningFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
 
 //state = initialState - we must to do like that because otherwise it's undefined at the beginning 
 const reducer = ( state = initialState, action ) => { // receiving the state and the action
@@ -182,21 +205,17 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.PURCHASE_ADD_USER_MODAL_INIT: return purchaseAddNewUserInit( state, action );
         case actionTypes.ADD_NEW_USER_MODAL_CLOSE: return purchaseAddNewUserCancel( state, action );
 
-        
-
         case actionTypes.ADD_NEW_TASK_FOR_USER_MODAL_INIT: return addNewTaskForUserInit( state, action );
         case actionTypes.ADD_NEW_TASK_FOR_USER_MODAL_CLOSE: return addNewTaskForUserCancel( state, action );
-
-
-
 
         case actionTypes.DELETE_USER_MODAL_INIT: return deleteUserModalInit( state, action );
         case actionTypes.DELETE_USER_MODAL_CLOSE: return deleteUserModalCancel( state, action );
 
-
-
         case actionTypes.TOAST_MODAL_CLOSE: return purchaseToastCancel( state, action );
 
+        case actionTypes.TASK_OPENING_FOR_USER_START: return taskOpeningStart( state, action );
+        case actionTypes.TASK_OPENING_FOR_USER_SUCCESS: return taskOpeningSuccess( state, action )
+        case actionTypes.TASK_OPENING_FOR_USER_FAIL: return taskOpeningFail( state, action );
         default: return state;
     }
 };

@@ -8,7 +8,6 @@ import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 
-
 //in this page I want to output my all card for each user
 class Cards extends Component {
 
@@ -35,8 +34,9 @@ class Cards extends Component {
             ) )
         }
         return (
-         
-            <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
+            <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"}}>
+
+            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                         <td scope="col" >מספר רישוי</td>
@@ -53,6 +53,7 @@ class Cards extends Component {
                     
                 </tbody>
             </table> 
+            </div>
         );
     }
 }

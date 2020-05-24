@@ -588,6 +588,11 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                         this.renderToastModal( 'משתמש נמחק בהצלחה')
 
                         :null }
+            { this.props.showAddTaskSuccessCase ?
+                        this.renderToastModal( 'משימה הוספה בהצלחה')
+
+                        :null }
+
 
             <p> </p>
          
@@ -680,6 +685,7 @@ const mapStateToProps = state => {
         showDeleteSuccessCase: state.admin.showDeleteSuccessCase,
         showAddNewTaskModal: state.admin.showAddNewTaskModal,
         showDeleteUserModal: state.admin.showDeleteUserModal,
+        showAddTaskSuccessCase: state.admin.showAddTaskSuccessCase,
         TalpiotUsers: state.admin.TalpiotUsers,
         GivatShaulUsers: state.admin.GivatShaulUsers,
         ModiinUsers: state.admin.ModiinUsers,
@@ -707,7 +713,7 @@ const mapDispatchToProps = dispatch => {
 
         onUserSignUp: (token,userId,firstName,lastName,branchNumber,userPermissions,email, password) => dispatch(actions.authSignUp(token,userId,firstName,lastName,branchNumber,userPermissions,email, password)),
         onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
-        onTaskOpening: (task, token,branchNumber,userKey,list) => dispatch(actions.taskOpening(task, token, branchNumber,userKey,list)),
+        onTaskOpening: (task, token,branchNumber,userKey,list) => dispatch(actions.taskOpeningForUser(task, token, branchNumber,userKey,list)),
 
     };
 };

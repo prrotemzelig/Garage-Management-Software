@@ -37,6 +37,7 @@ export {
     addNewTaskForUserModalOpening,
     addNewTaskForUserModalClose,
     deleteUserModalOpening,
-    deleteUserModalClose
+    deleteUserModalClose,
+    taskOpeningForUser
 } from './admin';
 

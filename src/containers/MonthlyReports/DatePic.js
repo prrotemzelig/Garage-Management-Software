@@ -2,11 +2,9 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import './style.css'
 import "react-datepicker/dist/react-datepicker.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 
-
-        
 class Datepic extends React.Component {
 
         constructor (props) {

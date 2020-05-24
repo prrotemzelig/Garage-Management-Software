@@ -6,6 +6,7 @@ const initialState = {
     doing:[],
     done:[],
     loading: false
+
 };
 
 

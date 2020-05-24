@@ -163,7 +163,7 @@ export const cardOpeningSuccess = ( id, cardData, node ) => { // here we expect 
 export const cardOpeningFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
     return {
         type: actionTypes.CARD_OPENING_FAIL,
-        error: error // pass on the error
+        error: error 
     };
 }
 
@@ -201,10 +201,11 @@ export const purchaseInit = () => { // this will be dispatched whenever we load 
 };
 
 
-export const fetchCardsSuccess = ( cards ) => { // we expect to get the cards as an argument
+export const fetchCardsSuccess = ( cards,node ) => { // we expect to get the cards as an argument
     return { // return a new object
         type: actionTypes.FETCH_CARDS_SUCCESS,
-        cards: cards
+        cards: cards,
+        node: node
     };
 };
 
@@ -243,7 +244,7 @@ export const fetchCards = (token, userId,branchNumber) => { //here we run our as
                     } );
                 }
 
-                dispatch(fetchCardsSuccess(fetchedCards));
+                dispatch(fetchCardsSuccess(fetchedCards,'cards'));
             } )
             .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
                 dispatch(fetchCardsFail(err));
@@ -253,30 +254,27 @@ export const fetchCards = (token, userId,branchNumber) => { //here we run our as
 
 
 
-export const fetchCloseCards = (token, userId,branchNumber) => { //here we run our async code
+export const fetchCloseCards = (token, userId,branchNumber) => { 
     return dispatch => {
-        dispatch(fetchCardsStart()); // we need to do that to set loading to true!
+        dispatch(fetchCardsStart()); 
 
-        const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
-        axios.get(branchNumber + '/closeCards.json' + queryParams) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
+        const queryParams = '?auth=' + token ; 
+        axios.get(branchNumber + '/closeCards.json' + queryParams) 
             
-            .then( res => { // when the data is there (in the node of cards in firebase)
+            .then( res => { 
                 console.log(res);
 
-                // so with the response I'm getting, I want to set some state which actually contain my cards and then outputs them.
                 const fetchedCards = []; 
-                //note!!! -> console.log(res.data); -> res.data will hold the data we get from firebase 
-                //and I get back a javascript object where the keys are simply these unique IDs firebase generated for us and the value (we have the IDs as properties)
-                //in the loop I turn my cards object into an array 
-                for ( let key in res.data ) { //in the cards node in the firebase, I'm not getting an array but I'll get back a javascript object
+          
+                for ( let key in res.data ) {
                     fetchedCards.push( {
-                        ...res.data[key], // here I want to push  res.ata for a given key, accessing the value which of course is the card
-                        id: key //to not lose the IDs though which are emy keys here I'll instead push a new object into this fetchedCards array where I will distribute the propertied off the Card object I've fetched from firebase with the spread operator and add 1 new property -> ID which is the ket because remember the key is in this object we've fetched
+                        ...res.data[key], 
+                        id: key 
                     } );
                 }
-                dispatch(fetchCardsSuccess(fetchedCards));
+                dispatch(fetchCardsSuccess(fetchedCards,'closeCards'));
             } )
-            .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
+            .catch( err => { 
                 dispatch(fetchCardsFail(err));
             } );
     };

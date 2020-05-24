@@ -83,10 +83,19 @@ const fetchCardsStart = ( state, action ) => {
 };
 
 const fetchCardsSuccess = ( state, action ) => { 
+    if(action.node=== 'cards'){
     return updateObject( state, { // here we want to stor the cards we fetched so we need to get the state 
         cards: action.cards,
         loading: false
     } );
+}
+
+else if(action.node=== 'closeCards'){
+    return updateObject( state, { // here we want to stor the cards we fetched so we need to get the state 
+        closeCards: action.cards,
+        loading: false
+    } );
+}
 };
 
 const fetchCardsFail = ( state, action ) => { 
