@@ -61,7 +61,6 @@ class Search extends React.Component {
                ))
             }
           }
-      console.log(cards);
 
       if(!this.state.found && this.state.carNumber!==''){
         return ( 
@@ -89,20 +88,21 @@ class Search extends React.Component {
       }
       if(this.state.found && this.state.click){
         return(
-          <div>  
-            
+          <div  >
             <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
             <div className="form-group">
             <ShowData
                 value={this.state.carNumber}
                 />
             </div>
+            
             <div className="form-group">
               <button onClick={e => this.modalClose(e)} type="button">
                 סגור
               </button>
             </div>
           </Modal>
+          
           <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
@@ -116,8 +116,8 @@ class Search extends React.Component {
                 <tbody >
                     {cards}
                 </tbody>  
-            </table>      
-            </div> 
+            </table>   
+            </div>   
         );     
       }
       else{

@@ -27,7 +27,7 @@ const asyncOpenCard = asyncComponent(() => {
 });
 
 const asyncReports = asyncComponent(() => {
-  return import('./containers/MonthlyReports/Report');
+  return import('./containers/DailyReports/Report');
 });
 
 const asyncUpdateCard = asyncComponent(() => {

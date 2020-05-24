@@ -7,6 +7,8 @@ import Card from './CardSearch';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
+import { Modal } from 'react-bootstrap';
+
 
 class showData extends React.Component   {
     constructor(props){
@@ -15,7 +17,9 @@ class showData extends React.Component   {
         cardDetails:{},
         carDetails:{},
         customer_details:{},
-        CarNumber:''
+        CarNumber:'',
+        parts:[],
+        works:[],
         }
       }
   
@@ -28,14 +32,39 @@ class showData extends React.Component   {
           this.state.carDetails=data.carData;
           this.state.cardDetails=data.cardData;
           this.state.customer_details=data.customerData;
-        }
+
+          let part=[];
+          let parts_card;
+          part=data.partsData;
+        
+          if(part === undefined || part === null || part === ''){
+          }
+          else{
+            parts_card=Object.values(data.partsData);
+            this.state.parts=parts_card;
+          }
+
+          let work=[];
+          let work_card;
+          work=data.workData;
+       
+          if(work === undefined || work === null || work === ''){
+          }
+          else{
+            work_card=Object.values(data.workData);
+            this.state.works=work_card;
+          }
+
       }
-      
+    }
       componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber); 
       }
       
       render () {
+        const partsDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
+        const worksDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
+        
         this.state.CarNumber=this.props.value;
         let cards;
         if(this.state.userCarNumber!==""){
@@ -43,6 +72,30 @@ class showData extends React.Component   {
             this.check(card)
           ))
         }
+        partsDetails.push( {name: this.state.parts[0].partDescription} );
+        partsDetails.push( {name: this.state.parts[0].amount} );
+        partsDetails.push( {name: this.state.parts[0].gross+'.00'} );
+        partsDetails.push( {name: this.state.parts[0].discount+'.00'}  );
+        partsDetails.push( {name: this.state.parts[0].net+'.00'}  );
+        const partsDetailsOutput = partsDetails.map(ig => {
+          // here we return some JSX
+          //we can use in ig.name as a unique key because it is unique here
+          return  <td 
+              
+                  cardData={ig.name}>{ig.name} </td>;
+      });
+      worksDetails.push( {name: this.state.works[0].workDescription} );
+      worksDetails.push( {name: this.state.works[0].time} );
+      worksDetails.push( {name: this.state.works[0].gross+'.00'} );
+      worksDetails.push( {name: this.state.works[0].discount+'.00'}  );
+      worksDetails.push( {name: this.state.works[0].net+'.00'}  );
+        const worksDetailsOutput = worksDetails.map(ig => {
+          // here we return some JSX
+          //we can use in ig.name as a unique key because it is unique here
+          return  <td 
+              
+                  cardData={ig.name}>{ig.name} </td>;
+      });
           return (   
             <form onSubmit={this.cardUpdateHandler} class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >
       
@@ -298,6 +351,50 @@ class showData extends React.Component   {
                 </div>   
               </div>   
             </div>  
+            <Modal.Body style={{padding: "0px",flex: "auto"}} scrollable={true}>
+            <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+              <div class="card-header" style={{fontSize: "14px"}}>עבודות שהתבצעו:</div>  
+            </div>
+            <div class="table-wrapper" style={{direction: "rtl"}}>
+               <table class="table table-bordered" style={{marginBottom: "1px"}} >
+                   <thead >
+                       <tr >
+                           <th  scope="col" style={{ textAlign: "right"}}>תיאור העבודה שהתבצעה</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>זמן</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>ברוטו</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
+                       </tr>
+                   </thead>
+                   <tbody >
+                    {worksDetailsOutput}
+                </tbody>
+               </table>
+           </div>
+          
+          </Modal.Body>
+          <Modal.Body style={{padding: "0px",flex: "auto"}} scrollable={true}>
+            <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+              <div class="card-header" style={{fontSize: "14px"}}>חלקים שהוחלפו:</div>  
+            </div>
+            <div class="table-wrapper" style={{direction: "rtl"}}>
+               <table class="table table-bordered" style={{marginBottom: "1px"}} >
+                   <thead >
+                       <tr >
+                           <th  scope="col" style={{ textAlign: "right"}}> החלקים שהוחלפו</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>כמות</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>ברוטו</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
+                       </tr>
+                   </thead>
+                   <tbody >
+                    {partsDetailsOutput}
+                </tbody>
+               </table>
+           </div>
+          
+          </Modal.Body>
         </form>
           );
         }

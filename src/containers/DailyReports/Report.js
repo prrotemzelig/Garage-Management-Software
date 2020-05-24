@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
-import {Bar, Pie} from 'react-chartjs-2';
+import {Bar, Pie, Line} from 'react-chartjs-2';
 import Date from './DatePic';
 import { Modal } from 'react-bootstrap';
 
@@ -18,6 +18,7 @@ class BarChart extends Component {
       countClose:0,
       countWork:0,
       countParts:0,
+      countRevenue:0,
       data:[],
       card:[]
     }
@@ -67,20 +68,15 @@ createReport(data){
     let parts_card;
     parts=data[i].partsData;
 
-    let work=[];
-    let work_card;
-    work=data[i].workData;
-
     let openingDate=data[i].cardData.openingDate;
     if(openingDate.includes(this.state.date)){
       if(parts === undefined || parts === null || parts === ''){
-        console.log("aaa");
       }
       else{
         parts_card=Object.values(data[i].partsData);
         for(var j=0;j<parts_card.length;j++){
-          console.log(parts_card[j]);
           this.state.countParts+=parseInt(parts_card[j].amount, 10) ;
+          this.state.countRevenue+=parseInt(parts_card[j].net, 10) ;
         }
       }
     }  
@@ -93,13 +89,13 @@ createReport(data){
     let openingDate=data[i].cardData.openingDate;
     if(openingDate.includes(this.state.date)){
       if(work === undefined || work === null || work === ''){
-        console.log("aaa");
       }
       else{
         work_card=Object.values(data[i].workData);
         for(var j=0;j<work_card.length;j++){
-          console.log(work_card[j]);
           this.state.countWork+=1;
+          this.state.countRevenue+=parseInt(work_card[j].net, 10) ;
+
         }
       }
     }  
@@ -134,6 +130,7 @@ createReport(data){
       this.state.countOpen=0;
       this.state.countWork=0;
       this.state.countParts=0;
+      this.state.countRevenue=0;
 
       for(var i=0;i<this.state.card[0].length;i++){
         cards.push(this.state.card[0][i]);
@@ -146,43 +143,53 @@ createReport(data){
       this.createReport(cards);
 
     }
-    
+   
     const data = {
       labels: [
        'כרטיסים שנפתחו ביום זה',
        'כרטיסים שנסגרו ביום זה',
        'חלקים שנמכרו ביום זה',
-       'עבודות שהתבצעו ביום זה'
-      ],
-      datasets: [{
-         data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,2],
+       'עבודות שהתבצעו ביום זה',
+       'סכום ההכנסות ביום זה'
+    ],
+    datasets: [{
+      label: '',
+      fill: false,
+      data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
          backgroundColor: [
            '#FF6384',
            '#36A2EB',
            '#FFCE56',
-           '#BD10E0'
+           '#BD10E0',
+           '#880e4f'
       ],
       hoverBackgroundColor: [
         '#FF6384',
         '#36A2EB',
         '#FFCE56',
-        '#BD10E0'
+        '#BD10E0',
+        '#880e4f'
       ]
     }]
    };
    
      return (
+       
       <div style={{direction: "rtl" }}>
+        
          <Date style={{direction: "rtl" }}
          getData={this.getData}
          onClicked={this.onChildClicked}/>
          <div style={{direction: "rtl" }}>
-          {this.state.click && this.state.date!='' ? <Bar height="100px" data={data} />:<Bar height="100px" data={data} />}
+          <Bar barSize="2000px" height="100px" data={data} />        
+
          </div>
        </div>
      );   
+     
   }
-  
+  //          {this.state.click && this.state.date!='' ? <Bar height="100px" data={data} />:<Bar height="100px" data={data} />}
+
 
 }
 
