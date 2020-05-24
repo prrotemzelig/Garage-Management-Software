@@ -31,7 +31,7 @@ class SearchBar extends React.Component {
               <input 
               name={name} className="search-input" 
               id="search" 
-              type="text" 
+              type="text" autocomplete="off"
               placeholder="הכנס מספר רכב" 
               value2={this.state.term}
               onChange={event=>this.onInputChange(event.target.value)} 
