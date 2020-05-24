@@ -173,7 +173,8 @@ class TasksComponent extends React.Component {
         formData['tag'] = tag;
         formData['list'] = newList;
         formData['isEdit'] = isEdit;
-
+        formData['openedByFirstName'] = this.props.firstName;
+        formData['openedByLastName'] = this.props.lastName;
         //delete from the old list and then then send the request to taskOpening
         this.props.onTaskDelete(this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,oldList,this.props.userId); // this contains all the data of card 
         this.props.onTaskOpening(formData, this.props.token, this.props.branchNumber, this.props.userKey, newList); // this contains all the data of card 
@@ -383,6 +384,8 @@ class TasksComponent extends React.Component {
             formData['tag'] = this.state.taskForm.toDoNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
+            formData['openedByFirstName'] = this.props.firstName;
+            formData['openedByLastName'] = this.props.lastName;
          //   console.log(this.state.taskForm.toDoNewTask.tag.text);
 
         }
@@ -392,6 +395,8 @@ class TasksComponent extends React.Component {
             formData['tag'] = this.state.taskForm.doingNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
+            formData['openedByFirstName'] = this.props.firstName;
+            formData['openedByLastName'] = this.props.lastName;
            // console.log(this.state.taskForm.doingNewTask.tag.text);
         }
         else if(list === 'done'){
@@ -400,6 +405,8 @@ class TasksComponent extends React.Component {
             formData['tag'] = this.state.taskForm.doneNewTask.tag.text;
             formData['list'] = list;
             formData['isEdit'] = false;
+            formData['openedByFirstName'] = this.props.firstName;
+            formData['openedByLastName'] = this.props.lastName;
         //    console.log(this.state.taskForm.doneNewTask.tag.text);
         }
 
@@ -514,6 +521,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         token: state.auth.token,
         userId: state.auth.userId,
         branchNumber: state.auth.branchNumber,
+        firstName: state.auth.firstName,
+        lastName: state.auth.lastName,
         userKey: state.auth.userKey,
         userTasksTODO: state.task.todo,
         userTasksDOING: state.task.doing,

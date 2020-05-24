@@ -41,7 +41,7 @@ export const taskOpeningStart = () => {
 
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
-export const taskOpening = ( taskData, token,branchNumber, userKey,list ) => { 
+export const taskOpening = ( taskData, token,branchNumber, userKey,list) => { 
 
     return dispatch => {
         dispatch( taskOpeningStart() ); // dispatch to the store

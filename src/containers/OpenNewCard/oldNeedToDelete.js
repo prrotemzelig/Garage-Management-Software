@@ -1,5 +1,236 @@
+//admin actions:
 
-          // <div class="form-group col-md-3" >
+// export const UserDelete = (token,userBranchNumber,userKey,userId,uidUser) => {   // token,branchNumber,userKey,taskKey ,list,userId
+
+//     console.log(token);
+//     console.log(userBranchNumber);
+//     console.log(userKey);
+//     console.log(userId);
+//     console.log(uidUser);
+
+    
+//     return dispatch => {
+//         dispatch( UserDeleteStart() ); // dispatch to the store
+//         //'/carData.json?auth=' + token,
+
+//         const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
+//         //?x-http-method-override=DELETE
+//              //   axios.delete(branchNumber + '/' + node + '/'+ cardKey + '.json' + queryParams,null )
+//              //        axios.delete(branchNumber + '/' + node + '/'+ cardKey + '.json' + queryParams,null )
+//              let url = 'https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';
+             
+             
+             
+
+//         axios.delete(userBranchNumber + '/users/'+ userKey  + '.json' + queryParams ,null ) //x-http-method-override=DELETE
+
+//         .then(res => {
+//         console.log(res);
+//         dispatch(UserDeleteSuccess(res)); //list 
+//         //dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 
+//         dispatch(fetchUsers(token, userId));
+//         })
+//         .catch( error => {
+//             dispatch(UserDeleteFail(error));
+//             console.log(error);
+//         } );
+
+//     };
+// };
+
+
+
+//AdminUserManagement old
+
+ //   <DeleteIcon 
+    //   style={{ fontSize:"large" }}
+    //   onClick={() => this.onDeleteUserClick(userKey,userBranchNumber,userToken)}/> 
+      //            <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() => this.onDeleteUserClick(userKey,userBranchNumber,userToken)} >מחק משתמש</Button>    
+
+          // <EditIcon 
+          //  style={{ fontSize:"large" }}
+           // onClick={() => this.onDeleteUserClick(userKey,userBranchNumber,userToken)}/>   
+
+/* <tbody >
+{cards}
+
+</tbody>  */
+
+
+// return (
+//     <div >
+//         {cards} 
+//     </div>
+// );
+
+
+{/* <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"}}>
+<table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
+    <thead>   
+        <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+            <th  scope="col" style={{ textAlign: "right"}}>סניף</th>
+            <th  scope="col" style={{ textAlign: "right"}}>שם</th>
+            <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
+            <th  scope="col" style={{ textAlign: "right"}}>הרשאות</th>
+            <th  scope="col" style={{ textAlign: "right"}}>פעולות</th> 
+        </tr>
+    </thead>
+    <tbody>
+    
+
+    {this.props.TalpiotUsers.map( user =>  (
+        <tr>
+            <td>תלפיות</td>
+            <td>{user.firstName}{' '}{user.lastName}</td>
+            <td>{user.email}</td>                        
+            <td>{user.userPermissions}</td>
+            <td>
+                {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken)}
+                {' '}
+                {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+              
+
+            </td>
+        </tr>
+         ))
+    }
+
+
+
+    {this.props.GivatShaulUsers.map( user =>  (
+    <tr>
+        <td>גבעת שאול</td>
+        <td>{user.firstName}{' '}{user.lastName}</td>
+        <td>{user.email}</td>                        
+        <td>{user.userPermissions}</td>
+        <td>
+            {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken)}
+            {' '}
+            {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+           
+
+        </td>
+    </tr>
+    ))
+    }
+
+    {this.props.ModiinUsers.map( user =>  (
+    <tr>
+        <td>מודיעין</td>
+        <td>{user.firstName}{' '}{user.lastName}</td>
+        <td>{user.email}</td>                        
+        <td>{user.userPermissions}</td>
+        <td>
+            {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken)}
+            {' '}
+            {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+        
+
+        </td>
+    </tr>
+    ))
+    }
+
+    </tbody>
+</table> 
+</div> */}
+
+
+
+
+
+
+
+/*
+    <Card
+        key={card.id}
+        cardData={card.cardData}/>
+          
+    with that -> we are passing the information to Card Component ( the other file in Component folder)
+    and there we need to output it there in the Card component.
+*/
+
+
+
+
+
+/* <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
+<thead>
+    
+    <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+    <th  scope="col" style={{ textAlign: "right"}}>סניף</th>
+    <th  scope="col" style={{ textAlign: "right"}}>שם</th>
+    <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
+    <th  scope="col" style={{ textAlign: "right"}}>הרשאות</th>
+    <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
+
+
+    </tr>
+</thead>
+
+<tbody>
+
+
+{this.props.TalpiotUsers.map( user =>  (
+
+    <tr>
+        
+        <td>תלפיות</td>
+        <td>{user.firstName}{' '}{user.lastName}</td>
+        <td>{user.email}</td>                        
+        <td>{user.userPermissions}</td>
+
+        <td>
+            {this.renderDeleteWorkOrPart(user.id,user.branchNumber)}
+        </td>
+    </tr>
+     ))
+}
+
+<div className={classes.separator}></div>
+
+{this.props.GivatShaulUsers.map( user =>  (
+
+<tr>
+    
+    <td>גבעת שאול</td>
+    <td>{user.firstName}{' '}{user.lastName}</td>
+    <td>{user.email}</td>                        
+    <td>{user.userPermissions}</td>
+
+    <td>
+        {this.renderDeleteWorkOrPart(user.id,user.branchNumber)}
+    </td>
+</tr>
+))
+}
+
+<div className={classes.separator}></div>
+
+{this.props.ModiinUsers.map( user =>  (
+
+<tr>
+    
+    <td>מודיעין</td>
+    <td>{user.firstName}{' '}{user.lastName}</td>
+    <td>{user.email}</td>                        
+    <td>{user.userPermissions}</td>
+
+    <td>
+        {this.renderDeleteWorkOrPart(user.id,user.branchNumber)}
+    </td>
+</tr>
+))
+}
+
+</tbody>
+
+</table>  */
+
+
+   
+   //openNew old
+   // <div class="form-group col-md-3" >
           // {(() => {
           //    if(this.state.found){
           //     this.state.cardForm.dateOfDamage.value= this.state.cardDetails.dateOfDamage;

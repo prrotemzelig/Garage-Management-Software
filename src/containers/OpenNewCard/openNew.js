@@ -1603,7 +1603,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
          </Modal.Body>
     
-          <Modal.Body style={{padding: "0px",flex: "auto"}}>
+          <Modal.Body style={{padding: "0px",flex: "auto"}} scrollable={true}>
            <div class="table-wrapper" style={{direction: "rtl"}}>
                <table class="table table-bordered" style={{marginBottom: "1px"}} >
                    <thead >
@@ -2827,7 +2827,7 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID)), // this contains all the data of card 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
-    onWorkModalOpening: ( ) =>  dispatch(actions.workModalOpening()),   
+    onWorkModalOpening: () =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
 
 

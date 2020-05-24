@@ -44,10 +44,13 @@ const asyncAdminSettingPage = asyncComponent(() => { // here we can define the p
   return import('./containers/AdminSettings/AdminSettings');
 });
 
+const asyncAdminUserManagementPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
+  return import('./containers/AdminSettings/AdminUserManagement');
+});
+
 const asyncUserSettingPage = asyncComponent(() => { // here we can define the path to the component we want to load lazily
   return import('./containers/openingPage/openingPage');
 });
-
 
 class App extends Component {
 
@@ -83,11 +86,11 @@ class App extends Component {
           <Route path="/updateTicketStatus" component={asyncOpenTwo} />
           <Route path="/UpdateTicketStatusAriel" component={asyncUpdateCard} />
           <Route path="/AdminSettings" component={asyncAdminSettingPage} />
-          
+          <Route path="/AdminUserManagement" component={asyncAdminUserManagementPage} />
+
           <Route path="/UserSettings" component={asyncUserSettingPage} />
           <Route path="/dailyUpdates" component={asyncReports} />
 
-          
           <Redirect to="/main" />
           <Redirect to="/" />
         </Switch>

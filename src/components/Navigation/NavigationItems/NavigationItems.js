@@ -34,6 +34,7 @@ const navigationItems = (props ) => (
             <div className={classes.separator}></div>
             
             {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל   </NavigationItem> : null}
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
 
             {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconOverview} link="/UserSettings">הגדרות  </NavigationItem> : null}
 

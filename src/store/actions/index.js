@@ -16,11 +16,10 @@ export {
     toastModalClose
 } from './card';
 export {
-    authSignUp, // import the auth method itself
     authSignIn,
     logout,
     setAuthRedirectPath,
-    authCheckState
+    authCheckState    
 } from './auth';
 export {
     taskOpening,
@@ -28,3 +27,15 @@ export {
     taskUpdate,
     taskDelete
 } from './task';
+export {
+    authSignUp, // import the auth method itself
+    fetchUsers,
+    UserDelete,
+    AddNewUserModalOpening,
+    AddNewUserModalClose,
+    addNewTaskForUserModalOpening,
+    addNewTaskForUserModalClose,
+    deleteUserModalOpening,
+    deleteUserModalClose
+} from './admin';
+

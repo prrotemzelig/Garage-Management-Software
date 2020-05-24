@@ -9,9 +9,22 @@ export const authSignInStart = () => { // essentially we use this action to set 
     };
 };
 
-export const authSignUpStart = () => { // essentially we use this action to set a loading state and potentially show a spinner if we want to
+// export const authSignUpStart = () => { // essentially we use this action to set a loading state and potentially show a spinner if we want to
+//     return {
+//         type: actionTypes.AUTH_SIGN_UP_START
+//     };
+// };
+
+export const purchaseToastCancel = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
-        type: actionTypes.AUTH_SIGN_UP_START
+        type: actionTypes.TOAST_MODAL_CLOSE // just return an action
+    };
+};
+
+export const toastModalClose = (  ) => { 
+    return dispatch => {
+        dispatch( purchaseToastCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
+        
     };
 };
 
@@ -29,28 +42,26 @@ export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,
     };
 };
 
-export const authSignUpSuccess = () => { // this will get some database, and return javascript object
-    return {
-        type: actionTypes.AUTH_SIGN_UP_SUCCESS
+// export const authSignUpSuccess = () => { // this will get some database, and return javascript object
+//     return {
+//         type: actionTypes.AUTH_SIGN_UP_SUCCESS
      
-    };
-};
+//     };
+// };
 
 export const authSignInFail = (error) => {
-    return {
-        
+    return { 
         type: actionTypes.AUTH_SIGN_IN_FAIL,
         error: error
     };
 };
 
-export const authSignUpFail = (error) => {
-    return {
-        type: actionTypes.AUTH_SIGN_UP_FAIL,
-        error: error
-    };
-};
-
+// export const authSignUpFail = (error) => {
+//     return {
+//         type: actionTypes.AUTH_SIGN_UP_FAIL,
+//         error: error
+//     };
+// };
 
 // this will be a synchronous action creator
 export const logout = () => { //need to add
@@ -79,46 +90,53 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-export const authSignUp = (firstName,lastName,branchNumber,userPermissions,email, password) => { // that will  be the one holding the async code that doing the authentication
-    //console.log("70");
-    // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
-    return dispatch => { // here we want to authenticate the use
-        dispatch(authSignUpStart());
-        const dataBaseUser = { // here we  prepare the user data for the state
-            firstName: firstName,
-            lastName: lastName,
-            branchNumber: branchNumber,
-            userPermissions: userPermissions,
-            email: email,
-            Tasks:[]
-        }; 
+// export const authSignUp = (firstName,lastName,branchNumber,userPermissions,email, password) => { // that will  be the one holding the async code that doing the authentication
+//     // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
+//     return dispatch => { // here we want to authenticate the use
+//         dispatch(authSignUpStart());
+//         const dataBaseUser = { // here we  prepare the user data for the state
+//             firstName: firstName,
+//             lastName: lastName,
+//             branchNumber: branchNumber,
+//             userPermissions: userPermissions,
+//             email: email,
+//             Tasks:[]
+//         }; 
 
-        const authData = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        };
+//         const authData = {
+//             email: email,
+//             password: password,
+//             returnSecureToken: true
+//         };
 
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';
+//         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';
 
-        axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
+//         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
 
-            .then(response => { // success case!
-            //    console.log("122" + response);
-                
-                const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
-                axios2.post(branchNumber + '/users.json' + queryParams , dataBaseUser )
-                //axios2.post(branchNumber + '/users.json?auth' + response.data.idToken , dataBaseUser )
+//             .then(response => { // success case!  
+//                 const dataBaseUser = { // here we  prepare the user data for the state
+//                     firstName: firstName,
+//                     lastName: lastName,
+//                     branchNumber: branchNumber,
+//                     userPermissions: userPermissions,
+//                     email: email,
+//                     userToken: response.data.idToken, //localId
+//                     Tasks:[]
+//                 };             
+//                 console.log(response);  
+//                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
+//                 axios2.post(branchNumber + '/users.json' + queryParams , dataBaseUser )
+//                 //axios2.post(branchNumber + '/users.json?auth' + response.data.idToken , dataBaseUser )
 
-                dispatch(authSignUpSuccess());
-               // dispatch(checkAuthTimeout(response.data.expiresIn));
+//                 dispatch(authSignUpSuccess());
+//                // dispatch(checkAuthTimeout(response.data.expiresIn));
 
-            })
-            .catch(err => { // add nertwork problem!!! need to fix this rotem
-                dispatch(authSignUpFail(err)); //err.response.data.error
-            });
-    };
-};
+//             })
+//             .catch(err => { // add nertwork problem!!! need to fix this rotem
+//                 dispatch(authSignUpFail(err)); //err.response.data.error
+//             });
+//     };
+// };
 
 export const authSignIn = (email, password, branchNumber) => { // that will  be the one holding the async code that doing the authentication
     // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
@@ -138,13 +156,6 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
         axios2.get(branchNumber + '/users.json/'  + '?email=' + email ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
 
             .then(res => { // success case!
-           //     console.log(res.request); //get
-            //    console.log(res.data); //get
-           //     console.log(res.status); //get
-           //     console.log(res.statusText); //get
-            //    console.log(res.headers); //get
-             //   console.log(res.config); //get
-            //    console.log(res.response); //get
 
                 for ( let key in res.data ) {  //get
                     if(res.data[key].email === email && res.data[key].branchNumber === branchNumber ){ //get
@@ -171,23 +182,19 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 dispatch(authSignInFail(err.message)); //err.response.data.error //post
                             }); //post
                         
-                     //   console.log("success login with the right brance"); //get
                         break; //get
                     }             
-                    //console.log("185" + res.data[key].email + key );        
                 } //get
-
                 if(!userFound){
-
                     dispatch(authSignInFail("USER CANNOT LOGIN")); //err.response.data.error //get
-                  //  console.log("show some error we cannot find any match"  ); //get
                 }
 
                 }) //get
+
+                
                     .catch(error => { // add nertwork problem!!! need to fix this rotem  //get
                     dispatch(authSignInFail(error)); //err.response.data.error //get
                 }); //get
-
     };
 };
 
@@ -211,8 +218,6 @@ export const authCheckState = () => {
             } else {
                 const userId = localStorage.getItem('userId');
                 const branchNumber = localStorage.getItem('branchNumber');
-
-            
                 const firstName = localStorage.getItem('firstName');
                 const lastName = localStorage.getItem('lastName');
                 const email = localStorage.getItem('email');
@@ -226,4 +231,57 @@ export const authCheckState = () => {
     };
 };
 
-//(token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey)
+
+
+
+// export const fetchUsersStart = () => {
+//     return {
+//         type: actionTypes.FETCH_USERS_START
+//     };
+// };
+
+// export const fetchUsersSuccess = ( users,BranchNumber ) => { 
+//     return { 
+//         type: actionTypes.FETCH_USERS_SUCCESS,
+//         users: users,
+//         BranchNumber: BranchNumber
+//     };
+// };
+
+// export const fetchUsersFail = ( error ) => {
+//     return {
+//         type: actionTypes.FETCH_USERS_FAIL,
+//         error: error
+//     };
+// };
+
+
+// export const fetchUsers = (token, userId,allBranchsNumbers) => {
+//     return dispatch => {
+//         dispatch(fetchUsersStart()); 
+
+//         for (let BranchNumber in allBranchsNumbers) {
+
+//         const queryParams = '?auth=' + token ; 
+//         axios2.get(allBranchsNumbers[BranchNumber] + '/users.json' + queryParams ) 
+            
+//             .then( res => { 
+//                 const fetchedUsers = []; 
+
+//                 for ( let key in res.data ) { 
+//                     fetchedUsers.push( {
+//                         ...res.data[key], 
+//                         id: key 
+//                     } );
+//                 }
+//                 dispatch(fetchUsersSuccess(fetchedUsers,allBranchsNumbers[BranchNumber]));
+//             } )
+//             .catch( err => { 
+//                 console.log(err);
+//                 dispatch(fetchUsersFail(err));
+//             } );
+//         }    
+//     };
+// };
+
+

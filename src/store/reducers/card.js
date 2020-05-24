@@ -76,6 +76,8 @@ const cardOpeningFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
 
+
+
 const fetchCardsStart = ( state, action ) => { 
     return updateObject( state, { loading: true } );
 };
@@ -90,6 +92,8 @@ const fetchCardsSuccess = ( state, action ) => {
 const fetchCardsFail = ( state, action ) => { 
     return updateObject( state, { loading: false } );
 };
+
+
 
 const cardUpdateStart = ( state, action ) => {
     return updateObject( state, { loading: true } ); 
