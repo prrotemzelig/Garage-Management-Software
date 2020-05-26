@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 import classes from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NavigationItem';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 import IconOverview from '../../../assets/icon-overview.js';
-//import IconTickets from '../../../assets/icon-tickets.js';
+import IconTickets from '../../../assets/icon-tickets.js';
 //import IconIdeas from '../../../assets/icon-ideas.js';
 //import IconContacts from '../../../assets/icon-contacts';
 //import IconAgents from '../../../assets/icon-agents';

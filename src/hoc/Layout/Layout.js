@@ -9,6 +9,7 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
+import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
 
 
 const styles = StyleSheet.create({
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
         marginTop: 54
     },
     mainBlock: {
-        backgroundColor: '#F7F8FC',
+       // backgroundColor: '#F7F8FC',
         padding: 10,
         paddingLeft: 5
     }
@@ -43,18 +44,46 @@ class Layout extends Component{
             return { showSideDrawer: !prevState.showSideDrawer };
         } );
     }
+    
 //    margin-right: 230px;
     render(){
+        let sidebarColor;
+        let userBackgroundColor ; 
+        
+        if(this.props.sidebarBackgroundColor==='primary'){
+            sidebarColor = 'linear-gradient(0deg, #ba54f5 0%, #e14eca 100%)';
+        }
+        else if(this.props.sidebarBackgroundColor==='blue'){
+            sidebarColor = 'linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%)';
+        }
+        else if(this.props.sidebarBackgroundColor==='green'){
+            
+            sidebarColor = 'linear-gradient(0deg, #0098f0 0%, #00f2c3 100%)';
+        }
+
+        if(this.props.backgroundColor ==='light'){
+            userBackgroundColor = '#F7F8FC';
+            // 'linear-gradient(0deg, #ba54f5 0%, #e14eca 100%)';
+        }
+        else if(this.props.backgroundColor === 'dark'){
+            userBackgroundColor = '#222a42';
+        }
+
+        console.log(this.props.backgroundColor);
+        console.log(userBackgroundColor);
+
         return(
             <Aux >  
-            <Row className={css(styles.container)}>
+            <Row className={css(styles.container)} style={{backgroundColor:userBackgroundColor}}>
             <Toolbar
                 isAuth={this.props.isAuthenticated}
-                drawerToggleClicked={this.sideDrawerToggleHandler}/>
+                drawerToggleClicked={this.sideDrawerToggleHandler}
+                colorBackground={sidebarColor}/>
             <SideDrawer 
                 isAuth={this.props.isAuthenticated}
                 open={this.state.showSideDrawer}
-                closed={this.sideDrawerClosedHandler}/> 
+                closed={this.sideDrawerClosedHandler}
+                colorBackground={sidebarColor}/> 
 
             <Column flexGrow={1} className={css(styles.mainBlock)}>
 
@@ -68,7 +97,7 @@ class Layout extends Component{
             </Column>
 
             </Row>
-
+        
         </Aux>)
     }
 } 
@@ -85,7 +114,9 @@ class Layout extends Component{
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.token !== null, // we need to find out if the user is authenticated . if it's not null so the user is authenticated
-        firstName: state.auth.firstName
+        firstName: state.auth.firstName,
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
+        backgroundColor: state.auth.backgroundColor
 
     };
 };

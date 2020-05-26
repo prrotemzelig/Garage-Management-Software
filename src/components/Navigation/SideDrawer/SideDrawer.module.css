@@ -15,6 +15,14 @@
 
 }
 
+
+.separator {
+    border-top: 1px solid #DDE2FF;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    opacity: 0.5;
+}
+
 @media (min-width: 999px) {
     .SideDrawer {
         display: none;

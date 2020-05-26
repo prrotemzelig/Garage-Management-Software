@@ -28,7 +28,8 @@ export const toastModalClose = (  ) => {
     };
 };
 
-export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey) => { // this will get some database, and return javascript object
+
+export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey,backgroundColor,profileImage,sidebarBackgroundColor) => { // this will get some database, and return javascript object
     return {
         type: actionTypes.AUTH_SIGN_IN_SUCCESS,
         idToken: token,
@@ -38,7 +39,12 @@ export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,
         lastName: lastName,
         email: email,
         userPermissions: userPermissions,
-        userKey: userKey
+        userKey: userKey,
+        backgroundColor: backgroundColor,
+        profileImage: profileImage,
+        sidebarBackgroundColor: sidebarBackgroundColor
+
+
     };
 };
 
@@ -74,6 +80,10 @@ export const logout = () => { //need to add
     localStorage.removeItem('email');
     localStorage.removeItem('userPermissions');
     localStorage.removeItem('userKey');
+
+    localStorage.removeItem('backgroundColor');
+    localStorage.removeItem('profileImage');
+    localStorage.removeItem('sidebarBackgroundColor');
 
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -174,8 +184,16 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 localStorage.setItem('email', res.data[key].email); //post
                                 localStorage.setItem('userPermissions', res.data[key].userPermissions); //post
                                 localStorage.setItem('userKey', key); //post
+
+                                localStorage.setItem('backgroundColor', res.data[key].backgroundColor); //post
+                                localStorage.setItem('profileImage', res.data[key].profileImage); //post
+                                localStorage.setItem('sidebarBackgroundColor', res.data[key].sidebarBackgroundColor); //post
+
+
+                            
                                 //,firstName,lastName,email,userPermissions
-                                dispatch(authSignInSuccess(response.data.idToken, response.data.localId, branchNumber,res.data[key].firstName,res.data[key].lastName,res.data[key].email,res.data[key].userPermissions,key));  //post
+                                dispatch(authSignInSuccess(response.data.idToken, response.data.localId, branchNumber,res.data[key].firstName,res.data[key].lastName,
+                                    res.data[key].email,res.data[key].userPermissions,key,res.data[key].backgroundColor,res.data[key].profileImage,res.data[key].sidebarBackgroundColor ));  //post
                                 dispatch(checkAuthTimeout(response.data.expiresIn)); //post
                                 }) 
                             .catch(err => { // add nertwork problem!!! need to fix this rotem //post
@@ -223,7 +241,12 @@ export const authCheckState = () => {
                 const email = localStorage.getItem('email');
                 const userPermissions = localStorage.getItem('userPermissions');
                 const userKey = localStorage.getItem('userKey');
-                dispatch(authSignInSuccess(token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey)); // check this! maybe need to add the rest values
+
+                const backgroundColor = localStorage.getItem('backgroundColor');
+                const profileImage = localStorage.getItem('profileImage');
+                const sidebarBackgroundColor = localStorage.getItem('sidebarBackgroundColor');
+
+                dispatch(authSignInSuccess(token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey,backgroundColor,profileImage,sidebarBackgroundColor)); // check this! maybe need to add the rest values
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 100000 )); // here we pass the amount of seconds until we should be logged out.
                 //was 1000 for 1 hour
             }   
@@ -232,6 +255,120 @@ export const authCheckState = () => {
 };
 
 
+
+export const purchaseSettingInit = () => { 
+    return {
+        type: actionTypes.SETTING_OPENING 
+    };
+};
+
+
+export const SettingOpening = () => {  
+    return dispatch => {
+        dispatch( purchaseSettingInit() ); 
+        
+    };
+};
+
+export const purchaseSettingCancel = () => { 
+    return {
+        type: actionTypes.SETTING_CLOSE 
+    };
+};
+
+
+export const SettingClose = (  token ) => { 
+    return dispatch => {
+        dispatch( purchaseSettingCancel() ); 
+        
+    };
+};
+
+
+
+
+
+
+export const updateSettingUserStart = () => {
+    return {// this being a async normal action reaches redux which has the reducer
+        type: actionTypes.UPDATE_SETTING_USER_START
+    };
+};
+
+// this synchronous action creators
+export const updateSettingUserSuccess = ( id, updateData,field) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+    //also I want the cardData
+    return { // here we return object where I have a type
+        type: actionTypes.UPDATE_SETTING_USER_SUCCESS,
+        field: field,
+        updateData: updateData
+        // taskId: id, 
+        // taskData: taskData
+        
+    };
+};
+
+// this synchronous action creators
+export const updateSettingUserFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
+    return {
+        type: actionTypes.UPDATE_SETTING_USER_FAIL,
+        error: error // pass on the error
+    };
+}
+
+
+export const updateSettingUser = (updateData,field,token,branchNumber,userKey,userId) => {  
+    //updateData, token,branchNumber,userKey,taskKey ,list,field,userId
+    console.log(updateData);
+    console.log(field);
+    console.log(token);
+    console.log(branchNumber);
+    console.log(userKey);
+    console.log(userId);
+//    const finalTag = {  tag: updateData}
+    let finalUpdateField = '' ; //finalTag
+    if(field === 'sidebarBackgroundColor'){
+        finalUpdateField = {  sidebarBackgroundColor: updateData};
+    }
+    if(field === 'backgroundColor'){
+        finalUpdateField = {  backgroundColor: updateData};
+   }
+
+   if(field === 'profileImage'){
+    finalUpdateField = {  profileImage: updateData};
+}
+
+console.log(finalUpdateField);
+    return dispatch => {
+        dispatch( updateSettingUserStart() ); // dispatch to the store
+        //'/carData.json?auth=' + token,
+        axios2.patch(branchNumber + '/users/'+ userKey + '/.json'  , finalUpdateField)
+//        axios.patch(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '/.json'  , finalUpdateField)
+
+        .then(res => {
+        console.log(res.data);
+        dispatch(updateSettingUserSuccess(res.data, updateData,field)); 
+       // dispatch(fetchTasks(token, userId, branchNumber,userKey));
+        if(field === 'sidebarBackgroundColor'){
+            localStorage.setItem('sidebarBackgroundColor', updateData); 
+        }
+        if(field === 'backgroundColor'){
+            localStorage.setItem('backgroundColor', updateData); 
+        }
+
+        if(field === 'profileImage'){
+            localStorage.setItem('profileImage', updateData); 
+        }
+
+
+        })
+        .catch( error => {
+            dispatch(updateSettingUserFail(error));
+            console.log(error);
+        } );
+
+    };
+};
 
 
 // export const fetchUsersStart = () => {

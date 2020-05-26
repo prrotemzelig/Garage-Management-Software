@@ -8,11 +8,15 @@ const initialState = { // javascript object
     firstName: null,
     lastName: null,
     email: null,
+    backgroundColor: null,
+    profileImage: null,
+    sidebarBackgroundColor:null,
     userPermissions: null,
     showSuccessCase: false, 
     userKey: null,
     error: null,
     loading: false,
+    showSettingModel: false,
     authRedirectPath: '/'
     // TalpiotUsers: [],
     // GivatShaulUsers: [],
@@ -44,7 +48,9 @@ const authSignInSuccess = (state, action) => {
         email: action.email,
         userPermissions: action.userPermissions,
         userKey: action.userKey,
-        
+        backgroundColor: action.backgroundColor,
+        profileImage: action.profileImage,
+        sidebarBackgroundColor:action.sidebarBackgroundColor,        
         error: null,
         loading: false // because we done!
      } );
@@ -73,8 +79,13 @@ const authSignInFail = (state, action) => { // get state and action
 // }
 
 const authLogout = (state, action) => {
-    return updateObject(state, { token: null, userId: null , branchNumber: null}); // we update the user to null so that made a logged in user is now lost again.
+    return updateObject(state, { token: null, userId: null , branchNumber: null,
+        firstName: null, lastName: null, email: null, userPermissions: null, userKey: null,
+        backgroundColor: null, profileImage: null, sidebarBackgroundColor: null
+    }); // we update the user to null so that made a logged in user is now lost again.
 };
+
+
 
 
 const setAuthRedirectPath = (state, action) => {
@@ -118,6 +129,59 @@ const setAuthRedirectPath = (state, action) => {
 //     return updateObject( state, { loading: false } );
 // };
 
+const purchaseSettingInit = ( state, action ) => {
+    return updateObject( state, { showSettingModel: true } );
+};
+
+const purchaseSettingCancel = ( state, action ) => {
+    return updateObject( state, { showSettingModel: false } ); 
+};
+
+
+
+const updateSettingUserStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const updateSettingUserFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+const updateSettingUserSuccess = ( state, action ) => {
+  //  const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+//   field: field,
+//   updateData: updateData
+
+    if(action.field === 'sidebarBackgroundColor'){
+        return updateObject( state, {
+            loading: false,
+            sidebarBackgroundColor: action.updateData
+            //  tasks: state.tasks.concat( newTask ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
+           // todo: state.todo.concat( newTask )
+           //onFetchTasks(token, userId, branchNumber,userKey)
+        });
+    }
+   else if(action.field === 'backgroundColor'){
+        return updateObject( state, {
+            loading: false,
+            backgroundColor: action.updateData
+            //  tasks: state.tasks.concat( newTask ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
+           // todo: state.todo.concat( newTask )
+           //onFetchTasks(token, userId, branchNumber,userKey)
+        });
+    }
+   else if(action.field === 'profileImage'){
+        return updateObject( state, {
+            loading: false,
+            profileImage: action.updateData
+            //  tasks: state.tasks.concat( newTask ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
+           // todo: state.todo.concat( newTask )
+           //onFetchTasks(token, userId, branchNumber,userKey)
+        });
+    }
+
+};
+
 
 //state = initialState - we must to do like that because otherwise it's undefined at the beginning 
 const reducer = ( state = initialState, action ) => { // receiving the state and the action
@@ -126,6 +190,14 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.AUTH_SIGN_IN_SUCCESS: return authSignInSuccess(state, action);
         case actionTypes.AUTH_SIGN_IN_FAIL: return authSignInFail(state, action);
         case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
+
+
+
+        case actionTypes.UPDATE_SETTING_USER_START: return updateSettingUserStart( state, action );
+        case actionTypes.UPDATE_SETTING_USER_SUCCESS: return updateSettingUserSuccess( state, action );
+        case actionTypes.UPDATE_SETTING_USER_FAIL: return updateSettingUserFail( state, action );
+
+
 
         // case actionTypes.AUTH_SIGN_UP_START: return authSignUpStart(state, action);
         // case actionTypes.AUTH_SIGN_UP_SUCCESS: return authSignUpSuccess(state, action);
@@ -136,6 +208,8 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
 
         case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state,action); // return the update path when this function gets executed
         
+        case actionTypes.SETTING_OPENING: return purchaseSettingInit( state, action );
+        case actionTypes.SETTING_CLOSE: return purchaseSettingCancel( state, action );
 
         // case actionTypes.FETCH_USERS_START: return fetchUsersStart( state, action );
         // case actionTypes.FETCH_USERS_SUCCESS: return fetchUsersSuccess( state, action );

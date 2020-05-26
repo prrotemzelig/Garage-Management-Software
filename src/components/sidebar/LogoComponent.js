@@ -15,10 +15,12 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: '24px',
         letterSpacing: '0.4px',
-        color: '#A4A6B3',
-        opacity: 0.7,
+        color: 'white',
         marginRight: 12
     }
+    //        opacity: 0.7,
+
+    //color: '#A4A6B3',
 });
 
 function LogoComponent() {

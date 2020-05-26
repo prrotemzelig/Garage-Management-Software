@@ -1,10 +1,15 @@
-import React from 'react';
+//import React from 'react';
+import React, {Component} from 'react';
+import * as actions from '../../store/actions/index';
+
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
 import { connect } from 'react-redux';
+import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const styles = StyleSheet.create({
     avatar: {
@@ -68,22 +73,59 @@ const styles = StyleSheet.create({
     }
 });
 
-function HeaderComponent(props) {
-    let thisUserBranchNumber ='';
-    if(props.branchNumber==='Talpiot'){
-        thisUserBranchNumber='תלפיות';
-    }
-    else if(props.branchNumber==='GivatShaul'){
-        thisUserBranchNumber='גבעת שאול';
+//function HeaderComponent(props) {
+class HeaderComponent extends Component {
 
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+          backgroundColor: "blue",
+          sidebarOpened:
+            document.documentElement.className.indexOf("nav-open") !== -1
+        };
+     }
 
-    else if(props.branchNumber==='Modiin'){
-        thisUserBranchNumber='מודיעין';
+    //  handleBgClick = color => {
+    //     this.setState({ backgroundColor: color });
+    //     console.log(this.state.backgroundColor);
+    //   };
+ 
+    onSettingClick = () =>  {
+        if(!this.props.showSettingModel){
+        this.props.onSettingOpening(); // this contains all the data of card 
+        }
+        else{
+            this.props.onSettingClose(); // this contains all the data of card 
+        }
+    }  
+    render(){
 
-    }
-      
-    const { icon, title, ...otherProps } = props;
+        let thisUserBranchNumber ='';
+        if(this.props.branchNumber==='Talpiot'){
+            thisUserBranchNumber='תלפיות';
+        }
+        else if(this.props.branchNumber==='GivatShaul'){
+            thisUserBranchNumber='גבעת שאול';
+    
+        }
+    
+        else if(this.props.branchNumber==='Modiin'){
+            thisUserBranchNumber='מודיעין';
+    
+        }
+          
+        let userProfileImage;
+        
+        if(this.props.profileImage==='anime3'){
+            userProfileImage = require("../../assets/anime3.png");
+        }
+        else if(this.props.profileImage==='anime6'){
+            userProfileImage = require("../../assets/anime6.png");
+        }
+
+
+        const { icon, title, ...otherProps } = this.props;
+
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
 
@@ -99,13 +141,22 @@ function HeaderComponent(props) {
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
                     <span className={css(styles.name, styles.cursorPointer)}>שלום,{title}</span>
-                    <img src={require("../../assets/anime3.png")} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
+                    <img src={userProfileImage} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
-
+                <SettingsIcon onClick={() => this.onSettingClick()} 
+                style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
+               {this.props.showSettingModel ?
+               <FixedPlugin
+                  
+                />
+                : null}
             </Row>
         </Row>
-    );
+    )
+
+    }
 }
+
 
 HeaderComponent.propTypes = {
     title: string
@@ -114,9 +165,22 @@ HeaderComponent.propTypes = {
 const mapStateToProps = state => {
     return {
         firstName: state.auth.firstName,
-        branchNumber: state.auth.branchNumber
+        branchNumber: state.auth.branchNumber,
+        showSettingModel: state.auth.showSettingModel,
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
+        backgroundColor: state.auth.backgroundColor,
+        profileImage: state.auth.profileImage
+
     };
 };
 
-export default connect( mapStateToProps )( HeaderComponent );
+const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
+  return {
+    onSettingOpening: () => dispatch( actions.SettingOpening() ),
+    onSettingClose: () => dispatch( actions.SettingClose() )
+
+  };
+};
+
+export default connect( mapStateToProps,mapDispatchToProps)( HeaderComponent );
 //export default HeaderComponent;

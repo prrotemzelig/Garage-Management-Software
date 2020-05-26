@@ -265,7 +265,10 @@ export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPerm
                     userPermissions: nodeUerPermissions,
                     email: email,
                     userToken: response.data.idToken, //localId
-                    Tasks:[]
+                    Tasks:[],
+                    sidebarBackgroundColor: 'blue',
+                    backgroundColor: 'light',
+                    profileImage: 'anime3'
                 };             
                 console.log(response);  
 
