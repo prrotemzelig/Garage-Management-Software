@@ -33,8 +33,11 @@ class Cards extends Component {
                     />
             ) )
         }
+        // #525f7f
         return (
-            <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"}}>
+            <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
+            {direction: "rtl", backgroundColor: "white"}
+            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
 
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
@@ -70,7 +73,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         loading: state.card.loading,
         token: state.auth.token,
         userId: state.auth.userId,
-        branchNumber: state.auth.branchNumber
+        branchNumber: state.auth.branchNumber,
+        backgroundColor: state.auth.backgroundColor
     };
 };
 

@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         cursor: 'pointer'
     },
     name: {
+        marginLeft:10,
         fontFamily: 'Alef Hebrew',
         fontStyle: 'normal',
         fontWeight: 600,
@@ -38,6 +39,9 @@ const styles = StyleSheet.create({
         '@media (max-width: 768px)': {
             display: 'none'
         }
+    },
+    nameDark: {
+        color: 'white'
     },
     separator: {
         borderLeft: '1px solid #DFE0EB',
@@ -64,6 +68,9 @@ const styles = StyleSheet.create({
             fontSize: 20
         }
     },
+    titleDark: {
+        color: 'white'
+    },
     iconStyles: {
         cursor: 'pointer',
         marginLeft: 25,
@@ -84,11 +91,6 @@ class HeaderComponent extends Component {
             document.documentElement.className.indexOf("nav-open") !== -1
         };
      }
-
-    //  handleBgClick = color => {
-    //     this.setState({ backgroundColor: color });
-    //     console.log(this.state.backgroundColor);
-    //   };
  
     onSettingClick = () =>  {
         if(!this.props.showSettingModel){
@@ -106,16 +108,13 @@ class HeaderComponent extends Component {
         }
         else if(this.props.branchNumber==='GivatShaul'){
             thisUserBranchNumber='גבעת שאול';
-    
         }
     
         else if(this.props.branchNumber==='Modiin'){
             thisUserBranchNumber='מודיעין';
-    
         }
           
         let userProfileImage;
-        
         if(this.props.profileImage==='anime3'){
             userProfileImage = require("../../assets/anime3.png");
         }
@@ -123,13 +122,14 @@ class HeaderComponent extends Component {
             userProfileImage = require("../../assets/anime6.png");
         }
 
-
         const { icon, title, ...otherProps } = this.props;
 
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
 
-            <span className={css(styles.title)}>סניף {thisUserBranchNumber}</span>
+            <span className={this.props.backgroundColor==='light' ?
+                css(styles.title)
+                : css(styles.title, styles.titleDark)} >סניף {thisUserBranchNumber}</span>
             
             <Row vertical="center">
                 <div className={css(styles.iconStyles)}>
@@ -140,20 +140,19 @@ class HeaderComponent extends Component {
                 </div>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>שלום,{title}</span>
+                    <span className={this.props.backgroundColor==='light' ?
+                    css(styles.name, styles.cursorPointer)
+                    : css(styles.name, styles.cursorPointer,styles.nameDark)}>שלום,{' '}{title}</span> 
                     <img src={userProfileImage} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
                 <SettingsIcon onClick={() => this.onSettingClick()} 
                 style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
-               {this.props.showSettingModel ?
-               <FixedPlugin
-                  
-                />
-                : null}
+              
+               {this.props.showSettingModel ? <FixedPlugin /> : null }
+
             </Row>
         </Row>
     )
-
     }
 }
 
@@ -178,9 +177,7 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
   return {
     onSettingOpening: () => dispatch( actions.SettingOpening() ),
     onSettingClose: () => dispatch( actions.SettingClose() )
-
   };
 };
 
 export default connect( mapStateToProps,mapDispatchToProps)( HeaderComponent );
-//export default HeaderComponent;

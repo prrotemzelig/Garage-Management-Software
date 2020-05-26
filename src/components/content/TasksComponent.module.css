@@ -58,3 +58,17 @@
     border-top: 1px solid #DDE2FF;
     opacity: 0.06;
 }
+
+
+
+option {
+    background: #ffffff;
+    color: #ff0000;
+  }
+  
+  select option:checked,
+  select option:focus {
+    background: linear-gradient(#ff0000, #ff0000);
+    -webkit-text-fill-color: #ffffff;
+    color: #ffffff;
+  }

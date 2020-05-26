@@ -1,6 +1,7 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite/no-important';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
     container: {
@@ -15,11 +16,12 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginLeft: -32,
         marginRight: -32,
-        paddingLeft: 32,
-        paddingRight: 32,
-        paddingBottom: 40,
-        paddingTop: 18,
-        maxHeight: 22,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingTop: 10,
+        minHeight: 5,
+       // maxHeight: 22,
         borderBottom: '1px solid #DFE0EB',
         ':last-child': {
             borderBottom: 'none'
@@ -63,7 +65,18 @@ const styles = StyleSheet.create({
         lineHeight: '24px',
         letterSpacing: '0.4px',
         color: '#252733'
+    },
+
+    titleDark: {
+        fontFamily: ' Alef Hebrew', 
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: 19,
+        lineHeight: '24px',
+        letterSpacing: '0.4px',
+        color: 'white'
     }
+
 });
 
 class CardComponent extends React.Component {
@@ -74,14 +87,16 @@ class CardComponent extends React.Component {
             {item}
         </Column>);
     }
-
+//className={css(styles.title)}
     render() {
         const { title, link, subtitle, subtitleTwo, items, containerStyles } = this.props;
         return (
             <Column flexGrow={1} className={css(styles.container, containerStyles)} breakpoints={{ 426: css(styles.containerMobile) }}>
                 <Row horizontal="space-between">
                     <Column>
-                        <span className={css(styles.title)}>{title}</span>
+                        <span className={this.props.backgroundColor==='light' ?
+                        css(styles.title)
+                        : css(styles.title, styles.titleDark)} >{title}</span>
                         <Row style={{ marginTop: 8, marginBottom: 16 }}>
                             <span className={css(styles.subtitle)}>{subtitle}</span>
                             {subtitleTwo && <span className={css(styles.subtitle, styles.subtitle2)}>{subtitleTwo}</span>}
@@ -95,4 +110,12 @@ class CardComponent extends React.Component {
     }
 }
 
-export default CardComponent;
+const mapStateToProps = state => { // here we get the state and return a javascript object
+    return {
+        backgroundColor: state.auth.backgroundColor
+
+    };
+  };
+
+export default connect(mapStateToProps)(CardComponent);
+

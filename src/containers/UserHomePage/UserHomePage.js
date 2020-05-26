@@ -52,6 +52,15 @@ const styles = StyleSheet.create({
         '@media (max-width: 1024px)': {
             marginTop: 30
         }
+    },
+    tasksDark: {
+        marginTop: 0,
+        direction: 'rtl',
+        backgroundColor: "#27293d" ,
+        color: "rgba(255, 255, 255, 0.8)",   
+        '@media (max-width: 1024px)': {
+            marginTop: 30
+        }
     }
 });
 
@@ -64,22 +73,52 @@ class UserHomePage extends Component {
       }
     
     render() { 
+
+        let MiniCardColor1 ; 
+        let MiniCardColor2 ; 
+        let MiniCardColor3 ; 
+        let MiniCardColor4 ; 
+
+        if(this.props.sidebarBackgroundColor==='primary'){
+            MiniCardColor1= '#7b1fa2' ;
+            MiniCardColor2='#9c27b0' ;
+            MiniCardColor3= '#ba68c8';
+            MiniCardColor4= '#e1bee7';
+        }
+        else if(this.props.sidebarBackgroundColor==='blue'){
+            MiniCardColor1= '#1976d2' ;
+            MiniCardColor2= '#2196f3';
+            MiniCardColor3= '#64b5f6';
+            MiniCardColor4= '#bbdefb';
+        }
+        else if(this.props.sidebarBackgroundColor==='green'){
+            MiniCardColor1= '#0097a7' ;
+            MiniCardColor2= '#00bcd4';
+            MiniCardColor3= '#4dd0e1';
+            MiniCardColor4= '#b2ebf2';
+        }
+
         return ( 
             <Column style= {{marginRight: "20px", marginTop: "10px",marginLeft: "20px"}}>
             <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4db6ac" title="  משימות בעשייה" value={this.props.userTasksDOING.length} />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4dd0e1" title="משימות לעשות" value={this.props.userTasksTODO.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="  משימות בעשייה" value={this.props.userTasksDOING.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="משימות לעשות" value={this.props.userTasksTODO.length} />
                 </Row>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#4fc3f7" title="כרטיסים שנסגרו" value={this.props.closeCards.length} />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= "#64b5f6" title="כרטיסים שנפתחו" value={this.props.cards.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="כרטיסים שנסגרו" value={this.props.closeCards.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="כרטיסים שנפתחו" value={this.props.cards.length} />
                 </Row>
             </Row>
 
           
             <Row horizontal="space-between" style={{display: "block"}} className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
-                <TasksComponent containerStyles={styles.tasks} />
+                <TasksComponent 
+                
+                containerStyles={this.props.backgroundColor==='light' ?
+                    styles.tasks
+                    : styles.tasksDark}
+                    />
             </Row>
         </Column>  
         )
@@ -95,7 +134,9 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         userId: state.auth.userId,
         branchNumber: state.auth.branchNumber,
         userTasksTODO: state.task.todo,
-        userTasksDOING: state.task.doing
+        userTasksDOING: state.task.doing,
+        backgroundColor: state.auth.backgroundColor,
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor
 
     };
   };
@@ -109,15 +150,4 @@ const mapStateToProps = state => { // here we get the state and return a javascr
     };
   };
   
-  export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(UserHomePage,axios));
-//export default UserHomePage;
-
-
-
-
-
-{/* <Row horizontal="space-between" className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
-<UnresolvedTicketsComponent containerStyles={styles.unresolvedTickets} />
-<TasksComponent containerStyles={styles.tasks} />
-</Row>
- */}
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(UserHomePage,axios));

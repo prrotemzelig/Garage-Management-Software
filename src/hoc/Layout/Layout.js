@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         marginTop: 54
     },
     mainBlock: {
-       // backgroundColor: '#F7F8FC',
+       //backgroundColor: '#F7F8FC',
         padding: 10,
         paddingLeft: 5
     }
@@ -67,6 +67,10 @@ class Layout extends Component{
         }
         else if(this.props.backgroundColor === 'dark'){
             userBackgroundColor = '#222a42';
+        }
+        else{
+            userBackgroundColor = '#F7F8FC';
+
         }
 
         console.log(this.props.backgroundColor);

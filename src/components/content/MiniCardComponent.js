@@ -52,3 +52,4 @@ function MiniCardComponent({backgroundColor, className = '', title, value }) {
 }
 
 export default MiniCardComponent;
+

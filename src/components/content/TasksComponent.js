@@ -6,7 +6,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import axios from '../../axios-cards';
 import * as actions from '../../store/actions/index';
 
-import { Row } from 'simple-flexbox'; //Column
+import { Row,Column } from 'simple-flexbox'; //Column
 import { StyleSheet, css } from 'aphrodite/no-important';
 import CardComponent from './CardComponent';
 import CheckboxOn from '../../assets/checkbox-on';
@@ -20,12 +20,16 @@ import { Modal ,Button } from 'react-bootstrap';
 import classes from './TasksComponent.module.css';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 
+import { DropdownItem } from "reactstrap";
+
 const styles = StyleSheet.create({
     addButton: {
         backgroundColor: '#F0F1F7',
         color: '#9FA2B4',
         fontSize: 20,
-        padding: 7
+        padding: 7,
+        marginRight: 10
+        
     },
     itemTitle: {
         color: '#252733',
@@ -37,13 +41,20 @@ const styles = StyleSheet.create({
         lineHeight: '20px'
         
     },
+    itemTitleDark: {
+        color: 'white'
+        
+    },
     itemValue: {
         color: '#9FA2B4'
     },
     greyTitle: {
-        color: '#C5C7CD'
+        color: '#C5C7CD',
+        marginLeft: '10px'
     },
     tagStyles: {
+        marginRight: 10,
+        borderColor: 'gray',
         borderRadius: 5,
         cursor: 'pointer',
         fontFamily: 'Alef Hebrew',
@@ -99,51 +110,92 @@ class TasksComponent extends React.Component {
             tag: TAGS.NEW,
             list: '',
             isEdit: false
-
         }
     },
-   
-    isEditOpen: false
 
+    isEditOpen: false
   }; 
 }
 
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchTasks(this.props.token, this.props.userId, this.props.branchNumber,this.props.userKey);
-        //localStorage.removeItem('userKey');
-
       }
 
     renderTask = (title, tag  , index, checked, taskKey, list,isEdit) => {
-      // localStorage.setItem(taskKey, false); //post
 
         return(
-        <Row horizontal="space-between" vertical="center">
-            <Row>
-                {this.renderDelete(taskKey,list)}
-                {this.renderEdit(tag,taskKey,list,isEdit)}
-                {this.renderCheckbox(checked,taskKey,list)}
-                <span className={css(styles.itemTitle)}>{title}</span>
-            </Row>
-            {this.renderTag(tag,taskKey,list)}
-            {this.renderMove(title,checked,tag,list,taskKey,isEdit)} 
 
-        </Row>
+        <Column horizontal="space-between" style={{marginBotton:"10px"}}>
+            <Column>
+                <Row>
+                    {this.renderCheckbox(checked,taskKey,list)}
+                        <Column>
+                            <span className={this.props.backgroundColor==='light' ?
+                            css(styles.itemTitle)
+                            : css(styles.itemTitle, styles.itemTitleDark)} >{title}</span>
+                        </Column>
+                </Row>
+            <Row vertical = "left" style={{direction: "ltr"}}>
+                {this.renderEdit(title, tag, checked, taskKey, list, isEdit)}
+                {this.renderTag(tag,taskKey,list)}
+            </Row>
+            </Column>
+        </Column>
     );
     }
+
     renderTag = ( tag,taskKey,list) => { 
         let backgroundColor;
         let color;
 
-        if(tag === 'URGENT'){
-            backgroundColor= "#FEC400";
-            color= "#FFFFFF"; }
-        else if (tag === 'NEW'){
-            backgroundColor= '#29CC97';
-            color= '#FFFFFF'; }
-        else if(tag === 'DEFAULT'){
-            backgroundColor= '#F0F1F7';
-            color= '#9FA2B4'; } 
+        if(this.props.sidebarBackgroundColor==='primary'){
+            if(tag === 'URGENT'){
+                backgroundColor= "#7b1fa2";
+                color= "#FFFFFF"; }
+            else if (tag === 'NEW'){
+                backgroundColor= '#ba68c8';
+                color= '#FFFFFF'; }
+          
+            }
+        
+        else if(this.props.sidebarBackgroundColor==='blue'){
+            if(tag === 'URGENT'){
+                backgroundColor= "#1976d2";
+                color= "#FFFFFF"; }
+            else if (tag === 'NEW'){
+                backgroundColor= '#64b5f6';
+                color= '#FFFFFF'; }
+        }
+
+        else if(this.props.sidebarBackgroundColor==='green'){
+            if(tag === 'URGENT'){
+                backgroundColor= "#0097a7";
+                color= "#FFFFFF"; }
+            else if (tag === 'NEW'){
+                backgroundColor= '#4dd0e1';
+                color= '#FFFFFF'; }
+        }
+
+        if(tag === 'DEFAULT'){
+            if(this.props.backgroundColor==='light'){
+                backgroundColor = 'lightgray';
+                color = 'white';
+            }
+            else{
+            backgroundColor = '#F0F1F7';
+            color = '#9FA2B4'; 
+        } 
+    }
+
+        // if(tag === 'URGENT'){
+        //     backgroundColor= "#FEC400";
+        //     color= "#FFFFFF"; }
+        // else if (tag === 'NEW'){
+        //     backgroundColor= '#29CC97';
+        //     color= '#FFFFFF'; }
+        // else if(tag === 'DEFAULT'){
+        //     backgroundColor= '#F0F1F7';
+        //     color= '#9FA2B4'; } 
 
         return(
         <Row horizontal="center" vertical="center"
@@ -196,81 +248,59 @@ class TasksComponent extends React.Component {
         this.props.onTaskDelete(this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list,this.props.userId); // this contains all the data of card 
     }  
     
-  
 
-    renderEdit = ( tag,taskKey,list,isEdit) => { 
-
-        //console.log( this.props.userTasksTODO[taskKey]);
+    renderEdit = (title, tag, checked, taskKey, list, isEdit) => { 
+        let backgroundColor = '#F0F1F7';
+        let color= '#9FA2B4';
        
-        // let backgroundColor= "#FEC400";
-        // let color= "#FFFFFF";
-
-        // <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons"><EditIcon style={{fontSize:"large"}}/></i></a>
-        //console.log(taskKey);
-        //console.log(taskKey);
-
-        //let open = localStorage.getItem(taskKey);
-  //      console.log(taskKey);
-     //  console.log(open);
         return(
         <Row horizontal="center" vertical="center">
 
             <EditIcon 
             style={{ fontSize:"large" }}
-            onClick={() => this.onEditClick(taskKey,tag,list,isEdit)}/>  
+            onClick={() => this.onEditClick(title, tag, checked, taskKey, list, isEdit)}/>  
             
-            
-            {/* <Dropdown isOpen={isEdit} direction="left" toggle={this.closeAddButton}>
+             <Dropdown isOpen={isEdit} direction="up" toggle={this.closeAddButton}  >
             <DropdownToggle
                 tag="span"
                 data-toggle="dropdown"
-                aria-expanded={this.state.isEditOpen}
-            >
+                aria-expanded={this.state.isEditOpen} >
                 
             </DropdownToggle>
-            <DropdownMenu>
-                <div onClick={this.closeAddButton}>Custom dropdown item</div>
-                <div onClick={this.closeAddButton}>Custom dropdown item</div>
-                <div onClick={this.closeAddButton}>Custom dropdown item</div>
-                <div onClick={this.closeAddButton}>Custom dropdown item</div>
-            </DropdownMenu>
-            </Dropdown> */}
-
-            {/* <div class="dropdown" show={this.state.isEditOpen} onHide={this.closeAddButton} >
+       
+            {list=== 'todo' ?
+                          
+                <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC",direction: "rtl"}}>
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר ל DOING</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר ל DONE</DropdownItem>  
+                <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
  
-              <a  type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-    
-            <div class="dropdown-menu dropdown-primary">
-                <a class="dropdown-item" href="#"><i class="fab fa-apple-pay"></i>&nbsp;&nbsp;Pay</a>
-                <a class="dropdown-item" href="#"><i class="fas fa-bell-slash"></i>&nbsp;&nbsp;Disable alertss</a>
-                <a class="dropdown-item" href="#"><i class="far fa-envelope"></i>&nbsp;&nbsp;Check mail</a>
-            </div>
-            </div> */}
-         {/* <Modal  show={this.state.isEditOpen} onHide={this.closeAddButton} dialogClassName={classes.ModalDialog} backdrop= {false}
- 
-        style={{ display: "flex", textAlign:"right", paddingLeft: "1px" ,width: "50%" }}  >
-      <Modal.Header closeButton style={{ padding: "5px", textAlign:"right"}}   >
-        <Modal.Title  >עבודות לכרטיס</Modal.Title>   
-      </Modal.Header>
+                </DropdownMenu>
+                : null
+            }             
 
-      <Modal.Body  style={{ backgroundColor:"#6c757d", display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"3px",flex: "none"}}   >
-        <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
-         </div> 
-        </Modal.Body>
-     
-        <div className={classes.separator}></div>
-      <Modal.Footer style={{padding: "5px", display: "block"}}>
-      <div >
-          <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
-            <div> 
-           
-              <Button onClick={this.handleAddRow} >הוספה</Button> 
-            </div>
-          </form>
-      </div>
-      </Modal.Footer>
-    </Modal> */}
+             {list==='doing' ?
+             <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC", direction: "rtl"}}>
+
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר ל TODO</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר ל DONE</DropdownItem>
+                <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
+
+                </DropdownMenu>
+                : null
+            }          
+
+             {list==='done' ?
+                <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC"}}>
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר ל TODO</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר ל DOING</DropdownItem>
+                <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
+
+                </DropdownMenu>
+                : null
+            }
+          
+            </Dropdown> 
         </Row>
         );
     }
@@ -281,42 +311,13 @@ class TasksComponent extends React.Component {
       };
 
       closeAddButton = () => {
+          console.log("393");
         this.setState( { isEditOpen: false } );
       };
 
-    onEditClick = (taskKey,tag,list,isEdit) =>  {
-        //onst items = prevState.items;
-        //const newTag = this.getNextTag(tag);
-     //   localStorage.setItem(taskKey, true); //post
-
-
-
-        // const newEdit = !isEdit ;
-        // console.log(newEdit);
-        // this.props.onTaskUpdate(newEdit, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'isEdit',this.props.userId); // this contains all the data of card 
-
-       // console.log(taskKey);
-
-
-
-
-       // let open = localStorage.getItem(taskKey); //post
-        // let final = false;
-
-        // if(open === 'true'){
-        //     final= true;
-        // }
-        // console.log(final);
-
-        // return final;
-     
-        //        this.setState( { isEditOpen: true } );
-
-        //this.handleAddRow();
-       // console.log("160");
-       // console.log(this.state.isEditOpen);
-
-       // this.props.onTaskUpdate(newTag.text, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'tag',this.props.userId); // this contains all the data of card 
+    onEditClick = (title, tag, checked, taskKey, list, isEdit) =>  {
+    const newEdit = !isEdit ;
+    this.props.onTaskUpdate(newEdit, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'isEdit',this.props.userId); // this contains all the data of card 
 
 }       
 
@@ -325,22 +326,11 @@ class TasksComponent extends React.Component {
         {checked ? <CheckboxOn /> : <CheckboxOff />}
     </div>;
 
-//  renderCheckbox2 = (index) => <div className={css(styles.checkboxWrapper)} onClick={() => this.onCheckboxClick(index)}>
-//         {this.state.items[index].checked ? <CheckboxOn /> : <CheckboxOff />}
-//     </div>;
-
     onCheckboxClick = (checked,taskKey,list) => {
         const newChecked = !checked ;
-     //   console.log(newChecked);
         this.props.onTaskUpdate(newChecked, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'checked',this.props.userId); // this contains all the data of card 
 
     }
- 
-    // onCheckboxClick2 = (index) => this.setState(prevState => {
-    //     const items = prevState.items;
-    //     items[index].checked = !items[index].checked;
-    //     return { items };
-    // });
 
     getNextTag = (except = 'URGENT') => {
         const tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
@@ -349,15 +339,8 @@ class TasksComponent extends React.Component {
     }
 
     onTagClick = (taskKey,tag,list) =>  {
-        //onst items = prevState.items;
+        //const items = prevState.items;
         const newTag = this.getNextTag(tag);
-        
-      //  console.log(list);
-     //   console.log(tag);
-
-      //  console.log(tag.text);
-      //  console.log(newTag);
-     //   console.log(newTag.text);
         this.props.onTaskUpdate(newTag.text, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'tag',this.props.userId); // this contains all the data of card 
 
     }       
@@ -377,7 +360,6 @@ class TasksComponent extends React.Component {
     taskOpeningHandler = ( event,list ) => {
         event.preventDefault(); // with that we get the task details
         const formData = {};
-     //   console.log();
         if(list === 'todo'){
             formData['title'] = this.state.taskForm.toDoNewTask.title;
             formData['checked'] = this.state.taskForm.toDoNewTask.checked;
@@ -397,7 +379,6 @@ class TasksComponent extends React.Component {
             formData['isEdit'] = false;
             formData['openedByFirstName'] = this.props.firstName;
             formData['openedByLastName'] = this.props.lastName;
-           // console.log(this.state.taskForm.doingNewTask.tag.text);
         }
         else if(list === 'done'){
             formData['title'] = this.state.taskForm.doneNewTask.title;
@@ -407,20 +388,9 @@ class TasksComponent extends React.Component {
             formData['isEdit'] = false;
             formData['openedByFirstName'] = this.props.firstName;
             formData['openedByLastName'] = this.props.lastName;
-        //    console.log(this.state.taskForm.doneNewTask.tag.text);
         }
 
-       // toDoNewTask  doingNewTask  doneNewTask
- 
-        // const task = { // here we  prepare the card data
-        //     taskData: formData,
-        //     //userId: this.props.userId,
-        //     //branchNumber: this.props.branchNumber,
-        //    // userKey: this.props.userKey
-        // }   
-
         this.props.onTaskOpening(formData, this.props.token, this.props.branchNumber, this.props.userKey, list); // this contains all the data of card 
-        //console.log(this.state.taskForm.newTask.title);
         
         let updateTaskForm =  { 
                 toDoNewTask: {  
@@ -447,7 +417,6 @@ class TasksComponent extends React.Component {
         }
         this.setState({taskForm: updateTaskForm});
         //this.setState( { showWorkModel: true } );
-
     }
 
     inputChangedHandler = (event,list) => { 
@@ -465,7 +434,6 @@ class TasksComponent extends React.Component {
         }
 
     render() {
-        //console.log(this.props.userTask);
         //  ...this.props.userTask.map( task => (task.list==='TODO' ? (this.renderTask2(task.title, task.tag , task.index,task.checked)) : this.getNextTag))
         let { isEditOpen } = this.state;
         return (
@@ -503,13 +471,14 @@ class TasksComponent extends React.Component {
         items={[
             <Row horizontal="space-between" vertical="center">
                     <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="doneNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
-                    onChange={(event) => this.inputChangedHandler(event,'doing')} value={this.state.taskForm.doneNewTask.title}
+                    onChange={(event) => this.inputChangedHandler(event,'done')} value={this.state.taskForm.doneNewTask.title}
                     style={{boxShadow: "none",  border: "none",  borderBottom: "none ",fontFamily: "Alef Hebrew",fontStyle: "normal",fontWeight: "600",fontSize: "14px",letterSpacing:" 0.2px",lineHeight: "20px"}}/>         
                     {this.renderAddButton('done')}
             </Row>,
                 ...this.props.userTasksDONE.map( task =>  this.renderTask(task.title, task.tag , task.index,task.checked, task.taskKey,'done', task.isEdit))
             ]}
     /> 
+                  
     </div>
     </div>
         );
@@ -526,7 +495,10 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         userKey: state.auth.userKey,
         userTasksTODO: state.task.todo,
         userTasksDOING: state.task.doing,
-        userTasksDONE: state.task.done
+        userTasksDONE: state.task.done,
+        backgroundColor: state.auth.backgroundColor,
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor
+
     };
   };
 
@@ -541,43 +513,3 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(TasksComponent,axios));
-
-    // state = { items: [
-    //     {title: 'סיום עדכון דוחות חודשיים', checked: false, tag: TAGS.URGENT },
-    //     {title: 'הוצאת חשבונית לחברת ביטוח שירביט', checked: false, tag: TAGS.NEW },
-    //     {title: 'בדיקת שעות נוכחות מול הרואה חשבון', checked: true, tag: TAGS.DEFAULT }
-    // ]};
-    
-      // renderTask2 = ({title, tag = {} }, index,checked) => (
-    //     <Row horizontal="space-between" vertical="center">
-    //         <Row>
-    //             {this.renderCheckbox2(checked)}
-    //             <span className={css(styles.itemTitle)}>{title}</span>
-    //         </Row>
-    //         {this.renderTag2(tag, index)}
-    //     </Row>
-    // );
-
-    // renderTask2 = ({title, tag = {} }, index,checked) => (
-    //     <Row horizontal="space-between" vertical="center">
-    //         <Row>
-    //             {this.renderCheckbox2(index)}
-    //             <span className={css(styles.itemTitle)}>{title}</span>
-    //         </Row>
-    //         {this.renderTag2(tag, index)}
-    //     </Row>
-    // );
-
-    // renderTag2 = ({ text, backgroundColor, color }, index) => (
-    //     <Row horizontal="center" vertical="center"
-    //         style={{ backgroundColor, color }} className={css(styles.tagStyles)}
-    //         onClick={() => this.onTagClick2(index)}>
-    //         {text}
-    //     </Row>
-    // );
-
-        // onTagClick2 = (index) => this.setState(prevState => {
-    //     const items = prevState.items;
-    //     items[index].tag = this.getNextTag(items[index].tag.text);
-    //     return { items };
-    // })
