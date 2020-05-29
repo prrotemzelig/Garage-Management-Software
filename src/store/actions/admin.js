@@ -250,7 +250,8 @@ export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPerm
         const authData = {
             email: email,
             password: password,
-            returnSecureToken: true
+            returnSecureToken: true,
+            displayName: firstName + ' ' + lastName
         };
 
         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';

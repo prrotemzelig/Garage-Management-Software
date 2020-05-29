@@ -23,7 +23,8 @@ export {
     authCheckState,
     SettingOpening,
     SettingClose,
-    updateSettingUser 
+    updateSettingUser,
+    resetPassword 
 } from './auth';
 export {
     taskOpening,

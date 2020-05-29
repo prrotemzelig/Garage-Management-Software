@@ -145,17 +145,17 @@ class AdminUserManagement extends Component {
             );
       }
 
-      renderForgetPasswordUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
-        return(
-            <>  
-            <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >שחזור סיסמא</Button>   { ' ' }            
-                {this.props.showAddNewTaskModal ?
-                this.renderAddNewTaskModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
-                : null}
+    //   renderForgetPasswordUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
+    //     return(
+    //         <>  
+    //         <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >שחזור סיסמא</Button>   { ' ' }            
+    //             {this.props.showAddNewTaskModal ?
+    //             this.renderAddNewTaskModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
+    //             : null}
 
-            </>
-            );
-      }
+    //         </>
+    //         );
+    //   }
       
 onDeleteUserClick = (userKey,userBranchNumber,userToken) =>  {
    this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken); 
@@ -628,9 +628,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                         {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                        {' '}
-                        {this.renderForgetPasswordUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                      
+                        
                     </td>
                 </tr>
                  ))
@@ -646,8 +644,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
-                    {this.renderForgetPasswordUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+             
                 </td>
             </tr>
             ))
@@ -663,8 +660,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
-                    {this.renderForgetPasswordUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                
                 </td>
             </tr>
             ))

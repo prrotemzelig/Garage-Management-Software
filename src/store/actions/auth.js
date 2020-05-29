@@ -2,6 +2,11 @@ import axios from 'axios';
 import axios2 from '../../axios-cards';
 import * as actionTypes from './actionTypes';
 //import { database } from 'firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
+//import firebase from 'firebase';
+import 'firebase/firestore';
+import config from "../../config";
 
 export const authSignInStart = () => { // essentially we use this action to set a loading state and potentially show a spinner if we want to
     return {
@@ -9,11 +14,6 @@ export const authSignInStart = () => { // essentially we use this action to set 
     };
 };
 
-// export const authSignUpStart = () => { // essentially we use this action to set a loading state and potentially show a spinner if we want to
-//     return {
-//         type: actionTypes.AUTH_SIGN_UP_START
-//     };
-// };
 
 export const purchaseToastCancel = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
@@ -48,12 +48,6 @@ export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,
     };
 };
 
-// export const authSignUpSuccess = () => { // this will get some database, and return javascript object
-//     return {
-//         type: actionTypes.AUTH_SIGN_UP_SUCCESS
-     
-//     };
-// };
 
 export const authSignInFail = (error) => {
     return { 
@@ -62,12 +56,6 @@ export const authSignInFail = (error) => {
     };
 };
 
-// export const authSignUpFail = (error) => {
-//     return {
-//         type: actionTypes.AUTH_SIGN_UP_FAIL,
-//         error: error
-//     };
-// };
 
 // this will be a synchronous action creator
 export const logout = () => { //need to add
@@ -100,53 +88,7 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-// export const authSignUp = (firstName,lastName,branchNumber,userPermissions,email, password) => { // that will  be the one holding the async code that doing the authentication
-//     // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
-//     return dispatch => { // here we want to authenticate the use
-//         dispatch(authSignUpStart());
-//         const dataBaseUser = { // here we  prepare the user data for the state
-//             firstName: firstName,
-//             lastName: lastName,
-//             branchNumber: branchNumber,
-//             userPermissions: userPermissions,
-//             email: email,
-//             Tasks:[]
-//         }; 
 
-//         const authData = {
-//             email: email,
-//             password: password,
-//             returnSecureToken: true
-//         };
-
-//         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';
-
-//         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
-
-//             .then(response => { // success case!  
-//                 const dataBaseUser = { // here we  prepare the user data for the state
-//                     firstName: firstName,
-//                     lastName: lastName,
-//                     branchNumber: branchNumber,
-//                     userPermissions: userPermissions,
-//                     email: email,
-//                     userToken: response.data.idToken, //localId
-//                     Tasks:[]
-//                 };             
-//                 console.log(response);  
-//                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
-//                 axios2.post(branchNumber + '/users.json' + queryParams , dataBaseUser )
-//                 //axios2.post(branchNumber + '/users.json?auth' + response.data.idToken , dataBaseUser )
-
-//                 dispatch(authSignUpSuccess());
-//                // dispatch(checkAuthTimeout(response.data.expiresIn));
-
-//             })
-//             .catch(err => { // add nertwork problem!!! need to fix this rotem
-//                 dispatch(authSignUpFail(err)); //err.response.data.error
-//             });
-//     };
-// };
 
 export const authSignIn = (email, password, branchNumber) => { // that will  be the one holding the async code that doing the authentication
     // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
@@ -173,7 +115,7 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                         userFound = true;
                         axios.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
                             .then(response => { // success case! //get
-                            //    console.log(key);
+
                                 const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 100000); // was 1000 for 1 hour //post
                                 localStorage.setItem('token', response.data.idToken); //post
                                 localStorage.setItem('expirationDate', expirationDate); //post
@@ -189,14 +131,19 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 localStorage.setItem('profileImage', res.data[key].profileImage); //post
                                 localStorage.setItem('sidebarBackgroundColor', res.data[key].sidebarBackgroundColor); //post
 
+                                console.log(response.data);
+                                console.log(response.data.displayName);
+                                console.log(response.data.fullName);
 
-                            
-                                //,firstName,lastName,email,userPermissions
+                                
                                 dispatch(authSignInSuccess(response.data.idToken, response.data.localId, branchNumber,res.data[key].firstName,res.data[key].lastName,
                                     res.data[key].email,res.data[key].userPermissions,key,res.data[key].backgroundColor,res.data[key].profileImage,res.data[key].sidebarBackgroundColor ));  //post
                                 dispatch(checkAuthTimeout(response.data.expiresIn)); //post
                                 }) 
-                            .catch(err => { // add nertwork problem!!! need to fix this rotem //post
+                            .catch(err => { // add nertwork problem!!! need to fix this rotem //post                       
+                                console.log(err);
+                                console.log(err.message);
+
                                 dispatch(authSignInFail(err.message)); //err.response.data.error //post
                             }); //post
                         
@@ -206,12 +153,10 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                 if(!userFound){
                     dispatch(authSignInFail("USER CANNOT LOGIN")); //err.response.data.error //get
                 }
-
                 }) //get
 
-                
                     .catch(error => { // add nertwork problem!!! need to fix this rotem  //get
-                    dispatch(authSignInFail(error)); //err.response.data.error //get
+                        dispatch(authSignInFail(error.message)); //err.response.data.error //get
                 }); //get
     };
 };
@@ -286,9 +231,6 @@ export const SettingClose = (  token ) => {
 
 
 
-
-
-
 export const updateSettingUserStart = () => {
     return {// this being a async normal action reaches redux which has the reducer
         type: actionTypes.UPDATE_SETTING_USER_START
@@ -355,12 +297,9 @@ console.log(finalUpdateField);
         if(field === 'backgroundColor'){
             localStorage.setItem('backgroundColor', updateData); 
         }
-
         if(field === 'profileImage'){
             localStorage.setItem('profileImage', updateData); 
         }
-
-
         })
         .catch( error => {
             dispatch(updateSettingUserFail(error));
@@ -371,54 +310,46 @@ console.log(finalUpdateField);
 };
 
 
-// export const fetchUsersStart = () => {
-//     return {
-//         type: actionTypes.FETCH_USERS_START
-//     };
-// };
+export const resetPasswordStart = () => {
+    return {
+        type: actionTypes.RESET_PASSWORD_START
+    };
+};
 
-// export const fetchUsersSuccess = ( users,BranchNumber ) => { 
-//     return { 
-//         type: actionTypes.FETCH_USERS_SUCCESS,
-//         users: users,
-//         BranchNumber: BranchNumber
-//     };
-// };
+export const resetPasswordSuccess = () => { 
+    return { 
+        type: actionTypes.RESET_PASSWORD_SUCCESS,
 
-// export const fetchUsersFail = ( error ) => {
-//     return {
-//         type: actionTypes.FETCH_USERS_FAIL,
-//         error: error
-//     };
-// };
+    };
+};
 
-
-// export const fetchUsers = (token, userId,allBranchsNumbers) => {
-//     return dispatch => {
-//         dispatch(fetchUsersStart()); 
-
-//         for (let BranchNumber in allBranchsNumbers) {
-
-//         const queryParams = '?auth=' + token ; 
-//         axios2.get(allBranchsNumbers[BranchNumber] + '/users.json' + queryParams ) 
-            
-//             .then( res => { 
-//                 const fetchedUsers = []; 
-
-//                 for ( let key in res.data ) { 
-//                     fetchedUsers.push( {
-//                         ...res.data[key], 
-//                         id: key 
-//                     } );
-//                 }
-//                 dispatch(fetchUsersSuccess(fetchedUsers,allBranchsNumbers[BranchNumber]));
-//             } )
-//             .catch( err => { 
-//                 console.log(err);
-//                 dispatch(fetchUsersFail(err));
-//             } );
-//         }    
-//     };
-// };
+export const resetPasswordFail = ( error ) => { 
+    return {
+        type: actionTypes.RESET_PASSWORD_FAIL,
+        error: error 
+    };
+}
 
 
+export const resetPassword = (email) => {   
+   // firebase.initializeApp(config);
+ //  https://garage-management-software.firebaseapp.com/auth
+
+    return dispatch => {
+        dispatch( resetPasswordStart() ); 
+
+        firebase.auth().sendPasswordResetEmail(email, { url: 'http://localhost:3000/auth' })
+        
+        .then(response => {
+            dispatch(resetPasswordSuccess(response)); 
+        })
+
+        .catch(error => {
+          console.log(error.message);
+
+          dispatch(resetPasswordFail(error.message));
+
+        })
+      
+    };
+};
