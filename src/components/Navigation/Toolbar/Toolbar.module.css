@@ -1,17 +1,22 @@
 .Toolbar {
-
+    right: 0;
+    top: 0;
+    top: 70px;
+    height:  calc(100vh - 90px);
+    bottom: 100px;
+    right: 10px;
     position: fixed;
     width: 17%;
     max-width: initial;
     padding-top: 32px;
-    height: calc(110% - 32px);
-    right: 0;
-    top: 0;
+    /* height: calc(110% - 32px);*/
+ 
     z-index: 200;
     background-color: rgb(54, 55, 64);
     padding: 32px 16px;
     transition: transform 0.3s ease-out;
-
+    border-radius: 5px;
+    overflow-y: auto; 
 }
 
 
@@ -49,4 +54,8 @@
 
     }
 }
+
+
+
+
 

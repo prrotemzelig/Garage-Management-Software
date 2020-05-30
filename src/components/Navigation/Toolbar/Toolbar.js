@@ -3,25 +3,27 @@ import classes from './Toolbar.module.css';
 import NavigationItems from '../NavigationItems/NavigationItems.js';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle';
 import LogoComponent from '../../sidebar/LogoComponent'
+import { Scrollbars } from 'react-custom-scrollbars';
 
+//visibility: "none", position: "fixed"
+//, visibility: "hidden"
 const toolbar = (props) => (
-    
-<div>
-    <DrawerToggle clicked={props.drawerToggleClicked}/>
 
+<div>  
+    
+    <DrawerToggle clicked={props.drawerToggleClicked}/>
     <header className={classes.Toolbar} style={{background: props.colorBackground}} >
         <LogoComponent />
         <div className={classes.separator}></div>
-
         <nav className={classes.DesktopOnly}>
         <DrawerToggle clicked={props.drawerToggleClicked}/>
-
             <NavigationItems isAuthenticated={props.isAuth}/>
         </nav>
         
-        
-   
-    </header></div>
+    </header>  
+    </div>
+ 
+
 );
 
 

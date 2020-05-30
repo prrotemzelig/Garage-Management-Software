@@ -131,9 +131,9 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 localStorage.setItem('profileImage', res.data[key].profileImage); //post
                                 localStorage.setItem('sidebarBackgroundColor', res.data[key].sidebarBackgroundColor); //post
 
-                                console.log(response.data);
-                                console.log(response.data.displayName);
-                                console.log(response.data.fullName);
+                               // console.log(response.data);
+                                //console.log(response.data.displayName);
+                                //console.log(response.data.fullName);
 
                                 
                                 dispatch(authSignInSuccess(response.data.idToken, response.data.localId, branchNumber,res.data[key].firstName,res.data[key].lastName,
@@ -141,8 +141,8 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 dispatch(checkAuthTimeout(response.data.expiresIn)); //post
                                 }) 
                             .catch(err => { // add nertwork problem!!! need to fix this rotem //post                       
-                                console.log(err);
-                                console.log(err.message);
+                                //console.log(err);
+                                //console.log(err.message);
 
                                 dispatch(authSignInFail(err.message)); //err.response.data.error //post
                             }); //post
@@ -260,22 +260,14 @@ export const updateSettingUserFail = ( error ) => { // here we might get the err
 
 
 export const updateSettingUser = (updateData,field,token,branchNumber,userKey,userId) => {  
-    //updateData, token,branchNumber,userKey,taskKey ,list,field,userId
-    console.log(updateData);
-    console.log(field);
-    console.log(token);
-    console.log(branchNumber);
-    console.log(userKey);
-    console.log(userId);
-//    const finalTag = {  tag: updateData}
-    let finalUpdateField = '' ; //finalTag
+
+    let finalUpdateField = '' ; 
     if(field === 'sidebarBackgroundColor'){
         finalUpdateField = {  sidebarBackgroundColor: updateData};
     }
     if(field === 'backgroundColor'){
         finalUpdateField = {  backgroundColor: updateData};
    }
-
    if(field === 'profileImage'){
     finalUpdateField = {  profileImage: updateData};
 }

@@ -21,8 +21,11 @@ const styles = StyleSheet.create({
     },
     container: {
         height: 40,
-        width: '95%',        
-        marginBottom: '20px'
+        width: '98%',        
+        marginBottom: '20px',
+        '@media (max-width: 999px)': {
+            width: '95%'
+        }
     },
     cursorPointer: {
         cursor: 'pointer'
@@ -61,11 +64,19 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: '30px',
         letterSpacing: 0.3,
+      //  position: 'fixed',
         '@media (max-width: 768px)': {
-            marginRight: 36 // marginLeft: 36
+            marginRight: 25, // marginLeft: 36
+            //position: 'fixed'
+
         },
         '@media (max-width: 468px)': {
-            fontSize: 20
+            fontSize: 20,
+            //position: 'fixed'
+        },
+        '@media (min-width: 769px)': {
+            position: 'fixed'
+
         }
     },
     titleDark: {
@@ -126,12 +137,13 @@ class HeaderComponent extends Component {
 
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
+            <Row vertical="center" style={{position: "left"}}>
 
             <span className={this.props.backgroundColor==='light' ?
                 css(styles.title)
                 : css(styles.title, styles.titleDark)} >סניף {thisUserBranchNumber}</span>
-            
-            <Row vertical="center">
+               </Row>
+            <Row vertical="center" style={{position: "left"}}>
                 <div className={css(styles.iconStyles)}>
                     <IconSearch />
                 </div>

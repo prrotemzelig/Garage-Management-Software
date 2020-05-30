@@ -311,7 +311,7 @@ class TasksComponent extends React.Component {
       };
 
       closeAddButton = () => {
-          console.log("393");
+        //  console.log("393");
         this.setState( { isEditOpen: false } );
       };
 

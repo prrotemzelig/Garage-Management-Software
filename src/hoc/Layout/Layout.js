@@ -9,7 +9,6 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
-import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
 
 
 const styles = StyleSheet.create({
@@ -73,12 +72,10 @@ class Layout extends Component{
 
         }
 
-        console.log(this.props.backgroundColor);
-        console.log(userBackgroundColor);
-
         return(
             <Aux >  
             <Row className={css(styles.container)} style={{backgroundColor:userBackgroundColor}}>
+                
             <Toolbar
                 isAuth={this.props.isAuthenticated}
                 drawerToggleClicked={this.sideDrawerToggleHandler}
@@ -90,12 +87,12 @@ class Layout extends Component{
                 colorBackground={sidebarColor}/> 
 
             <Column flexGrow={1} className={css(styles.mainBlock)}>
-
+         {this.props.isAuthenticated ?
+                <HeaderComponent title={this.props.firstName}  style={{direction: "rtl"}}/>
+                : null
+                } 
             <main className={classes.Content}>
-            {this.props.isAuthenticated ?
-            <HeaderComponent title={this.props.firstName}  style={{direction: "rtl"}}/>
-            : null
-            } 
+              
                 {this.props.children}
             </main>
             </Column>
@@ -106,13 +103,6 @@ class Layout extends Component{
     }
 } 
 
-
-
-
-// {this.props.isAuthenticated ?
-//     <HeaderComponent title="hey 'user name' " style={{direction: "rtl"}}/>
-//     : null
-//         }
 
 
 const mapStateToProps = state => {

@@ -163,7 +163,7 @@ class Auth extends Component {
 
         if (this.props.error) { // if it's not null -> // we get message from firebase. the error come from firebase and its given me a javascript object
         //<p>{this.props.error.message}</p>
-        console.log(this.props.error);
+       // console.log(this.props.error);
             errorMessage = (
                 <div> 
                 
