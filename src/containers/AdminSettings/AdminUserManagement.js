@@ -9,6 +9,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from '../../components/UI/Modal/Modal.module.css';
 import { Modal ,Button } from 'react-bootstrap';
 import { updateObject, checkValidity} from '../../shared/utility'; 
+import { StyleSheet, css } from 'aphrodite/no-important';
 
 
 class AdminUserManagement extends Component {
@@ -122,7 +123,7 @@ class AdminUserManagement extends Component {
     renderDeleteUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
         return(
             <>
-            <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() => this.props.onDeleteUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >מחק משתמש</Button>    
+            <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  onClick={() => this.props.onDeleteUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >מחק משתמש</Button>    
             
             {this.props.showDeleteUserModal ?
             this.renderDeleteUserModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
@@ -136,7 +137,7 @@ class AdminUserManagement extends Component {
     renderAddTaskToUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
         return(
             <>  
-            <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >הוסף משימה</Button>   { ' ' }            
+            <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >הוסף משימה</Button>   { ' ' }            
                 {this.props.showAddNewTaskModal ?
                 this.renderAddNewTaskModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
                 : null}
@@ -560,7 +561,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
 
     render () {
         let cards;
-        
+        console.log(window.innerWidth);
 
         if (this.props.loading) {
             cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
@@ -577,7 +578,9 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
         //     ) )
         // }
         return (
-         <div>
+            <div class="form-row" > 
+
+         <div  class="form-group col-md-12">
             {
                 this.props.loading ? 
                 <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>
@@ -605,64 +608,127 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
             <p> </p>
          
             <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ? {direction: "rtl", backgroundColor: "white"}
-            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
-        <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
-            <thead>   
-                <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)",  tableLayout: "fixed"}}>
+        <table class="table table-bordered" style={window.innerWidth > '376' ? {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",  tableLayout: "fixed"}: {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
+            <thead>  
+            <>
+            {window.innerWidth > '376' ?
+
+             <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                     <th  scope="col" style={{ textAlign: "right"}}>סניף</th>
                     <th  scope="col" style={{ textAlign: "right"}}>שם</th>
                     <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
                     <th  scope="col" style={{ textAlign: "right"}}>הרשאות</th>
                     <th  scope="col" style={{ textAlign: "right"}}>פעולות</th> 
                 </tr>
+
+            :
+            <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+            <th  scope="col" style={{ textAlign: "right"}}>פרטים</th>
+            <th  scope="col" style={{ textAlign: "right"}}>הרשאות</th>
+            <th  scope="col" style={{ textAlign: "right"}}>פעולות</th> 
+            </tr> }
+            </>
+
+               
+
+
             </thead>
             <tbody>
 
             {this.props.TalpiotUsers.map( user =>  (
-                <tr>
-                    <td>תלפיות</td>
-                    <td>{user.firstName}{' '}{user.lastName}</td>
-                    <td>{user.email}</td>                        
-                    <td>{user.userPermissions}</td>
-                    <td>
+                <>
+                    {window.innerWidth > '376' ?
+                    <tr> 
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                         {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         
                     </td>
-                </tr>
+                    </tr>      
+                    :
+                    <tr>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
+                        {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                        {' '}
+                        {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                        
+                    </td>
+                    </tr>
+                    }
+                     </>
+               
                  ))
             }
 
             {this.props.GivatShaulUsers.map( user =>  (
-            <tr>
-                <td>גבעת שאול</td>
-                <td>{user.firstName}{' '}{user.lastName}</td>
-                <td>{user.email}</td>                        
-                <td>{user.userPermissions}</td>
-                <td>
+        
+                <>
+                {window.innerWidth > '376' ?
+                <tr> 
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>גבעת שאול</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-             
+                    
                 </td>
-            </tr>
+                </tr>      
+                :
+                <tr>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>גבעת שאול<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                    {' '}
+                    {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                    
+                </td>
+                </tr>
+                }
+                </>
             ))
             }
 
             {this.props.ModiinUsers.map( user =>  (
-            <tr>
-                <td>מודיעין</td>
-                <td>{user.firstName}{' '}{user.lastName}</td>
-                <td>{user.email}</td>                        
-                <td>{user.userPermissions}</td>
-                <td>
+        
+                <>
+                {window.innerWidth > '376' ?
+                <tr> 
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מודיעין</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                
+                    
                 </td>
-            </tr>
+                </tr>      
+                :
+                <tr>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מודיעין<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                    {' '}
+                    {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+                    
+                </td>
+                </tr>
+                }
+                </>
             ))
             }
 
@@ -673,11 +739,23 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
             </div>
             }
         </div>
+        </div>
         );
     }
 }
 
+{/* <tr>
+                
+<td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
+<td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>                        
+<td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+<td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word", width: "100%"}}>
+    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
+    {' '}
+    {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
 
+</td>
+</tr> */}
 const mapStateToProps = state => { 
     return {
         showSuccessCase: state.admin.showSuccessCase,
