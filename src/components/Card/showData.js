@@ -72,11 +72,17 @@ class showData extends React.Component   {
             this.check(card)
           ))
         }
-        partsDetails.push( {name: this.state.parts[0].partDescription} );
+        if(this.state.parts[0]===null || this.state.parts[0]=== undefined || this.state.parts[0] === ''){
+
+        }
+        else{
+          partsDetails.push( {name: this.state.parts[0].partDescription} );
         partsDetails.push( {name: this.state.parts[0].amount} );
         partsDetails.push( {name: this.state.parts[0].gross+'.00'} );
         partsDetails.push( {name: this.state.parts[0].discount+'.00'}  );
         partsDetails.push( {name: this.state.parts[0].net+'.00'}  );
+        }
+        
         const partsDetailsOutput = partsDetails.map(ig => {
           // here we return some JSX
           //we can use in ig.name as a unique key because it is unique here
@@ -84,11 +90,15 @@ class showData extends React.Component   {
               
                   cardData={ig.name}>{ig.name} </td>;
       });
+      if(this.state.works[0]===null || this.state.works[0]=== undefined || this.state.works[0] === ''){
+      }
+      else{
       worksDetails.push( {name: this.state.works[0].workDescription} );
       worksDetails.push( {name: this.state.works[0].time} );
       worksDetails.push( {name: this.state.works[0].gross+'.00'} );
       worksDetails.push( {name: this.state.works[0].discount+'.00'}  );
       worksDetails.push( {name: this.state.works[0].net+'.00'}  );
+      }
         const worksDetailsOutput = worksDetails.map(ig => {
           // here we return some JSX
           //we can use in ig.name as a unique key because it is unique here

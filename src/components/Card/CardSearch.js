@@ -5,8 +5,10 @@ import React from 'react';
 
 const cardSearch = ( props ) => {
     const number=props.data;
-
+    console.log(props.cardData.licenseNumber);
+    console.log(number);
     if(props.cardData.licenseNumber===number){
+        console.log("yesss");
         const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         cardDetails.push( {name: props.customerData.customerName });
         cardDetails.push( {name: props.cardData.licenseNumber });

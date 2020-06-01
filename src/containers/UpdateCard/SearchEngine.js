@@ -46,6 +46,7 @@ class Search extends React.Component {
     render () {
       let cards;
       this.state.carNumber= this.props.value;
+      console.log(this.state.carNumber);
           if(this.state.carNumber!== "" ){
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards = this.props.cards.map( card => (
@@ -130,7 +131,8 @@ class Search extends React.Component {
 }
 const mapStateToProps = state => { // here we get the state and return a javascript object
   return {
-      cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
+      //cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
+      cards: state.card.closeCards,
       loading: state.card.loading,
       token: state.auth.token,
       userId: state.auth.userId,

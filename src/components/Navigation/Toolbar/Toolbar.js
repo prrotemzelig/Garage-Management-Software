@@ -3,7 +3,7 @@ import classes from './Toolbar.module.css';
 import NavigationItems from '../NavigationItems/NavigationItems.js';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle';
 import LogoComponent from '../../sidebar/LogoComponent'
-import { Scrollbars } from 'react-custom-scrollbars';
+//import { Scrollbars } from 'react-custom-scrollbars';
 
 //visibility: "none", position: "fixed"
 //, visibility: "hidden"
