@@ -65,14 +65,13 @@ class Search extends React.Component {
 
       if(!this.state.found && this.state.carNumber!==''){
         return ( 
-          <div style={ this.props.backgroundColor === 'light' ? {direction: "rtl",fontFamily: "Alef Hebrew" }:{ direction: "rtl",fontFamily: "Alef Hebrew", color: "white"}}>
+          <div >
             <h5>לא נמצאה היסטוריה עבור רכב זה </h5></div> 
       );
       }
-    
       if(this.state.found && this.state.carNumber!=='' && !this.state.click){
       return (
-        <table class="table " style={ this.props.backgroundColor === 'light' ? {direction: "rtl",fontFamily: "Alef Hebrew" }:{ direction: "rtl",fontFamily: "Alef Hebrew", color: "white"}}>
+        <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                         <td scope="col" >שם לקוח</td>
@@ -137,9 +136,7 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       loading: state.card.loading,
       token: state.auth.token,
       userId: state.auth.userId,
-      branchNumber: state.auth.branchNumber,
-      backgroundColor: state.auth.backgroundColor
-
+      branchNumber: state.auth.branchNumber
   };
 };
 
