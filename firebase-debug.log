@@ -1,0 +1,55 @@
+[debug] [2020-05-25T15:16:11.404Z] ----------------------------------------------------------------------
+[debug] [2020-05-25T15:16:11.406Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2020-05-25T15:16:11.407Z] CLI Version:   8.4.0
+[debug] [2020-05-25T15:16:11.407Z] Platform:      win32
+[debug] [2020-05-25T15:16:11.407Z] Node Version:  v13.7.0
+[debug] [2020-05-25T15:16:11.408Z] Time:          Mon May 25 2020 18:16:11 GMT+0300 (שעון ישראל (קיץ))
+[debug] [2020-05-25T15:16:11.409Z] ----------------------------------------------------------------------
+[debug] [2020-05-25T15:16:11.409Z] 
+[debug] [2020-05-25T15:16:11.416Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-25T15:16:11.417Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\arielasaraf\Desktop\Final-Project\Garage-Management-Software
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  .firebaserc already has a default project, using garage-management-software. 
+[debug] [2020-05-25T15:16:17.003Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/garage-management-software  
+ 
+[debug] [2020-05-25T15:16:17.697Z] <<< HTTP RESPONSE 403 {"vary":"X-Origin, Referer, Origin,Accept-Encoding","content-type":"application/json; charset=UTF-8","date":"Mon, 25 May 2020 15:16:26 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-25T15:16:17.697Z] <<< HTTP RESPONSE BODY {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2020-05-25T15:16:17.702Z] HTTP Error: 403, The caller does not have permission
+[debug] [2020-05-25T15:16:17.708Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:38:12)
+    at Request._callback (C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\lib\api.js:41:35)
+    at Request.self.callback (C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:321:20)
+    at Request.EventEmitter.emit (domain.js:485:12)
+    at Request.<anonymous> (C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\request\request.js:1154:10)
+    at Request.emit (events.js:321:20)
+    at Request.EventEmitter.emit (domain.js:485:12)
+    at IncomingMessage.<anonymous> (C:\Users\arielasaraf\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\request\request.js:1076:12)
+    at Object.onceWrapper (events.js:427:28)
+    at IncomingMessage.emit (events.js:333:22)
+    at IncomingMessage.EventEmitter.emit (domain.js:485:12)
+    at endReadableNT (_stream_readable.js:1201:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+[error] 
+[error] Error: Failed to get Firebase project garage-management-software. Please make sure the project exists and your account has permission to access it.
