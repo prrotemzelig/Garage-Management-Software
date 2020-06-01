@@ -1,0 +1,38 @@
+[debug] [2020-05-31T17:51:45.668Z] ----------------------------------------------------------------------
+[debug] [2020-05-31T17:51:45.671Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\RotemZelig\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2020-05-31T17:51:45.671Z] CLI Version:   8.4.1
+[debug] [2020-05-31T17:51:45.671Z] Platform:      win32
+[debug] [2020-05-31T17:51:45.671Z] Node Version:  v13.6.0
+[debug] [2020-05-31T17:51:45.673Z] Time:          Sun May 31 2020 20:51:45 GMT+0300 (שעון ישראל (קיץ))
+[debug] [2020-05-31T17:51:45.674Z] ----------------------------------------------------------------------
+[debug] [2020-05-31T17:51:45.674Z] 
+[debug] [2020-05-31T17:51:45.687Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-31T17:51:45.688Z] > authorizing via signed-in user
+[debug] [2020-05-31T17:51:45.689Z] [iam] checking project garage-management-software for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2020-05-31T17:51:45.693Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/garage-management-software:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]}
+[debug] [2020-05-31T17:51:59.342Z] [iam] error while checking permissions, command may fail: FirebaseError: Server Error. socket hang up
+[debug] [2020-05-31T17:51:59.347Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/garage-management-software  
+ 
+[debug] [2020-05-31T17:52:01.161Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 31 May 2020 17:52:00 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'garage-management-software'...
+[info] 
+[info] i  deploying database, hosting 
+[info] i  database: checking rules syntax... 
+[debug] [2020-05-31T17:52:01.236Z] >>> HTTP REQUEST PUT https://garage-management-software.firebaseio.com/.settings/rules.json?dryRun=true  
+ {// check!
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2020-05-31T17:52:24.531Z] <<< HTTP RESPONSE 200 {"server":"nginx","date":"Sun, 31 May 2020 17:52:23 GMT","content-type":"application/json; charset=utf-8","content-length":"15","connection":"keep-alive","access-control-allow-origin":"*","cache-control":"no-cache","strict-transport-security":"max-age=31556926; includeSubDomains; preload"}
+[info] +  database: rules syntax for database garage-management-software is valid 
+[debug] [2020-05-31T17:52:24.536Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/garage-management-software/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-05-31T17:52:56.150Z] Error: connect ETIMEDOUT 172.217.22.42:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1137:16)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 172.217.22.42:443
