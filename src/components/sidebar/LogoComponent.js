@@ -5,7 +5,6 @@ import Logo from '../../assets/icon-logo';
 
 const styles = StyleSheet.create({
     container: {
-        display: 'block'
        // marginLeft: 32,
         //marginRight: 32
     },
@@ -28,7 +27,7 @@ function LogoComponent() {
     return (
         <Row className={css(styles.container)} horizontal="center" vertical="center">
          
-            <span className={css(styles.title)}>סרגל כלים</span>
+            <span className={css(styles.title)}>Dashboard Kit</span>
             <Logo />
         </Row>
     );

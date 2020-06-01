@@ -9,7 +9,6 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
-import Header from '../../components/header/Header';
 
 
 const styles = StyleSheet.create({
@@ -90,8 +89,7 @@ class Layout extends Component{
             <Column flexGrow={1} className={css(styles.mainBlock)}>
          {this.props.isAuthenticated ?
                 <HeaderComponent title={this.props.firstName}  style={{direction: "rtl"}}/>
-                : 
-                <Header style={{direction: "rtl"}}/>
+                : null
                 } 
             <main className={classes.Content}>
               

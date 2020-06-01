@@ -3,6 +3,7 @@ import { bool, func, string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import { NavLink } from 'react-router-dom';
+import NavigationItem from '../Navigation/NavigationItems/NavigationItem/NavigationItem';
 
 const styles = StyleSheet.create({
     activeBar: {
