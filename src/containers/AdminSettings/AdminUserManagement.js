@@ -137,7 +137,6 @@ class AdminUserManagement extends Component {
         return(
             <>  
             <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >הוסף משימה</Button>   { ' ' }            
-                
                 {this.props.showAddNewTaskModal ?
                 this.renderAddNewTaskModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
                 : null}
@@ -146,21 +145,30 @@ class AdminUserManagement extends Component {
             );
       }
 
+    //   renderForgetPasswordUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
+    //     return(
+    //         <>  
+    //         <Button bsStyle="secondary" style={{borderColor: "black",color: "white"}}  onClick={() =>   this.props.onAddNewTaskForUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)} >שחזור סיסמא</Button>   { ' ' }            
+    //             {this.props.showAddNewTaskModal ?
+    //             this.renderAddNewTaskModal( this.props.userKey,this.props.userBranchNumber,this.props.userToken,this.props.firstName,this.props.lastName)
+    //             : null}
 
+    //         </>
+    //         );
+    //   }
+      
 onDeleteUserClick = (userKey,userBranchNumber,userToken) =>  {
-
    this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken); 
-  }  
+}  
   
 
 openAddNewUserModal = (event) => { // add new USER to the system
   this.props.onAddNewUserModalOpening( ); 
 };
 
-
 closeAddNewUser = (event) => {
     this.props.onAddNewUserModalClose(this.props.token); 
-  };
+};
 
   userSignUpHandler = (event) => {
 
@@ -596,7 +604,8 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
 
             <p> </p>
          
-            <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"}}>
+            <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ? {direction: "rtl", backgroundColor: "white"}
+            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
         <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
             <thead>   
                 <tr style={{fontWeight: "bold", fontSize: "18px"}}>
@@ -619,7 +628,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                         {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                      
+                        
                     </td>
                 </tr>
                  ))
@@ -635,7 +644,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                   
+             
                 </td>
             </tr>
             ))
@@ -694,7 +703,9 @@ const mapStateToProps = state => {
         userBranchNumber: state.admin.userBranchNumber,
         userToken: state.admin.userToken,
         firstName: state.admin.firstName,
-        lastName: state.admin.lastName
+        lastName: state.admin.lastName,
+        backgroundColor: state.auth.backgroundColor
+
     };
 };
 

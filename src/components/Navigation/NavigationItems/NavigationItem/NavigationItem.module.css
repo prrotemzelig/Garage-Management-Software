@@ -14,7 +14,7 @@
 
 .NavigationItem a {
 
-    color: rgb(164, 166, 179);
+    color: white;
     text-decoration: none;
     height: 100%;
     width: 100%;
@@ -32,11 +32,25 @@
     color: #615D5B;
     background-color: rgba(221, 226, 255, 0.08);
     border-right: 3px solid #DDE2FF;
-    color: rgb(221, 226, 255) ;
+    color: white ;
+
+   
+    
 }
 
-.Logo a:active{
+
+/* .Logo a:active{
+    fill: #DDE2FF;
+    opacity: 0.4;
+} */
+
+.icon {
+    margin-left: 12px;
+}
+
+.icon a:hover,
+.icon a:active,
+.icon a.active {
     fill: #DDE2FF;
     opacity: 0.4;
 }
-

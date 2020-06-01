@@ -20,7 +20,11 @@ export {
     authSignIn,
     logout,
     setAuthRedirectPath,
-    authCheckState    
+    authCheckState,
+    SettingOpening,
+    SettingClose,
+    updateSettingUser,
+    resetPassword 
 } from './auth';
 export {
     taskOpening,

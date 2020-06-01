@@ -9,8 +9,19 @@ import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
 
+//import { firebase } from 'firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
+//import firebase from 'firebase';
+import 'firebase/firestore';
+import config from "../../config";
+
+firebase.initializeApp(config);
 
 class Auth extends Component {
+
+
+// db = firebase.firestore();
     state = {
         controls: {
             branchNumber: {
@@ -75,15 +86,46 @@ class Auth extends Component {
     }
 
     submitHandler = (event) => {
-        //console.log("71" + this.state.controls.branchNumber.value);
         event.preventDefault(); // we call this to prevent the reloading of the page
+
+        if(this.state.controls.email.value==='' && this.state.controls.password.value===''){
+            alert('נא להכניס כתובת מייל וסיסמא'); 
+        }
+        else if(this.state.controls.email.value===''){
+            alert('נא להכניס כתובת מייל'); 
+        }
+        else if(this.state.controls.password.value===''){
+            alert('נא להכניס סיסמא'); 
+        }
+        else{
+        //console.log("71" + this.state.controls.branchNumber.value);
         
         this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
     }
+}
 
-    switchAuthModeHandler = () => {
-        console.log("user clicked forget password");
+
+    resetPasswordHandler = (event) => {
+        event.preventDefault(); // we call this to prevent the reloading of the page
+
+        if(this.state.controls.email.value===''){
+            alert('נא להכניס כתובת מייל'); 
+        }
+     else{
+
+        this.props.onResetPassword(this.state.controls.email.value); // pass email value and password value
+
+//        // const config = {};
+        // firebase.initializeApp(config);
+
+// //  https://garage-management-software.firebaseapp.com/auth
+//         firebase.auth().sendPasswordResetEmail(this.state.controls.email.value, { url: 'http://localhost:3000/auth' })
+//         .then(response => {
+//         })
+//         .catch(error => {
+//         })
+    }
         // this.setState(prevState => {
         //     return {isSignup: !prevState.isSignup};
         // });
@@ -121,6 +163,7 @@ class Auth extends Component {
 
         if (this.props.error) { // if it's not null -> // we get message from firebase. the error come from firebase and its given me a javascript object
         //<p>{this.props.error.message}</p>
+       // console.log(this.props.error);
             errorMessage = (
                 <div> 
                 
@@ -151,7 +194,7 @@ class Auth extends Component {
                 </form>
                 <div style= {{textAlign: "center"}}> 
                 <Button style= {{textAlign: "center"}}
-                    clicked={this.switchAuthModeHandler} 
+                    clicked={this.resetPasswordHandler} 
                     btnType="Danger" >?שכחת סיסמא</Button></div>
                     
             </div>
@@ -199,7 +242,10 @@ const mapDispatchToProps = dispatch => { // we do this to be able to dispatch so
     return {
         onAuthSignIn: (email, password,branchNumber) => dispatch(actions.authSignIn(email, password,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         //onAuth: (email, password, isSignup,branchNumber) => dispatch(actions.auth(email, password,isSignup,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+        onResetPassword: (email) => dispatch(actions.resetPassword(email))
+
+        
     };
 };
 

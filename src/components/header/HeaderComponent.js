@@ -1,10 +1,15 @@
-import React from 'react';
+//import React from 'react';
+import React, {Component} from 'react';
+import * as actions from '../../store/actions/index';
+
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
 import { connect } from 'react-redux';
+import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const styles = StyleSheet.create({
     avatar: {
@@ -16,13 +21,17 @@ const styles = StyleSheet.create({
     },
     container: {
         height: 40,
-        width: '95%',        
-        marginBottom: '20px'
+        width: '98%',        
+        marginBottom: '20px',
+        '@media (max-width: 999px)': {
+            width: '95%'
+        }
     },
     cursorPointer: {
         cursor: 'pointer'
     },
     name: {
+        marginLeft:10,
         fontFamily: 'Alef Hebrew',
         fontStyle: 'normal',
         fontWeight: 600,
@@ -33,6 +42,9 @@ const styles = StyleSheet.create({
         '@media (max-width: 768px)': {
             display: 'none'
         }
+    },
+    nameDark: {
+        color: 'white'
     },
     separator: {
         borderLeft: '1px solid #DFE0EB',
@@ -52,12 +64,23 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: '30px',
         letterSpacing: 0.3,
+      //  position: 'fixed',
         '@media (max-width: 768px)': {
-            marginRight: 36 // marginLeft: 36
+            marginRight: 25, // marginLeft: 36
+            //position: 'fixed'
+
         },
         '@media (max-width: 468px)': {
-            fontSize: 20
+            fontSize: 20,
+            //position: 'fixed'
+        },
+        '@media (min-width: 769px)': {
+            position: 'fixed'
+
         }
+    },
+    titleDark: {
+        color: 'white'
     },
     iconStyles: {
         cursor: 'pointer',
@@ -68,28 +91,59 @@ const styles = StyleSheet.create({
     }
 });
 
-function HeaderComponent(props) {
-    let thisUserBranchNumber ='';
-    if(props.branchNumber==='Talpiot'){
-        thisUserBranchNumber='תלפיות';
-    }
-    else if(props.branchNumber==='GivatShaul'){
-        thisUserBranchNumber='גבעת שאול';
+//function HeaderComponent(props) {
+class HeaderComponent extends Component {
 
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+          backgroundColor: "blue",
+          sidebarOpened:
+            document.documentElement.className.indexOf("nav-open") !== -1
+        };
+     }
+ 
+    onSettingClick = () =>  {
+        if(!this.props.showSettingModel){
+        this.props.onSettingOpening(); // this contains all the data of card 
+        }
+        else{
+            this.props.onSettingClose(); // this contains all the data of card 
+        }
+    }  
+    render(){
 
-    else if(props.branchNumber==='Modiin'){
-        thisUserBranchNumber='מודיעין';
+        let thisUserBranchNumber ='';
+        if(this.props.branchNumber==='Talpiot'){
+            thisUserBranchNumber='תלפיות';
+        }
+        else if(this.props.branchNumber==='GivatShaul'){
+            thisUserBranchNumber='גבעת שאול';
+        }
+    
+        else if(this.props.branchNumber==='Modiin'){
+            thisUserBranchNumber='מודיעין';
+        }
+          
+        let userProfileImage;
+        if(this.props.profileImage==='anime3'){
+            userProfileImage = require("../../assets/anime3.png");
+        }
+        else if(this.props.profileImage==='anime6'){
+            userProfileImage = require("../../assets/anime6.png");
+        }
 
-    }
-      
-    const { icon, title, ...otherProps } = props;
+        const { icon, title, ...otherProps } = this.props;
+
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
+            <Row vertical="center" style={{position: "left"}}>
 
-            <span className={css(styles.title)}>סניף {thisUserBranchNumber}</span>
-            
-            <Row vertical="center">
+            <span className={this.props.backgroundColor==='light' ?
+                css(styles.title)
+                : css(styles.title, styles.titleDark)} >סניף {thisUserBranchNumber}</span>
+               </Row>
+            <Row vertical="center" style={{position: "left"}}>
                 <div className={css(styles.iconStyles)}>
                     <IconSearch />
                 </div>
@@ -98,14 +152,22 @@ function HeaderComponent(props) {
                 </div>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>שלום,{title}</span>
-                    <img src={require("../../assets/anime3.png")} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
+                    <span className={this.props.backgroundColor==='light' ?
+                    css(styles.name, styles.cursorPointer)
+                    : css(styles.name, styles.cursorPointer,styles.nameDark)}>שלום,{' '}{title}</span> 
+                    <img src={userProfileImage} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
+                <SettingsIcon onClick={() => this.onSettingClick()} 
+                style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
+              
+               {this.props.showSettingModel ? <FixedPlugin /> : null }
 
             </Row>
         </Row>
-    );
+    )
+    }
 }
+
 
 HeaderComponent.propTypes = {
     title: string
@@ -114,9 +176,20 @@ HeaderComponent.propTypes = {
 const mapStateToProps = state => {
     return {
         firstName: state.auth.firstName,
-        branchNumber: state.auth.branchNumber
+        branchNumber: state.auth.branchNumber,
+        showSettingModel: state.auth.showSettingModel,
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
+        backgroundColor: state.auth.backgroundColor,
+        profileImage: state.auth.profileImage
+
     };
 };
 
-export default connect( mapStateToProps )( HeaderComponent );
-//export default HeaderComponent;
+const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
+  return {
+    onSettingOpening: () => dispatch( actions.SettingOpening() ),
+    onSettingClose: () => dispatch( actions.SettingClose() )
+  };
+};
+
+export default connect( mapStateToProps,mapDispatchToProps)( HeaderComponent );
