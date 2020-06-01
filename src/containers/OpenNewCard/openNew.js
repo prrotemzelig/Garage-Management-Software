@@ -24,6 +24,10 @@ import { FaThinkPeaks } from 'react-icons/fa';
 import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
 import Aux from '../../hoc/Auxn/Auxn';
+import * as emailjs from 'emailjs-com'
+import { FormFeedback, Form, FormGroup, Label, Input } from 'reactstrap'
+
+
 
 const getDateTime = () => {
   let tempDate = new Date();
@@ -36,6 +40,10 @@ class openNew extends Component   {
         super(props)
     this.state = {
     //cardKey:'',
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
     car_data:[],
     card_data:[],
     customer_data:[],
@@ -51,8 +59,9 @@ class openNew extends Component   {
     dataBaseCarNumber:'',
     cardDetails:{},
     carDetails:{},
-    ImageFiles:[],
-    DocFiles:[],
+    imageFiles:[],
+    imageArray:[],
+    docFiles:[],
     found: false,
     customer_details:{},
     startDate: new Date(),
@@ -659,7 +668,7 @@ workOrPartsOpeningHandler = ( event,kind ) => {
       this.setState( { isAddNewWorkOrPartOpen: false } );
   }
 
-    workOrPartsUpdateHandler = ( event,kind ) => {
+workOrPartsUpdateHandler = ( event,kind ) => {
       event.preventDefault(); // with that we get the task details
       const itemData = {};
 
@@ -1344,21 +1353,7 @@ componentDidMount() { // we want to fetch all the cards. so for doing that, I ne
 // }
 }
 
-componentWillUpdate(newProps, newState) {
-  //console.log(newState);
-  //console.log(newProps);
-  
-  this.state.cards=newProps.cards;
-  var i=0; 
 
-//console.log(newState);
-}
-
-componentDidUpdate(preProps,preState){
-  //console.log(preProps);
-  //console.log(preState);
-  //this.updateAPI();
-}
 
 closeWorksModal = (event) => {
 
@@ -2179,32 +2174,178 @@ updateCustomerInputValue(evt,i) {
   this.state.customer_data[i]=evt.target.value;
   //console.log(this.state.customer_data);
 }
+buildImgTag(){
 
+  return <div className="photo-container">
+  { 
+    this.state.imageArray.map(imageURI => 
+    (<img className="photo-uploaded" src={imageURI} alt="Photo uploaded"/>)) 
+  }
+  </div>
+}
 
 fileSelectedHandler = (e) => {
-  for ( let fieldName in e.target.files ) {
-    if(e.target.files[fieldName].type==="image/jpeg"){
-      this.state.ImageFiles.push(e.target.files[fieldName]);
+  console.log(e.target.files);
+  
+  for(var i=0;i<e.target.files.length;i++){
+    let type=e.target.files[i].type;
+    if(type.includes("image/jpeg")){
+      this.state.imageFiles.push(e.target.files[i]);
+    }
+    else{
+      this.state.docFiles.push(e.target.files[i]);
     }
   }
-  for ( let fieldName in e.target.files ) {
-    if(e.target.type === "file" && e.target.files[fieldName].type!=="image/jpeg"){
-      this.state.DocFiles.push(e.target.files[fieldName]);
-    }
+  console.log(this.state.imageFiles);
+  console.log(this.state.docFiles);
+  
+ if (e.target.files) {
+
+  /* Get files in array form */
+  const files = Array.from(e.target.files);
+
+  /* Map each file to a promise that resolves to an array of image URI's */ 
+  Promise.all(files.map(file => {
+      return (new Promise((resolve,reject) => {
+          const reader = new FileReader();
+          reader.addEventListener('load', (ev) => {
+              resolve(ev.target.result);
+          });
+          reader.addEventListener('error', reject);
+          reader.readAsDataURL(file);
+      }));
+  }))
+  .then(images => {
+
+      /* Once all promises are resolved, update state with image URI array */
+      this.setState({ imageArray : images })
+
+  }, error => {        
+      console.error(error);
+  });
   }
-  for(let g in this.state.DocFiles){
-    if(this.state.DocFiles[g].type==='undefined'){
-      //console.log(this.state.DocFiles[g].type);
-    }
-  }
- // console.log(this.state.ImageFiles);
- // console.log(this.state.DocFiles);
+  console.log(this.state.imageArray);
+ 
+
+}
+
+handle_Submit(e) {
+  e.preventDefault()
+ 
+  const { name, email, subject, message } = this.state
+  let templateParams = {
+    from_name: name,
+    to_name: email,
+    subject: subject,
+    message_html: message,    
+   }
+   
+   emailjs.send(
+    'gmail',
+    'template_ioZDdoH7',
+     templateParams,
+    'user_4U9CbkH78jIK0dza4aWEp'
+   )
+ 
+   this.resetForm()
+}
+resetForm() {
+  this.setState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+}
+handle_Change = (param, e) => {
+  this.setState({ [param]: e.target.value })
+}
+
+sendEmail(e) {
+ 
+
+  const { name, email, subject, message } = this.state
+  // create a new XMLHttpRequest
+  var xhr = new XMLHttpRequest();
+
+  // get a callback when the server responds
+  xhr.addEventListener('load', () => {
+      // update the response state and the step
+      
+      this.setState ({
+          emailStatus: xhr.responseText
+      });
+      console.log( xhr.responseText);
+  });
+  //'http://api.ruvictor.com/sendemail/index.php?sendto='
+  // open the request with the verb and the url
+  xhr.open('GET', 'http://localhost:3000/' + email + 
+                          '&name=' + name + 
+                          '&message=' + message);
+  // send the request
+  xhr.send();
+  this.resetForm()
+
+
+ /* 
+  "use strict";
+  const nodemailer = require("nodemailer");
+  const account={
+    user:"oswald.auer37@ethereal.email",
+    pass:"axm8ujnm1aq2YpxkZD"
+  };
+// async..await is not allowed in global scope, must use a wrapper
+  async function main() {
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+    let testAccount = await nodemailer.createTestAccount();
+
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: testAccount.user, // generated ethereal user
+      pass: testAccount.pass, // generated ethereal password
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    to: "ariel.asaraf@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+    
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
+
+main().catch(console.error);
+*/
+  /*e.preventDefault();    //This is important, i'm not sure why, but the email won't send without it
+
+  emailjs.sendForm('gmail', 'template_ioZDdoH7', e.target, 'user_4U9CbkH78jIK0dza4aWEp')
+    .then((result) => {
+    	console.log('Email successfully sent!')
+    }, (error) => {
+        console.log(error.text);
+    });*/
 }
 
 onChange = date => this.setState({ date })
 
   render () {
-  
+    const imgTag = this.buildImgTag();
+
     let { licenseNumber , ticketNumber } = this.state;
 
   
@@ -2731,12 +2872,70 @@ onChange = date => this.setState({ date })
                     <h5>מסמכים:</h5>
                         <input type="file" multiple onChange={this.fileSelectedHandler} />
                   </div>
+                  {imgTag}
+
               
                 </div>  
               </div>  
                : null }  
             </div>  
-     
+            <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} >שליחת מייל לשמאי</div>
+            {this.state.showUploadDocDiv ? 
+              <div class="card-body text-dark bg-white" >
+                   <>
+          <Form onSubmit={this.handle_Submit.bind(this)}>
+            <FormGroup controlId="formBasicEmail">
+              <Label className="text-muted">כתובת מייל</Label>
+              <Input
+                type="email"
+                name="email"
+                value={this.state.email}
+                className="text-primary"
+                onChange={this.handle_Change.bind(this, 'email')}
+                placeholder="הכנס כתובת מייל"
+              />
+            </FormGroup>
+            <FormGroup controlId="formBasicName">
+              <Label className="text-muted">שם</Label>
+              <Input
+                type="text"
+                name="name"
+                value={this.state.name}
+                className="text-primary"
+                onChange={this.handle_Change.bind(this, 'name')}
+                placeholder="שם"
+              />
+            </FormGroup>
+            <FormGroup controlId="formBasicSubject">
+              <Label className="text-muted">נושא</Label>
+              <Input
+                type="text"
+                name="subject"
+                className="text-primary"
+                value={this.state.subject}
+                onChange={this.handle_Change.bind(this, 'subject')}
+                placeholder="נושא"
+              />
+            </FormGroup>
+            <FormGroup controlId="formBasicMessage">
+              <Label className="text-muted">הודעה</Label>
+              <Input
+                type="textarea"
+                name="message"
+                className="text-primary"
+                value={this.state.message}
+                onChange={this.handle_Change.bind(this, 'message')}
+              />
+            </FormGroup>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+      </>
+              </div>  
+               : null }  
+            </div>  
         <form class="form-group" > 
         <span>    
         {this.state.found ?    

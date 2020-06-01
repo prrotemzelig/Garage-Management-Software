@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
-import {Bar, Pie, Line} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 import Date from './DatePic';
-import { Modal } from 'react-bootstrap';
 
 
 class BarChart extends Component {
