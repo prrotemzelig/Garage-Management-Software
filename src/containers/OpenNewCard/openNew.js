@@ -99,7 +99,7 @@ class openNew extends Component   {
       }, 
 
       cardType: {
-        value: 'ביטוח',
+        value: '', //ביטוח
         valid: false,
         touched: false
       } ,
@@ -358,6 +358,8 @@ class openNew extends Component   {
       formData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
   }
 
+  formData['ticketNumber'] = this.props.cards.length + 1;
+  console.log(formData['ticketNumber']);
   const carData = {};
   for (let formElementIdentifier in this.state.vehicleData) {
     carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
@@ -423,6 +425,8 @@ for (let formElementIdentifier in this.state.customerDetails) {
 
 
 inputChangedHandler = (event) => { 
+console.log(event.target.id);
+console.log(event.target.value);
 
   const updatedFormElement = updateObject(this.state.cardForm[event.target.id], { 
       // here we pass my cardForm and there (inputIdentifier) -> it show the control 
@@ -464,7 +468,6 @@ inputChangedHandler = (event) => {
   }
 
 inputCarChangedHandler = (event) => { 
-
 const updatedFormElement = updateObject(this.state.vehicleData[event.target.id], { 
     value: event.target.value,
     //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
@@ -786,6 +789,7 @@ cardUpdateHandler = ( event ) => {
     speedometer: this.state.car_data[10]
   }
 
+  console.log(this.state.car_data[9]);
   const cardData={
     appraiser: this.state.card_data[0],
     cardType: this.state.card_data[1],
@@ -800,6 +804,8 @@ cardUpdateHandler = ( event ) => {
     policyNumber: this.state.card_data[10],
     ticketNumber: this.state.cardDetails.ticketNumber
   }
+
+  console.log(this.state.cardDetails.ticketNumber);
 
   const customerData={
     address: this.state.customer_data[0],
@@ -1098,7 +1104,7 @@ setTheStates = () => {
         }, 
   
         cardType: {
-          value: 'ביטוח',
+          value: '', //ביטוח
           valid: false,
           touched: false
         } ,
@@ -1318,7 +1324,7 @@ check(data,licenseNumber){
     this.state.identifiedCardID=data.id;//rotem
     this.state.branchNumber=data.branchNumber;
 
-
+    console.log(data.carData.manufactureYear);
     // this.setState({found: true});
     // this.setState({dataBaseCarNumber: data.cardData.licenseNumber});
     // this.setState({carDetails: data.carData});
@@ -1529,7 +1535,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cardType" >סוג כרטיס</label>
-                 <select id="inputState" class="form-control" style={{marginLeft: "10px"}}  >
+                 <select id="cardType" class="form-control" value={this.state.cardDetails.cardType} style={{marginLeft: "10px"}}  >
                    <option selected>ביטוח</option>
                    <option>פרטי</option>
                  </select>
@@ -1751,8 +1757,13 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cardType" >סוג כרטיס</label>
-                 <select id="inputState" class="form-control" style={{marginLeft: "10px"}}  >
-                   <option selected>ביטוח</option>
+                 <select id="cardType" class="form-control" value={this.state.cardDetails.cardType} style={{marginLeft: "10px"}}  >
+                 {/* {this.state.cardForm.cardType.value === 'פרטי' ? 
+                        <option selected>פרטי</option> 
+                    : 
+                    <option selected >ביטוח</option>
+                    }  */}
+                         <option selected>ביטוח</option>
                    <option>פרטי</option>
                  </select>
                </div>
@@ -2158,15 +2169,37 @@ switchDivModeHandlerDoc = () => {
 
 
 updateCarInputValue=(evt,i)=> {
+  evt.preventDefault(); // with that we get the Card details
+
   this.state.car_data[i]=evt.target.value;
-//  console.log(this.state.car_data);
+  console.log(this.state.car_data);
+  if(i===9){
+    this.state.carDetails.manufactureYear=evt.target.value;
+    this.state.vehicleData.manufactureYear.value=evt.target.value;
+    this.setState(prevState => {
+      return (this.state.vehicleData.manufactureYear.value);
+      });
+    //return (this.state.carDetails.manufactureYear);
+    
+    return (this.state.vehicleData.manufactureYear.value);
+
+  }
+  console.log(this.state.carDetails.manufactureYear);
+  console.log(this.state.vehicleData.manufactureYear.value);
+
+  console.log(i);
+
+  //value={this.state.carDetails.manufactureYear}
 
 }
 
 updateCardInputValue=(evt,i)=> {
+  console.log(this.state.card_data);
+  console.log(evt.target.value);
 
     this.state.card_data[i]=evt.target.value;
-  //  console.log(this.state.card_data);
+    console.log(this.state.card_data[i]);
+
 
 }
 
@@ -2412,23 +2445,49 @@ onChange = date => this.setState({ date })
               })()}
                   <label for="ticketNumber">מספר כרטיס</label>
                   <input type="text" id="ticketNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"
-                  value={this.state.cardForm.ticketNumber.value}
-                   onChange={(event) => this.inputChangedHandler(event)}/>
+                  value={this.state.cardForm.ticketNumber.value} 
+                  // {this.props.cards.length +1}
+                  // value={this.state.cardForm.ticketNumber.value}
+                  //  onChange={(event) => this.inputChangedHandler(event)}
+                   />
                 </div>
+                
   
                 <div class="form-group col-md-3" >
+                {(() => {
+                if(this.state.found && this.state.term!=''){
+                  this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
+                  //this.g(this.state.carDetails.carDescription.value);
+                  //console.log(this.state.carDetails);
+                }    
+                })()}
                   <label for="cardType">סוג כרטיס</label>
-                  <select id="inputState" class="form-control" onChange={(event) => this.inputChangedHandler(event)}>
-                    <option selected>ביטוח</option>
-                    <option>פרטי</option>
+                  <select id="cardType" class="form-control" 
+                  defaultValue={this.state.cardDetails.cardType} 
+                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,1)}>
+                      {this.state.found && this.state.term != '' && this.state.cardForm.cardType.value === 'פרטי' ? 
+                      <>
+                      <option >ביטוח</option>
+                        <option selected>פרטי</option> 
+                        </>
+                    : 
+                    <>
+                    <option selected >ביטוח</option>
+                    <option >פרטי</option> 
+                    </>} 
+                   
                   </select>
                 </div>
   
                 <div className="form-group col-md-3">
-                <label htmlFor="openingDate">תאריך פתיחה</label>
-                <input  type="text" name="openingDate" autocomplete="off" className="form-control" 
-                value={this.state.reportStartDate} 
-                onChange={(event) => this.inputChangedHandler(event)}  />
+                <label for="openingDate">תאריך פתיחה</label>
+                <input  type="text" id="openingDate" autocomplete="off" className="form-control" 
+                value= {this.state.found ?  this.state.cardDetails.openingDate : this.state.reportStartDate}
+                
+                // {this.state.cardDetails.openingDate}
+                // value={this.state.reportStartDate} 
+                // onChange={(event) => this.inputChangedHandler(event)} 
+                 />
               </div>
               </div> 
             </div>
@@ -2520,15 +2579,43 @@ onChange = date => this.setState({ date })
                 </div>
   
                 <div class="form-group col-md-3" >
+                {(() => {
+                   if(this.state.found){
+                    this.state.vehicleData.manufactureYear.value= this.state.carDetails.manufactureYear;
+                    console.log(this.state.vehicleData.manufactureYear.value)
+                    }    
+                 })()}
                   <label for="manufactureYear">שנת יצור</label>
-                  <select  id="manufactureYear" class="form-control" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} onChange={(event) => this.inputCarChangedHandler(event)}>
-                    <option selected></option>
+                  <select  id="manufactureYear" class="form-control"  style={{backgroundColor: "white"}}  
+                   value={ this.state.vehicleData.manufactureYear.value}  
+                  disabled={!this.state.formIsValid} onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,9)}>
+                  
+                    {/* <option selected></option> */}
                     <option>2020</option>
                     <option>2019</option>
                     <option>2018</option>
                     <option>2017</option>
                     <option>2016</option>
-                    <option>2015 and more</option>
+                    <option>2015</option>
+                    <option>2014</option>
+                    <option>2013</option>
+                    <option>2012</option>
+                    <option>2011</option>
+                    <option>2010</option>
+                    <option>2009</option>
+                    <option>2008</option>
+                    <option>2007</option>
+                    <option>2006</option>
+                    <option>2005</option>
+                    <option>2004</option>
+                    <option>2003</option>
+                    <option>2002</option>
+                    <option>2001</option>
+                    <option>2000</option>
+                    <option>1999</option>
+                    <option>1998</option>
+                    <option>1997</option>
+        
                   </select>
                 </div>
 
