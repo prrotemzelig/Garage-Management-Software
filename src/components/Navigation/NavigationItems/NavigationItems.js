@@ -29,13 +29,13 @@ const navigationItems = (props ) => (
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/dailyUpdates">עדכונים יומיים   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null}
+            {/* {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null} */}
 
             <div className={classes.separator}></div>
 
             {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
 
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null}
+            {/* {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null} */}
 
             {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconOverview} link="/UserSettings">הגדרות  </NavigationItem> : null}
 
