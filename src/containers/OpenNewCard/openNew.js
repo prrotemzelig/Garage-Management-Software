@@ -17,6 +17,7 @@ import { updateObject, checkValidity, checkFormatNumbers} from '../../shared/uti
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import card from '../../components/Card/Card';
@@ -77,6 +78,7 @@ class openNew extends Component   {
     showTinsmithingDetailsDiv:true,
     showCustomerRequestsDiv:true,
     showUploadDocDiv:true,
+    showSendMailDiv: true,
 //    showWorkModel: false,
 
     cardForm: { 
@@ -358,7 +360,7 @@ class openNew extends Component   {
       formData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
   }
 
-  formData['ticketNumber'] = this.props.cards.length + 1;
+  formData['ticketNumber'] = this.props.cards.length + this.props.closeCards.length + 1;
   console.log(formData['ticketNumber']);
   const carData = {};
   for (let formElementIdentifier in this.state.vehicleData) {
@@ -2167,6 +2169,13 @@ switchDivModeHandlerDoc = () => {
       });
 }
 
+switchDivModeHandlerMail = () => {
+  this.setState(prevState => {
+      return {showSendMailDiv: !prevState.showSendMailDiv};
+      });
+}
+
+
 
 updateCarInputValue=(evt,i)=> {
   evt.preventDefault(); // with that we get the Card details
@@ -2424,7 +2433,14 @@ onChange = date => this.setState({ date })
     <form  onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandler} >פרטים</div>
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > פרטים </span> 
+              { !this.state.showDetailsDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandler}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandler}/>
+              }
+              </div>
             
             {this.state.showDetailsDiv ? 
             <div class="card-body text-dark bg-white" >
@@ -2495,8 +2511,17 @@ onChange = date => this.setState({ date })
           </div>
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandlerCar}>עדכון פרטי רכב</div>
-            
+
+             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > עדכון פרטי רכב </span> 
+              { !this.state.showCarInfoDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCar}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCar}/>
+              }
+              </div>
+
+
             {this.state.showCarInfoDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row">              
@@ -2573,7 +2598,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="lastVisit">ביקור אחרון</label>
-                  <input type="text" id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" 
+                  <input type="datetime-local"  id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" 
                   defaultValue={this.state.vehicleData.lastVisit.value}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,8)}/>
                 </div>
@@ -2626,11 +2651,13 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="deliveryDate" >תאריך מסירה</label> 
-                  <input type="text" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="datetime-local" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.vehicleData.deliveryDate.value}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,5)}/>
                 </div>
-  
+
+
+
                 <div class="form-group col-md-3" >
                 {(() => {
                    if(this.state.found){
@@ -2672,8 +2699,18 @@ onChange = date => this.setState({ date })
           </div>
   
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandlerCus}>עדכון פרטי לקוח</div>
             
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > עדכון פרטי לקוח </span> 
+              { !this.state.showCustomerDetailsDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCus}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCus}/>
+              }
+              </div>
+
+
+
             {this.state.showCustomerDetailsDiv ?
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
@@ -2684,7 +2721,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="customerNumber" >מספר לקוח</label>
-                  <input type="text" id="customerNumber" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off"
+                  <input type="text" id="customerNumber" class="form-control" autocomplete="off"
                   defaultValue={this.state.customerDetails.customerNumber.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,5)}/>
                 </div>
@@ -2696,7 +2733,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="customerName">שם לקוח</label>
-                  <input type="text" id="customerName" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off"
+                  <input type="text" id="customerName" class="form-control"  autocomplete="off"
                   defaultValue={this.state.customerDetails.customerName.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,3)}/>
                 </div>
@@ -2708,7 +2745,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="address">כתובת</label>
-                  <input type="text" id="address" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.address.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,0)}/>
                 </div>
@@ -2826,8 +2863,17 @@ onChange = date => this.setState({ date })
           </div>
   
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandlerTin}>נתוני כרטיס פחחות</div>
             
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > נתוני כרטיס פחחות </span> 
+              { !this.state.showTinsmithingDetailsDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerTin}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerTin}/>
+              }
+              </div>
+
+
             {this.state.showTinsmithingDetailsDiv ?
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
@@ -2862,7 +2908,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="insuranceCompany">חברת ביטוח</label>
-                  <input type="text" id="insuranceCompany" class="form-control" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="text" id="insuranceCompany" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.cardForm.insuranceCompany.value}
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,7)}/>
                 </div>
@@ -2926,7 +2972,17 @@ onChange = date => this.setState({ date })
           </div>
   
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandlerReq}>תלונות/בקשות הלקוח</div>  
+            
+
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > תלונות/בקשות הלקוח </span> 
+              { !this.state.showCustomerRequestsDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReq}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReq}/>
+              }
+              </div>
+             
             {this.state.showCustomerRequestsDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
@@ -2947,7 +3003,18 @@ onChange = date => this.setState({ date })
                : null }   
           </div>  
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} onClick={this.switchDivModeHandlerDoc}>העלאת תמונות וקבצים</div>
+
+
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span >העלאת תמונות וקבצים </span> 
+              { !this.state.showUploadDocDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerDoc}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerDoc}/>
+              }
+              </div>
+             
+
             {this.state.showUploadDocDiv ? 
               <div class="card-body text-dark bg-white" >
                 <div class="form-row" > 
@@ -2967,57 +3034,43 @@ onChange = date => this.setState({ date })
                : null }  
             </div>  
             <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header" style={{fontSize: "14px",fontWeight: "bold"}} >שליחת מייל לשמאי</div>
-            {this.state.showUploadDocDiv ? 
+
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span >שליחת מייל לשמאי/חברת ביטוח </span> 
+              { !this.state.showSendMailDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerMail}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerMail}/>
+              }
+              </div>
+
+            
+            {this.state.showSendMailDiv ? 
               <div class="card-body text-dark bg-white" >
                    <>
-          <Form onSubmit={this.handle_Submit.bind(this)}>
-            <FormGroup controlId="formBasicEmail">
+          <Form >
+            <FormGroup controlId="formBasicEmail" autocomplete="off">
               <Label className="text-muted">כתובת מייל</Label>
-              <Input
-                type="email"
-                name="email"
-                value={this.state.email}
-                className="text-primary"
-                onChange={this.handle_Change.bind(this, 'email')}
-                placeholder="הכנס כתובת מייל"
-              />
+              <Input type="email" name="email" value={this.state.email} className="text-primary"  placeholder="הכנס/י כתובת מייל" autocomplete="off" 
+                    onChange={this.handle_Change.bind(this, 'email')} />
             </FormGroup>
             <FormGroup controlId="formBasicName">
               <Label className="text-muted">שם</Label>
-              <Input
-                type="text"
-                name="name"
-                value={this.state.name}
-                className="text-primary"
-                onChange={this.handle_Change.bind(this, 'name')}
-                placeholder="שם"
-              />
+              <Input type="text" name="name" value={this.state.name} className="text-primary"  placeholder="הכנס/י שם" autocomplete="off"
+                    onChange={this.handle_Change.bind(this, 'name')} />
             </FormGroup>
             <FormGroup controlId="formBasicSubject">
               <Label className="text-muted">נושא</Label>
-              <Input
-                type="text"
-                name="subject"
-                className="text-primary"
-                value={this.state.subject}
-                onChange={this.handle_Change.bind(this, 'subject')}
-                placeholder="נושא"
-              />
+              <Input type="text" name="subject" className="text-primary" value={this.state.subject} placeholder="הכנס/י נושא" autocomplete="off"
+                  onChange={this.handle_Change.bind(this, 'subject')}/>
             </FormGroup>
             <FormGroup controlId="formBasicMessage">
               <Label className="text-muted">הודעה</Label>
-              <Input
-                type="textarea"
-                name="message"
-                className="text-primary"
-                value={this.state.message}
-                onChange={this.handle_Change.bind(this, 'message')}
-              />
+              <Input type="textarea" name="message" className="text-primary" value={this.state.message} placeholder="הכנס/י הודעה" autocomplete="off"
+                    onChange={this.handle_Change.bind(this, 'message')}/>
             </FormGroup>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+
+            <Button variant="primary" type="submit" style={{textAlign:"left",direction: "ltr",float: "left"}} onClick={this.handle_Submit.bind(this)}> שלח מייל </Button>
           </Form>
       </>
               </div>  
@@ -3091,6 +3144,7 @@ onChange = date => this.setState({ date })
 const mapStateToProps = state => { // here we get the state and return a javascript object
   return {
       cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
+      closeCards: state.card.closeCards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
       loading: state.card.loading,
       showSuccessCase: state.card.showSuccessCase,
       showUpdateSuccessCase: state.card.showUpdateSuccessCase,
