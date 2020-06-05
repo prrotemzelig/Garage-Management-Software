@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 const cardSearch = ( props ) => {
     const number=props.data;
@@ -21,17 +22,21 @@ const cardSearch = ( props ) => {
                 cardData={ig.name}>{ig.name} </td>;
     });
 
-    
-    return (
-        <tr  style={{fontSize: "18px", direction: "rtl"}}>
-    
-        {cardsDetailsOutput} 
-        <button 
+    /**
+     * <button 
         type="submit" 
         className="btn btn-md btn-primary sign-in-button"
         onClick={props.onClicked}         >
         הצגת פרטים מלאים
       </button> 
+     */
+    return (
+        <tr  style={{fontSize: "18px", direction: "rtl"}}>
+    
+        {cardsDetailsOutput} 
+        <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={props.onClicked}   >הצגת פרטים מלאים</Button> 
+
+        
         </tr> 
     );
     }

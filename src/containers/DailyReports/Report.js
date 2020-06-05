@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
-import {Bar} from 'react-chartjs-2';
+import {Bar,Pie,Line} from 'react-chartjs-2';
 import Date from './DatePic';
 
 
@@ -19,11 +19,13 @@ class BarChart extends Component {
       countParts:0,
       countRevenue:0,
       data:[],
-      card:[]
+      card:[],
+      closeCard:[],
+      chartType:''
     }
     this.onChildClicked = this.onChildClicked.bind(this);
     this.getData=this.getData.bind(this);
-  
+    this.chartSelected=this.chartSelected.bind(this);
   }
   
   onChildClicked() {
@@ -39,6 +41,19 @@ class BarChart extends Component {
   componentWillMount(){
     this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
   }
+  chartSelected(data){
+    if(data==='עוגה'){
+      this.state.chartType="Pie";
+    }
+    if(data==='מקלות'){
+      this.state.chartType="Bar";
+    }
+    if(data==='גרף'){
+      this.state.chartType="Line";
+    }
+    console.log(this.state.chartType);
+
+  }
 
 
 
@@ -53,7 +68,6 @@ createReport(data){
     if(openingDate.includes(this.state.date)){
       this.state.countOpen+=1;
       if(closeDate === undefined || closeDate === null || closeDate === ''){
-        console.log("aaa");
       }
       else{
         if(closeDate.includes(this.state.date)){
@@ -104,11 +118,13 @@ createReport(data){
 
   render() {
    let cards=[];
-     
+   
    if(this.props.cards !==''){
-    console.log(this.props.cards[0].closeDate);
-    if(this.state.card.length<2){
-      console.log(this.props.cards[0]);
+    this.state.card=this.props.cards;
+    this.state.closeCard=this.props.closeCards;
+    //console.log(this.props.cards[0].closeDate);
+    /*if(this.state.card.length<2){
+      //console.log(this.props.cards[0]);
       if(this.state.card.length===0){
           this.state.card.push(this.props.cards);
       }
@@ -119,10 +135,8 @@ createReport(data){
           this.state.card.push(this.props.cards);
         } 
       } 
-    }
+    }*/
    }
-    console.log(this.state.card);
-
     if(this.state.date!=='' && this.state.click){
       this.state.click=false;
       this.state.countClose=0;
@@ -131,14 +145,14 @@ createReport(data){
       this.state.countParts=0;
       this.state.countRevenue=0;
 
-      for(var i=0;i<this.state.card[0].length;i++){
-        cards.push(this.state.card[0][i]);
+      for(var i=0;i<this.state.card.length;i++){
+        cards.push(this.state.card[i]);
       }
-      if(this.state.card.length>1){
-        for(var i=0;i<this.state.card[1].length;i++){
-          cards.push(this.state.card[1][i]);
-        }
+      
+      for(var i=0;i<this.state.closeCard.length;i++){
+        cards.push(this.state.closeCard[i]);
       }
+      console.log(cards);
       this.createReport(cards);
 
     }
@@ -171,16 +185,51 @@ createReport(data){
       ]
     }]
    };
+   const data_pie = {
+    labels: [
+     'כרטיסים שנפתחו ביום זה',
+     'כרטיסים שנסגרו ביום זה',
+     'חלקים שנמכרו ביום זה',
+     'עבודות שהתבצעו ביום זה',
+     'סכום ההכנסות ביום זה'
+  ],
+  datasets: [{
+    label: '',
+    fill: false,
+    data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue],
+       backgroundColor: [
+         '#FF6384',
+         '#36A2EB',
+         '#FFCE56',
+         '#BD10E0',
+         '#880e4f'
+    ],
+    hoverBackgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56',
+      '#BD10E0',
+      '#880e4f'
+    ]
+  }]
+ };
    
      return (
        
       <div style={{direction: "rtl" }}>
+       
         
          <Date style={{direction: "rtl" }}
          getData={this.getData}
-         onClicked={this.onChildClicked}/>
+         onClicked={this.onChildClicked}
+         chartSelected={this.chartSelected}
+         />
+         
          <div style={{direction: "rtl" }}>
-          <Bar barSize="2000px" height="100px" data={data} />        
+          {this.state.chartType==="" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Pie" ? <Pie barSize="2000px" height="85px" data={data_pie} /> : <div></div>}
+          {this.state.chartType==="Line" ? <Line barSize="2000px" height="85px" data={data} /> : <div></div>}  
 
          </div>
        </div>
@@ -195,6 +244,7 @@ createReport(data){
 const mapStateToProps = state => { // here we get the state and return a javascript object
   return {
       cards: state.card.cards, 
+      closeCards: state.card.closeCards,
       loading: state.card.loading,
       token: state.auth.token,
       userId: state.auth.userId,

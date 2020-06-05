@@ -5,7 +5,7 @@ import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import ShowData from '../../components/Card/showData';
-import { Modal } from 'react-bootstrap';
+import { Modal ,Button } from 'react-bootstrap';
 class Search extends Component {
   
     constructor(props){
@@ -93,6 +93,13 @@ class Search extends Component {
       );
       }
       if(this.state.found && this.state.click){
+        /**
+         * <div className="form-group">
+              <button onClick={e => this.modalClose(e)} type="button">
+                סגור
+              </button>
+            </div>
+         */
         return(
           <div  >
             <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
@@ -101,15 +108,15 @@ class Search extends Component {
                 value={this.state.carNumber}
                 />
             </div>
+            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
             
-            <div className="form-group">
-              <button onClick={e => this.modalClose(e)} type="button">
-                סגור
-              </button>
-            </div>
           </Modal>
           
-          <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
+          <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
+            {direction: "rtl", backgroundColor: "white"}
+            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
+
+            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                         <td>שם לקוח</td>
@@ -123,6 +130,7 @@ class Search extends Component {
                     {cards}
                 </tbody>  
             </table>   
+            </div>
             </div>   
         );     
       }
