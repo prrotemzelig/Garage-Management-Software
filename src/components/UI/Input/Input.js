@@ -61,12 +61,12 @@ const input = ( props ) => {
 };
 
 
-{/* <div className={classes.Input}>
+/* <div className={classes.Input}>
             
 <label className={classes.Label}>{props.label}
 {inputElement}</label>
 <label className={classes.text}>{props.text}</label>
-</div> */}
+</div> */
 
 
 export default input;

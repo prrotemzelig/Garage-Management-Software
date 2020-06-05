@@ -42,11 +42,11 @@ class Cards extends Component {
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
-                        <td scope="col" >מספר רישוי</td>
-                        <td scope="col" >מספר כרטיס</td>
-                        <td scope="col" >שם לקוח</td>
-                        <td scope="col" >תיאור רכב</td>
-                        <td scope="col" >תאריך פתיחה</td>
+                        <td>מספר רישוי</td>
+                        <td>מספר כרטיס</td>
+                        <td>שם לקוח</td>
+                        <td>תיאור רכב</td>
+                        <td>תאריך פתיחה</td>
     
                     </tr>
                 </thead>

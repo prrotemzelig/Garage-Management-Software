@@ -6,7 +6,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 //import firebase from 'firebase';
 import 'firebase/firestore';
-import config from "../../config";
+// import config from "../../config";
 
 export const authSignInStart = () => { // essentially we use this action to set a loading state and potentially show a spinner if we want to
     return {
@@ -105,7 +105,7 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
          
        // const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
        // axios2.get(branchNumber + '/users.json/' +queryParams ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
-        axios2.get(branchNumber + '/users.json/'  + '?email=' + email ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
+        axios2.get(branchNumber + '/users.json/?email=' + email ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
 
             .then(res => { // success case!
 

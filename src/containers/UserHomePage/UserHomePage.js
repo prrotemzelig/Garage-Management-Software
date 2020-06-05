@@ -8,7 +8,7 @@ import * as actions from '../../store/actions/index';
 import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite/no-important';
 import MiniCardComponent from '../../components/content/MiniCardComponent';
-import UnresolvedTicketsComponent from '../../components/content/UnresolvedTicketsComponent';
+// import UnresolvedTicketsComponent from '../../components/content/UnresolvedTicketsComponent';
 import TasksComponent from '../../components/content/TasksComponent';
 
 const styles = StyleSheet.create({
@@ -74,26 +74,18 @@ class UserHomePage extends Component {
     
     render() { 
 
-        let MiniCardColor1 ; 
-        let MiniCardColor2 ; 
         let MiniCardColor3 ; 
         let MiniCardColor4 ; 
 
         if(this.props.sidebarBackgroundColor==='primary'){
-            MiniCardColor1= '#7b1fa2' ;
-            MiniCardColor2='#9c27b0' ;
             MiniCardColor3= '#ba68c8';
             MiniCardColor4= '#e1bee7';
         }
         else if(this.props.sidebarBackgroundColor==='blue'){
-            MiniCardColor1= '#1976d2' ;
-            MiniCardColor2= '#2196f3';
             MiniCardColor3= '#64b5f6';
             MiniCardColor4= '#bbdefb';
         }
         else if(this.props.sidebarBackgroundColor==='green'){
-            MiniCardColor1= '#0097a7' ;
-            MiniCardColor2= '#00bcd4';
             MiniCardColor3= '#4dd0e1';
             MiniCardColor4= '#b2ebf2';
         }

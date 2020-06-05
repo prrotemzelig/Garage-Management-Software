@@ -4,18 +4,18 @@ import { connect } from 'react-redux';
 
 import classes from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NavigationItem';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+// import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 import IconOverview from '../../../assets/icon-overview.js';
 import IconTickets from '../../../assets/icon-tickets.js';
 import IconIdeas from '../../../assets/icon-ideas.js';
 import IconContacts from '../../../assets/icon-contacts';
-import IconAgents from '../../../assets/icon-agents';
+// import IconAgents from '../../../assets/icon-agents';
 import IconArticles from '../../../assets/icon-articles';
 import IconSettings from '../../../assets/icon-settings';
 import IconSubscription from '../../../assets/icon-subscription';
-import IconBurger from '../../../assets/icon-burger';
-import SettingsIcon from '@material-ui/icons/Settings';
+// import IconBurger from '../../../assets/icon-burger';
+// import SettingsIcon from '@material-ui/icons/Settings';
 
 const navigationItems = (props ) => (
     <ul className={classes.NavigationItems}>
@@ -38,7 +38,7 @@ const navigationItems = (props ) => (
 
             {/* {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconSettings} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null} */}
 
-            {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconSettings} link="/UserSettings">הגדרות  </NavigationItem> : null}
+            {/* {(props.isAuthenticated && (props.userPermissions ==='User' || props.userPermissions ==='basic')) ? <NavigationItem icon={IconSettings} link="/UserSettings">הגדרות  </NavigationItem> : null} */}
 
             {!props.isAuthenticated
             ? <NavigationItem icon={IconArticles} link="/auth">התחברות   </NavigationItem>

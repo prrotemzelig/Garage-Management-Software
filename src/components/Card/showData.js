@@ -1,16 +1,16 @@
-import Button2 from '../UI/Button/Button';
 import React, { Component } from 'react'
+// import Button2 from '../UI/Button/Button';
 import DatePicker from "react-datepicker";
 import { connect } from 'react-redux';
-import classes from '../../components/Card/Card.module.css';
-import Card from './CardSearch';
+// import classes from '../../components/Card/Card.module.css';
+// import Card from './CardSearch';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import { Modal } from 'react-bootstrap';
 
 
-class showData extends React.Component   {
+class showData extends Component   {
     constructor(props){
         super(props);
         this.state = {
@@ -57,9 +57,6 @@ class showData extends React.Component   {
 
       }
     }
-      componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-        this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber); 
-      }
       
       render () {
         const partsDetails = []; // this is a code to transform each of my open card into an array of all the open cards.

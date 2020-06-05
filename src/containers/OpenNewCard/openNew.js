@@ -2,31 +2,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import dd from './openNew.module.css';
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 //import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { database } from 'firebase';
+// import { database } from 'firebase';
 import "react-datepicker/dist/react-datepicker.css";
-import Image from './images.js';
-import Button2 from '../../components/UI/Button/Button';
-import Spinner from '../../components/UI/Spinner/Spinner';
+// import Image from './images.js';
+// import Button2 from '../../components/UI/Button/Button';
+// import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../store/actions/index';
-import { updateObject, checkValidity, checkFormatNumbers} from '../../shared/utility'; //
+import { updateObject, checkValidity} from '../../shared/utility'; //checkFormatNumbers
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import card from '../../components/Card/Card';
-import { FaThinkPeaks } from 'react-icons/fa';
+// import card from '../../components/Card/Card';
+// import { FaThinkPeaks } from 'react-icons/fa';
 import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
-import Aux from '../../hoc/Auxn/Auxn';
 import * as emailjs from 'emailjs-com'
-import { FormFeedback, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 
 
 
@@ -1552,7 +1551,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
          
             <div className={classes.separator}></div>
     
-          <Modal.Body  style={{ backgroundColor:"#6c757d" , display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none"}}   >
+          <Modal.Body  style={{ backgroundColor:"#6c757d" , display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none"}}   >
          
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto"}}> 
            
@@ -1779,7 +1778,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
          
             <div className={classes.separator}></div>
     
-          <Modal.Body  style={{ backgroundColor:"lightsteelblue" , display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none"}}   >
+          <Modal.Body  style={{ backgroundColor:"lightsteelblue" , display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none"}}   >
          
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto"}}> 
            
@@ -2388,7 +2387,7 @@ onChange = date => this.setState({ date })
   render () {
     const imgTag = this.buildImgTag();
 
-    let { licenseNumber , ticketNumber } = this.state;
+    // let { licenseNumber , ticketNumber } = this.state;
 
   
 
@@ -2471,7 +2470,7 @@ onChange = date => this.setState({ date })
   
                 <div class="form-group col-md-3" >
                 {(() => {
-                if(this.state.found && this.state.term!=''){
+                if(this.state.found && this.state.term !==''){
                   this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
                   //this.g(this.state.carDetails.carDescription.value);
                   //console.log(this.state.carDetails);
@@ -2481,7 +2480,7 @@ onChange = date => this.setState({ date })
                   <select id="cardType" class="form-control" 
                   defaultValue={this.state.cardDetails.cardType} 
                    onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,1)}>
-                      {this.state.found && this.state.term != '' && this.state.cardForm.cardType.value === 'פרטי' ? 
+                      {this.state.found && this.state.term !== '' && this.state.cardForm.cardType.value === 'פרטי' ? 
                       <>
                       <option >ביטוח</option>
                         <option selected>פרטי</option> 
@@ -2527,7 +2526,7 @@ onChange = date => this.setState({ date })
               <div class="form-row">              
                 <div class="form-group col-md-3" >
                 {(() => {
-                if(this.state.found && this.state.term!=''){
+                if(this.state.found && this.state.term !==''){
                   this.state.vehicleData.carDescription.value=this.state.carDetails.carDescription;
                   //this.g(this.state.carDetails.carDescription.value);
                   //console.log(this.state.carDetails);
@@ -2541,7 +2540,7 @@ onChange = date => this.setState({ date })
   
                 <div class="form-group col-md-3" >
                  {(() => {
-                   if(this.state.found && this.state.term!=''){
+                   if(this.state.found && this.state.term !==''){
                     this.state.vehicleData.speedometer.value= this.state.carDetails.speedometer;
                     //this.state.carDetails.speedometer=this.state.term;
                     }    

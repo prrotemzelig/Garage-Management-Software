@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { updateObject, checkValidity} from '../../shared/utility'; 
+import { updateObject} from '../../shared/utility'; 
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import axios from '../../axios-cards';
 import * as actions from '../../store/actions/index';
@@ -13,11 +13,11 @@ import CheckboxOn from '../../assets/checkbox-on';
 import CheckboxOff from '../../assets/checkbox-off';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
-import { Modal ,Button } from 'react-bootstrap';
-import classes from './TasksComponent.module.css';
+// import AddIcon from '@material-ui/icons/Add';
+// import CheckIcon from '@material-ui/icons/Check';
+// import CloseIcon from '@material-ui/icons/Close';
+// import { Modal ,Button } from 'react-bootstrap';
+// import classes from './TasksComponent.module.css';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 
 import { DropdownItem } from "reactstrap";
@@ -250,8 +250,8 @@ class TasksComponent extends React.Component {
     
 
     renderEdit = (title, tag, checked, taskKey, list, isEdit) => { 
-        let backgroundColor = '#F0F1F7';
-        let color= '#9FA2B4';
+        // let backgroundColor = '#F0F1F7';
+        // let color= '#9FA2B4';
        
         return(
         <Row horizontal="center" vertical="center">
@@ -435,7 +435,7 @@ class TasksComponent extends React.Component {
 
     render() {
         //  ...this.props.userTask.map( task => (task.list==='TODO' ? (this.renderTask2(task.title, task.tag , task.index,task.checked)) : this.getNextTag))
-        let { isEditOpen } = this.state;
+        // let { isEditOpen } = this.state;
         return (
             <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div  class="form-group col-md-4"> 
