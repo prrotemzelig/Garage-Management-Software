@@ -90,17 +90,6 @@
     "css-loader": "^3.5.3",
     "react-bootstrap": "^0.33.1",
     "react-scripts": "latest"
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/prrotemzelig/Garage-Management-Software.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/prrotemzelig/Garage-Management-Software/issues"
-  },
-  "homepage": "https://github.com/prrotemzelig/Garage-Management-Software#readme"
+  }
+  
 }
