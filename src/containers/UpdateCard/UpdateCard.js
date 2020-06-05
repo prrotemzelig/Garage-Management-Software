@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import './UpdateCard.css'
 import Search from './SearchEngine.js';
 
-
-class SearchBar extends React.Component {
+class SearchBar extends Component {
   
   constructor(props){
     super(props);

@@ -105,7 +105,7 @@ createReport(data){
   render() {
    let cards=[];
      
-   if(this.props.cards!=''){
+   if(this.props.cards !==''){
     console.log(this.props.cards[0].closeDate);
     if(this.state.card.length<2){
       console.log(this.props.cards[0]);
@@ -123,7 +123,7 @@ createReport(data){
    }
     console.log(this.state.card);
 
-    if(this.state.date!='' && this.state.click){
+    if(this.state.date!=='' && this.state.click){
       this.state.click=false;
       this.state.countClose=0;
       this.state.countOpen=0;

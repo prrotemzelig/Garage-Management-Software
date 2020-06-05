@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import classes from './NavigationItem.module.css';
-import Icon from '../../../../assets/icon-overview.js';
+// import Icon from '../../../../assets/icon-overview.js';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 
 //const navigationItem = ( props ) => (
 
-class navigationItem extends React.Component {
+class navigationItem extends Component {
     
 static propTypes = {
     match: PropTypes.object.isRequired,

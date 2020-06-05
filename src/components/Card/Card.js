@@ -100,9 +100,6 @@ const card = ( props ) => {
     );
 };
 
-{/* <div className={classes.Card} >
-<p style={{color:'black'}}>פרטי הרכב </p>
-<p> {cardsDetailsOutput}</p>
-</div> */}
+
 
 export default card;

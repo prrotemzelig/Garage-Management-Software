@@ -5,9 +5,9 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import axios from '../../axios-cards';
 import * as actions from '../../store/actions/index';
 
-import { Button } from "reactstrap";
+// import { Button } from "reactstrap";
 import classes from './fixedPlugin.module.css';
-import SettingsIcon from '@material-ui/icons/Settings';
+// import SettingsIcon from '@material-ui/icons/Settings';
 
 class FixedPlugin extends Component {
   constructor(props) {

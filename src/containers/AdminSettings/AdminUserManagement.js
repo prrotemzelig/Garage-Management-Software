@@ -9,7 +9,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from '../../components/UI/Modal/Modal.module.css';
 import { Modal ,Button } from 'react-bootstrap';
 import { updateObject, checkValidity} from '../../shared/utility'; 
-import { StyleSheet, css } from 'aphrodite/no-important';
+// import { StyleSheet, css } from 'aphrodite/no-important';
 
 
 class AdminUserManagement extends Component {
@@ -337,7 +337,7 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
             </Modal.Header>
       
               <div className={classes.separator}></div>
-            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
+            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
                     {errorMessage}
               <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
               <div class="form-group col-md-6"  style={{ marginBottom: "4px"}}   > 
@@ -464,16 +464,16 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
 
 renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName) => { ///*** TOAST modal! ****
 
-    let nodeBranchNumber = '';
-    if(userBranchNumber === 'Talpiot'){
-        nodeBranchNumber= 'תלפיות'
-    }
-    else if(userBranchNumber === 'GivatShaul'){
-        nodeBranchNumber= 'גבעת שאול'
-    }
-    else if(userBranchNumber === 'Modiin'){
-        nodeBranchNumber= 'מודיעין'
-    }
+    // let nodeBranchNumber = '';
+    // if(userBranchNumber === 'Talpiot'){
+    //     nodeBranchNumber= 'תלפיות'
+    // }
+    // else if(userBranchNumber === 'GivatShaul'){
+    //     nodeBranchNumber= 'גבעת שאול'
+    // }
+    // else if(userBranchNumber === 'Modiin'){
+    //     nodeBranchNumber= 'מודיעין'
+    // }
 
 
     let workButtons =
@@ -491,7 +491,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
             <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
               <Modal.Title  >מחיקת משתמש</Modal.Title>   
             </Modal.Header>
-            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
+            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
                     
               <div class="form-row" style={{ direction: "rtl" ,fontSize: "22px", marginRight:"auto",fontWeight: "bold"}}> 
             האם למחוק את משתמש {firstName} {lastName}?
@@ -510,16 +510,16 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
 
   renderAddNewTaskModal = ( userKey,userBranchNumber,userToken,firstName,lastName) => { ///*** TOAST modal! ****
 
-    let nodeBranchNumber = '';
-    if(userBranchNumber === 'Talpiot'){
-        nodeBranchNumber= 'תלפיות'
-    }
-    else if(userBranchNumber === 'GivatShaul'){
-        nodeBranchNumber= 'גבעת שאול'
-    }
-    else if(userBranchNumber === 'Modiin'){
-        nodeBranchNumber= 'מודיעין'
-    }
+    // let nodeBranchNumber = '';
+    // if(userBranchNumber === 'Talpiot'){
+    //     nodeBranchNumber= 'תלפיות'
+    // }
+    // else if(userBranchNumber === 'GivatShaul'){
+    //     nodeBranchNumber= 'גבעת שאול'
+    // }
+    // else if(userBranchNumber === 'Modiin'){
+    //     nodeBranchNumber= 'מודיעין'
+    // }
 
     let workButtons =
         <div class="form-group" style={{marginBottom: "4px"}}>
@@ -537,7 +537,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
             <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
               <Modal.Title  >הוספת משימה חדשה למשתמש</Modal.Title>   
             </Modal.Header>
-            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",maxHeight: "100%",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
+            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
                     
               <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
               <div class="form-group col-md-12"  style={{ marginBottom: "4px",width:"100%",height: "100%"}}   > 
@@ -560,12 +560,12 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
   
 
     render () {
-        let cards;
+        // let cards;
         console.log(window.innerWidth);
 
-        if (this.props.loading) {
-            cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
-        }
+        // if (this.props.loading) {
+        //     cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
+        // }
 
         // else if ( !this.props.loading ) { // if it not true - if we not loading
         //     cards = this.props.cards.map( card => (
@@ -744,7 +744,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
     }
 }
 
-{/* <tr>
+/* <tr>
                 
 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>                        
@@ -755,7 +755,7 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
 
 </td>
-</tr> */}
+</tr> */
 const mapStateToProps = state => { 
     return {
         showSuccessCase: state.admin.showSuccessCase,

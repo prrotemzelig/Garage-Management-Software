@@ -6,7 +6,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import ShowData from '../../components/Card/showData';
 import { Modal } from 'react-bootstrap';
-class Search extends React.Component {
+class Search extends Component {
   
     constructor(props){
         super(props);
@@ -39,12 +39,16 @@ class Search extends React.Component {
 
   check(data){
     if(data.cardData.licenseNumber===this.state.carNumber){
+      //this.setState({ found: true });
+
       this.state.found=true;
     }
   }
   
     render () {
       let cards;
+      //this.setState({ carNumber: this.props.value });
+
       this.state.carNumber= this.props.value;
       console.log(this.state.carNumber);
           if(this.state.carNumber!== "" ){
@@ -75,11 +79,11 @@ class Search extends React.Component {
         <table class="table " style={ this.props.backgroundColor === 'light' ? {direction: "rtl",fontFamily: "Alef Hebrew" }:{ direction: "rtl",fontFamily: "Alef Hebrew", color: "white"}}>
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
-                        <td scope="col" >שם לקוח</td>
-                        <td scope="col" >מספר רכב</td>
-                        <td scope="col" >תאריך הנזק</td>
-                        <td scope="col" >מספר כרטיס</td>
-                        <td scope="col" >תאריך סגירה</td>  
+                        <td>שם לקוח</td>
+                        <td>מספר רכב</td>
+                        <td>תאריך הנזק</td>
+                        <td>מספר כרטיס</td>
+                        <td>תאריך סגירה</td>  
                     </tr> 
                 </thead>
                 <tbody >
@@ -108,11 +112,11 @@ class Search extends React.Component {
           <table class="table " style={{direction: "rtl",fontFamily: "Alef Hebrew"}}>
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
-                        <td scope="col" >שם לקוח</td>
-                        <td scope="col" >מספר רכב</td>
-                        <td scope="col" >תאריך הנזק</td>
-                        <td scope="col" >מספר כרטיס</td>
-                        <td scope="col" >תאריך פתיחה</td>     
+                        <td>שם לקוח</td>
+                        <td>מספר רכב</td>
+                        <td>תאריך הנזק</td>
+                        <td>מספר כרטיס</td>
+                        <td>תאריך פתיחה</td>     
                     </tr>     
                 </thead>
                 <tbody >

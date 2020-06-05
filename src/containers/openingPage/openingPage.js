@@ -18,18 +18,3 @@ class openingPage extends Component {
     }
 }
 export default openingPage;
-
-
-
-{/* <form className={classes.Opening}>
-<p><strong>ברוכים הבאים למוסכניק</strong></p> 
-<p> האתר הטוב ביותר לניהול המוסך שלך</p> 
-<p> כאן תוכל לנהל באופן מלא את המוסך שלך</p> 
-<p> ולקבל את חווית המשתמש הטובה ביותר</p> 
-
-
-           </form> */}
-
-    //        <div>
-    //        <Button style={classes.Button} btnType="openCard" disabled={true}>פתיחת כרטיס</Button>
-    //    </div> 

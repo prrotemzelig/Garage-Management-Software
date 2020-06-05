@@ -1,15 +1,9 @@
 //import React from 'react';
 import React, {Component} from 'react';
-import * as actions from '../../store/actions/index';
-
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
-import IconSearch from '../../assets/icon-search';
-import IconBellNew from '../../assets/icon-bell-new';
-import { connect } from 'react-redux';
-import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
-import SettingsIcon from '@material-ui/icons/Settings';
+
 
 const styles = StyleSheet.create({
     avatar: {

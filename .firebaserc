@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "garage-management-software",
-    "clear": "garage-management-softwa",
-    "domain": "garage-management-softwa"
+    "default": "garage-management-softwa"
   }
 }
