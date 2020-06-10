@@ -47,7 +47,8 @@ class Datepic extends React.Component {
                 <DatePicker
                         selected={ this.state.startDate }
                         onChange={ this.handleChange }
-                        dateFormat="MMMM d, yyyy"
+                        //dateFormat="MMMM d, yyyy"
+                        dateFormat="d/MM/yyyy"
                         className="form-control"
                 />
                 </div>

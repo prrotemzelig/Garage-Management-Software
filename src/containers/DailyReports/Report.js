@@ -5,6 +5,12 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import {Bar,Pie,Line} from 'react-chartjs-2';
 import Date from './DatePic';
+import {Grid} from "@material-ui/core";
+//import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+//import ApexCharts from 'apexcharts'
+
+
+
 
 
 class BarChart extends Component {
@@ -114,28 +120,22 @@ createReport(data){
     }  
   }
 }
-
+isMobile() {
+  let check = false;
+  ((a => {
+      if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+      }))(navigator.userAgent || navigator.vendor);
+  return check;
+ }
 
   render() {
    let cards=[];
-   
+   let v=this.isMobile();
+   console.log(v);
    if(this.props.cards !==''){
     this.state.card=this.props.cards;
     this.state.closeCard=this.props.closeCards;
-    //console.log(this.props.cards[0].closeDate);
-    /*if(this.state.card.length<2){
-      //console.log(this.props.cards[0]);
-      if(this.state.card.length===0){
-          this.state.card.push(this.props.cards);
-      }
-      if(this.state.card.length===1){
-        if(this.state.card[0][0].closeDate===this.props.cards[0].closeDate){
-        }
-        else{
-          this.state.card.push(this.props.cards);
-        } 
-      } 
-    }*/
+    
    }
     if(this.state.date!=='' && this.state.click){
       this.state.click=false;
@@ -158,16 +158,28 @@ createReport(data){
     }
    
     const data = {
+      animationEnabled: true,
+      exportEnabled: true,
+      theme: "light2", // "light1", "dark1", "dark2"
       labels: [
-       'כרטיסים שנפתחו ביום זה',
-       'כרטיסים שנסגרו ביום זה',
-       'חלקים שנמכרו ביום זה',
-       'עבודות שהתבצעו ביום זה',
-       'סכום ההכנסות ביום זה'
+        'כרטיסים שנפתחו',
+        'כרטיסים שנסגרו',
+        'חלקים שנמכרו',
+        'עבודות שהתבצעו',
+        'סכום ההכנסות'
     ],
     datasets: [{
       label: '',
       fill: false,
+      showpercentvalues: "1",
+      aligncaptionwithcanvas: "0",
+      captionpadding: "0",
+      decimals: "1", 
+      backgroundColor: "#FF6384",
+      plottooltext:
+      "<b>$percentValue</b> of our Android users are on <b>$label</b>",
+      centerlabel: "# Users: $value",
+      theme: "fusion",
       data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
          backgroundColor: [
            '#FF6384',
@@ -187,15 +199,24 @@ createReport(data){
    };
    const data_pie = {
     labels: [
-     'כרטיסים שנפתחו ביום זה',
-     'כרטיסים שנסגרו ביום זה',
-     'חלקים שנמכרו ביום זה',
-     'עבודות שהתבצעו ביום זה',
-     'סכום ההכנסות ביום זה'
+     'כרטיסים שנפתחו',
+     'כרטיסים שנסגרו',
+     'חלקים שנמכרו',
+     'עבודות שהתבצעו',
+     'סכום ההכנסות'
   ],
   datasets: [{
     label: '',
     fill: false,
+    showpercentvalues: "1",
+    aligncaptionwithcanvas: "0",
+    captionpadding: "0",
+    decimals: "1", 
+    backgroundColor: "#FF6384",
+    plottooltext:
+      "<b>$percentValue</b> of our Android users are on <b>$label</b>",
+    centerlabel: "# Users: $value",
+    theme: "fusion",
     data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue],
        backgroundColor: [
          '#FF6384',
@@ -212,32 +233,91 @@ createReport(data){
       '#880e4f'
     ]
   }]
- };
+   };
+   /*const options = {
+    labels: [
+      'כרטיסים שנפתחו',
+      'כרטיסים שנסגרו',
+      'חלקים שנמכרו',
+      'עבודות שהתבצעו',
+      'סכום ההכנסות'
+    ],
+    animationEnabled: true,
+    exportEnabled: true,
+    theme: "light2", // "light1", "dark1", "dark2"
+    data: [{
+      type: "line",
+      data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
+    }]
+  };*/
+  const options = [
+    {name: 'כרטיסים שנפתחו', uv: this.state.countOpen, pv: 2400, amt: 2400}, 
+    {name: 'כרטיסים שנסגרו', uv: this.state.countClose, pv: 1398, amt: 2210},
+    {name: 'חלקים שנמכרו', uv: this.state.countParts, pv: 9800, amt: 2290},
+    {name: 'עבודות שהתבצעו', uv: this.state.countWork, pv: 4300, amt: 2100},
+    {name: 'סכום ההכנסות', uv: this.state.countRevenue, pv: 3800, amt: 2500}
+
+];
+
+
    
      return (
-       
       <div style={{direction: "rtl" }}>
-       
+      
+       <Grid container direction="column">
         
          <Date style={{direction: "rtl" }}
          getData={this.getData}
          onClicked={this.onChildClicked}
          chartSelected={this.chartSelected}
          />
-         
-         <div style={{direction: "rtl" }}>
+         {v ? <div style={{direction: "rtl"}}>
+          {this.state.chartType==="" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Bar" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Line" ? <Line barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}  
+          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
+
+ 
+         </div>
+         : 
+         <div style={{direction: "rtl"}}>
           {this.state.chartType==="" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
           {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Pie" ? <Pie barSize="2000px" height="85px" data={data_pie} /> : <div></div>}
           {this.state.chartType==="Line" ? <Line barSize="2000px" height="85px" data={data} /> : <div></div>}  
+          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
 
+ 
          </div>
+         }
+         
+         </Grid>
        </div>
      );   
      
   }
+  /**
+   * {v ? <div style={{direction: "rtl"}}>
+          {this.state.chartType==="" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Bar" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Line" ? <Line barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}  
+          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
+
+ 
+         </div>
+         : 
+         <div style={{direction: "rtl"}}>
+          {this.state.chartType==="" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
+          {this.state.chartType==="Line" ? <Line barSize="2000px" height="85px" data={data} /> : <div></div>}  
+          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
+
+ 
+         </div>
+         }
+   */
   //          {this.state.click && this.state.date!='' ? <Bar height="100px" data={data} />:<Bar height="100px" data={data} />}
 
+//          {this.state.chartType==="Pie" ? <Pie barSize="2000px" height="85px" data={data_pie} /> : <div></div>}
 
 }
 
