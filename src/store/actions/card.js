@@ -1,6 +1,19 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-cards';
 
+export const purchaseSetCurrentCardKey = () => { 
+    return {
+        type: actionTypes.PURCHASE_SET_CURRENT_CARD_KEY 
+    };
+};
+
+
+export const setCurrentCardKey = () => {  
+    return dispatch => {
+        dispatch( purchaseSetCurrentCardKey() ); 
+        
+    };
+};
 
 export const purchaseWorksInit = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
@@ -107,7 +120,7 @@ export const cardUpdateStart = () => {
 
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
-export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,identifiedCardID ) => { 
+export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,identifiedCardID,userId ) => { 
   //  console.log(branchNumber);
     return dispatch => {
         dispatch( cardUpdateStart() ); // dispatch to the store
@@ -115,6 +128,7 @@ export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,id
         .then(res => {
       //  console.log(res.data.name);
         dispatch(cardUpdateSuccess(res.data.name, carData)); 
+        dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
 
         })
         .catch( error => {
@@ -149,13 +163,15 @@ export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,id
 };
 
 // this synchronous action creators
-export const cardOpeningSuccess = ( id, cardData, node ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+export const cardOpeningSuccess = ( id, cardData, node,currentTicketNumber ) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
     //also I want the cardData
     return { // here we return object where I have a type
         type: actionTypes.CARD_OPENING_SUCCESS,
         cardId: id, 
         cardData: cardData ,
-        node: node
+        node: node,
+        currentCardKey: id,
+        currentTicketNumber: currentTicketNumber
     };
 };
 
@@ -172,6 +188,7 @@ export const cardOpeningStart = () => {
         type: actionTypes.CARD_OPENING_START
     };
 };
+
 export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => { 
     console.log(cardData);
     return dispatch => {
@@ -181,7 +198,7 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
         axios.post(branchNumber + '/' + node + '.json?auth=' + token, cardData ) // send the HTTP request 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
             console.log(response.data)
-            dispatch(cardOpeningSuccess(response.data.name, cardData, node)); 
+            dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
 
             // this.props.history.push( '/' ); // here we navigate away
@@ -190,7 +207,13 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
             console.log(error);
             dispatch(cardOpeningFail(error));
 
-        } );
+        } )
+        
+        .finally(function(){
+            console.log("189");
+            dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
+
+        });
     };
 };
 

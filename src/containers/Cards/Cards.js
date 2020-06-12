@@ -18,12 +18,16 @@ class Cards extends Component {
     //and the cards I need to output of curse should be fetched from the backend
     render () {
         let cards;
+        let isLoading;
 
-        if (this.props.loading) {
-            cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
-        }
+//         if (!this.props.loading) {
+//             //,position: "center",textAlign: "center" 
+//             // position: "absolute",top: "50%", left: "50%",
+// //            marginTop: "-50px",marginLeft: "-50px",width: "100px", height: "100px"
+//             isLoading = <div ><Spinner/></div>;
+//         }
 
-        else if ( !this.props.loading ) { // if it not true - if we not loading
+         if ( !this.props.loading ) { // if it not true - if we not loading
             cards = this.props.cards.map( card => (
                 <Card
                     key={card.id}
@@ -33,8 +37,15 @@ class Cards extends Component {
                     />
             ) )
         }
+        //    {isLoading}
         // #525f7f
         return (
+            <div> 
+           
+            {this.props.loading ?
+                    <Spinner/>  
+             :
+
             <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
             {direction: "rtl", backgroundColor: "white"}
             : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
@@ -57,15 +68,12 @@ class Cards extends Component {
                 </tbody>
             </table> 
             </div>
+            }
+            </div>
         );
     }
 }
 
-// return (
-//     <div >
-//         {cards} 
-//     </div>
-// );
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
     return {

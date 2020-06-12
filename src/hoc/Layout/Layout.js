@@ -78,6 +78,7 @@ class Layout extends Component{
             <Row className={css(styles.container)} style={{backgroundColor:userBackgroundColor}}>
                 
             <Toolbar
+                backgroundColor={this.props.backgroundColor}
                 isAuth={this.props.isAuthenticated}
                 drawerToggleClicked={this.sideDrawerToggleHandler}
                 colorBackground={sidebarColor}/>

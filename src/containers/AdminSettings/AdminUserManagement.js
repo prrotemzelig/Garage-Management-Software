@@ -666,6 +666,8 @@ renderDeleteUserModal = ( userKey,userBranchNumber,userToken,firstName,lastName)
                      </>
                
                  ))
+
+                 
             }
 
             {this.props.GivatShaulUsers.map( user =>  (

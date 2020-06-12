@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
 });
 
 const TAGS = {
-    URGENT: { text: 'URGENT', backgroundColor: '#FEC400', color: '#FFFFFF' },
-    NEW: { text: 'NEW', backgroundColor: '#29CC97', color: '#FFFFFF' },
-    DEFAULT: { text: 'DEFAULT', backgroundColor: '#F0F1F7', color: '#9FA2B4' },
+    URGENT: { text: 'דחוף', backgroundColor: '#FEC400', color: '#FFFFFF' },
+    NEW: { text: 'חדש', backgroundColor: '#29CC97', color: '#FFFFFF' },
+    DEFAULT: { text: 'רגיל', backgroundColor: '#F0F1F7', color: '#9FA2B4' },
 }
 class TasksComponent extends React.Component {
 
@@ -149,34 +149,34 @@ class TasksComponent extends React.Component {
         let color;
 
         if(this.props.sidebarBackgroundColor==='primary'){
-            if(tag === 'URGENT'){
+            if(tag === 'דחוף'){
                 backgroundColor= "#7b1fa2";
                 color= "#FFFFFF"; }
-            else if (tag === 'NEW'){
+            else if (tag === 'חדש'){
                 backgroundColor= '#ba68c8';
                 color= '#FFFFFF'; }
           
             }
         
         else if(this.props.sidebarBackgroundColor==='blue'){
-            if(tag === 'URGENT'){
+            if(tag === 'דחוף'){
                 backgroundColor= "#1976d2";
                 color= "#FFFFFF"; }
-            else if (tag === 'NEW'){
+            else if (tag === 'חדש'){
                 backgroundColor= '#64b5f6';
                 color= '#FFFFFF'; }
         }
 
         else if(this.props.sidebarBackgroundColor==='green'){
-            if(tag === 'URGENT'){
+            if(tag === 'דחוף'){
                 backgroundColor= "#0097a7";
                 color= "#FFFFFF"; }
-            else if (tag === 'NEW'){
+            else if (tag === 'חדש'){
                 backgroundColor= '#4dd0e1';
                 color= '#FFFFFF'; }
         }
 
-        if(tag === 'DEFAULT'){
+        if(tag === 'רגיל'){
             if(this.props.backgroundColor==='light'){
                 backgroundColor = 'lightgray';
                 color = 'white';
@@ -332,17 +332,23 @@ class TasksComponent extends React.Component {
 
     }
 
-    getNextTag = (except = 'URGENT') => {
-        const tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
-        const tagIndex = (tagLabels.indexOf(except) + 1) % 3;
-        return TAGS[tagLabels[tagIndex]];
+    getNextTag = (tag) => { //(except = 'דחוף')
+        let tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
+        // const tagIndex = (tagLabels.indexOf(except) + 1) % 3;
+        if(tag === 'דחוף')
+            return TAGS[tagLabels[1]];
+            
+        if(tag === 'חדש')
+            return TAGS[tagLabels[2]];
+
+        if(tag === 'רגיל')
+            return TAGS[tagLabels[0]];
     }
 
     onTagClick = (taskKey,tag,list) =>  {
         //const items = prevState.items;
         const newTag = this.getNextTag(tag);
         this.props.onTaskUpdate(newTag.text, this.props.token, this.props.branchNumber, this.props.userKey,taskKey ,list, 'tag',this.props.userId); // this contains all the data of card 
-
     }       
 
     onAddButtonClick = () => this.setState(prevState => {
@@ -439,7 +445,7 @@ class TasksComponent extends React.Component {
         return (
             <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div  class="form-group col-md-4"> 
-            <CardComponent containerStyles={this.props.containerStyles} title="TODO" link="ראה הכל" subtitle="היום"
+            <CardComponent containerStyles={this.props.containerStyles} title="לטיפול" link="ראה הכל" subtitle="היום"
                 items={[
                     <Row horizontal="space-between" vertical="center">
                         <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="toDoNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
@@ -453,7 +459,7 @@ class TasksComponent extends React.Component {
             </div> 
 
             <div  class="form-group col-md-4"> 
-            <CardComponent containerStyles={this.props.containerStyles} title="DOING" link="ראה הכל" subtitle="היום"
+            <CardComponent containerStyles={this.props.containerStyles} title="בטיפול" link="ראה הכל" subtitle="היום"
             items={[
                 <Row horizontal="space-between" vertical="center">
                     <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="doingNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
@@ -467,7 +473,7 @@ class TasksComponent extends React.Component {
     </div>
 
 <div  class="form-group col-md-4"> 
-        <CardComponent containerStyles={this.props.containerStyles} title="DONE" link="ראה הכל" subtitle="היום"
+        <CardComponent containerStyles={this.props.containerStyles} title="טופל" link="ראה הכל" subtitle="היום"
         items={[
             <Row horizontal="space-between" vertical="center">
                     <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="doneNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
