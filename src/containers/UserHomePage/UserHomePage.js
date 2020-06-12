@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     lastRow: {
-        marginTop: 30,
+        marginTop: 20,
         display: 'block'
     },
     unresolvedTickets: {
@@ -47,19 +47,19 @@ const styles = StyleSheet.create({
         }
     },
     tasks: {
-        marginTop: 0,
+        marginTop: 20,
         direction: 'rtl',
         '@media (max-width: 1024px)': {
-            marginTop: 30
+            marginTop: 20
         }
     },
     tasksDark: {
-        marginTop: 0,
+        marginTop: 20,
         direction: 'rtl',
         backgroundColor: "#27293d" ,
         color: "rgba(255, 255, 255, 0.8)",   
         '@media (max-width: 1024px)': {
-            marginTop: 30
+            marginTop: 20
         }
     }
 });
@@ -105,6 +105,9 @@ class UserHomePage extends Component {
 
           
             <Row horizontal="space-between" style={{display: "block"}} className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
+                <div style={this.props.backgroundColor === 'light' ? {fontSize: "18px", fontWeight: "bold", textAlign: "center"} 
+                : {fontSize: "18px", fontWeight: "bold", textAlign: "center",color: "white"} }> רשימת מטלות </div>
+           
                 <TasksComponent 
                 
                 containerStyles={this.props.backgroundColor==='light' ?

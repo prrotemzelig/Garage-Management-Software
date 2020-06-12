@@ -1,15 +1,12 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import dd from './openNew.module.css';
 // import DatePicker from "react-datepicker";
 //import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 // import { database } from 'firebase';
 import "react-datepicker/dist/react-datepicker.css";
 // import Image from './images.js';
-// import Button2 from '../../components/UI/Button/Button';
-// import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../store/actions/index';
@@ -26,7 +23,7 @@ import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
 import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
-
+import Promise from 'bluebird'
 
 
 const getDateTime = () => {
@@ -58,7 +55,7 @@ class openNew extends Component   {
     userCarNumber:'',
     dataBaseCarNumber:'',
     cardDetails:{},
-    carDetails:{},
+    carDetails:{}, 
     imageFiles:[],
     imageArray:[],
     docFiles:[],
@@ -89,259 +86,67 @@ class openNew extends Component   {
           maxLength: 10, //need to change to 8 
           isNumeric: true
       },
-        valid: false,
-        touched: false
+        valid: false
       }, 
       
-      ticketNumber: {
-        value: '',
-        valid: false,
-        touched: false
-      }, 
-
-      cardType: {
-        value: '', //ביטוח
-        valid: false,
-        touched: false
-      } ,
-
-      openingDate: {
-        value: getDateTime(),
-        valid: false,
-        touched: false
-      },
-     
-      insuranceAgent:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-       
-      appraiser:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-          
-      insuranceCompany:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-          
-      customerParticipation:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-
-      policyNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-
-      claimNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-        
-      dateOfDamage:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-
-      customerRequests:{
-        value: '',
-        valid: false,
-        touched: false
-      }
-
+      ticketNumber: {value: ''}, 
+      cardType: {value: ''} ,
+      openingDate: {value: getDateTime()},
+      insuranceAgent:{value: ''},
+      appraiser:{value: ''},   
+      insuranceCompany:{value: '' },
+      customerParticipation:{value: ''},
+      policyNumber:{value: ''},
+      claimNumber:{value: ''},  
+      dateOfDamage:{value: ''},
+      customerRequests:{ value: ''}
     },
 
     vehicleData: { 
-
-    
-      carDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      speedometer:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-     
-      engineCapacity:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      color:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      chalkModel:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      lastVisit:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      manufactureYear:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      deliveryDate:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      driverName:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      code:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      carNote:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      carDescription:{value: '' },
+      speedometer:{value: ''},
+      engineCapacity:{value: '' },
+      color:{value: '' },
+      chalkModel:{ value: ''},
+      lastVisit:{value: '' },
+      manufactureYear:{value: ''},
+      deliveryDate:{value: ''},
+      driverName:{value: ''},
+      code:{ value: '' },
+      carNote:{value: '' }
     },
  
     customerDetails:{
-      
-      customerNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      customerName:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      address:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      city:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      postalCode:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      homePhone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      cellphone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      workingPhone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      identificationNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      mailAdress:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      orderNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      customerNote:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      customerNumber:{value: ''},
+      customerName:{value: ''},
+      address:{value: ''},
+      city:{value: ''},
+      postalCode:{value: '' },
+      homePhone:{ value: ''},
+      cellphone:{value: ''},
+      workingPhone:{value: ''},
+      identificationNumber:{value: '' },
+      mailAdress:{value: ''},
+      orderNumber:{value: '' },
+      customerNote:{value: ''}
     },
 
     cardWork:{
 
-      workDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      time:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      workDescription:{value: ''},
+      time:{value: ''},
+      gross:{ value: '' },
+      discount:{value: ''},
+      net:{ value: ''}
 
     },
   
     cardPart:{
-      partDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      amount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      partDescription:{value: '' },
+      amount:{value: ''},
+      gross:{value: ''},
+      discount:{value: ''},
+      net:{ value: '' }
     }
   }; 
 }
@@ -352,7 +157,97 @@ class openNew extends Component   {
 //           }
 //   };
 
-  cardOpeningHandler = ( event ) => {
+
+componentWillUnmount() {
+  console.log("666");
+     this.setTheStates();
+}
+
+componentDidUpdate(prevProps,prevState) {
+  // console.log("671");
+  // console.log(this.props.currentCardKey);
+  // console.log(this.state.identifiedCardID);
+
+  // Typical usage (don't forget to compare props):
+//    if (this.props.currentCardKey === '' ) { //&& this.props.currentCardKey === '' && this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== '' 
+//       console.log("678");
+// }
+
+//   else if (this.props.currentCardKey === this.state.identifiedCardID  ) { //&& this.props.currentCardKey === '' && this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== '' 
+//     console.log("684");
+// }
+//this.props.currentCardKey!== '' &&
+   if ( this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID === '' ) { //&& this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== ''
+    // console.log("687");
+    this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+    this.add();
+  }
+
+//   else if (this.props.currentCardKey!== ''  ) { //&& this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== '' 
+// }
+//  this.props.userID !== prevProps.userID
+  // else if (this.props.currentCardKey !== prevProps.currentCardKey ) { //&& this.props.currentCardKey === '' && this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== '' 
+  //     this.setTheStates();
+  // }
+// else if (this.props.currentCardKey === '' ) { //&& this.props.currentCardKey === '' && this.props.currentCardKey !== this.state.identifiedCardID && this.state.identifiedCardID !== '' 
+//     this.setTheStates();
+// }
+}
+
+componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
+  this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+}
+
+
+add = () => { 
+  // console.log("357");
+  let value = this.state.cardForm['licenseNumber'].value;
+
+  if(value  !== '' && this.props.currentCardKey !== ''  ){
+    this.setState({found: true}); // check!!
+    // console.log("208");
+
+    // console.log(this.state.found);
+     // this.state.found=true;
+      this.state.dataBaseCarNumber=this.state.cardForm.licenseNumber.value;
+    
+      for (let formElementIdentifier in this.state.cardForm) {
+        this.state.cardDetails[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
+    }
+
+    this.state.cardDetails['ticketNumber'] = this.props.currentTicketNumber;
+
+
+
+    for (let formElementIdentifier in this.state.vehicleData) {
+      this.state.carDetails[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
+  }
+
+  for (let formElementIdentifier in this.state.customerDetails) {
+    this.state.customer_details[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
+}
+
+      this.state.identifiedCardID=this.props.currentCardKey
+      this.state.branchNumber=this.props.branchNumber;
+
+      // console.log(this.props.currentCardKey);
+      // console.log(this.state.found);
+      // console.log(this.state.dataBaseCarNumber);
+      // console.log(this.state.cardDetails);
+      // console.log(this.state.customer_details);
+      // console.log(this.state.identifiedCardID);
+      // console.log(this.state.branchNumber);
+  }
+
+  this.props.onSetCurrentCardKey(); //this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID
+
+      if(this.state.found === true){
+        this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
+      }
+  }
+
+ 
+cardOpeningHandler = ( event ) => {
     event.preventDefault(); // with that we get the Card details
     const formData = {};
     for (let formElementIdentifier in this.state.cardForm) {
@@ -360,7 +255,7 @@ class openNew extends Component   {
   }
 
   formData['ticketNumber'] = this.props.cards.length + this.props.closeCards.length + 1;
-  console.log(formData['ticketNumber']);
+  // console.log(formData['ticketNumber']);
   const carData = {};
   for (let formElementIdentifier in this.state.vehicleData) {
     carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
@@ -381,19 +276,13 @@ for (let formElementIdentifier in this.state.customerDetails) {
 
   //  this.setState({found: true});
 
-  //  console.log(this.state.found);
-    this.props.onCardOpening(card,this.props.userId,this.props.token, this.props.branchNumber, 'cards'); // this contains all the data of card 
-    // this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+   this.props.onCardOpening(card,this.props.userId,this.props.token, this.props.branchNumber, 'cards'); // this contains all the data of card 
+    this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+    // console.log(this.state.cardForm['licenseNumber'].value);
 
+      // this.add();
+   
 
-    // let cards;    
-
-    // console.log(this.state.cardForm.licenseNumber.value);
-    //   cards = this.props.cards.map( card => (
-    //     this.check(card,this.state.cardForm.licenseNumber.value)
-    //   ))
-    
-  
     //   if(this.state.found === true){
     //     console.log("385");
     //     this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
@@ -423,19 +312,16 @@ for (let formElementIdentifier in this.state.customerDetails) {
  
 }
 
-
-
 inputChangedHandler = (event) => { 
-console.log(event.target.id);
-console.log(event.target.value);
+// console.log(event.target.id);
+// console.log(event.target.value);
 
   const updatedFormElement = updateObject(this.state.cardForm[event.target.id], { 
       // here we pass my cardForm and there (inputIdentifier) -> it show the control 
       // this.state.cardForm[inputIdentifier] -> this is the old object
       // the second object it a java script object
       value: event.target.value,
-      valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      touched: true
+      valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation)
   });
   const updatedCardForm = updateObject(this.state.cardForm, { // here we want to update the overall card for a given input identifer
       [event.target.id]: updatedFormElement // here we need to pass javascript object and pass a new properties and it should be dynamic input identifier where we pick a specific control.
@@ -466,123 +352,80 @@ console.log(event.target.value);
     if(this.state.found === true){
       this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
     }
-  }
-
-inputCarChangedHandler = (event) => { 
-const updatedFormElement = updateObject(this.state.vehicleData[event.target.id], { 
-    value: event.target.value,
-    //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-    touched: true
-});
-const updatedCardForm = updateObject(this.state.vehicleData, { 
-    [event.target.id]: updatedFormElement 
-});
-
-// let formIsValid = true;
-// for (let inputIdentifier in updatedCardForm) {
-//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-// }
-
-this.setState({vehicleData: updatedCardForm}); //, formIsValid: formIsValid
 }
 
+inputCarChangedHandler = (event) => { 
+      const updatedFormElement = updateObject(this.state.vehicleData[event.target.id], { 
+          value: event.target.value,
+      });
+      const updatedCardForm = updateObject(this.state.vehicleData, { 
+          [event.target.id]: updatedFormElement 
+      });
+      this.setState({vehicleData: updatedCardForm}); 
+}
 
-inputCusChangedHandler = (event) => { //inputIdentifier
-
-const updatedFormElement = updateObject(this.state.customerDetails[event.target.id], { 
-
-    value: event.target.value,
-    //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-    touched: true
-});
-
-const updatedCardForm = updateObject(this.state.customerDetails, { 
-    [event.target.id]: updatedFormElement 
-});
-
-// let formIsValid = true;
-// for (let inputIdentifier in updatedCardForm) {
-//     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-// }
-this.setState({customerDetails: updatedCardForm}); //, formIsValid: formIsValid
+inputCusChangedHandler = (event) => { 
+      const updatedFormElement = updateObject(this.state.customerDetails[event.target.id], { 
+          value: event.target.value,
+      });
+      const updatedCardForm = updateObject(this.state.customerDetails, { 
+          [event.target.id]: updatedFormElement 
+      });
+      this.setState({customerDetails: updatedCardForm}); 
 }
 
 inputNewWorkChangedHandler = (event) => { 
-  const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
-      value: event.target.value,
-     // value: checkFormatNumbers(event.target.value),
-
-      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      touched: true
-  });
-  const updatedCardForm = updateObject(this.state.cardWork, { 
-      [event.target.id]: updatedFormElement 
-  });
-  
-  // let formIsValid = true;
-  // for (let inputIdentifier in updatedCardForm) {
-  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-  // }
-  this.setState({cardWork: updatedCardForm}); //, formIsValid: formIsValid
+      const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+          value: event.target.value,
+        // value: checkFormatNumbers(event.target.value),
+          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      });
+      const updatedCardForm = updateObject(this.state.cardWork, { 
+          [event.target.id]: updatedFormElement 
+      });
+      
+      this.setState({cardWork: updatedCardForm}); 
 }
 
 updateWorkChangedHandler = (event) => { 
-  const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
-      value: event.target.value,
-     // value: checkFormatNumbers(event.target.value),
-      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      touched: true
-  });
-  const updatedCardForm = updateObject(this.state.cardWork, { 
-      [event.target.id]: updatedFormElement 
-  });
-  
-  // let formIsValid = true;
-  // for (let inputIdentifier in updatedCardForm) {
-  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-  // }
-  //console.log(event.target.value);
-  this.setState({cardWork: updatedCardForm}); //, formIsValid: formIsValid
+      const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+          value: event.target.value,
+        // value: checkFormatNumbers(event.target.value),
+          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      });
+      const updatedCardForm = updateObject(this.state.cardWork, { 
+          [event.target.id]: updatedFormElement 
+      });
+      this.setState({cardWork: updatedCardForm}); 
 }
 
 
 inputNewPartChangedHandler = (event) => { 
-  const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
-      value: event.target.value,
-      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      touched: true
-  });
-  const updatedCardForm = updateObject(this.state.cardPart, { 
-      [event.target.id]: updatedFormElement 
-  });
-  
-  // let formIsValid = true;
-  // for (let inputIdentifier in updatedCardForm) {
-  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-  // }
-  this.setState({cardPart: updatedCardForm}); //, formIsValid: formIsValid
+      const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+          value: event.target.value,
+          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      });
+      const updatedCardForm = updateObject(this.state.cardPart, { 
+          [event.target.id]: updatedFormElement 
+      });
+      this.setState({cardPart: updatedCardForm});
 }
 
 UpdatePartChangedHandler = (event) => { 
-  const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
-      value: event.target.value,
-      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      touched: true
-  });
-  const updatedCardForm = updateObject(this.state.cardPart, { 
-      [event.target.id]: updatedFormElement 
-  });
-  
-  // let formIsValid = true;
-  // for (let inputIdentifier in updatedCardForm) {
-  //     formIsValid = updatedCardForm[inputIdentifier].valid && formIsValid;
-  // }
-  this.setState({cardPart: updatedCardForm}); //, formIsValid: formIsValid
+      const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+          value: event.target.value,
+          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+      });
+      const updatedCardForm = updateObject(this.state.cardPart, { 
+          [event.target.id]: updatedFormElement 
+      });
+      
+      this.setState({cardPart: updatedCardForm}); 
 }
     
 
 workOrPartsOpeningHandler = ( event,kind ) => {
-      event.preventDefault(); // with that we get the task details
+      event.preventDefault(); 
       const formData = {};
 
       if(kind === 'workData'){
@@ -594,82 +437,42 @@ workOrPartsOpeningHandler = ( event,kind ) => {
           formData['kind'] = kind;
       }
 
-      else if( kind === 'partsData'){// partDescription amount
+      else if( kind === 'partsData'){ 
         formData['partDescription'] = this.state.cardPart.partDescription.value;
         formData['amount'] = this.state.cardPart.amount.value;
         formData['gross'] = this.state.cardPart.gross.value;
         formData['discount'] = this.state.cardPart.discount.value;
         formData['net'] = this.state.cardPart.net.value;
         formData['kind'] = kind;
-
       }
+
       let cardKey = this.state.identifiedCardID;
       this.props.onWorkOrPartsOpening(formData, this.props.token, this.props.branchNumber, this.props.userId, kind,cardKey ); // this contains all the data of card 
-     
-      if(kind ==='workData'){
-        let updateCardWork = {
-          workDescription:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          time:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          gross:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          discount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          net:{
-            value: '',
-            valid: false,
-            touched: false
-          }
-        }
-        this.setState({cardWork: updateCardWork});
+      this.setWorkAndPartStates();
+  }
+
+  setWorkAndPartStates = () => {
+
+      let updateCardWork = {
+        workDescription:{value: ''},
+        time:{value: ''},
+        gross:{value: ''},
+        discount:{value: ''},
+        net:{value: ''}
       }
 
-
-     else if(kind ==='partsData'){
-        let updateCardWork = {
-          partDescription:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          amount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          gross:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          discount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          net:{
-            value: '',
-            valid: false,
-            touched: false
-          }
-        }
-        this.setState({cardPart: updateCardWork});
+      let updateCardPart = {
+        partDescription:{value: ''},
+        amount:{value: ''},
+        gross:{value: ''},
+        discount:{value: ''},
+        net:{value: ''}
       }
-
+    
+      this.setState({cardWork: updateCardWork});
+      this.setState({cardPart: updateCardPart});
       this.setState( { isAddNewWorkOrPartOpen: false } );
+      this.setState( { isUpdateWorkOrPartOpen: false } );
   }
 
 workOrPartsUpdateHandler = ( event,kind ) => {
@@ -685,7 +488,7 @@ workOrPartsUpdateHandler = ( event,kind ) => {
         itemData['kind'] = kind;
       }
 
-      else if( kind === 'partsData'){// partDescription amount
+      else if( kind === 'partsData'){ 
         itemData['partDescription'] = this.state.cardPart.partDescription.value;
         itemData['amount'] = this.state.cardPart.amount.value;
         itemData['gross'] = this.state.cardPart.gross.value;
@@ -697,74 +500,9 @@ workOrPartsUpdateHandler = ( event,kind ) => {
       let cardKey = this.state.identifiedCardID;
       let itemKey = this.state.itemKeyForUpdateWorkOrPart;
 
-      this.props.onWorkOrPartUpdate(itemData, this.props.token, this.props.branchNumber, this.props.userId,'cards', kind,cardKey,itemKey ); // this contains all the data of card 
-     
-      if(kind ==='workData'){
-        let updateCardWork = {
-          workDescription:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          time:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          gross:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          discount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          net:{
-            value: '',
-            valid: false,
-            touched: false
-          }
-        }
-        this.setState({cardWork: updateCardWork});
-      }
+      this.props.onWorkOrPartUpdate(itemData, this.props.token, this.props.branchNumber, this.props.userId,'cards', kind,cardKey,itemKey ); 
+      this.setWorkAndPartStates();
 
-
-     else if(kind ==='partsData'){
-        let updateCardWork = {
-          partDescription:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          amount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          gross:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          discount:{
-            value: '',
-            valid: false,
-            touched: false
-          },
-          net:{
-            value: '',
-            valid: false,
-            touched: false
-          }
-        }
-        this.setState({cardPart: updateCardWork});
-      }
-
-      
-      this.setState( { isUpdateWorkOrPartOpen: false } );
-      this.setState( { isAddNewWorkOrPartOpen: false } );
   }
   
  handleChange = date => {
@@ -773,8 +511,8 @@ workOrPartsUpdateHandler = ( event,kind ) => {
   });
 };
 
-cardUpdateHandler = ( event ) => {
-  event.preventDefault(); // with that we get the Card details
+cardUpdateHandler = ( event ) => { // עדכון כרטיס
+  event.preventDefault(); 
  
   const carData ={
     carDescription: this.state.car_data[0],
@@ -790,7 +528,7 @@ cardUpdateHandler = ( event ) => {
     speedometer: this.state.car_data[10]
   }
 
-  console.log(this.state.car_data[9]);
+  // console.log(this.state.car_data[9]);
   const cardData={
     appraiser: this.state.card_data[0],
     cardType: this.state.card_data[1],
@@ -806,7 +544,7 @@ cardUpdateHandler = ( event ) => {
     ticketNumber: this.state.cardDetails.ticketNumber
   }
 
-  console.log(this.state.cardDetails.ticketNumber);
+  // console.log(this.state.cardDetails.ticketNumber);
 
   const customerData={
     address: this.state.customer_data[0],
@@ -823,269 +561,49 @@ cardUpdateHandler = ( event ) => {
     workingPhone: this.state.customer_data[11]
   }
 
-  this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID); // this contains all the data of card
+  this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
   //this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.state.branchNumber,this.state.identifiedCardID); // this contains all the data of card 
+  this.setTheStates();
+  document.getElementById("workCardForm").reset(); 
+
 }
 
 cardCloseHandler = ( event ) => {
-event.preventDefault(); // with that we get the Card details
+      event.preventDefault(); 
 
-const cardData = {};
-for (let formElementIdentifier in this.state.cardForm) {
-  cardData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
-}
+      const cardData = {};
+      for (let formElementIdentifier in this.state.cardForm) {
+        cardData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
+      }
+      const carData = {};
+      for (let formElementIdentifier in this.state.vehicleData) {
+        carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
+      }
 
-const carData = {};
-for (let formElementIdentifier in this.state.vehicleData) {
-  carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
-}
+      const customerData = {};
+      for (let formElementIdentifier in this.state.customerDetails) {
+        customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
+      }
 
-const customerData = {};
-for (let formElementIdentifier in this.state.customerDetails) {
-  customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
-}
-
-  const card = { // here we  prepare the card data
-      cardData: cardData,
-      carData: carData, 
-      customerData: customerData,
-      userId: this.props.userId,
-      branchNumber: this.props.branchNumber,
-      closeDate: getDateTime()
-  }   
-  this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId); // this contains all the data of card 
-  this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards'); // this contains all the data of card 
-  
-  this.setTheStates();
-
-  // let updateTaskForm =  { 
- 
-  //     licenseNumber: {
-  //       value: '',
-  //       validation: {
-  //         required: true,
-  //         minLength: 3, //need to change to 7 
-  //         maxLength: 10, //need to change to 8 
-  //         isNumeric: true
-  //     },
-  //       valid: false,
-  //       touched: false
-  //     }, 
-      
-  //     ticketNumber: {
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     }, 
-
-  //     cardType: {
-  //       value: 'ביטוח',
-  //       valid: false,
-  //       touched: false
-  //     } ,
-
-  //     openingDate: {
-  //       value: getDateTime(),
-  //       valid: false,
-  //       touched: false
-  //     },
-     
-  //     insuranceAgent:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-       
-  //     appraiser:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-          
-  //     insuranceCompany:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-          
-  //     customerParticipation:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-
-  //     policyNumber:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-
-  //     claimNumber:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
+        const card = { 
+            cardData: cardData,
+            carData: carData, 
+            customerData: customerData,
+            userId: this.props.userId,
+            branchNumber: this.props.branchNumber,
+            closeDate: getDateTime()
+        }   
+        this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId);  
+        this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards');  
         
-  //     dateOfDamage:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     },
-
-  //     customerRequests:{
-  //       value: '',
-  //       valid: false,
-  //       touched: false
-  //     }  
-  // }
-
-  // let updateVehicleForm = {
-    
-  //   carDescription:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   speedometer:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-   
-  //   engineCapacity:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   color:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   chalkModel:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   lastVisit:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   manufactureYear:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   deliveryDate:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   driverName:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   code:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   carNote:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   }
-  // }
- 
-  // let updateCustomerForm = {
-    
-  //   customerNumber:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   customerName:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   address:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   city:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   postalCode:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   homePhone:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   cellphone:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   workingPhone:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   identificationNumber:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   mailAdress:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   orderNumber:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   customerNote:{
-  //     value: '',
-  //     valid: false,
-  //     touched: false
-  //   }
-  // }
-
-  // this.setState({car_data: []});
-  // this.setState({card_data: []});
-  // this.setState({customer_data: []});
-  // this.setState({branchNumber: ''});
-  // this.setState({identifiedCardID: ''});
-
-  //  this.setState({cardForm: updateTaskForm});
-  //  this.setState({vehicleData: updateVehicleForm });
-  //  this.setState({customerDetails: updateCustomerForm});
-  //  this.setState({found: false});
-  //  this.setState({dataBaseCarNumber: ''});
-
-  //   this.setState({carDetails: ''});
-  //   this.setState({userCarNumber: ''});
-
+        this.setTheStates();
 }
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
 
 
 setTheStates = () => {
-  
+
     let updateTaskForm =  { 
-   
         licenseNumber: {
           value: '',
           validation: {
@@ -1094,201 +612,53 @@ setTheStates = () => {
             maxLength: 10,
             isNumeric: true
         },
-          valid: false,
-          touched: false
+          valid: false
         }, 
-        
-        ticketNumber: {
-          value: '',
-          valid: false,
-          touched: false
-        }, 
-  
-        cardType: {
-          value: '', //ביטוח
-          valid: false,
-          touched: false
-        } ,
-  
-        openingDate: {
-          value: getDateTime(),
-          valid: false,
-          touched: false
-        },
-       
-        insuranceAgent:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-         
-        appraiser:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-            
-        insuranceCompany:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-            
-        customerParticipation:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-  
-        policyNumber:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-  
-        claimNumber:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-          
-        dateOfDamage:{
-          value: '',
-          valid: false,
-          touched: false
-        },
-  
-        customerRequests:{
-          value: '',
-          valid: false,
-          touched: false
+        ticketNumber: {value: ''}, 
+        cardType: {value: ''} ,
+        openingDate: {value: getDateTime()},
+        insuranceAgent:{value: ''},
+        appraiser:{value: ''},   
+        insuranceCompany:{value: ''},    
+        customerParticipation:{value: ''},
+        policyNumber:{value: ''},
+        claimNumber:{value: ''},
+        dateOfDamage:{value: ''},
+        customerRequests:{value: ''
         }  
     }
   
     let updateVehicleForm = {
-      
-      carDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      speedometer:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-     
-      engineCapacity:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      color:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      chalkModel:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      lastVisit:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      manufactureYear:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      deliveryDate:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      driverName:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      code:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      carNote:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      carDescription:{value: ''},
+      speedometer:{value: ''}, 
+      engineCapacity:{value: ''},
+      color:{value: ''},
+      chalkModel:{value: ''},
+      lastVisit:{value: ''},
+      manufactureYear:{value: ''},
+      deliveryDate:{value: ''},
+      driverName:{value: '' },
+      code:{value: ''},
+      carNote:{value: ''}
     }
    
     let updateCustomerForm = {
-      
-      customerNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      customerName:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      address:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      city:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      postalCode:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      homePhone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      cellphone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      workingPhone:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      identificationNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      mailAdress:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      orderNumber:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      customerNote:{
-        value: '',
-        valid: false,
-        touched: false
-      }
+      customerNumber:{value: ''},
+      customerName:{value: '' },
+      address:{value: ''},
+      city:{value: ''},
+      postalCode:{value: ''},
+      homePhone:{value: ''},
+      cellphone:{value: ''},
+      workingPhone:{value: ''},
+      identificationNumber:{value: ''},
+      mailAdress:{value: ''},
+      orderNumber:{value: ''},
+      customerNote:{value: ''}
     }
   
+    document.getElementById("workCardForm").reset(); 
+
     this.setState({car_data: []});
     this.setState({card_data: []});
     this.setState({customer_data: []});
@@ -1301,21 +671,17 @@ setTheStates = () => {
      this.setState({found: false});
      this.setState({dataBaseCarNumber: ''});
   
-      this.setState({carDetails: ''});
+      this.setState({carDetails: {}});
       this.setState({userCarNumber: ''});
   
+      this.setState({cardDetails: {}});
+      this.setState({customer_details: {}});
   }
 
 
 check(data,licenseNumber){
- // console.log("1068");
-  //console.log(data.cardData.licenseNumber);
- // console.log(licenseNumber);
-
 
   if(data.cardData.licenseNumber===licenseNumber){
-    //console.log("860");
-
 
     this.state.found=true;
     this.state.dataBaseCarNumber=data.cardData.licenseNumber;
@@ -1325,7 +691,15 @@ check(data,licenseNumber){
     this.state.identifiedCardID=data.id;//rotem
     this.state.branchNumber=data.branchNumber;
 
-    console.log(data.carData.manufactureYear);
+
+    // console.log(this.state.found);
+    // console.log(this.state.dataBaseCarNumber);
+    // console.log(this.state.cardDetails);
+    // console.log(this.state.customer_details);
+    // console.log(this.state.identifiedCardID);
+    // console.log(this.state.branchNumber);
+
+    // console.log(data.carData.manufactureYear);
     // this.setState({found: true});
     // this.setState({dataBaseCarNumber: data.cardData.licenseNumber});
     // this.setState({carDetails: data.carData});
@@ -1335,43 +709,17 @@ check(data,licenseNumber){
     // this.setState({identifiedCardID: data.id});
     // this.setState({branchNumber: data.branchNumber});
 
-
-
-    //     console.log(this.state.found);
-    //     console.log(this.state.dataBaseCarNumber);
-    //     console.log(this.state.carDetails);
-    //     console.log(this.state.cardDetails);
-    //     console.log(this.state.customer_details);
-    //     console.log(this.state.identifiedCardID);
-    //     console.log(this.state.branchNumber);
   }
 }
 
 
-
-
-componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-  this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
- // console.log("857");
-
-// if(this.state.found === true){
-//   console.log("859");
-//   this.props.onGetAllCardData(this.props.token, this.props.userId, this.props.branchNumber, 'cards', this.state.identifiedCardID);
-// }
-}
-
-
-
 closeWorksModal = (event) => {
-
-  this.setState( { isAddNewWorkOrPartOpen: false } );
-  this.setState( { isUpdateWorkOrPartOpen: false } );
+  this.setWorkAndPartStates();
   this.props.onWorkModalClose(this.props.token); // this contains all the data of card 
 // this.setState({ showWorkModel: false });
 };
 
 closeToastModal = (event) => {
-
   this.setState( { isAddNewWorkOrPartOpen: false } );
   this.setState( { isUpdateWorkOrPartOpen: false } );
   this.props.onToastModalClose(this.props.token); // this contains all the data of card 
@@ -1381,8 +729,7 @@ closeToastModal = (event) => {
 
 
 closePartsModal = (event) => {
-  this.setState( { isAddNewWorkOrPartOpen: false } );
-  this.setState( { isUpdateWorkOrPartOpen: false } );
+  this.setWorkAndPartStates();
   this.props.onPartsModalClose(this.props.token); // this contains all the data of card 
 };
 
@@ -1398,7 +745,6 @@ this.props.onPartModalOpening( ); // this contains all the data of card //this.p
 };
 
 renderToastModal = (message) => { ///*** TOAST modal! ****
-
 
 
   let workButtons =
@@ -1491,12 +837,12 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
             { isUpdateWorkOrPartOpen ?  
             <div>            
            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsUpdateHandler( event, 'workData')}> <CheckIcon/> עדכון </Button> 
-           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeEditButton}> <CloseIcon/> ביטול </Button> 
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
            </div>  
             :
             <div>
            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'workData')}> <CheckIcon/> אישור </Button> 
-           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
            
            </div>  
            
@@ -1537,8 +883,9 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cardType" >סוג כרטיס</label>
                  <select id="cardType" class="form-control" value={this.state.cardDetails.cardType} style={{marginLeft: "10px"}}  >
-                   <option selected>ביטוח</option>
-                   <option>פרטי</option>
+                    <option></option>
+                    <option>ביטוח</option>
+                    <option>פרטי</option>
                  </select>
                </div>
     
@@ -1714,12 +1061,12 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
           { isUpdateWorkOrPartOpen ?  
             <div>            
            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue", borderColor: "black"}}  onClick= {( event ) => this.workOrPartsUpdateHandler( event, 'partsData')}> <CheckIcon/> עדכון </Button> 
-           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
            </div>  
             :
             <div>
            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue", borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'partsData')}> <CheckIcon/> אישור </Button> 
-           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.closeAddButton}> <CloseIcon/> ביטול </Button> 
+           <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
            
            </div>  
            
@@ -1758,14 +1105,10 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
     
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cardType" >סוג כרטיס</label>
-                 <select id="cardType" class="form-control" value={this.state.cardDetails.cardType} style={{marginLeft: "10px"}}  >
-                 {/* {this.state.cardForm.cardType.value === 'פרטי' ? 
-                        <option selected>פרטי</option> 
-                    : 
-                    <option selected >ביטוח</option>
-                    }  */}
-                         <option selected>ביטוח</option>
-                   <option>פרטי</option>
+                 <select id="cardType" class="form-control" value={this.state.cardDetails.cardType} style={{marginLeft: "10px"}}>
+                      <option selected></option>
+                      <option >ביטוח</option>
+                      <option>פרטי</option>
                  </select>
                </div>
     
@@ -1879,10 +1222,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
 
 renderEditWorkOrPart = ( itemKey,list,workDescription,time,gross,discount,net) => { 
   return(
-      <EditIcon 
-      style={{ fontSize:"large" }}
-      onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net)}/>  
-    
+      <EditIcon style={{ fontSize:"large" }} onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net)}/>  
   );
 }
 
@@ -1894,63 +1234,22 @@ onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) 
   
   if(list ==='workData'){
     let updateCardWork = {
-      workDescription:{
-        value: workDescription,
-        valid: false,
-        touched: false
-      },
-      time:{
-        value: time,
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: gross,
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: discount,
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: net,
-        valid: false,
-        touched: false
-      }
+      workDescription:{value: workDescription},
+      time:{value: time},
+      gross:{value: gross},
+      discount:{value: discount},
+      net:{value: net}
     }
     this.setState({cardWork: updateCardWork});
   }
 
-
  else if(list ==='partsData'){
     let updateCardWork = {
-      partDescription:{
-        value: workDescription,
-        valid: false,
-        touched: false
-      },
-      amount:{
-        value: time,
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: gross,
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: discount,
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: net,
-        valid: false,
-        touched: false
-      }
+      partDescription:{value: workDescription},
+      amount:{value: time},
+      gross:{value: gross},
+      discount:{value: discount},
+      net:{value: net}
     }
     this.setState({cardPart: updateCardWork});
   }
@@ -1960,14 +1259,9 @@ onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) 
  // this.props.onWorkOrPartDelete(this.props.token, this.props.branchNumber,cardKey,itemKey ,list,this.props.userId); // this contains all the data of card 
 }      
 
-
-
 renderDeleteWorkOrPart = (itemKey,list) => { 
   return(
-      <DeleteIcon 
-      style={{ fontSize:"large" }}
-      onClick={() => this.onDeleteWorkOrPartClick(itemKey,list)}/>     
- 
+      <DeleteIcon style={{ fontSize:"large" }} onClick={() => this.onDeleteWorkOrPartClick(itemKey,list)}/>     
   );
 }
 
@@ -1992,151 +1286,11 @@ handleRemoveRow = () => {
 };
 
 
-closeAddButton = () => {
-  this.setState( { isAddNewWorkOrPartOpen: false } );
-  this.setState( { isUpdateWorkOrPartOpen: false } );
-
-    let updateCardWork = {
-      workDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      time:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
-    }
-    this.setState({cardWork: updateCardWork});
-  
-
-
-
-    let updateCardPart = {
-      partDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      amount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
-    }
-    this.setState({cardPart: updateCardPart});
-  
-
-};
-
-closeEditButton = () => {
-  this.setState( { isAddNewWorkOrPartOpen: false } );
-  this.setState( { isUpdateWorkOrPartOpen: false } );
-
-
-    let updateCardWork = {
-      workDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      time:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false, 
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
-    }
-    this.setState({cardWork: updateCardWork});
-  
-
-
-
-    let updateCardPart = {
-      partDescription:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      amount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      gross:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      discount:{
-        value: '',
-        valid: false,
-        touched: false
-      },
-      net:{
-        value: '',
-        valid: false,
-        touched: false
-      }
-    }
-    this.setState({cardPart: updateCardPart});
-  
-  
-};
-
-
-
 switchDivModeHandler = () => {
   this.setState(prevState => {
       return {showDetailsDiv: !prevState.showDetailsDiv};
       });
 }
-
 
 switchDivModeHandlerCar = () => {
   this.setState(prevState => {
@@ -2174,47 +1328,43 @@ switchDivModeHandlerMail = () => {
       });
 }
 
-
-
 updateCarInputValue=(evt,i)=> {
-  evt.preventDefault(); // with that we get the Card details
+      evt.preventDefault(); 
 
-  this.state.car_data[i]=evt.target.value;
-  console.log(this.state.car_data);
-  if(i===9){
-    this.state.carDetails.manufactureYear=evt.target.value;
-    this.state.vehicleData.manufactureYear.value=evt.target.value;
-    this.setState(prevState => {
-      return (this.state.vehicleData.manufactureYear.value);
-      });
-    //return (this.state.carDetails.manufactureYear);
-    
-    return (this.state.vehicleData.manufactureYear.value);
-
-  }
-  console.log(this.state.carDetails.manufactureYear);
-  console.log(this.state.vehicleData.manufactureYear.value);
-
-  console.log(i);
-
-  //value={this.state.carDetails.manufactureYear}
-
+      this.state.car_data[i]=evt.target.value;
+      // console.log(this.state.car_data);
+      if(i===9){
+        this.state.carDetails.manufactureYear=evt.target.value;
+        this.state.vehicleData.manufactureYear.value=evt.target.value;
+        this.setState(prevState => {
+          return (this.state.vehicleData.manufactureYear.value);
+          });
+        //return (this.state.carDetails.manufactureYear);
+        return (this.state.vehicleData.manufactureYear.value);
+      }
+      //value={this.state.carDetails.manufactureYear}
 }
 
 updateCardInputValue=(evt,i)=> {
-  console.log(this.state.card_data);
-  console.log(evt.target.value);
-
+  evt.preventDefault(); 
     this.state.card_data[i]=evt.target.value;
-    console.log(this.state.card_data[i]);
 
-
+   // this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
+    if(i===1){
+      this.state.cardDetails.cardType=evt.target.value;
+      this.state.cardForm.cardType.value=evt.target.value;
+      this.setState(prevState => {
+        return (this.state.cardForm.cardType.value);
+        });
+      //return (this.state.carDetails.manufactureYear);
+      return (this.state.cardForm.cardType.value);
+    }
 }
 
 updateCustomerInputValue(evt,i) {
   this.state.customer_data[i]=evt.target.value;
-  //console.log(this.state.customer_data);
 }
+
 buildImgTag(){
 
   return <div className="photo-container">
@@ -2290,6 +1440,7 @@ handle_Submit(e) {
  
    this.resetForm()
 }
+
 resetForm() {
   this.setState({
     name: '',
@@ -2298,13 +1449,13 @@ resetForm() {
     message: '',
   })
 }
+
 handle_Change = (param, e) => {
   this.setState({ [param]: e.target.value })
 }
 
 sendEmail(e) {
  
-
   const { name, email, subject, message } = this.state
   // create a new XMLHttpRequest
   var xhr = new XMLHttpRequest();
@@ -2389,16 +1540,12 @@ onChange = date => this.setState({ date })
 
     // let { licenseNumber , ticketNumber } = this.state;
 
-  
-
     // let cards;
     // if(this.state.userCarNumber!==""){
     //   cards = this.props.cards.map( card => (
     //     this.check(card)
     //   ))
     // }
-
-    
 
 
        /* <Toast>
@@ -2427,9 +1574,8 @@ onChange = date => this.setState({ date })
     //         </div>
     //     </div> 
 
-
   return (
-    <form  onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
+    <form id="workCardForm" onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
@@ -2477,20 +1623,13 @@ onChange = date => this.setState({ date })
                 }    
                 })()}
                   <label for="cardType">סוג כרטיס</label>
-                  <select id="cardType" class="form-control" 
-                  defaultValue={this.state.cardDetails.cardType} 
+                  <select id="cardType" class="form-control"  disabled={!this.state.formIsValid} style={{backgroundColor: "white"}} 
+                  value={this.state.cardForm.cardType.value} 
                    onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,1)}>
-                      {this.state.found && this.state.term !== '' && this.state.cardForm.cardType.value === 'פרטי' ? 
-                      <>
-                      <option >ביטוח</option>
-                        <option selected>פרטי</option> 
-                        </>
-                    : 
-                    <>
-                    <option selected >ביטוח</option>
-                    <option >פרטי</option> 
-                    </>} 
-                   
+                      <option></option>
+                      <option>ביטוח</option>
+                      <option>פרטי</option>
+            
                   </select>
                 </div>
   
@@ -2529,7 +1668,6 @@ onChange = date => this.setState({ date })
                 if(this.state.found && this.state.term !==''){
                   this.state.vehicleData.carDescription.value=this.state.carDetails.carDescription;
                   //this.g(this.state.carDetails.carDescription.value);
-                  //console.log(this.state.carDetails);
                 }    
                 })()}
                   <label for="carDescription">תאור הרכב</label>
@@ -2573,8 +1711,8 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="color" >צבע</label>
-                  <input  type="text" id="color" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off"
-                  defaultValue={this.state.vehicleData.color.value}
+                  <input  type="text" id="color" class="form-control" style={{backgroundColor: "white"}} aria-describedby="passwordHelpInline" autocomplete="off" disabled={!this.state.formIsValid}
+                  defaultValue={this.state.vehicleData.color.value}  
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,4)}/>
                 </div>
   
@@ -2597,8 +1735,8 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="lastVisit">ביקור אחרון</label>
-                  <input type="datetime-local"  id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" 
-                  defaultValue={this.state.vehicleData.lastVisit.value}
+                  <input type="datetime-local"  id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.vehicleData.lastVisit.value} style={{backgroundColor: "white"}}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,8)}/>
                 </div>
   
@@ -2606,7 +1744,7 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.manufactureYear.value= this.state.carDetails.manufactureYear;
-                    console.log(this.state.vehicleData.manufactureYear.value)
+                    // console.log(this.state.vehicleData.manufactureYear.value)
                     }    
                  })()}
                   <label for="manufactureYear">שנת יצור</label>
@@ -2615,6 +1753,7 @@ onChange = date => this.setState({ date })
                   disabled={!this.state.formIsValid} onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,9)}>
                   
                     {/* <option selected></option> */}
+                    <option></option>
                     <option>2020</option>
                     <option>2019</option>
                     <option>2018</option>
@@ -2654,8 +1793,6 @@ onChange = date => this.setState({ date })
                   defaultValue={this.state.vehicleData.deliveryDate.value}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,5)}/>
                 </div>
-
-
 
                 <div class="form-group col-md-3" >
                 {(() => {
@@ -2707,7 +1844,6 @@ onChange = date => this.setState({ date })
               <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCus}/>
               }
               </div>
-
 
 
             {this.state.showCustomerDetailsDiv ?
@@ -2965,14 +2101,12 @@ onChange = date => this.setState({ date })
   
           : null }
 
-
-
-
           </div>
   
+          <div class="form-row" > 
+          <div class="form-group col-md-6" >
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             
-
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > תלונות/בקשות הלקוח </span> 
               { !this.state.showCustomerRequestsDiv ? 
@@ -2985,24 +2119,28 @@ onChange = date => this.setState({ date })
             {this.state.showCustomerRequestsDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
-                <div class="form-group col-md-12" >
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.customerRequests.value= this.state.cardDetails.customerRequests;
                     }    
                  })()}
                   <label for="customerRequests" >תלונות/בקשות הלקוח</label>
+                  <Input type="textarea" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}
+                          defaultValue={this.state.cardForm.customerRequests.value}
+                          onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/>
+
+{/* 
                   <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.cardForm.customerRequests.value}
-                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/>
+                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/> */}
+
                 </div>
               </div> 
               
-            </div> 
                : null }   
           </div>  
-          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
 
+          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
 
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span >העלאת תמונות וקבצים </span> 
@@ -3013,26 +2151,29 @@ onChange = date => this.setState({ date })
               }
               </div>
              
-
             {this.state.showUploadDocDiv ? 
               <div class="card-body text-dark bg-white" >
                 <div class="form-row" > 
-                  <div class="form-group col-md-3">
+                  <div class="form-group col">
                     <h5>תמונות:</h5>
-                        <input type="file" multiple onChange={this.fileSelectedHandler}/>
+                        <input type="file" multiple onChange={this.fileSelectedHandler} disabled={!this.state.formIsValid}/>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col">
                     <h5>מסמכים:</h5>
-                        <input type="file" multiple onChange={this.fileSelectedHandler} />
+                        <input type="file" multiple onChange={this.fileSelectedHandler} disabled={!this.state.formIsValid} />
                   </div>
                   {imgTag}
 
-              
                 </div>  
               </div>  
                : null }  
-            </div>  
-            <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+            </div> 
+
+              </div> 
+
+              <div class="form-group col-md-6" >
+
+            <div class="card text-white bg-dark mb-6" style={{display: "flex"}}>
 
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span >שליחת מייל לשמאי/חברת ביטוח </span> 
@@ -3049,32 +2190,36 @@ onChange = date => this.setState({ date })
                    <>
           <Form >
             <FormGroup controlId="formBasicEmail" autocomplete="off">
-              <Label className="text-muted">כתובת מייל</Label>
-              <Input type="email" name="email" value={this.state.email} className="text-primary"  placeholder="הכנס/י כתובת מייל" autocomplete="off" 
-                    onChange={this.handle_Change.bind(this, 'email')} />
+              <Label >כתובת מייל</Label>
+              <Input type="email" name="email" value={this.state.email} placeholder="הכנס/י כתובת מייל" autocomplete="off" disabled={!this.state.formIsValid} 
+                    style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'email')} />
             </FormGroup>
             <FormGroup controlId="formBasicName">
-              <Label className="text-muted">שם</Label>
-              <Input type="text" name="name" value={this.state.name} className="text-primary"  placeholder="הכנס/י שם" autocomplete="off"
-                    onChange={this.handle_Change.bind(this, 'name')} />
+              <Label >שם</Label>
+              <Input type="text" name="name" value={this.state.name} placeholder="הכנס/י שם" autocomplete="off" disabled={!this.state.formIsValid}
+                   style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'name')} />
             </FormGroup>
             <FormGroup controlId="formBasicSubject">
-              <Label className="text-muted">נושא</Label>
-              <Input type="text" name="subject" className="text-primary" value={this.state.subject} placeholder="הכנס/י נושא" autocomplete="off"
-                  onChange={this.handle_Change.bind(this, 'subject')}/>
+              <Label >נושא</Label>
+              <Input type="text" name="subject" value={this.state.subject} placeholder="הכנס/י נושא" autocomplete="off" disabled={!this.state.formIsValid}
+                  style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'subject')}/>
             </FormGroup>
             <FormGroup controlId="formBasicMessage">
-              <Label className="text-muted">הודעה</Label>
-              <Input type="textarea" name="message" className="text-primary" value={this.state.message} placeholder="הכנס/י הודעה" autocomplete="off"
-                    onChange={this.handle_Change.bind(this, 'message')}/>
+              <Label >הודעה</Label>
+              <Input type="textarea" name="message" value={this.state.message} placeholder="הכנס/י הודעה" autocomplete="off" disabled={!this.state.formIsValid}
+                    style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'message')}/>
             </FormGroup>
 
-            <Button variant="primary" type="submit" style={{textAlign:"left",direction: "ltr",float: "left"}} onClick={this.handle_Submit.bind(this)}> שלח מייל </Button>
+            <Button variant="primary" type="submit" style={{textAlign:"left",direction: "ltr",float: "left"}} disabled={!this.state.formIsValid} onClick={this.handle_Submit.bind(this)}> שלח מייל </Button>
           </Form>
       </>
               </div>  
                : null }  
             </div>  
+            </div>
+
+            </div>
+
         <form class="form-group" > 
         <span>    
         {this.state.found ?    
@@ -3109,26 +2254,11 @@ onChange = date => this.setState({ date })
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardOpeningHandler}>שמירת כרטיס חדש</Button> 
       </div>  
       }
+
       {' '}
-       { this.props.showSuccessCase ?
-             this.renderToastModal( 'כרטיס נשמר בהצלחה')
-
-              :null }
-
-      { this.props.showUpdateSuccessCase ?
-             this.renderToastModal( 'כרטיס עודכן בהצלחה')
-
-              :null }
-
-{ this.props.showCloseCardSuccessCase && this.props.showSuccessCase ?
-             this.renderToastModal( 'כרטיס נסגר בהצלחה')
-
-              :null }
-
-
-{/* <button type="submit" style={{backgroundColor: "secondary"}} className="btn btn-md btn-primary sign-in-button" onClick={this.cardUpdateHandler}>עדכון</button>  */}
-
-
+        { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null }
+        { this.props.showUpdateSuccessCase ? this.renderToastModal( 'כרטיס עודכן בהצלחה') :null }
+        { this.props.showCloseCardSuccessCase && this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נסגר בהצלחה') :null }
 
         </form>
       </form>
@@ -3137,7 +2267,6 @@ onChange = date => this.setState({ date })
 }
 
 }
-  // <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}>הדפסת כרטיס</Button> {' '}
 
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
@@ -3154,7 +2283,9 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       showPartModel: state.card.showPartModel,
       branchNumber: state.auth.branchNumber,
       workData: state.card.workData,
-      partsData: state.card.partsData
+      partsData: state.card.partsData,
+      currentCardKey: state.card.currentCardKey,
+      currentTicketNumber: state.card.currentTicketNumber
   };
 };
 
@@ -3163,12 +2294,11 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     
     onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
     onCardOpening: (cardData,userId, token,branchNumber,node) => dispatch(actions.cardOpening(cardData,userId, token, branchNumber,node)),
-    onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID)), // this contains all the data of card 
+    onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId)), // this contains all the data of card 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
     onWorkModalOpening: () =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
-
 
     onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
 
@@ -3179,8 +2309,12 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onWorkOrPartUpdate: (itemData, token,branchNumber,userId,list, kind,cardKey,itemKey) => dispatch(actions.workOrPartUpdate(itemData, token,branchNumber,userId,list, kind,cardKey,itemKey)),
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
 
-    onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey))
+    onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
 
+    onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
+
+
+    
       //  return a map to map my props to dispatchable functions
       //here we want to execute an anonymous function where we eventually dispatch the action we just created it
       // note - we need to execute this function - "fetchCards()" to really get the action

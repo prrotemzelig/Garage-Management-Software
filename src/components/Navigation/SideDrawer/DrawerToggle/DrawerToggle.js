@@ -22,13 +22,20 @@ const styles = StyleSheet.create({
             display: 'none'
 
         }
+    },
+    color:{
+        color: 'white'
     }
 });
-
+//className={[classes.lightBadge,classes.badge].join(' ')}
+//className={props.backgroundColor === ' light'? css(styles.burgerIcon) : [css(styles.burgerIcon),css(styles.color)].join(' ')}
 const drawerToggle = (props) => (
-    <div className={css(styles.burgerIcon)} onClick={props.clicked}>
-        <IconBurger />
+    <div className={css(styles.burgerIcon)} onClick={props.clicked} >
+        <IconBurger fill= {props.backgroundColor === 'dark' ? 'white' : 'black'}/>
     </div>
 );
 
+
+
 export default drawerToggle;
+

@@ -11,7 +11,7 @@ const toolbar = (props) => (
 
 <div>  
     
-    <DrawerToggle clicked={props.drawerToggleClicked}/>
+    <DrawerToggle clicked={props.drawerToggleClicked}  backgroundColor={props.backgroundColor}/>
     <header className={classes.Toolbar} style={{background: props.colorBackground}} >
         <LogoComponent />
         <div className={classes.separator}></div>

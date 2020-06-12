@@ -12,9 +12,18 @@ const initialState = {
     showCloseCardSuccessCase: false,
     showUpdateSuccessCase: false,
     workData: [],
-    partsData: []
+    partsData: [],
+    currentCardKey: '',
+    currentTicketNumber: ''
 
 };
+
+
+
+const purchaseSetCurrentCardKey = ( state, action ) => {
+    return updateObject( state, { currentCardKey: '',currentTicketNumber: '' } );
+};
+
 
 const purchaseWorksInit = ( state, action ) => {
     return updateObject( state, { showWorkModel: true } );
@@ -47,11 +56,13 @@ const cardOpeningStart = ( state, action ) => {
 };
 
 const cardOpeningSuccess = ( state, action ) => {
-    console.log("49");
+    console.log(action.currentTicketNumber);
+
     if(action.node === 'cards'){
-        console.log("51");
     const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
+        currentCardKey: action.currentCardKey,
+        currentTicketNumber: action.currentTicketNumber,
         loading: false,
         //purchased: true,
         showSuccessCase: true,
@@ -59,7 +70,6 @@ const cardOpeningSuccess = ( state, action ) => {
     } );
 }
 else if (action.node === 'closeCards'){
-    console.log("61");
     const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
         loading: false,
@@ -112,7 +122,9 @@ const cardUpdateSuccess = ( state, action ) => {
     //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
         loading: false,
-        showUpdateSuccessCase: true
+        showUpdateSuccessCase: true,
+        currentCardKey: '',
+        currentTicketNumber: ''
       //  purchased: true,
     } );
 };
@@ -248,6 +260,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.CARD_DELETE_START: return cardDeleteStart( state, action );
         case actionTypes.CARD_DELETE_SUCCESS: return cardDeleteSuccess( state, action );
         case actionTypes.CARD_DELETE_FAIL: return cardDeleteFail( state, action );
+
+        case actionTypes.PURCHASE_SET_CURRENT_CARD_KEY: return purchaseSetCurrentCardKey( state, action );
+
 
         case actionTypes.PURCHASE_WORKS_INIT: return purchaseWorksInit( state, action );
         case actionTypes.WORKS_MODAL_CLOSE: return purchaseWorksCancel( state, action );
