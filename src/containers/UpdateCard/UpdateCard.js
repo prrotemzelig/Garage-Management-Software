@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './UpdateCard.css'
 import Search from './SearchEngine.js';
+import SearchIcon from "@material-ui/icons/Search";
+
 
 class SearchBar extends Component {
   
@@ -25,30 +27,28 @@ class SearchBar extends Component {
       const name = this.props.searchBoxName || undefined
         return (
           <div>
-          <div className="search-box">
-            <div style={{direction: "rtl" ,color: "gray" }}>
-              <input 
-              name={name} className="search-input" 
-              id="search" 
-              type="text" autocomplete="off"
-              placeholder="הכנס מספר רכב" 
-              value2={this.state.term}
-              onChange={event=>this.onInputChange(event.target.value)} 
-              onKeyPress={this.props.onKeyPress|| null}/>
+            <div className="search-box">
+              <div style={{direction: "rtl" ,color: "gray"}}>
+                <input 
+                name={name} className="search-input" 
+                id="search" 
+                type="text" autocomplete="off"
+                placeholder="הכנס מספר רכב" 
+                value2={this.state.term}
+                onChange={event=>this.onInputChange(event.target.value)} 
+                onKeyPress={this.props.onKeyPress|| null}/>
+                <SearchIcon style={{ fontSize: 25 }} />
+              </div>
             </div>
-            
-          </div>
-          <div>  
+            <div>  
               <Search
                 value={this.state.term}
                 />
             </div>
           </div>
-
         );
     }
 }
-
  
 export default SearchBar;
 
