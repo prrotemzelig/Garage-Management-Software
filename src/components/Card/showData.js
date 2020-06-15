@@ -18,6 +18,7 @@ class showData extends Component   {
         carDetails:{},
         customer_details:{},
         CarNumber:'',
+        ticketNumber:'',
         parts:[],
         works:[],
         }
@@ -28,7 +29,7 @@ class showData extends Component   {
       
       }
       check(data){
-        if(data.cardData.licenseNumber===this.state.CarNumber){
+        if(data.cardData.licenseNumber===this.state.CarNumber && data.cardData.ticketNumber===this.state.ticketNumber){
           this.state.carDetails=data.carData;
           this.state.cardDetails=data.cardData;
           this.state.customer_details=data.customerData;
@@ -61,7 +62,7 @@ class showData extends Component   {
       render () {
         const partsDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         const worksDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
-        
+        this.state.ticketNumber=this.props.data;
         this.state.CarNumber=this.props.value;
         let cards;
         if(this.state.userCarNumber!==""){
@@ -74,10 +75,10 @@ class showData extends Component   {
         }
         else{
           partsDetails.push( {name: this.state.parts[0].partDescription} );
-        partsDetails.push( {name: this.state.parts[0].amount} );
-        partsDetails.push( {name: this.state.parts[0].gross+'.00'} );
-        partsDetails.push( {name: this.state.parts[0].discount+'.00'}  );
-        partsDetails.push( {name: this.state.parts[0].net+'.00'}  );
+          partsDetails.push( {name: this.state.parts[0].amount} );
+          partsDetails.push( {name: this.state.parts[0].gross+'.00'} );
+          partsDetails.push( {name: this.state.parts[0].discount+'.00'}  );
+          partsDetails.push( {name: this.state.parts[0].net+'.00'}  );
         }
         
         const partsDetailsOutput = partsDetails.map(ig => {
@@ -409,7 +410,7 @@ class showData extends Component   {
 }
 const mapStateToProps = state => { // here we get the state and return a javascript object
         return {
-            cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
+            cards: state.card.closeCards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
             loading: state.card.loading,
             token: state.auth.token,
             userId: state.auth.userId,
