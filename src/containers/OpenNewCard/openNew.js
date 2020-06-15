@@ -25,6 +25,9 @@ import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 import Promise from 'bluebird'
 
+import modal2 from './modal2.css'
+
+
 
 const getDateTime = () => {
   let tempDate = new Date();
@@ -1375,7 +1378,198 @@ buildImgTag(){
   </div>
 }
 
-fileSelectedHandler = (e) => {
+
+
+renderImagesAndDocModal = () => { ///*** TOAST modal! ****
+
+
+  let workButtons =
+      <div class="form-group" style={{marginBottom: "4px"}}>
+          <div  style={{ color: "white" ,fontSize: "16px", direction : "rtl"}}>עע</div> 
+            <div style={{textAlign:"left"}}> 
+              <Button bsStyle="light" style={{borderColor: "black",color: "black"}} onClick={this.closeToastModal} >לעשות מחיקה</Button>{' '}
+          </div>
+      </div>;
+    
+    return (
+
+      <Modal show={true} onHide={this.close} dialogClassName={classes.Dialog} style={{ position: "fixed",top: "50%",  left: "50%",transform: "translate(-50%, -50%)",wordWrap: "break-word",width: "min-content"}}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body >
+
+                 <div style={{wordWrap: "break-word"}}>
+           <ul className="nav nav-tabs">
+             <li className="active"><a href="#" >Selecting</a></li>
+           </ul>
+           <div className="tab-content">
+             <div className="tab-pane active" id="select">
+
+             <section className="photo-section" style={{ fontSize: "50%"}}>
+               <h2>Select Photos</h2>
+               <div className="row">
+                 {this.props.imagesForCard.map(image => 
+                <div className="col-xs-4 col-sm-3 col-md-2" style={{wordWrap: "break-word"}}>
+                <div style={{wordWrap: "break-word",position: "relative",borderColor: "rgba(82,168,236,.8)",boxShadow: "0 0 8px rgba(82,168,236,.6)",
+      content: '',
+      position: "absolute",
+      bottom: "-7px",
+      left: "0",
+      display: "block",
+      borderWidth: "7px 0 0 7px",
+      borderStyle: "solid",
+      borderColor: "rgba(55, 55, 55, 0.87) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)",
+      zIndex: "-1",
+}} >
+                  <img src={image.url} alt=""/>
+
+                  <div className="checkbox">
+                    <label>
+                      <input type="checkbox"/>
+                <i/>
+              </label>
+             </div>
+                </div>
+              </div>
+                )}
+              </div>
+            </section>
+            </div>
+          </div>
+          </div>
+            <h4>Text in a modal</h4>
+            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww wwwwwwwwwwwwwwwwwwwww</p>
+
+            <h4>Popover in a modal</h4>
+            
+
+            <hr />
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+
+
+
+//       <div class="modal fade"  id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
+//   <div class="modal-dialog">
+//     <div class="modal-content">
+//       <div class="modal-header">
+//         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+//         <h4 class="modal-title" id="myModalLabel" >Modal title</h4>
+//       </div>
+//       <div class="modal-body">
+//       <div className="container">
+//           <h1>Mock-Up: Photos <small className="text-muted">using <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/arqex/fluxify">Fluxify</a> &amp; <a href="https://getbootstrap.com/">Bootstrap</a></small></h1>
+//           <ul className="nav nav-tabs">
+//             <li className="active"><a href="#" >Selecting</a></li>
+//           </ul>
+//           <div className="tab-content">
+//             <div className="tab-pane active" id="select">
+
+//             <section className="photo-section">
+//               <h2>Select Photos</h2>
+//               <div className="row">
+//                 {this.props.imagesForCard.map(image => 
+//                 <div className="col-xs-4 col-sm-3 col-md-2">
+//                 <div >
+//                   <img src={image.url} alt=""/>
+
+//                   <div className="checkbox">
+//                     <label>
+//                       <input type="checkbox"/>
+//                 <i/>
+//               </label>
+//              </div>
+//                 </div>
+//               </div>
+//                 )}
+//               </div>
+//             </section>
+//             </div>
+//           </div>
+//           </div> 
+//       </div>
+//       <div class="modal-footer">
+//         <div class="left-side">
+//             <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Never mind</button>
+//         </div>
+//         <div class="divider"></div>
+//         <div class="right-side">
+//             <button type="button" class="btn btn-danger btn-simple">Delete</button>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// </div>
+    ); 
+      
+
+}
+
+/* <Modal show={true} onHide={this.closeToastModal}  
+style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
+<Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+<Modal.Title  >תמונות</Modal.Title>   
+</Modal.Header>
+<Modal.Body  style={{ backgroundColor:"lightsteelblue", padding:"3px",flex: "none" }}   >
+
+
+<div className="container">
+    <h1>Mock-Up: Photos <small className="text-muted">using <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/arqex/fluxify">Fluxify</a> &amp; <a href="https://getbootstrap.com/">Bootstrap</a></small></h1>
+    <ul className="nav nav-tabs">
+      <li className="active"><a href="#" >Selecting</a></li>
+
+    </ul>
+    <div className="tab-content">
+      <div className="tab-pane active" id="select">
+
+      <section className="photo-section">
+        <h2>Select Photos</h2>
+        <div className="row">
+          {this.props.imagesForCard.map(image => 
+          
+          <div className="col-xs-4 col-sm-3 col-md-2">
+          <div >
+            <img src={image.url} alt=""/>
+
+            <div className="checkbox">
+              <label>
+                <input type="checkbox"/>
+          <i/>
+        </label>
+       </div>
+
+          </div>
+        </div>
+      //    )}
+        </div>
+      </section>
+      </div>
+    </div>
+
+    </div> 
+</Modal.Body>
+<Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
+   {workButtons}
+</Modal.Footer>
+</Modal>  */
+
+
+
+showImagesAndDoc  = () => {
+  this.props.onGetImagesOrDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'])
+  // console.log(this.props.showGetSuccessCase);
+  // if(this.props.showGetSuccessCase){
+  //   console.log(this.props.imagesForCard);
+  // }
+}
+
+
+fileSelectedHandler = (e,type) => {
   console.log(e.target.files);
   
   for(var i=0;i<e.target.files.length;i++){
@@ -1389,7 +1583,15 @@ fileSelectedHandler = (e) => {
   }
   console.log(this.state.imageFiles);
   console.log(this.state.docFiles);
-  
+ 
+  if(type==='images'){
+      this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'images',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
+  }
+  else{
+    this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'doc',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
+
+  }
+      //this.props.onImageOrDocUploading(this.state.docFiles);
  if (e.target.files) {
 
   /* Get files in array form */
@@ -1419,6 +1621,10 @@ fileSelectedHandler = (e) => {
  
 
 }
+
+
+
+
 
 handle_Submit(e) {
   e.preventDefault()
@@ -2156,15 +2362,16 @@ onChange = date => this.setState({ date })
                 <div class="form-row" > 
                   <div class="form-group col">
                     <h5>תמונות:</h5>
-                        <input type="file" multiple onChange={this.fileSelectedHandler} disabled={!this.state.formIsValid}/>
+                        <input type="file" multiple onChange={ (event) =>  this.fileSelectedHandler(event,'images')} disabled={!this.state.formIsValid}/>
                   </div>
                   <div class="form-group col">
-                    <h5>מסמכים:</h5>
-                        <input type="file" multiple onChange={this.fileSelectedHandler} disabled={!this.state.formIsValid} />
+                    <h5>מסמכים:</h5>    
+                        <input type="file" multiple onChange= { (event) =>  this.fileSelectedHandler(event,'doc')} disabled={!this.state.formIsValid} />
                   </div>
-                  {imgTag}
+                  {/* {imgTag} */}
 
                 </div>  
+                
               </div>  
                : null }  
             </div> 
@@ -2244,6 +2451,10 @@ onChange = date => this.setState({ date })
             :null}  
             {' '}
       {this.state.found ? 
+        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.showImagesAndDoc}>תמונות/מסמכים שהועלו</Button> 
+      : null}
+        {' '}
+      {this.state.found ? 
         <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.cardCloseHandler}>סגירת כרטיס</Button> 
       : null}
       {' '}
@@ -2259,6 +2470,7 @@ onChange = date => this.setState({ date })
         { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null }
         { this.props.showUpdateSuccessCase ? this.renderToastModal( 'כרטיס עודכן בהצלחה') :null }
         { this.props.showCloseCardSuccessCase && this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נסגר בהצלחה') :null }
+        { this.props.showGetSuccessCase ? this.renderImagesAndDocModal() :null }
 
         </form>
       </form>
@@ -2285,7 +2497,10 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       workData: state.card.workData,
       partsData: state.card.partsData,
       currentCardKey: state.card.currentCardKey,
-      currentTicketNumber: state.card.currentTicketNumber
+      currentTicketNumber: state.card.currentTicketNumber,
+
+      showGetSuccessCase: state.storage.showGetSuccessCase,
+      imagesForCard: state.storage.fetchedImages
   };
 };
 
@@ -2297,12 +2512,18 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId)), // this contains all the data of card 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
+    onImageOrDocUploading:(file,userId ,token,branchNumber,node,cardKey,ticketNumber) => dispatch( actions.imageOrDocUploading(file,userId ,token,branchNumber,node,cardKey,ticketNumber)),
+    onGetImagesOrDocs:(userId ,token,branchNumber,cardKey,ticketNumber) => dispatch( actions.getImagesOrDocs(userId ,token,branchNumber,cardKey,ticketNumber)),
+
+
+    
+    
     onWorkModalOpening: () =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
 
-    onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
+    onToastModalClose: () =>  dispatch(actions.toastModalClose()),
 
-    onPartModalOpening: ( ) =>  dispatch(actions.partModalOpening()),   
+    onPartModalOpening: () =>  dispatch(actions.partModalOpening()),   
     onPartsModalClose: (token ) =>  dispatch(actions.partModalClose(token)),
 
     onWorkOrPartsOpening: (formData, token,branchNumber,userId, kind,cardKey) => dispatch(actions.workOrPartsOpening(formData, token, branchNumber,userId, kind,cardKey)),
@@ -2310,7 +2531,6 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
 
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
-
     onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
 
 

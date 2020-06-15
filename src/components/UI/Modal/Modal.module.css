@@ -28,6 +28,16 @@
         max-width: 100%;
         height: auto;
     }
+    .Dialog {
+        max-width : 100% ;
+        display:table;
+    }
+}
+
+.Dialog {
+    max-width : 100% ;
+    display:table;
+
 }
 
 

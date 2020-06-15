@@ -217,6 +217,10 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
     };
 };
 
+
+
+
+
 export const purchaseInit = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
         type: actionTypes.PURCHASE_INIT // just return an action

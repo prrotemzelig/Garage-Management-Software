@@ -1,0 +1,9 @@
+[
+    {
+      "origin": ["*"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600,
+      "responseHeader": ["Authorization", "Content-Range", "Accept", "Content-Type", "Origin", "Range"]
+
+    }
+  ]

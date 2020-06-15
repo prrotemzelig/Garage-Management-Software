@@ -18,6 +18,10 @@ export {
     setCurrentCardKey
 } from './card';
 export {
+    imageOrDocUploading,
+    getImagesOrDocs
+} from './storage';
+export {
     authSignIn,
     logout,
     setAuthRedirectPath,

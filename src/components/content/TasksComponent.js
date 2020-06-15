@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         
     },
     itemTitle: {
+        wordWrap: 'break-word',
         color: '#252733',
         fontFamily: 'Alef Hebrew',
         fontStyle: 'normal',
@@ -125,11 +126,11 @@ class TasksComponent extends React.Component {
 
         return(
 
-        <Column horizontal="space-between" style={{marginBotton:"10px"}}>
-            <Column>
-                <Row>
+        <Column horizontal="space-between" style={{marginBotton:"10px",wordWrap: "break-word"}}>
+            <Column style={{wordWrap: "break-word"}}>
+                <Row style={{wordWrap: "break-word"}}>
                     {this.renderCheckbox(checked,taskKey,list)}
-                        <Column>
+                        <Column style={{wordWrap: "break-word"}}>
                             <span className={this.props.backgroundColor==='light' ?
                             css(styles.itemTitle)
                             : css(styles.itemTitle, styles.itemTitleDark)} >{title}</span>
