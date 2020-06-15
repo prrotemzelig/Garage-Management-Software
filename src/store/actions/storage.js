@@ -157,6 +157,7 @@ export const getImagesOrDocs = ( userId ,token,branchNumber,cardKey,ticketNumber
     let count = 0;
     let fetchedImages = []; 
 
+    
     listRef.listAll()
     .then(result =>  {
         count = result.items.length;
