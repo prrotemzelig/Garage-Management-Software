@@ -449,7 +449,7 @@ class TasksComponent extends React.Component {
             <CardComponent containerStyles={this.props.containerStyles} title="לטיפול" link="ראה הכל" subtitle="היום"
                 items={[
                     <Row horizontal="space-between" vertical="center">
-                        <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="toDoNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
+                        <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autoComplete="off" id="toDoNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
                         onChange={(event) => this.inputChangedHandler(event,'todo')} value={this.state.taskForm.toDoNewTask.title}
                         style={{boxShadow: "none",  border: "none",  borderBottom: "none ",fontFamily: "Alef Hebrew",fontStyle: "normal",fontWeight: "600",fontSize: "14px",letterSpacing:" 0.2px",lineHeight: "20px"}}/>
                         {this.renderAddButton('todo')}

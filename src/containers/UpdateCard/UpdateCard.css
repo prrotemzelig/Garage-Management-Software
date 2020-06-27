@@ -1,42 +1,40 @@
 .UpdateCard {
-    background: #FBFBFB;
-    border: 1px solid #EAEAEA;
-    border-radius: 3px;
-  }
+  background: #FBFBFB;
+  border: 1px solid #EAEAEA;
+  border-radius: 3px;
+}
 
-  
-  .search-box {
-    margin: 20px auto;
-    margin: auto;
-    width: 40%;
-    text-align: center;
-    box-shadow: 0 2px 3px #ccc;
-    border: 1px solid #eee;
-    padding: 14px;
-    box-sizing: border-box;
-  }
- 
-  .search-input {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    background-color: transparent;
-    border: 0px;
-    padding: 5px 0px;
-    font-size: 1em;
-    position: relative;
-    outline: 0px;
-    width: 75%;
-    color: #000;
 
-  }
-  
-  .search-box {
-    background: #FBFBFB;
-    border: 1px solid rgb(14, 4, 4);
-    border-radius: 20px;
-    
-  }
+.search-box {
+  margin: 20px auto;
+  margin: auto;
+  width: 40%;
+  text-align: center;
+  box-shadow: 0 2px 3px #ccc;
+  border: 1px solid #eee;
+  padding: 14px;
+  box-sizing: border-box;
+}
 
+.search-input {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 0px;
+  padding: 5px 0px;
+  font-size: 1em;
+  position: relative;
+  outline: 0px;
+  width: 75%;
+  color: #000;
+
+}
+
+.search-box {
+  background: #FBFBFB;
+  border: 1px solid rgb(14, 4, 4);
+  border-radius: 20px;
+  width:50%; 
   
-  
+}

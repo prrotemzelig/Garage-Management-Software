@@ -1,3 +1,152 @@
+
+
+/* * {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+ Clearfix (clear floats) 
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.gridContainer > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+} */
+
+
+.section {
+  
+  display: flex;
+  flex-wrap: wrap;
+}
+/* .section::after {
+  content: '';
+  flex-grow: 999999999;
+} */
+
+.section,
+.section:before,
+.section:after {
+  content: '';
+  flex-grow: 999999999;
+}
+
+.div {
+  display: flex;
+  /* flex-wrap: wrap; */
+  margin: 2px;
+  /* background-color: violet; */
+  position: relative;
+}
+
+.i{
+  display: block;
+}
+.img {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  vertical-align: bottom;
+}
+
+
+
+/* // BASIC */
+
+/* .div
+  display: flex;
+  flex-wrap: wrap;
+ */
+
+/* .img
+  height: 200px;
+  flex-grow: 1;
+  object-fit: cover;
+  margin: 2px;
+ */
+
+
+/* .Ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+.Li {
+  height: 40vh;
+  flex-grow: 1;
+}
+
+.Li:last-child {
+   There's no science in using "10" here. In all my testing, this delivered the best results. 
+  flex-grow: 10;
+}
+
+.Img {
+  max-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  vertical-align: bottom;
+}
+
+ ADVANCED
+
+ Portrait 
+
+@media (max-aspect-ratio: 1/1) {
+  .Li {
+    height: 30vh;
+  }
+}
+
+Short screens 
+
+@media (max-height: 480px) {
+  .Li {
+    height: 80vh;
+  }
+}
+
+Smaller screens in portrait 
+
+@media (max-aspect-ratio: 1/1) and (max-width: 480px) {
+  .Ul {
+    flex-direction: row;
+  }
+
+  .Li {
+    height: auto;
+    width: 100%;
+  }
+  .Img {
+    width: 100%;
+    max-height: 75vh;
+    min-width: 0;
+  }
+} */
+
+
+
 .modal-open {
     overflow: hidden;
   }

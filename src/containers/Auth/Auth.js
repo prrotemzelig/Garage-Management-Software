@@ -10,11 +10,11 @@ import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
 
 //import { firebase } from 'firebase';
-import firebase from "firebase/app";
+//import firebase from "firebase/app";
 import "firebase/auth";
 //import firebase from 'firebase';
 import 'firebase/firestore';
-import config from "../../config";
+//import config from "../../config";
 
 //firebase.initializeApp(config);
 
