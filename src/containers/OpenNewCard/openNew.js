@@ -30,6 +30,8 @@ import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 import Promise from 'bluebird'
 import { storageRef } from "../../config";
 import './hoverEffect.css'
+import filesStyle from './modal2.css'
+//import './image.css';
 
 
 
