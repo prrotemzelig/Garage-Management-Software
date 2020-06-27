@@ -104,7 +104,7 @@ class HeaderComponent extends Component {
      }
  
     onSettingClick = () =>  {
-        if(!this.props.showSettingModel){
+        if(!this.props.showsettingmodel){
         this.props.onSettingOpening(); // this contains all the data of card 
         }
         else{
@@ -114,22 +114,22 @@ class HeaderComponent extends Component {
     render(){
 
         let thisUserBranchNumber ='';
-        if(this.props.branchNumber==='Talpiot'){
+        if(this.props.branchnumber==='Talpiot'){
             thisUserBranchNumber='תלפיות';
         }
-        else if(this.props.branchNumber==='GivatShaul'){
+        else if(this.props.branchnumber==='GivatShaul'){
             thisUserBranchNumber='גבעת שאול';
         }
     
-        else if(this.props.branchNumber==='Modiin'){
+        else if(this.props.branchnumber==='Modiin'){ //branchNumber
             thisUserBranchNumber='מודיעין';
         }
           
         let userProfileImage;
-        if(this.props.profileImage==='anime3'){
+        if(this.props.profileimage==='anime3'){
             userProfileImage = require("../../assets/anime3.png");
         }
-        else if(this.props.profileImage==='anime6'){
+        else if(this.props.profileimage==='anime6'){
             userProfileImage = require("../../assets/anime6.png");
         }
 
@@ -139,7 +139,7 @@ class HeaderComponent extends Component {
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
             <Row vertical="center" style={{position: "left"}}>
 
-            <span className={this.props.backgroundColor==='light' ?
+            <span className={this.props.backgroundcolor==='light' ?
                 css(styles.title)
                 : css(styles.title, styles.titleDark)} >סניף {thisUserBranchNumber}</span>
                </Row>
@@ -152,7 +152,7 @@ class HeaderComponent extends Component {
                 </div>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
-                    <span className={this.props.backgroundColor==='light' ?
+                    <span className={this.props.backgroundcolor==='light' ?
                     css(styles.name, styles.cursorPointer)
                     : css(styles.name, styles.cursorPointer,styles.nameDark)}>שלום,{' '}{title}</span> 
                     <img src={userProfileImage} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
@@ -160,7 +160,7 @@ class HeaderComponent extends Component {
                 <SettingsIcon onClick={() => this.onSettingClick()} 
                 style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
               
-               {this.props.showSettingModel ? <FixedPlugin /> : null }
+               {this.props.showsettingmodel ? <FixedPlugin /> : null }
 
             </Row>
         </Row>
@@ -175,12 +175,12 @@ HeaderComponent.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        firstName: state.auth.firstName,
-        branchNumber: state.auth.branchNumber,
-        showSettingModel: state.auth.showSettingModel,
-        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
-        backgroundColor: state.auth.backgroundColor,
-        profileImage: state.auth.profileImage
+       // firstName: state.auth.firstName,
+        branchnumber: state.auth.branchNumber,
+        showsettingmodel: state.auth.showSettingModel,
+        //sidebarbackgroundcolor: state.auth.sidebarBackgroundColor,
+        backgroundcolor: state.auth.backgroundColor,
+        profileimage: state.auth.profileImage
 
     };
 };

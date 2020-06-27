@@ -19,7 +19,12 @@ export {
 } from './card';
 export {
     imageOrDocUploading,
-    getImagesOrDocs
+    getImages,
+    getDocs,
+    deleteImages,
+    deleteDocs,
+    downloadDoc,
+    downloadImage
 } from './storage';
 export {
     authSignIn,

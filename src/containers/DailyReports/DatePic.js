@@ -64,4 +64,4 @@ class Datepic extends React.Component {
 //dd/MM/yyyy 01/05/2020
 }
 
-export default Datepic; 
+export default Datepic;

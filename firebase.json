@@ -15,5 +15,19 @@
         "destination": "/index.html"
       }
     ]
-  }
+  },
+  "cors": [
+    {
+      "origin": [
+        "http://garage-management-softwa.appspot.com"
+      ],
+      "method": [
+        "GET"
+      ],
+      "responseHeader": [
+        "Content-Type"
+      ],
+      "maxAgeSeconds": 3600
+    }
+  ]
 }

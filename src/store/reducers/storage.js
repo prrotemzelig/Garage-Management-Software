@@ -3,17 +3,36 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
     fetchedImages: [], 
-    docs: [],
+    resizeImages: [],
+    numberOfImages: 0,
+    numberOfDocs: 0,
+    fetchedDocs: [],
     loading: false,
+    loadingImages: false,
+    loadingResizeImages: false,
+    loadingDocs: false,
     showSuccessCase: false,
     cardStorage: [],
     payload:'',
     error: '',
+    errorImages: '',
+    errorDocs: '',
     showGetSuccessCase: false,
     emptyStorage: false,
-    alert: ''
-    //allImagesForCard: []
-
+    emptyImagesStorage: false,
+    emptyDocsStorage: false,
+    alert: '',
+    alertImages: '',
+    alertDocs: '',
+    loadingDeleteImages: false,
+    showDeleteImagesCase: false,
+    loadingDeleteDocs: false,
+    showDeleteDocsCase: false,
+    loadingDownloadDocs: false,
+    errorDownloadDocs: false,
+    loadingDownloadImage: false,
+    errorDownloadImage: false
+    
 };
 
 
@@ -53,39 +72,202 @@ const imageOrDocUploadingFail = ( state, action ) => {
 
 
 
-
-const getImagesOrDocsStart = ( state, action ) => {
-    return updateObject( state, { loading: true } ); 
+const getImagesStart = ( state, action ) => {
+    return updateObject( state, { 
+        loadingImages: true,
+        fetchedImages: [], 
+        numberOfImages: 0,
+        showSuccessCase: false,
+        emptyImagesStorage: false,
+        alertImages: '',
+        errorImages: ''
+    } ); 
 };
-const getImagesOrDocsSuccess = ( state, action ) => {//, { taskKey: action.taskId }
-console.log(action.condition);
+const getImagesSuccess = ( state, action ) => {//, { taskKey: action.taskId }
+//console.log(action.condition);
+    if(action.condition === 'false'){
+       // console.log(action.condition);
+      //  if(action.node === '/images'){
+        return updateObject( state, { 
+            loadingImages: false,
+            alertImages: 'No images to show',
+            emptyImagesStorage: true,
+            fetchedImages: [],
+            resizeImages: [],
+            numberOfImages: 0
+
+        } ); 
+   // }
+ 
+    }
+    else if(action.condition === 'true'){
+     //   if(action.node === '/images'){
+    //const newImage = updateObject( action.fetchedImages ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    //console.log(action.fetchedImages);
+    return updateObject( state, { 
+        fetchedImages: action.fetchedImages ,
+        loadingImages: false ,
+        showGetSuccessCase: true,
+        numberOfImages: action.count
+    } ); 
+//}
+
+// else if(action.node === '/images/resize'){
+//     //const newImage = updateObject( action.fetchedImages ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+//     console.log(action.node);
+
+//     console.log(action.fetchedImages);
+//     return updateObject( state, { 
+//         resizeImages: action.fetchedImages ,
+//         loadingResizeImages: false ,
+//         showGetSuccessCase: true,
+        
+//     } ); 
+// }
+
+}
+};
+
+const getImagesFail = ( state, action ) => {
+    return updateObject( state, {
+        loadingImages: false,
+        showGetSuccessCase: false,
+        errorImages: action.error,
+        numberOfImages: 0
+    } );
+};
+
+
+
+
+
+const deleteImagesStart = ( state, action ) => {
+    return updateObject( state, { 
+        loadingDeleteImages: true,
+    } ); 
+};
+const deleteImagesSuccess = ( state, action ) => {
+        return updateObject( state, { 
+            loadingDeleteImages: false,
+            showDeleteImagesCase: true
+        } ); 
+};
+
+const deleteImagesFail = ( state, action ) => {
+    return updateObject( state, {
+        loadingDeleteImages: false,
+        showDeleteImagesCase: false,
+        errorImages: action.error
+    } );
+};
+
+
+
+
+const getDocsStart = ( state, action ) => {
+    return updateObject( state, {
+         loadingDocs: true,
+         numberOfDocs: 0,
+         fetchedDocs: [],
+         emptyDocsStorage: false,
+         alertDocs: '',
+         errorDocs: ''
+        } ); 
+};
+const getDocsSuccess = ( state, action ) => {//, { taskKey: action.taskId }
+//console.log(action.condition);
     if(action.condition === 'false'){
         return updateObject( state, { 
-            loading: false,
-            alert: 'No files to show',
-            emptyStorage: true
+            loadingDocs: false,
+            alertDocs: 'No docs to show',
+            emptyDocsStorage: true,
+            fetchedDocs: [] ,
+            numberOfDocs: 0
         } ); 
-
  
     }
     else if(action.condition === 'true'){
     //const newImage = updateObject( action.fetchedImages ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
-    console.log(action.fetchedImages);
     return updateObject( state, { 
-        fetchedImages: action.fetchedImages ,
-        loading: false ,
-        showGetSuccessCase: true
+        fetchedDocs: action.fetchedDocs ,
+        loadingDocs: false ,
+        successCaseDocs: true,
+        numberOfDocs: action.count
     } ); 
 }
 };
 
-const getImagesOrDocsFail = ( state, action ) => {
+const getDocsFail = ( state, action ) => {
     return updateObject( state, {
-        loading: false,
+        loadingDocs: false,
         showGetSuccessCase: false,
-        error: action.error
+        errorDocs: action.error,
+        numberOfDocs: 0
     } );
 
+};
+
+
+
+const deleteDocsStart = ( state, action ) => {
+    return updateObject( state, { 
+        loadingDeleteDocs: true,
+    } ); 
+};
+const deleteDocsSuccess = ( state, action ) => {
+        return updateObject( state, { 
+            loadingDeleteDocs: false,
+            showDeleteDocsCase: true
+        } ); 
+};
+
+const deleteDocsFail = ( state, action ) => {
+    return updateObject( state, {
+        loadingDeleteDocs: false,
+        showDeleteDocsCase: false,
+        errorDocs: action.error
+    } );
+};
+
+
+
+const downloadDocStart = ( state, action ) => {
+    return updateObject( state, { 
+        loadingDownloadDocs: true
+    } ); 
+};
+const downloadDocSuccess = ( state, action ) => {
+        return updateObject( state, { 
+            loadingDownloadDocs: false
+        } ); 
+};
+
+const downloadDocFail = ( state, action ) => {
+    return updateObject( state, {
+        loadingDownloadDocs: false,
+        errorDownloadDocs: action.error
+    } );
+};
+
+
+
+
+const downloadImageStart = ( state, action ) => {
+    return updateObject( state, { 
+        loadingDownloadImage: true
+    } ); 
+};
+const downloadImageSuccess = ( state, action ) => {
+        return updateObject( state, { 
+            loadingDownloadImage: false
+        } ); 
+};
+
+const downloadImageFail = ( state, action ) => {
+    return updateObject( state, {
+        loadingDownloadImage: false,
+        errorDownloadImage: action.error
+    } );
 };
 
 
@@ -103,10 +285,37 @@ const reducer = ( state = initialState, action ) => {
         
 
 
-        case actionTypes.GET_IMAGES_OR_DOCS_START: return getImagesOrDocsStart( state, action );
-        case actionTypes.GET_IMAGES_OR_DOCS_SUCCESS: return getImagesOrDocsSuccess( state, action );
-        case actionTypes.GET_IMAGES_OR_DOCS_FAIL: return getImagesOrDocsFail( state, action );
+        case actionTypes.GET_IMAGES_START: return getImagesStart( state, action );
+        case actionTypes.GET_IMAGES_SUCCESS: return getImagesSuccess( state, action );
+        case actionTypes.GET_IMAGES_FAIL: return getImagesFail( state, action );
         
+
+        case actionTypes.DELETE_IMAGES_START: return deleteImagesStart( state, action );
+        case actionTypes.DELETE_IMAGES_SUCCESS: return deleteImagesSuccess( state, action );
+        case actionTypes.DELETE_IMAGES_FAIL: return deleteImagesFail( state, action );
+
+
+        case actionTypes.GET_DOCS_START: return getDocsStart( state, action );
+        case actionTypes.GET_DOCS_SUCCESS: return getDocsSuccess( state, action );
+        case actionTypes.GET_DOCS_FAIL: return getDocsFail( state, action );
+
+
+        case actionTypes.DELETE_DOCS_START: return deleteDocsStart( state, action );
+        case actionTypes.DELETE_DOCS_SUCCESS: return deleteDocsSuccess( state, action );
+        case actionTypes.DELETE_DOCS_FAIL: return deleteDocsFail( state, action );
+
+
+        case actionTypes.DOWNLOAD_DOC_START: return downloadDocStart( state, action );
+        case actionTypes.DOWNLOAD_DOC_SUCCESS: return downloadDocSuccess( state, action );
+        case actionTypes.DOWNLOAD_DOC_FAIL: return downloadDocFail( state, action );
+
+
+
+        
+        case actionTypes.DOWNLOAD_IMAGE_START: return downloadImageStart( state, action );
+        case actionTypes.DOWNLOAD_IMAGE_SUCCESS: return downloadImageSuccess( state, action );
+        case actionTypes.DOWNLOAD_IMAGE_FAIL: return downloadImageFail( state, action );
+
         default: return state; 
     }
 };

@@ -18,7 +18,7 @@ class Cards extends Component {
     //and the cards I need to output of curse should be fetched from the backend
     render () {
         let cards;
-        let isLoading;
+       // let isLoading;
 
 //         if (!this.props.loading) {
 //             //,position: "center",textAlign: "center" 

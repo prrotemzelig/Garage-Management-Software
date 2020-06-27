@@ -17,6 +17,10 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import AssignmentReturnedIcon from '@material-ui/icons/AssignmentReturned';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 // import card from '../../components/Card/Card';
 // import { FaThinkPeaks } from 'react-icons/fa';
 import { Modal ,Button } from 'react-bootstrap';
@@ -24,8 +28,12 @@ import classes from '../../components/UI/Modal/Modal.module.css';
 import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 import Promise from 'bluebird'
+import { storageRef } from "../../config";
 
-import modal2 from './modal2.css'
+import './hoverEffect.css'
+
+import filesStyle from './modal2.css'
+//import './image.css';
 
 
 
@@ -62,6 +70,8 @@ class openNew extends Component   {
     imageFiles:[],
     imageArray:[],
     docFiles:[],
+    imagesArrayForCheck: [],
+    docsArrayForCheck: [],
     found: false,
     customer_details:{},
     startDate: new Date(),
@@ -78,7 +88,8 @@ class openNew extends Component   {
     showCustomerRequestsDiv:true,
     showUploadDocDiv:true,
     showSendMailDiv: true,
-//    showWorkModel: false,
+//    showWorkModel: false, 
+    showImagesAndDoc: false,
 
     cardForm: { 
       licenseNumber: {
@@ -198,6 +209,7 @@ componentDidUpdate(prevProps,prevState) {
 }
 
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
+  console.log("212");
   this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
 }
 
@@ -243,9 +255,15 @@ add = () => {
   }
 
   this.props.onSetCurrentCardKey(); //this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID
+  // this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
 
       if(this.state.found === true){
+        console.log("251");
         this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
+        this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
+        this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
+
+        
       }
   }
 
@@ -350,11 +368,20 @@ inputChangedHandler = (event) => {
     cards = this.props.cards.map( card => (
       this.check(card,event.target.value)
     ))
-  }
 
-    if(this.state.found === true){
-      this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
-    }
+  }
+  // if(this.state.found === false){
+  //   this.setTheStates();
+  // }
+
+    // if(this.state.found === true){
+    //   console.log(this.state.cardDetails['ticketNumber']);
+    //   console.log("372");
+    //   this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
+    //   this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
+    //  //this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
+
+    // }
 }
 
 inputCarChangedHandler = (event) => { 
@@ -531,7 +558,6 @@ cardUpdateHandler = ( event ) => { // עדכון כרטיס
     speedometer: this.state.car_data[10]
   }
 
-  // console.log(this.state.car_data[9]);
   const cardData={
     appraiser: this.state.card_data[0],
     cardType: this.state.card_data[1],
@@ -547,7 +573,6 @@ cardUpdateHandler = ( event ) => { // עדכון כרטיס
     ticketNumber: this.state.cardDetails.ticketNumber
   }
 
-  // console.log(this.state.cardDetails.ticketNumber);
 
   const customerData={
     address: this.state.customer_data[0],
@@ -695,14 +720,14 @@ check(data,licenseNumber){
     this.state.branchNumber=data.branchNumber;
 
 
-    // console.log(this.state.found);
-    // console.log(this.state.dataBaseCarNumber);
-    // console.log(this.state.cardDetails);
-    // console.log(this.state.customer_details);
-    // console.log(this.state.identifiedCardID);
-    // console.log(this.state.branchNumber);
+   // if(this.state.found === true){
+      console.log(this.state.cardDetails['ticketNumber']);
+      console.log("372");
+      this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
+      this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
+     this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
 
-    // console.log(data.carData.manufactureYear);
+    //}
     // this.setState({found: true});
     // this.setState({dataBaseCarNumber: data.cardData.licenseNumber});
     // this.setState({carDetails: data.carData});
@@ -1379,189 +1404,288 @@ buildImgTag(){
 }
 
 
+switchShowImagesAndDoc = () => {
+  this.setState(prevState => {
+      return {showImagesAndDoc: !prevState.showImagesAndDoc};
+      });
+}
 
-renderImagesAndDocModal = () => { ///*** TOAST modal! ****
+// getMeta = (varA, varB) => {
+//   console.log(varA);
+//   if (typeof varB !== 'undefined') {
+//      alert(varA + ' width ' + varB + ' height');
+//      console.log(varA  + varB );
+//      return varA;
+//   } else {
+//      var img = new Image();
+//      img.src = varA;
+//      img.onload = this.getMeta(this.width, this.height);
+//   }
+// }
 
+MakeFile() {
+  
+  var FileSaver = require('file-saver');
+  //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
+  for(var i=0;i<this.state.docFiles.length;i++){
+    console.log(this.state.docFiles[i]);
+    console.log(this.state.docFiles[i].name);
 
-  let workButtons =
-      <div class="form-group" style={{marginBottom: "4px"}}>
-          <div  style={{ color: "white" ,fontSize: "16px", direction : "rtl"}}>עע</div> 
-            <div style={{textAlign:"left"}}> 
-              <Button bsStyle="light" style={{borderColor: "black",color: "black"}} onClick={this.closeToastModal} >לעשות מחיקה</Button>{' '}
-          </div>
-      </div>;
-    
-    return (
+    FileSaver.saveAs(this.state.docFiles[i], this.state.docFiles[i].name);
+  }
+  for(var i=0;i<this.state.imageFiles.length;i++){
+        console.log(this.state.imageFiles[i]);
+        console.log(this.state.imageFiles[i].name);
 
-      <Modal show={true} onHide={this.close} dialogClassName={classes.Dialog} style={{ position: "fixed",top: "50%",  left: "50%",transform: "translate(-50%, -50%)",wordWrap: "break-word",width: "min-content"}}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body >
-
-                 <div style={{wordWrap: "break-word"}}>
-           <ul className="nav nav-tabs">
-             <li className="active"><a href="#" >Selecting</a></li>
-           </ul>
-           <div className="tab-content">
-             <div className="tab-pane active" id="select">
-
-             <section className="photo-section" style={{ fontSize: "50%"}}>
-               <h2>Select Photos</h2>
-               <div className="row">
-                 {this.props.imagesForCard.map(image => 
-                <div className="col-xs-4 col-sm-3 col-md-2" style={{wordWrap: "break-word"}}>
-                <div style={{wordWrap: "break-word",position: "relative",borderColor: "rgba(82,168,236,.8)",boxShadow: "0 0 8px rgba(82,168,236,.6)",
-      content: '',
-      position: "absolute",
-      bottom: "-7px",
-      left: "0",
-      display: "block",
-      borderWidth: "7px 0 0 7px",
-      borderStyle: "solid",
-      borderColor: "rgba(55, 55, 55, 0.87) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)",
-      zIndex: "-1",
-}} >
-                  <img src={image.url} alt=""/>
-
-                  <div className="checkbox">
-                    <label>
-                      <input type="checkbox"/>
-                <i/>
-              </label>
-             </div>
-                </div>
-              </div>
-                )}
-              </div>
-            </section>
-            </div>
-          </div>
-          </div>
-            <h4>Text in a modal</h4>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww wwwwwwwwwwwwwwwwwwwww</p>
-
-            <h4>Popover in a modal</h4>
-            
-
-            <hr />
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.close}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+    FileSaver.saveAs(this.state.imageFiles[i], this.state.imageFiles[i].name);
+  }
+  
+}
 
 
+onMakeFileForDownload(url2,name,key,node) {
 
-//       <div class="modal fade"  id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
-//   <div class="modal-dialog">
-//     <div class="modal-content">
-//       <div class="modal-header">
-//         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-//         <h4 class="modal-title" id="myModalLabel" >Modal title</h4>
-//       </div>
-//       <div class="modal-body">
-//       <div className="container">
-//           <h1>Mock-Up: Photos <small className="text-muted">using <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/arqex/fluxify">Fluxify</a> &amp; <a href="https://getbootstrap.com/">Bootstrap</a></small></h1>
-//           <ul className="nav nav-tabs">
-//             <li className="active"><a href="#" >Selecting</a></li>
-//           </ul>
-//           <div className="tab-content">
-//             <div className="tab-pane active" id="select">
+//this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
 
-//             <section className="photo-section">
-//               <h2>Select Photos</h2>
-//               <div className="row">
-//                 {this.props.imagesForCard.map(image => 
-//                 <div className="col-xs-4 col-sm-3 col-md-2">
-//                 <div >
-//                   <img src={image.url} alt=""/>
+storageRef.child(this.props.branchNumber + "/" + this.state.cardDetails['ticketNumber'] + "/" + node + "/" + name).getDownloadURL().then(function(url) {
 
-//                   <div className="checkbox">
-//                     <label>
-//                       <input type="checkbox"/>
-//                 <i/>
-//               </label>
-//              </div>
-//                 </div>
-//               </div>
-//                 )}
-//               </div>
-//             </section>
-//             </div>
-//           </div>
-//           </div> 
-//       </div>
-//       <div class="modal-footer">
-//         <div class="left-side">
-//             <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Never mind</button>
-//         </div>
-//         <div class="divider"></div>
-//         <div class="right-side">
-//             <button type="button" class="btn btn-danger btn-simple">Delete</button>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </div>
-    ); 
-      
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+
+  xhr.onload = function(event) {
+       var FileSaver = require('file-saver');
+      FileSaver.saveAs(xhr.response, name);    
+  };
+
+  xhr.send();
+
+
+}).catch(function(error) {
+    console.log(error);
+});
 
 }
 
-/* <Modal show={true} onHide={this.closeToastModal}  
-style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
-<Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
-<Modal.Title  >תמונות</Modal.Title>   
-</Modal.Header>
-<Modal.Body  style={{ backgroundColor:"lightsteelblue", padding:"3px",flex: "none" }}   >
+
+onMultipleDocDownload(node) { //url2,name,key,
+  Object.keys(this.state.docsArrayForCheck).map((key, i) => {
+    this.props.onDownloadDoc(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
+     delete this.state.docsArrayForCheck[key];
+     console.log(this.state.docsArrayForCheck);
+    })
+}
 
 
-<div className="container">
-    <h1>Mock-Up: Photos <small className="text-muted">using <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/arqex/fluxify">Fluxify</a> &amp; <a href="https://getbootstrap.com/">Bootstrap</a></small></h1>
-    <ul className="nav nav-tabs">
-      <li className="active"><a href="#" >Selecting</a></li>
 
-    </ul>
-    <div className="tab-content">
-      <div className="tab-pane active" id="select">
+onDeleteMultipleDocs = (node) => {
+  Object.keys(this.state.docsArrayForCheck).map((key, i) => {
+       this.props.onDeleteDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
+        delete this.state.docsArrayForCheck[key];
+  })
+}
 
-      <section className="photo-section">
-        <h2>Select Photos</h2>
-        <div className="row">
-          {this.props.imagesForCard.map(image => 
-          
-          <div className="col-xs-4 col-sm-3 col-md-2">
-          <div >
-            <img src={image.url} alt=""/>
 
-            <div className="checkbox">
-              <label>
-                <input type="checkbox"/>
-          <i/>
-        </label>
-       </div>
+onDeleteMultipleImages = (node) => {
+  Object.keys(this.state.imagesArrayForCheck).map((key, i) => {
+       this.props.onDeleteImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
+        delete this.state.imagesArrayForCheck[key];
+  })
+}
 
-          </div>
+onMultipleImagesDownload(node) {
+  Object.keys(this.state.imagesArrayForCheck).map((key, i) => {
+    this.props.onDownloadImage(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
+     delete this.state.imagesArrayForCheck[key];
+     console.log(this.state.imagesArrayForCheck);
+    })
+}
+
+
+onCheckBoxImageClick(key, name, url,index,check){
+
+  if(check){ // unmarked the box
+   // this.props.docsForCard[index].check = false;
+    const imagesArrayForCheck = Object.assign({}, this.state.imagesArrayForCheck);
+    delete imagesArrayForCheck[name];
+    delete this.state.imagesArrayForCheck[name];
+    this.setState({ imagesArrayForCheck: imagesArrayForCheck });
+  
+  }
+  else if(!check){ // marked the box
+    //this.props.docsForCard[index].check = true;
+    this.state.imagesArrayForCheck[name] = true;
+  
+    const updatedCardForm = updateObject(this.state.imagesArrayForCheck, { 
+      [name]: true 
+  });
+    this.setState({imagesArrayForCheck: updatedCardForm});
+  } 
+}
+
+
+onCheckBoxFileClick(key, name, url,index,check){
+
+if(check){ // unmarked the box
+ // this.props.docsForCard[index].check = false;
+  const docsArrayForCheck = Object.assign({}, this.state.docsArrayForCheck);
+  delete docsArrayForCheck[name];
+  delete this.state.docsArrayForCheck[name];
+  this.setState({ docsArrayForCheck: docsArrayForCheck });
+
+}
+else if(!check){ // marked the box
+  //this.props.docsForCard[index].check = true;
+  this.state.docsArrayForCheck[name] = true;
+
+  const updatedCardForm = updateObject(this.state.docsArrayForCheck, { 
+    [name]: true 
+});
+  this.setState({docsArrayForCheck: updatedCardForm});
+}
+
+}
+
+renderImagesAndDocModal = () => { ///*** images and docs modal! ****
+    //,top: "50%",  left: "50%",transform: "translate(-50%, -50%)",wordWrap: "break-word",width: "min-content"
+    
+    return (
+//display: "inline-flex"
+
+      <Modal show={true} onHide={this.switchShowImagesAndDoc} dialogClassName={classes.Dialog} style={{ position: "fixed",display: "flex",fontFamily: "Alef Hebrew"}}>
+          <Modal.Header closeButton >
+            <Modal.Title>תמונות ומסמכים לכרטיס</Modal.Title>
+          </Modal.Header>
+          <Modal.Body >
+
+
+         <ul class="nav nav-tabs" id="myTab" role="tablist" style={{direction: "rtl"}}>
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">תמונות</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">מסמכים</a>
+              </li>
+ 
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style={{opacity: "initial"}}>
+
+
+              {
+           Object.keys(this.state.imagesArrayForCheck).length !== 0 ?
+
+            <div id="textbox" style={{direction: "rtl", textAlign: "right",fontSize: "25px",width: "100%" , display: "inline-table"}}>
+                <p class="alignright" style={{	float: "right"}}>
+                { Object.keys(this.state.imagesArrayForCheck).length} נבחרו 
+                </p>
+                <p class="alignleft" style={{	float: "left"}}>
+                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onDeleteMultipleImages('/images') }/>
+                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleImagesDownload('/images')}/>  
+                </p>
+            </div>
+          : null
+          }
+
+              <section style={{ display: "-webkit-box",flexWrap: "wrap"}}> 
+                    {this.props.imagesForCard.map(image =>
+                            <div className="div" ng-repeat="img in imgs" style={{width:image.width*200/image.height + 'px',flexGrow:image.width*200/image.height}} >
+                            <i className="i" style={{paddingBottom:image.height/image.width*100 + '%'}}></i>
+                            <div class="hovereffect">
+                              <img className="img" src={image.url} alt={image.key}  />
+                            <div class="overlay">   
+                            {
+                          this.state.imagesArrayForCheck[image.name] ?
+                    <CheckBoxIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
+                     :
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
+
+                      } 
+                          <DeleteOutlineIcon style={{ fontSize:"large" }} onClick={() => this.props.onDeleteImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], '/images',image.name) }/>
+                          <AssignmentReturnedIcon style={{ fontSize:"large" }} onClick={() => this.onMakeFileForDownload(image.url,image.name,image.key,'/images')}/>         
+                    </div>
+                    </div>
+                        </div>
+                      )}    
+                            </section> 
+              </div>             
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"  style={{opacity: "initial"}}>
+          {
+           Object.keys(this.state.docsArrayForCheck).length !== 0 ?
+
+            <div id="textbox" style={{direction: "rtl", textAlign: "right",fontSize: "25px",width: "100%"}}>
+                <p class="alignright" style={{	float: "right"}}>
+                { Object.keys(this.state.docsArrayForCheck).length} נבחרו 
+                </p>
+                <p class="alignleft" style={{	float: "left"}}>
+                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onDeleteMultipleDocs('/docs') }/>
+                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleDocDownload('/docs')}/>  
+                </p>
+            </div>
+          : null
+          }
+
+              <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ? {direction: "rtl", backgroundColor: "white"}
+            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)",  tableLayout: "fixed"}}>
+        <table class="table table-bordered" style={window.innerWidth > '376' ? {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",  tableLayout: "fixed"}: {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
+            <thead>  
+
+             <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+                    <th  scope="col" style={{ textAlign: "right"}}>שם קובץ</th>
+                    <th  scope="col" style={{ textAlign: "right"}}>תאריך שינוי אחרון</th>
+                    <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {this.props.docsForCard.map( file =>  (
+                    <tr> 
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>
+                      {
+                          this.state.docsArrayForCheck[file.name] ?
+                    <CheckBoxIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
+                     :
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
+
+                      }{' '}
+                    {file.name}
+                    </td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{file.lastModified}</td>  
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
+                    <p class="icon-links">                              
+
+                          <DeleteOutlineIcon style={{ fontSize:"large" }} onClick={() => this.props.onDeleteDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], '/docs',file.name) }/>
+                          <AssignmentReturnedIcon style={{ fontSize:"large" }} onClick={() => this.onMakeFileForDownload(file.url,file.name,file.key,'docs')}/>         
+
+                        </p>
+                    </td>
+                    </tr>      
+                 ))  
+            }
+       </tbody>
+        </table> 
         </div>
-      //    )}
-        </div>
-      </section>
-      </div>
-    </div>
+    
+                  </div>
+            </div>
+              
+          </Modal.Body>
+          <Modal.Footer style={{direction: "rtl"}}>    
+            <Button onClick={this.switchShowImagesAndDoc} style={{textAlign: "right"}}>סגירה</Button>
+          </Modal.Footer>
+        </Modal>
 
-    </div> 
-</Modal.Body>
-<Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
-   {workButtons}
-</Modal.Footer>
-</Modal>  */
+    ); 
+      
+}
 
 
 
 showImagesAndDoc  = () => {
-  this.props.onGetImagesOrDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'])
+  this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
+  this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
+
+
   // console.log(this.props.showGetSuccessCase);
   // if(this.props.showGetSuccessCase){
   //   console.log(this.props.imagesForCard);
@@ -1588,10 +1712,9 @@ fileSelectedHandler = (e,type) => {
       this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'images',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
   }
   else{
-    this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'doc',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
+    this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'docs',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
 
   }
-      //this.props.onImageOrDocUploading(this.state.docFiles);
  if (e.target.files) {
 
   /* Get files in array form */
@@ -1621,9 +1744,6 @@ fileSelectedHandler = (e,type) => {
  
 
 }
-
-
-
 
 
 handle_Submit(e) {
@@ -1812,7 +1932,7 @@ onChange = date => this.setState({ date })
               })()}
                   <label for="ticketNumber">מספר כרטיס</label>
                   <input type="text" id="ticketNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"
-                  value={this.state.cardForm.ticketNumber.value} 
+                  defaultValue={this.state.cardForm.ticketNumber.value} 
                   // {this.props.cards.length +1}
                   // value={this.state.cardForm.ticketNumber.value}
                   //  onChange={(event) => this.inputChangedHandler(event)}
@@ -2368,6 +2488,9 @@ onChange = date => this.setState({ date })
                     <h5>מסמכים:</h5>    
                         <input type="file" multiple onChange= { (event) =>  this.fileSelectedHandler(event,'doc')} disabled={!this.state.formIsValid} />
                   </div>
+
+                  <Button bsStyle="secondary" style={{height: 35,borderColor: "black", marginTop: 20 }}  
+                  onClick={e => this.MakeFile()} >הורד תמונות וקבצים</Button> 
                   {/* {imgTag} */}
 
                 </div>  
@@ -2418,6 +2541,8 @@ onChange = date => this.setState({ date })
             </FormGroup>
 
             <Button variant="primary" type="submit" style={{textAlign:"left",direction: "ltr",float: "left"}} disabled={!this.state.formIsValid} onClick={this.handle_Submit.bind(this)}> שלח מייל </Button>
+
+
           </Form>
       </>
               </div>  
@@ -2451,7 +2576,7 @@ onChange = date => this.setState({ date })
             :null}  
             {' '}
       {this.state.found ? 
-        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.showImagesAndDoc}>תמונות/מסמכים שהועלו</Button> 
+        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button> 
       : null}
         {' '}
       {this.state.found ? 
@@ -2470,7 +2595,7 @@ onChange = date => this.setState({ date })
         { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null }
         { this.props.showUpdateSuccessCase ? this.renderToastModal( 'כרטיס עודכן בהצלחה') :null }
         { this.props.showCloseCardSuccessCase && this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נסגר בהצלחה') :null }
-        { this.props.showGetSuccessCase ? this.renderImagesAndDocModal() :null }
+        { this.state.showImagesAndDoc ? this.renderImagesAndDocModal() :null }
 
         </form>
       </form>
@@ -2479,6 +2604,9 @@ onChange = date => this.setState({ date })
 }
 
 }
+
+// { this.props.showGetSuccessCase ? this.renderImagesAndDocModal() :null }
+
 
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
@@ -2500,7 +2628,15 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       currentTicketNumber: state.card.currentTicketNumber,
 
       showGetSuccessCase: state.storage.showGetSuccessCase,
-      imagesForCard: state.storage.fetchedImages
+      imagesForCard: state.storage.fetchedImages,
+      numberOfImages: state.storage.numberOfImages,
+
+      docsForCard: state.storage.fetchedDocs,
+      numberOfDocs: state.storage.numberOfDocs,
+
+      resizeImagesForCard: state.storage.resizeImages,
+      backgroundColor: state.auth.backgroundColor
+
   };
 };
 
@@ -2513,10 +2649,15 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
     onImageOrDocUploading:(file,userId ,token,branchNumber,node,cardKey,ticketNumber) => dispatch( actions.imageOrDocUploading(file,userId ,token,branchNumber,node,cardKey,ticketNumber)),
-    onGetImagesOrDocs:(userId ,token,branchNumber,cardKey,ticketNumber) => dispatch( actions.getImagesOrDocs(userId ,token,branchNumber,cardKey,ticketNumber)),
+    onGetImages:(userId ,token,branchNumber,cardKey,ticketNumber, node) => dispatch( actions.getImages(userId ,token,branchNumber,cardKey,ticketNumber, node)),
+   
+    onDeleteImages:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.deleteImages(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
+    onDeleteDocs:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.deleteDocs(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
 
+    onDownloadDoc:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadDoc(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
+    onDownloadImage:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadImage(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
 
-    
+    onGetDocs:(userId ,token,branchNumber,cardKey,ticketNumber, node) => dispatch( actions.getDocs(userId ,token,branchNumber,cardKey,ticketNumber, node)), 
     
     onWorkModalOpening: () =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
@@ -2533,11 +2674,6 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
     onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
 
-
-    
-      //  return a map to map my props to dispatchable functions
-      //here we want to execute an anonymous function where we eventually dispatch the action we just created it
-      // note - we need to execute this function - "fetchCards()" to really get the action
 
   };
 };

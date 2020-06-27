@@ -5,6 +5,7 @@ export const updateObject = (oldObject, updatedProperties) => { // its an error 
     };
 };
 
+
 export const checkValidity = (value, rules) => {
     let isValid = true;
     if (!rules) {
