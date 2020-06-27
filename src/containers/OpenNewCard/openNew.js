@@ -29,11 +29,8 @@ import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 import Promise from 'bluebird'
 import { storageRef } from "../../config";
-
 import './hoverEffect.css'
 
-import filesStyle from './modal2.css'
-//import './image.css';
 
 
 
@@ -157,23 +154,16 @@ class openNew extends Component   {
   
     cardPart:{
       partDescription:{value: '' },
-      amount:{value: ''},
+      amount:{value: 1},
       gross:{value: ''},
       discount:{value: ''},
       net:{ value: '' }
     }
   }; 
 }
-//    constructor(props){
-//      super(props);
-//      this.state = {
-//                reportStartDate: getDateTime(),
-//           }
-//   };
 
 
 componentWillUnmount() {
-  console.log("666");
      this.setTheStates();
 }
 
@@ -261,9 +251,7 @@ add = () => {
         console.log("251");
         this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
         this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
-        this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
-
-        
+        this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');     
       }
   }
 
@@ -276,7 +264,6 @@ cardOpeningHandler = ( event ) => {
   }
 
   formData['ticketNumber'] = this.props.cards.length + this.props.closeCards.length + 1;
-  // console.log(formData['ticketNumber']);
   const carData = {};
   for (let formElementIdentifier in this.state.vehicleData) {
     carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
@@ -334,8 +321,6 @@ for (let formElementIdentifier in this.state.customerDetails) {
 }
 
 inputChangedHandler = (event) => { 
-// console.log(event.target.id);
-// console.log(event.target.value);
 
   const updatedFormElement = updateObject(this.state.cardForm[event.target.id], { 
       // here we pass my cardForm and there (inputIdentifier) -> it show the control 
@@ -405,54 +390,140 @@ inputCusChangedHandler = (event) => {
 }
 
 inputNewWorkChangedHandler = (event) => { 
-      const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
-          value: event.target.value,
-        // value: checkFormatNumbers(event.target.value),
-          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+  if(event.target.id === 'gross'){
+    const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+      value: event.target.value
+    // value: checkFormatNumbers(event.target.value),
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+  });
+  let finalNetValue;
+
+  if(this.state.cardWork.discount.value !== ''){
+    finalNetValue = event.target.value - (this.state.cardWork.discount.value * event.target.value )/100 ; //calculate the final price after discount
+  }
+  else{
+    finalNetValue= event.target.value;
+  }
+
+  const updatedFormElementForNet = updateObject(this.state.cardWork['net'], { 
+    value: finalNetValue
+});
+
+  const updatedCardForm = updateObject(this.state.cardWork, { 
+      [event.target.id]: updatedFormElement,
+      ['net']: updatedFormElementForNet 
+  });
+  
+  this.setState({cardWork: updatedCardForm}); 
+  }
+
+  else if(event.target.id === 'discount'){
+          const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+            value: event.target.value
+        });
+
+        const finalNetValue = this.state.cardWork.gross.value - (event.target.value * this.state.cardWork.gross.value )/100 ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.cardWork['net'], { 
+          value: finalNetValue
       });
-      const updatedCardForm = updateObject(this.state.cardWork, { 
-          [event.target.id]: updatedFormElement 
-      });
+
+        const updatedCardForm = updateObject(this.state.cardWork, { 
+            [event.target.id]: updatedFormElement,
+            ['net']: updatedFormElementForNet 
+        });
+        this.setState({cardWork: updatedCardForm}); 
+  }
+  
+  else{
+          const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+            value: event.target.value
+        });
+        const updatedCardForm = updateObject(this.state.cardWork, { 
+            [event.target.id]: updatedFormElement 
+        });
+        
+        this.setState({cardWork: updatedCardForm}); 
+  }
       
-      this.setState({cardWork: updatedCardForm}); 
 }
-
-updateWorkChangedHandler = (event) => { 
-      const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
-          value: event.target.value,
-        // value: checkFormatNumbers(event.target.value),
-          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      });
-      const updatedCardForm = updateObject(this.state.cardWork, { 
-          [event.target.id]: updatedFormElement 
-      });
-      this.setState({cardWork: updatedCardForm}); 
-}
-
 
 inputNewPartChangedHandler = (event) => { 
-      const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
-          value: event.target.value,
-          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+
+  if(event.target.id === 'gross'){
+    const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+      value: event.target.value
+    // value: checkFormatNumbers(event.target.value),
+      //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
+  });
+  let finalNetValue;
+
+  if(this.state.cardPart.discount.value !== ''){
+    finalNetValue = (event.target.value - (this.state.cardPart.discount.value * event.target.value )/100) ; //calculate the final price after discount
+  }
+  else{
+    finalNetValue= event.target.value;
+  }
+  
+  const updatedFormElementForNet = updateObject(this.state.cardPart['net'], { 
+    value: finalNetValue*this.state.cardPart.amount.value
+});
+
+  const updatedCardForm = updateObject(this.state.cardPart, { 
+      [event.target.id]: updatedFormElement,
+      ['net']: updatedFormElementForNet 
+  });
+  
+  this.setState({cardPart: updatedCardForm}); 
+  }
+
+  else if(event.target.id === 'discount'){
+          const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+            value: event.target.value
+        });
+
+        const finalNetValue = this.state.cardPart.gross.value - (event.target.value * this.state.cardPart.gross.value )/100 ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.cardPart['net'], { 
+          value: finalNetValue*this.state.cardPart.amount.value
       });
-      const updatedCardForm = updateObject(this.state.cardPart, { 
-          [event.target.id]: updatedFormElement 
-      });
-      this.setState({cardPart: updatedCardForm});
+
+        const updatedCardForm = updateObject(this.state.cardPart, { 
+            [event.target.id]: updatedFormElement,
+            ['net']: updatedFormElementForNet 
+        });
+        this.setState({cardPart: updatedCardForm}); 
+  }
+  
+  else if(event.target.id === 'amount'){
+    const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+      value: event.target.value
+  });
+
+  const finalNetValue =  this.state.cardPart.gross.value - (this.state.cardPart.discount.value * this.state.cardPart.gross.value )/100 ;
+  const updatedFormElementForNet = updateObject(this.state.cardPart['net'], { 
+    value: finalNetValue*event.target.value
+});
+
+  const updatedCardForm = updateObject(this.state.cardPart, { 
+      [event.target.id]: updatedFormElement,
+      ['net']: updatedFormElementForNet 
+  });
+  this.setState({cardPart: updatedCardForm}); 
 }
 
-UpdatePartChangedHandler = (event) => { 
-      const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
-          value: event.target.value,
-          //valid: checkValidity(event.target.value, this.state.cardForm[event.target.id].validation),
-      });
-      const updatedCardForm = updateObject(this.state.cardPart, { 
-          [event.target.id]: updatedFormElement 
-      });
+  else{
+          const updatedFormElement = updateObject(this.state.cardPart[event.target.id], { 
+            value: event.target.value
+        });
+        const updatedCardForm = updateObject(this.state.cardPart, { 
+            [event.target.id]: updatedFormElement 
+        });
+        
+        this.setState({cardPart: updatedCardForm}); 
+  }
       
-      this.setState({cardPart: updatedCardForm}); 
+
 }
-    
+
 
 workOrPartsOpeningHandler = ( event,kind ) => {
       event.preventDefault(); 
@@ -493,7 +564,7 @@ workOrPartsOpeningHandler = ( event,kind ) => {
 
       let updateCardPart = {
         partDescription:{value: ''},
-        amount:{value: ''},
+        amount:{value: 1},
         gross:{value: ''},
         discount:{value: ''},
         net:{value: ''}
@@ -541,7 +612,7 @@ workOrPartsUpdateHandler = ( event,kind ) => {
   });
 };
 
-cardUpdateHandler = ( event ) => { // עדכון כרטיס
+cardUpdateHandler = ( event ) => { // update card
   event.preventDefault(); 
  
   const carData ={
@@ -590,7 +661,6 @@ cardUpdateHandler = ( event ) => { // עדכון כרטיס
   }
 
   this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
-  //this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.state.branchNumber,this.state.identifiedCardID); // this contains all the data of card 
   this.setTheStates();
   document.getElementById("workCardForm").reset(); 
 
@@ -750,7 +820,7 @@ closeWorksModal = (event) => {
 closeToastModal = (event) => {
   this.setState( { isAddNewWorkOrPartOpen: false } );
   this.setState( { isUpdateWorkOrPartOpen: false } );
-  this.props.onToastModalClose(this.props.token); // this contains all the data of card 
+  this.props.onToastModalClose(this.props.token); 
 // this.setState({ showWorkModel: false });
 };
 
@@ -758,7 +828,7 @@ closeToastModal = (event) => {
 
 closePartsModal = (event) => {
   this.setWorkAndPartStates();
-  this.props.onPartsModalClose(this.props.token); // this contains all the data of card 
+  this.props.onPartsModalClose(this.props.token);  
 };
 
 
@@ -813,8 +883,6 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
           <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
             <div> 
               <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.closeWorksModal} >יציאה</Button>{' '}
-              {/* <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>עדכון</Button>{' '} */}
-              {/* <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.closeWorksModal}>מחיקה</Button>{' '} */}
               <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.handleAddRow} >הוספה</Button> 
             </div>
           </form>
@@ -829,36 +897,35 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
             <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
               <label for="workDescription" >תיאור עבודה</label>
               <input type="text" id="workDescription" class="form-control" value={this.state.cardWork.workDescription.value} autocomplete="off" aria-describedby="passwordHelpInline" 
-              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
+              onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
             </div>
 
             <div class="form-group col-md-1" style={{ marginBottom: "4px"}}  >
               <label for="time">זמן תקן</label>
               <input type="number" id="time" class="form-control" value={this.state.cardWork.time.value} autocomplete="off"  aria-describedby="passwordHelpInline" 
-              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
+              onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
 
             <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
              <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" 
-             onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
-            </div>
+              onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
+              </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
               <input type="number" id="discount" class="form-control" value={this.state.cardWork.discount.value} autocomplete="off" aria-describedby="passwordHelpInline" 
-              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
-            </div>
+              onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
+              </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
-              <label for="net">נטו</label>
+              <label for="net">נטו</label> 
               <input type="number" id="net" class="form-control" value={this.state.cardWork.net.value} autocomplete="off" aria-describedby="passwordHelpInline" 
-              onChange = { isUpdateWorkOrPartOpen ? (event) => this.updateWorkChangedHandler(event) : (event) => this.inputNewWorkChangedHandler(event) }/>
-            </div>
+              onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
+              </div>
 
           </div>
         </form>
-        {/* onSubmit={this.cardOpeningHandler}   */}
         <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px", justifyContent: "left"}} >
           <div>  
 
@@ -1053,32 +1120,32 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
             <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
               <label for="partDescription" >תיאור חלק</label>        
               <input type="text" id="partDescription" class="form-control" autocomplete="off" value={this.state.cardPart.partDescription.value} aria-describedby="passwordHelpInline"
-               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
+               onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
             </div>
 
             <div class="form-group col-md-1" style={{ marginBottom: "4px"}}  >
               <label for="amount">כמות</label>
               <input type="number" id="amount" class="form-control" autocomplete="off" value={this.state.cardPart.amount.value} aria-describedby="passwordHelpInline" 
-               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
-            </div>
+               onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
+               </div>
 
             <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
              <input type="number" id="gross" class="form-control" value={this.state.cardPart.gross.value} aria-describedby="passwordHelpInline" autocomplete="off" 
-              onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
-            </div>
+               onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
+               </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
               <input type="number" id="discount" class="form-control" value={this.state.cardPart.discount.value} aria-describedby="passwordHelpInline" autocomplete="off" 
-               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
-            </div>
+               onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
+               </div>
 
             <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
               <label for="net">נטו</label>
               <input type="number" id="net" class="form-control" value={this.state.cardPart.net.value} aria-describedby="passwordHelpInline" autocomplete="off" 
-               onChange = { isUpdateWorkOrPartOpen ? (event) => this.UpdatePartChangedHandler(event) : (event) => this.inputNewPartChangedHandler(event) }/>
-            </div>
+               onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
+               </div>
 
           </div>
         </form>
