@@ -66,6 +66,8 @@
   top: 0;
   width: 100%;
   vertical-align: bottom;
+  border: solid;
+  border-width: thick;
 }
 
 

@@ -166,7 +166,7 @@ class openNew extends Component   {
 
 
 componentWillUnmount() {
-     this.setTheStates();
+     this.setTheStates('');
 }
 
 componentDidUpdate(prevProps,prevState) {
@@ -336,6 +336,7 @@ inputChangedHandler = (event) => {
   });
 
   let formIsValid = true;
+
   if (event.target.id === 'licenseNumber'   ) { // the user must enter valid car number! the rest does not matter
       formIsValid = updatedCardForm[event.target.id].valid;  
   }
@@ -351,15 +352,41 @@ inputChangedHandler = (event) => {
 
     let cards;    
 
+
+    // onMultipleDocDownload(node) { //url2,name,key,
+    //   Object.keys(this.state.docsArrayForCheck).map((key, i) => {
+    //     this.props.onDownloadDoc(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
+    //      delete this.state.docsArrayForCheck[key];
+    //      console.log(this.state.docsArrayForCheck);
+    //     })
+    // }
+
+
   if(event.target.value!==""){
-    cards = this.props.cards.map( card => (
-      this.check(card,event.target.value)
-    ))
+
+    for(var i=0; i < this.props.cards.length ; i++){
+     // console.log(this.props.cards);
+      if(this.check(this.props.cards[i],event.target.value)){
+        console.log("369");
+        break;
+      }
+    }
+
+    // cards = this.props.cards.map( (card,i) => {
+    //   if(this.check(card,event.target.value)){
+    //   }
+    //   else{
+    //     console.log("364");
+
+    //   }
+    // })
 
   }
-  // if(this.state.found === false){
-  //   this.setTheStates();
-  // }
+
+  if(this.state.found === false){
+    console.log("361");
+    this.setTheStates(event.target.value);
+  }
 
     // if(this.state.found === true){
     //   console.log(this.state.cardDetails['ticketNumber']);
@@ -663,7 +690,7 @@ cardUpdateHandler = ( event ) => { // update card
   }
 
   this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
-  this.setTheStates();
+  this.setTheStates('');
   document.getElementById("workCardForm").reset(); 
 
 }
@@ -696,16 +723,22 @@ cardCloseHandler = ( event ) => {
         this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId);  
         this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards');  
         
-        this.setTheStates();
+        this.setTheStates('');
 }
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
 
 
-setTheStates = () => {
-
+setTheStates = (licenseNumber) => {
+  let valueLicenseNumber;
+  if(licenseNumber !== ''){
+    valueLicenseNumber = licenseNumber;
+  }
+  else{
+    valueLicenseNumber= '';
+  }
     let updateTaskForm =  { 
         licenseNumber: {
-          value: '',
+            value: valueLicenseNumber,
           validation: {
             required: true,
             minLength: 3,
@@ -764,18 +797,35 @@ setTheStates = () => {
     this.setState({customer_data: []});
     this.setState({branchNumber: ''});
     this.setState({identifiedCardID: ''});
-  
      this.setState({cardForm: updateTaskForm});
      this.setState({vehicleData: updateVehicleForm });
      this.setState({customerDetails: updateCustomerForm});
      this.setState({found: false});
      this.setState({dataBaseCarNumber: ''});
-  
       this.setState({carDetails: {}});
       this.setState({userCarNumber: ''});
   
       this.setState({cardDetails: {}});
       this.setState({customer_details: {}});
+
+      // if( licenseNumber!==''){
+      //   const updatedFormElement = updateObject(this.state.cardForm['licenseNumber'], { 
+      //     value: licenseNumber,
+      //     valid: checkValidity(licenseNumber, this.state.cardForm['licenseNumber'].validation)
+      // });
+      // const updatedCardForm = updateObject(this.state.cardForm, { // here we want to update the overall card for a given input identifer
+      //     ['licenseNumber']: updatedFormElement // here we need to pass javascript object and pass a new properties and it should be dynamic input identifier where we pick a specific control.
+      // });
+    
+     // let formIsValid = true;
+     // formIsValid = updatedCardForm['licenseNumber'].valid;  
+     // this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: licenseNumber});
+
+      document.getElementById("workCardForm").reset(); 
+
+
+     // }
+
   }
 
 
@@ -793,8 +843,6 @@ check(data,licenseNumber){
 
 
    // if(this.state.found === true){
-      console.log(this.state.cardDetails['ticketNumber']);
-      console.log("372");
       this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
       this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
      this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
@@ -809,6 +857,14 @@ check(data,licenseNumber){
     // this.setState({identifiedCardID: data.id});
     // this.setState({branchNumber: data.branchNumber});
 
+    return true;
+  }
+
+
+  else if(data.cardData.licenseNumber!==licenseNumber && this.state.dataBaseCarNumber !== data.cardData.licenseNumber ){
+   // this.setTheStates(licenseNumber);
+    this.state.found=false;
+    return false;
   }
 }
 
@@ -1462,20 +1518,10 @@ updateCustomerInputValue(evt,i) {
   this.state.customer_data[i]=evt.target.value;
 }
 
-buildImgTag(){
-
-  return <div className="photo-container">
-  { 
-    this.state.imageArray.map(imageURI => 
-    (<img className="photo-uploaded" src={imageURI} alt="Photo uploaded"/>)) 
-  }
-  </div>
-}
-
 
 switchShowImagesAndDoc = () => {
   this.setState(prevState => {
-      return {showImagesAndDoc: !prevState.showImagesAndDoc};
+      return {showImagesAndDoc: !prevState.showImagesAndDoc,imagesArrayForCheck:[], docsArrayForCheck: []};
       });
 }
 
@@ -1492,56 +1538,33 @@ switchShowImagesAndDoc = () => {
 //   }
 // }
 
-MakeFile() {
+// MakeFile() {
   
-  var FileSaver = require('file-saver');
-  //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
-  for(var i=0;i<this.state.docFiles.length;i++){
-    console.log(this.state.docFiles[i]);
-    console.log(this.state.docFiles[i].name);
+//   var FileSaver = require('file-saver');
+//   //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
+//   for(var i=0;i<this.state.docFiles.length;i++){
+//     console.log(this.state.docFiles[i]);
+//     console.log(this.state.docFiles[i].name);
 
-    FileSaver.saveAs(this.state.docFiles[i], this.state.docFiles[i].name);
-  }
-  for(var i=0;i<this.state.imageFiles.length;i++){
-        console.log(this.state.imageFiles[i]);
-        console.log(this.state.imageFiles[i].name);
+//     FileSaver.saveAs(this.state.docFiles[i], this.state.docFiles[i].name);
+//   }
+//   for(var i=0;i<this.state.imageFiles.length;i++){
+//         console.log(this.state.imageFiles[i]);
+//         console.log(this.state.imageFiles[i].name);
 
-    FileSaver.saveAs(this.state.imageFiles[i], this.state.imageFiles[i].name);
-  }
+//     FileSaver.saveAs(this.state.imageFiles[i], this.state.imageFiles[i].name);
+//   }
   
-}
+// }
 
 
-onMakeFileForDownload(url2,name,key,node) {
-
-//this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
-
-storageRef.child(this.props.branchNumber + "/" + this.state.cardDetails['ticketNumber'] + "/" + node + "/" + name).getDownloadURL().then(function(url) {
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
-  xhr.responseType = 'blob';
-
-  xhr.onload = function(event) {
-       var FileSaver = require('file-saver');
-      FileSaver.saveAs(xhr.response, name);    
-  };
-
-  xhr.send();
-
-
-}).catch(function(error) {
-    console.log(error);
-});
-
-}
 
 
 onMultipleDocDownload(node) { //url2,name,key,
   Object.keys(this.state.docsArrayForCheck).map((key, i) => {
     this.props.onDownloadDoc(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
      delete this.state.docsArrayForCheck[key];
-     console.log(this.state.docsArrayForCheck);
+    // console.log(this.state.docsArrayForCheck);
     })
 }
 
@@ -1566,7 +1589,7 @@ onMultipleImagesDownload(node) {
   Object.keys(this.state.imagesArrayForCheck).map((key, i) => {
     this.props.onDownloadImage(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
      delete this.state.imagesArrayForCheck[key];
-     console.log(this.state.imagesArrayForCheck);
+    // console.log(this.state.imagesArrayForCheck);
     })
 }
 
@@ -1641,7 +1664,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style={{opacity: "initial"}}>
 
 
-              {
+              { 
            Object.keys(this.state.imagesArrayForCheck).length !== 0 ?
 
             <div id="textbox" style={{direction: "rtl", textAlign: "right",fontSize: "25px",width: "100%" , display: "inline-table"}}>
@@ -1670,8 +1693,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                     <CheckBoxOutlineBlankIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
 
                       } 
-                          <DeleteOutlineIcon style={{ fontSize:"large" }} onClick={() => this.props.onDeleteImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], '/images',image.name) }/>
-                          <AssignmentReturnedIcon style={{ fontSize:"large" }} onClick={() => this.onMakeFileForDownload(image.url,image.name,image.key,'/images')}/>         
+           
                     </div>
                     </div>
                         </div>
@@ -1702,7 +1724,6 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
              <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                     <th  scope="col" style={{ textAlign: "right"}}>שם קובץ</th>
                     <th  scope="col" style={{ textAlign: "right"}}>תאריך שינוי אחרון</th>
-                    <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
                 </tr>
             </thead>
             <tbody>
@@ -1720,14 +1741,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                     {file.name}
                     </td>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{file.lastModified}</td>  
-                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                    <p class="icon-links">                              
-
-                          <DeleteOutlineIcon style={{ fontSize:"large" }} onClick={() => this.props.onDeleteDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], '/docs',file.name) }/>
-                          <AssignmentReturnedIcon style={{ fontSize:"large" }} onClick={() => this.onMakeFileForDownload(file.url,file.name,file.key,'docs')}/>         
-
-                        </p>
-                    </td>
+                
                     </tr>      
                  ))  
             }
@@ -1931,7 +1945,7 @@ main().catch(console.error);
 onChange = date => this.setState({ date })
 
   render () {
-    const imgTag = this.buildImgTag();
+   // const imgTag = this.buildImgTag();
 
     // let { licenseNumber , ticketNumber } = this.state;
 
@@ -2558,9 +2572,6 @@ onChange = date => this.setState({ date })
                         <input type="file" multiple onChange= { (event) =>  this.fileSelectedHandler(event,'doc')} disabled={!this.state.formIsValid} />
                   </div>
 
-                  <Button bsStyle="secondary" style={{height: 35,borderColor: "black", marginTop: 20 }}  
-                  onClick={e => this.MakeFile()} >הורד תמונות וקבצים</Button> 
-                  {/* {imgTag} */}
 
                 </div>  
                 

@@ -310,22 +310,23 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
     return dispatch => {
             dispatch( getDocsStart() ); 
     var listRef = storageRef.child(branchNumber + "/" + ticketNumber + node ); 
-    let counterFiles = 0;
+    //let counterFiles = 0;
     let count = 0;
     let fetchedDocs = []; 
     let countIndex = 0;
 
-    listRef.list()
+    listRef.listAll()
     .then(result =>  {
         count = result.items.length;
         if(count === 0){
             //alert('אין תמונות להצגה'); 
+            console.log("323");
             dispatch( getDocsSuccess(fetchedDocs,'false',node,count) ); 
 
         }
       result.items.forEach(folder => {
           console.log(folder);
-                counterFiles += 1;   
+              //  counterFiles += 1;   
                 folder.getDownloadURL()
                .then(function(url) {
                 // console.log(folder.getCreationTimeMillis());
@@ -339,18 +340,11 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
                     check: false
                 } );
                 countIndex += 1;
-                console.log(countIndex);
-
-                console.log(counterFiles);
-                console.log(count);
-
-                //     if(counterFiles === count) {
-                //         console.log("358");
-                //         dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
-                //   }    
+                    if(countIndex === count) {
+                        dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
+                  }    
           })
           .catch(error => {
-                    console.log(error);
                     dispatch(getDocsFail(error));
           }) 
       });
@@ -359,19 +353,14 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
     .catch(error => {
                  console.log(error);
                 dispatch(getDocsFail(error));
-    })
-
-    .finally(function(){
-        console.log(counterFiles);
-        console.log(count);
-     if(counterFiles === count) {
-        console.log(counterFiles);
-        console.log(count);
-        console.log("362");
-        dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
-     }
-
     });
+
+    // .finally(function(){
+    //  if(counterFiles === count) {
+    //    // dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
+    //  }
+
+    // });
     };
 };
 
@@ -404,6 +393,13 @@ export const deleteDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node
         listRef.delete()
         .then(result => {
             dispatch(deleteDocsSuccess(result));
+            console.log(userId);
+            console.log(token);
+            console.log(branchNumber);
+            console.log(cardKey);
+            console.log(ticketNumber);
+            console.log(node);
+
             dispatch(getDocs( userId ,token,branchNumber,cardKey,ticketNumber,node));
         })
 
