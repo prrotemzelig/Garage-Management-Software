@@ -1716,8 +1716,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
           : null
           }
 
-              <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ? {direction: "rtl", backgroundColor: "white"}
-            : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)",  tableLayout: "fixed"}}>
+              <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"} }>
         <table class="table table-bordered" style={window.innerWidth > '376' ? {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",  tableLayout: "fixed"}: {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
             <thead>  
 
