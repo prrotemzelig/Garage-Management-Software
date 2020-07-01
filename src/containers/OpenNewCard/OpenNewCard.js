@@ -1715,7 +1715,7 @@ style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
 
 
 showImagesAndDoc  = () => {
-  //this.props.onGetImagesOrDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'])
+//  this.props.onGetImagesOrDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'])
   // console.log(this.props.showGetSuccessCase);
   // if(this.props.showGetSuccessCase){
   //   console.log(this.props.imagesForCard);
@@ -2722,7 +2722,7 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
     onImageOrDocUploading:(file,userId ,token,branchNumber,node,cardKey,ticketNumber) => dispatch( actions.imageOrDocUploading(file,userId ,token,branchNumber,node,cardKey,ticketNumber)),
- // onGetImagesOrDocs:(userId ,token,branchNumber,cardKey,ticketNumber) => dispatch( actions.getImagesOrDocs(userId ,token,branchNumber,cardKey,ticketNumber)),
+    //onGetImagesOrDocs:(userId ,token,branchNumber,cardKey,ticketNumber) => dispatch( actions.getImagesOrDocs(userId ,token,branchNumber,cardKey,ticketNumber)),
 
 
     

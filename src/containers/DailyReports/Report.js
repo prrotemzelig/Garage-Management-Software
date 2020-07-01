@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/index';
 import {Bar,Pie,Line} from 'react-chartjs-2';
 import Date from './DatePic';
 import {Grid} from "@material-ui/core";
-import LineChart from 'react-linechart';
+//import LineChart from 'react-linechart';
 import { Modal ,Button } from 'react-bootstrap';
 
 import {ExcelExport,ExcelExportColumn,ExcelExportColumnGroup} from '@progress/kendo-react-excel-export';
