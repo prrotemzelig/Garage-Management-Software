@@ -30,7 +30,7 @@ const navigationItems = (props ) => (
             {props.isAuthenticated ? <NavigationItem icon={IconContacts} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/dailyUpdates">עדכונים יומיים   </NavigationItem> : null}
             {/* {props.isAuthenticated ? <NavigationItem icon={IconAgents} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null} */}
-            {/* {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null} */}
+            {props.isAuthenticated ? <NavigationItem icon={IconOverview} link="/cardOpening"> פתיחת כרטיס ישן   </NavigationItem> : null}
 
             <div className={classes.separator}></div>
 

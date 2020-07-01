@@ -91,6 +91,8 @@ class UserHomePage extends Component {
         }
 
         return ( 
+            
+           
             <Column style= {{marginRight: "20px", marginTop: "10px",marginLeft: "20px"}}>
             <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>

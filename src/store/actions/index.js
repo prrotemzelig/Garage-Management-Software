@@ -52,6 +52,13 @@ export {
     addNewTaskForUserModalClose,
     deleteUserModalOpening,
     deleteUserModalClose,
-    taskOpeningForUser
+    taskOpeningForUser,
+    notificationOpeningForUser
+
 } from './admin';
+export {
+    notificationOpening,
+    fetchNotification,
+    notificationDelete
+} from './notification';
 

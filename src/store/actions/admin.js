@@ -393,3 +393,45 @@ export const taskOpeningForUser = ( taskData, token,branchNumber, userKey,list) 
         } );
     };
 };
+
+export const notificationOpeningFail = ( error ) => { 
+    //console.log(error);
+    return {
+        type: actionTypes.NOTIFICATION_OPENING_FOR_USER_FAIL,
+        error: error 
+    };
+}
+
+
+export const notificationOpeningStart = () => {
+    return {
+        type: actionTypes.NOTIFICATION_OPENING_FOR_USER_START
+    };
+};
+export const notificationOpeningSuccess = ( id, notificationData ) => { 
+    return { 
+        type: actionTypes.NOTIFICATION_OPENING_FOR_USER_SUCCESS,
+        notificationId: id, 
+        notificationData: notificationData
+    };
+};
+
+
+export const notificationOpeningForUser = ( notificationData, token,branchNumber, userKey) => { 
+
+    return dispatch => {
+        dispatch( notificationOpeningStart() ); 
+
+        axios.post(branchNumber + '/users/' + userKey + '/notification.json' ,notificationData ) 
+
+        .then( response => {
+           // console.log(response.data)
+            dispatch(notificationOpeningSuccess(response.data.name, notificationData)); 
+
+        } )
+        .catch( error => {
+            dispatch(notificationOpeningFail(error));
+            //console.log(error);
+        } );
+    };
+};

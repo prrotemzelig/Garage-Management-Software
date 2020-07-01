@@ -118,6 +118,8 @@ class AdminUserManagement extends Component {
     
     componentDidMount() { 
         this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumbers
+        //ariel
+        //this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
     }
 
     renderDeleteUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
@@ -447,18 +449,22 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
         formData['isEdit'] = false;
         formData['openedByFirstName'] = this.props.AdminFirstName;
         formData['openedByLastName'] = this.props.AdminLastName;
-      
     
     this.props.onTaskOpening(formData,token, userBranchNumber, userKey,list); // this contains all the data of card 
-    
+    console.log(userKey);
+    const notification={};
+    notification['type']='task';
+    notification['description']=this.state.taskForm.newTaskForUser.title;
+    notification['openedBy'] = this.props.AdminFirstName+' '+this.props.AdminLastName;
+    this.props.onNotificationOpening(notification,token, userBranchNumber, userKey);
     this.closeAddNewTaskModal();
-
     let updateTaskForm =  { 
             newTaskForUser: {  
                 title: ''            
             }  
     }
     this.setState({taskForm: updateTaskForm});
+
 }
 
 
@@ -769,6 +775,7 @@ const mapStateToProps = state => {
         AdminFirstName: state.auth.firstName,
         AdminLastName: state.auth.lastName,
         branchNumber: state.auth.branchNumber,
+        UserKey: state.auth.userKey,
 
         showAddNewUserModel: state.admin.showAddNewUserModel,
         showDeleteSuccessCase: state.admin.showDeleteSuccessCase,
@@ -784,7 +791,11 @@ const mapStateToProps = state => {
         userToken: state.admin.userToken,
         firstName: state.admin.firstName,
         lastName: state.admin.lastName,
-        backgroundColor: state.auth.backgroundColor
+        backgroundColor: state.auth.backgroundColor,
+
+        //notification: state.notification.notification,
+        //notificationKey: state.notification.notificationId
+
 
     };
 };
@@ -806,6 +817,9 @@ const mapDispatchToProps = dispatch => {
         onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
         onTaskOpening: (task, token,branchNumber,userKey,list) => dispatch(actions.taskOpeningForUser(task, token, branchNumber,userKey,list)),
 
+        onNotificationOpening: (notification, token,branchNumber,userKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey)),
+        //onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
+        //onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId))
     };
 };
 

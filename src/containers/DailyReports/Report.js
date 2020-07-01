@@ -6,11 +6,13 @@ import * as actions from '../../store/actions/index';
 import {Bar,Pie,Line} from 'react-chartjs-2';
 import Date from './DatePic';
 import {Grid} from "@material-ui/core";
+import LineChart from 'react-linechart';
+import { Modal ,Button } from 'react-bootstrap';
+
+import {ExcelExport,ExcelExportColumn,ExcelExportColumnGroup} from '@progress/kendo-react-excel-export';
+
 //import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 //import ApexCharts from 'apexcharts'
-
-
-
 
 
 class BarChart extends Component {
@@ -27,57 +29,116 @@ class BarChart extends Component {
       data:[],
       card:[],
       closeCard:[],
-      chartType:''
+      chartType:'',
+      excelData:[],
+      month:'',
+      year:'',
+      countMonthOpen:0,
+      countMonthClose:0,
+      countMonthWork:0,
+      countMonthParts:0,
+      countMonthRevenue:0,
+      counter:0,
+      modal: false
+
     }
     this.onChildClicked = this.onChildClicked.bind(this);
     this.getData=this.getData.bind(this);
     this.chartSelected=this.chartSelected.bind(this);
   }
-  
+  modalOpen() {
+    this.setState({ modal: true });
+  }
+    
+  modalClose() {
+    this.setState({modal: false});
+  }
   onChildClicked() {
     this.setState({click : true});
   }
-  getData(data){
-    this.setState({date : data});
+  getData(data,month,year){
+    this.setState({date: data,month: month,year: year});
   }
-  componentDidMount(){
-    this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+componentDidMount(){
+  this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+}
+componentWillMount(){
+  this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
+}
+chartSelected(data){
+    if(data==='עוגה'){this.state.chartType="Pie";}
+    if(data==='מקלות'){this.state.chartType="Bar";}
+    if(data==='גרף'){this.state.chartType="Line";}
+}
+createMountlyReport(data){
+  for(var i=0; i<data.length; i++){
+    let openingDate=data[i].cardData.openingDate;
+    let closeDate=data[i].closeDate;
 
-  }
-  componentWillMount(){
-    this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
-  }
-  chartSelected(data){
-    if(data==='עוגה'){
-      this.state.chartType="Pie";
+    if(openingDate.includes(this.state.month+"."+this.state.year)){
+      this.state.countMonthOpen+=1;
+      if(closeDate === undefined || closeDate === null || closeDate === ''){
+      }
+      else{
+        if(closeDate.includes(this.state.month+"."+this.state.year)){
+          this.state.countMonthClose+=1;
+        }
+      }
     }
-    if(data==='מקלות'){
-      this.state.chartType="Bar";
-    }
-    if(data==='גרף'){
-      this.state.chartType="Line";
-    }
-    console.log(this.state.chartType);
-
   }
+  for(var i=0; i<data.length; i++){
+    let parts=[];
+    let parts_card;
+    parts=data[i].partsData;
 
+    let openingDate=data[i].cardData.openingDate;
+    if(openingDate.includes(this.state.month+"."+this.state.year)){
+      if(parts === undefined || parts === null || parts === ''){
+      }
+      else{
+        parts_card=Object.values(data[i].partsData);
+        for(var j=0;j<parts_card.length;j++){
+          this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
+          this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
+        }
+      }
+    }  
+  }
+  for(var i=0; i<data.length; i++){
+    let work=[];
+    let work_card;
+    work=data[i].workData;
 
+    let openingDate=data[i].cardData.openingDate;
+    if(openingDate.includes(this.state.month+"."+this.state.year)){
+      if(work === undefined || work === null || work === ''){
+      }
+      else{
+        work_card=Object.values(data[i].workData);
+        for(var j=0;j<work_card.length;j++){
+          this.state.countMonthWork+=1;
+          this.state.countMonthRevenue+=parseInt(work_card[j].net, 10) ;
 
+        }
+      }
+    }  
+  }
+}
 createReport(data){
  
   for(var i=0; i<data.length; i++){
   let openingDate=data[i].cardData.openingDate;
   let closeDate=data[i].closeDate;
   
-  console.log(data[i].cardData.openingDate+'  '+data[i].cardData.licenseNumber);
-  console.log(data[i].closeDate);
     if(openingDate.includes(this.state.date)){
       this.state.countOpen+=1;
+      this.state.counter=1;
       if(closeDate === undefined || closeDate === null || closeDate === ''){
       }
       else{
         if(closeDate.includes(this.state.date)){
           this.state.countClose+=1;
+          this.state.counter=1;
         }
       }
     }
@@ -96,6 +157,7 @@ createReport(data){
         for(var j=0;j<parts_card.length;j++){
           this.state.countParts+=parseInt(parts_card[j].amount, 10) ;
           this.state.countRevenue+=parseInt(parts_card[j].net, 10) ;
+          this.state.counter=1;
         }
       }
     }  
@@ -114,7 +176,7 @@ createReport(data){
         for(var j=0;j<work_card.length;j++){
           this.state.countWork+=1;
           this.state.countRevenue+=parseInt(work_card[j].net, 10) ;
-
+          this.state.counter=1;
         }
       }
     }  
@@ -127,23 +189,31 @@ isMobile() {
       }))(navigator.userAgent || navigator.vendor);
   return check;
  }
-
-  render() {
-   let cards=[];
-   let v=this.isMobile();
-   console.log(v);
-   if(this.props.cards !==''){
+_exporter;
+export = () => {
+        this._exporter.save();
+    }
+render() {
+  let cards=[];
+  let is_mobile=this.isMobile();
+  console.log(is_mobile);
+  if(this.props.cards !==''){
     this.state.card=this.props.cards;
-    this.state.closeCard=this.props.closeCards;
-    
-   }
-    if(this.state.date!=='' && this.state.click){
+    this.state.closeCard=this.props.closeCards; 
+  }
+  if(this.state.date!=='' && this.state.click){
       this.state.click=false;
       this.state.countClose=0;
       this.state.countOpen=0;
       this.state.countWork=0;
       this.state.countParts=0;
       this.state.countRevenue=0;
+      this.state.countMonthClose=0;
+      this.state.countMonthOpen=0;
+      this.state.countMonthWork=0;
+      this.state.countMonthParts=0;
+      this.state.countMonthRevenue=0;
+      this.state.counter=0;
 
       for(var i=0;i<this.state.card.length;i++){
         cards.push(this.state.card[i]);
@@ -152,21 +222,52 @@ isMobile() {
       for(var i=0;i<this.state.closeCard.length;i++){
         cards.push(this.state.closeCard[i]);
       }
-      console.log(cards);
       this.createReport(cards);
+      this.createMountlyReport(cards);
+      if(this.state.counter==0){this.modalOpen();}
+      if(this.state.month==1){this.state.month="ינואר"};
+      if(this.state.month==2){this.state.month="פברואר"};
+      if(this.state.month==3){this.state.month="מרץ"};
+      if(this.state.month==4){this.state.month="אפריל"};
+      if(this.state.month==5){this.state.month="מאי"};
+      if(this.state.month==6){this.state.month="יוני"};
+      if(this.state.month==7){this.state.month="יולי"};
+      if(this.state.month==8){this.state.month="אוגוסט"};
+      if(this.state.month==9){this.state.month="ספטמבר"};
+      if(this.state.month==10){this.state.month="אוקטובר"};
+      if(this.state.month==11){this.state.month="נובמבר"};
+      if(this.state.month==12){this.state.month="דצמבר"};
+
 
     }
    
-    const data = {
-      animationEnabled: true,
-      exportEnabled: true,
-      theme: "light2", // "light1", "dark1", "dark2"
-      labels: [
-        'כרטיסים שנפתחו',
-        'כרטיסים שנסגרו',
-        'חלקים שנמכרו',
-        'עבודות שהתבצעו',
-        'סכום ההכנסות'
+  const data = {
+    animationEnabled: true,
+    //exportEnabled: true,
+    //theme: "light1", // "light1", "dark1", "dark2"
+    labels: [ 'כרטיסים שנפתחו','כרטיסים שנסגרו','חלקים שנמכרו','עבודות שהתבצעו', 'סכום ההכנסות'],
+    axisX:{
+      labelFontColor: "white"
+    },
+    axisY:{
+      labelFontColor: "white"
+    },
+    datasets: [{
+      label: '',
+      fill: false,
+      showpercentvalues: "1",
+      aligncaptionwithcanvas: "0",
+      captionpadding: "0",
+      decimals: "1", 
+      borderWidth: 2,
+      data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
+        backgroundColor: [ '#FF6384','#36A2EB','#FFCE56','#BD10E0','#880e4f'],
+        hoverBackgroundColor: ['#FF6384','#36A2EB','#FFCE56','#BD10E0','#880e4f'],
+      }]
+  };
+  const data_pie = {
+    labels: [
+     'כרטיסים שנפתחו','כרטיסים שנסגרו','חלקים שנמכרו','עבודות שהתבצעו','סכום ההכנסות'
     ],
     datasets: [{
       label: '',
@@ -176,91 +277,23 @@ isMobile() {
       captionpadding: "0",
       decimals: "1", 
       backgroundColor: "#FF6384",
-      plottooltext:
-      "<b>$percentValue</b> of our Android users are on <b>$label</b>",
-      centerlabel: "# Users: $value",
       theme: "fusion",
-      data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
-         backgroundColor: [
-           '#FF6384',
-           '#36A2EB',
-           '#FFCE56',
-           '#BD10E0',
-           '#880e4f'
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#BD10E0',
-        '#880e4f'
-      ]
-    }]
-   };
-   const data_pie = {
-    labels: [
-     'כרטיסים שנפתחו',
-     'כרטיסים שנסגרו',
-     'חלקים שנמכרו',
-     'עבודות שהתבצעו',
-     'סכום ההכנסות'
-  ],
-  datasets: [{
-    label: '',
-    fill: false,
-    showpercentvalues: "1",
-    aligncaptionwithcanvas: "0",
-    captionpadding: "0",
-    decimals: "1", 
-    backgroundColor: "#FF6384",
-    plottooltext:
-      "<b>$percentValue</b> of our Android users are on <b>$label</b>",
-    centerlabel: "# Users: $value",
-    theme: "fusion",
-    data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue],
-       backgroundColor: [
-         '#FF6384',
-         '#36A2EB',
-         '#FFCE56',
-         '#BD10E0',
-         '#880e4f'
-    ],
-    hoverBackgroundColor: [
-      '#FF6384',
-      '#36A2EB',
-      '#FFCE56',
-      '#BD10E0',
-      '#880e4f'
-    ]
-  }]
-   };
-   /*const options = {
-    labels: [
-      'כרטיסים שנפתחו',
-      'כרטיסים שנסגרו',
-      'חלקים שנמכרו',
-      'עבודות שהתבצעו',
-      'סכום ההכנסות'
-    ],
-    animationEnabled: true,
-    exportEnabled: true,
-    theme: "light2", // "light1", "dark1", "dark2"
-    data: [{
-      type: "line",
-      data: [this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue,2],
-    }]
-  };*/
-  const options = [
-    {name: 'כרטיסים שנפתחו', uv: this.state.countOpen, pv: 2400, amt: 2400}, 
-    {name: 'כרטיסים שנסגרו', uv: this.state.countClose, pv: 1398, amt: 2210},
-    {name: 'חלקים שנמכרו', uv: this.state.countParts, pv: 9800, amt: 2290},
-    {name: 'עבודות שהתבצעו', uv: this.state.countWork, pv: 4300, amt: 2100},
-    {name: 'סכום ההכנסות', uv: this.state.countRevenue, pv: 3800, amt: 2500}
+      data: [
+        this.state.countOpen, this.state.countClose, this.state.countParts,this.state.countWork,this.state.countRevenue],
+        backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#BD10E0','#880e4f'],
+        hoverBackgroundColor: [ '#FF6384','#36A2EB','#FFCE56','#BD10E0','#880e4f']
+      }]
+  };
+  const dataExcel = [
+    {
+        openCards: this.state.countMonthOpen,
+        closeCards: this.state.countMonthClose,
+        parts: this.state.countMonthParts,
+        works: this.state.countMonthWork,
+        revenue: this.state.countMonthRevenue
+    }
+  ];
 
-];
-
-
-   
      return (
       <div style={{direction: "rtl" }}>
       
@@ -271,54 +304,56 @@ isMobile() {
          onClicked={this.onChildClicked}
          chartSelected={this.chartSelected}
          />
-         {v ? <div style={{direction: "rtl"}}>
+          {this.state.counter == 0 
+          ?<div>
+          <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
+            <div className="form-group">
+            אין מידע להציג בתאריך זה
+            </div>
+            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
+            
+          </Modal>
+          </div>
+          :<div></div>}
+         {is_mobile 
+         ? 
+         <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
+          
           {this.state.chartType==="" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
           {this.state.chartType==="Bar" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
           {this.state.chartType==="Line" ? <Line barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}  
           {this.state.chartType==="Pie" ? <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
-
- 
          </div>
          : 
-         <div style={{direction: "rtl"}}>
-          {this.state.chartType==="" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Line" ? <Line barSize="2000px" height="85px" data={data} /> : <div></div>}  
-          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
-
- 
+         <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
+          {this.state.chartType==="" ? <Bar barSize="2000px" height="75px" data={data} /> : <div></div>}
+          {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="75px" data={data} /> : <div></div>}
+          {this.state.chartType==="Line" ? <Line barSize="2000px" height="75px" data={data} /> : <div></div>}  
+          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" barSize="2000px" height="75px" dataFormat="JSON" data={data_pie} /> : <div></div>}
          </div>
          }
-         
+         <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
+         <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}   onClick={this.export}>הפקת דוח חודשי לטבלת לאקסל</Button> 
+        </div>
+         <ExcelExport
+                    data={dataExcel}  
+                    fileName={"דוח עבור חודש "+this.state.month+".xlsx"}
+                    ref={(exporter) => { this._exporter = exporter; }}
+                >
+                    <ExcelExportColumn field="openCards" title="כרטיסים פתוחים" locked={true} width={150} />
+                    <ExcelExportColumn field="closeCards" title="כרטיסים סגורים" width={150} />
+                    <ExcelExportColumn field="parts" title="חלקים שנמכרו" width={150} />
+                    <ExcelExportColumn field="works" title="עבודות שהתבצעו" width={150} />
+                    <ExcelExportColumn field="revenue" title="סכום ההכנסות" width={150} />
+
+                    <ExcelExportColumnGroup title="Availability" headerCellOptions={{ textAlign: 'center' }}></ExcelExportColumnGroup>
+        </ExcelExport>
+      
          </Grid>
        </div>
      );   
      
   }
-  /**
-   * {v ? <div style={{direction: "rtl"}}>
-          {this.state.chartType==="" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Bar" ? <Bar barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Line" ? <Line barSize="2000px" width="100px" height="85px" data={data} /> : <div></div>}  
-          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
-
- 
-         </div>
-         : 
-         <div style={{direction: "rtl"}}>
-          {this.state.chartType==="" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Bar" ? <Bar barSize="2000px" height="85px" data={data} /> : <div></div>}
-          {this.state.chartType==="Line" ? <Line barSize="2000px" height="85px" data={data} /> : <div></div>}  
-          {this.state.chartType==="Pie" ? <Pie type="doughnut2d" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> : <div></div>}
-
- 
-         </div>
-         }
-   */
-  //          {this.state.click && this.state.date!='' ? <Bar height="100px" data={data} />:<Bar height="100px" data={data} />}
-
-//          {this.state.chartType==="Pie" ? <Pie barSize="2000px" height="85px" data={data_pie} /> : <div></div>}
-
 }
 
 const mapStateToProps = state => { // here we get the state and return a javascript object

@@ -421,7 +421,7 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
         return {
-          onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) )
+          onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) )
         };
       };
       

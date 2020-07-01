@@ -214,7 +214,7 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.TOAST_MODAL_CLOSE: return purchaseToastCancel( state, action );
 
         case actionTypes.TASK_OPENING_FOR_USER_START: return taskOpeningStart( state, action );
-        case actionTypes.TASK_OPENING_FOR_USER_SUCCESS: return taskOpeningSuccess( state, action )
+        case actionTypes.TASK_OPENING_FOR_USER_SUCCESS: return taskOpeningSuccess( state, action );
         case actionTypes.TASK_OPENING_FOR_USER_FAIL: return taskOpeningFail( state, action );
         default: return state;
     }
