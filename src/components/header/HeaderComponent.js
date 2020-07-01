@@ -111,7 +111,7 @@ class HeaderComponent extends Component {
         };
      }
      componentDidMount() { 
-        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
     }
     modalOpen() {
         this.setState({ modal: true });
@@ -153,8 +153,8 @@ class HeaderComponent extends Component {
         console.log(this.props.notification);
 
         for(var i=0;i<notification.length;i++){
-            console.log(this.props.branchNumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
-            this.props.onNotificationDelete(this.props.token,this.props.branchNumber,this.props.UserKey,notification[i].notificationKey,this.props.userId);
+            console.log(this.props.branchnumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
+            this.props.onNotificationDelete(this.props.token,this.props.branchnumber,this.props.UserKey,notification[i].notificationKey,this.props.userId);
         }
     }
 
@@ -242,12 +242,10 @@ HeaderComponent.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        firstName: state.auth.firstName,
-        branchNumber: state.auth.branchNumber,
-        showSettingModel: state.auth.showSettingModel,
-        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
-        backgroundColor: state.auth.backgroundColor,
-        profileImage: state.auth.profileImage,
+        branchnumber: state.auth.branchNumber,
+        showsettingmodel: state.auth.showSettingModel,
+        backgroundcolor: state.auth.backgroundColor,
+        profileimage: state.auth.profileImage,
         token: state.auth.token,
         notification: state.notification.notification,
         UserKey: state.auth.userKey,
