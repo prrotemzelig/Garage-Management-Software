@@ -153,6 +153,7 @@ export const getImagesOrDocs = ( userId ,token,branchNumber,cardKey,ticketNumber
             dispatch( getImagesOrDocsStart() ); 
     // create a Reference to that folder:
     var listRef = storageRef.child(branchNumber + "/" + ticketNumber + "/images");
+    
     let counterFiles = 0;
     let count = 0;
     let fetchedImages = []; 

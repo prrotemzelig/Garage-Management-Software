@@ -22,9 +22,9 @@ const asyncAuth = asyncComponent(() => {
   return import('./containers/Auth/Auth');
 });
 
-// const asyncOpenCard = asyncComponent(() => {
-//   return import('./containers/OpenNewCard/OpenNewCard');
-// });
+const asyncOpenCard = asyncComponent(() => {
+  return import('./containers/OpenNewCard/OpenNewCard');
+});
 
 const asyncReports = asyncComponent(() => {
   return import('./containers/DailyReports/Report');
@@ -80,7 +80,7 @@ class App extends Component {
           <Route path="/openCards" component={asyncCards} />
           <Route path="/logout" component={Logout} />
           <Route path="/auth" component={asyncAuth} />
-          {/* <Route path="/cardOpening" exact component={asyncOpenCard} /> */}
+          <Route path="/cardOpening" exact component={asyncOpenCard} />
           <Route path="/updateTicketStatus" component={asyncOpenTwo} />
           <Route path="/carHistory" component={asyncUpdateCard} />
           {/* <Route path="/AdminSettings" component={asyncAdminSettingPage} /> */}

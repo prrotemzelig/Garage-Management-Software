@@ -10,6 +10,13 @@ import IconBellNew from '../../assets/icon-bell-new';
 import { connect } from 'react-redux';
 import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
 import SettingsIcon from '@material-ui/icons/Settings';
+import { StreamApp, NotificationDropdown,FlatFeed } from 'react-activity-feed';
+import { Modal ,Button } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 
 const styles = StyleSheet.create({
     avatar: {
@@ -98,11 +105,21 @@ class HeaderComponent extends Component {
         super(props);
         this.state = {
           backgroundColor: "blue",
+          modal: false,
           sidebarOpened:
             document.documentElement.className.indexOf("nav-open") !== -1
         };
      }
- 
+     componentDidMount() { 
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+    }
+    modalOpen() {
+        this.setState({ modal: true });
+    }
+        
+    modalClose() {
+        this.setState({modal: false});
+    }
     onSettingClick = () =>  {
         if(!this.props.showSettingModel){
         this.props.onSettingOpening(); // this contains all the data of card 
@@ -111,8 +128,38 @@ class HeaderComponent extends Component {
             this.props.onSettingClose(); // this contains all the data of card 
         }
     }  
-    render(){
+    notify = () =>{
+        let notification=this.props.notification;
+        console.log(this.props.notification);
+        for(var i=0;i<notification.length;i++){
+            if(notification[i].type=="task"){
+                let notificationData=notification[i].description+":נוספה משימה חדשה "+'\n';
+                notificationData+='\n'+notification[i].openedBy+" על ידי";
+                //this.props.onNotificationDelete(this.props.token,this.props.branchNumber,this.props.UserKey,notification[i].id,this.props.userId);
 
+                toast.info(notificationData);
+                //this.deleteNotification(notification[i].id);
+            }
+        }
+        this.deleteNotification();
+        if(notification.length==0){
+            this.modalOpen();
+            //this.setState({ modal: true });
+        }
+    } 
+
+    deleteNotification = () =>{
+        let notification=this.props.notification;
+        console.log(this.props.notification);
+
+        for(var i=0;i<notification.length;i++){
+            console.log(this.props.branchNumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
+            this.props.onNotificationDelete(this.props.token,this.props.branchNumber,this.props.UserKey,notification[i].notificationKey,this.props.userId);
+        }
+    }
+
+    render(){        
+        
         let thisUserBranchNumber ='';
         if(this.props.branchNumber==='Talpiot'){
             thisUserBranchNumber='תלפיות';
@@ -134,7 +181,7 @@ class HeaderComponent extends Component {
         }
 
         const { icon, title, ...otherProps } = this.props;
-
+        
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
             <Row vertical="center" style={{position: "left"}}>
@@ -148,7 +195,27 @@ class HeaderComponent extends Component {
                     <IconSearch />
                 </div>
                 <div className={css(styles.iconStyles)}>
-                    <IconBellNew />
+                <button onClick={this.notify}><IconBellNew /></button>
+                <div>
+                <ToastContainer
+                position="top-left"
+                autoClose={false}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                />
+                </div>
+                <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
+            <div className="form-group">
+                אין הודעות חדשות
+            </div>
+            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
+            
+          </Modal>
                 </div>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
@@ -180,7 +247,17 @@ const mapStateToProps = state => {
         showSettingModel: state.auth.showSettingModel,
         sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
         backgroundColor: state.auth.backgroundColor,
-        profileImage: state.auth.profileImage
+        profileImage: state.auth.profileImage,
+        token: state.auth.token,
+        notification: state.notification.notification,
+        UserKey: state.auth.userKey,
+        userId: state.auth.userId,
+        notificationKey: state.notification.notificationId,
+        loading: state.notification.loading,
+
+
+
+
 
     };
 };
@@ -188,7 +265,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
     onSettingOpening: () => dispatch( actions.SettingOpening() ),
-    onSettingClose: () => dispatch( actions.SettingClose() )
+    onSettingClose: () => dispatch( actions.SettingClose() ),
+    onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
+    onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId))
+
   };
 };
 

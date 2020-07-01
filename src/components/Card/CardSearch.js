@@ -21,10 +21,12 @@ const cardSearch = ( props ) => {
    
     return (
 
-        <tr  style={{fontSize: "18px", direction: "rtl"}}>
+        <tr  style={props.backGroundColor=== 'light' ?
+        {direction: "rtl", backgroundColor: "white"}
+        : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
     
         {cardsDetailsOutput} 
-        <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={(event)=>props.onClicked(event,num)}   >הצג פרטים</Button>
+        <Button bsStyle="secondary" style={props.backGroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}  onClick={(event)=>props.onClicked(event,num)}   >הצג פרטים</Button>
 
         
         </tr> 

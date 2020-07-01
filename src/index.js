@@ -26,6 +26,7 @@ import authReducer from './store/reducers/auth'; // we must import all the reduc
 import taskReducer from './store/reducers/task'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
 import adminReducer from './store/reducers/admin'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
 import storageReducer from './store/reducers/storage'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
+import notificationReducer from './store/reducers/notification'; // we must import all the reducer we have here!! ( we that we added to our global root reducer)
 
 
 // react-redux-firebase config
@@ -46,7 +47,8 @@ const rootReducer = combineReducers({  // here we pass a javascript object
   auth: authReducer,
   task: taskReducer,
   admin: adminReducer,
-  storage: storageReducer
+  storage: storageReducer,
+  notification: notificationReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(
