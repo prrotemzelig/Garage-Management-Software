@@ -3,10 +3,11 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = { 
     showSuccessCase: false, 
+    loadingFetchUsers:false,
     error: null,
     loading: false,
     showAddNewUserModel: false,   
-    showDeleteSuccessCase: false,
+    // showDeleteSuccessCase: false,
     showAddNewTaskModal: false,
     showDeleteUserModal: false,
     showAddTaskSuccessCase:false,
@@ -24,7 +25,7 @@ const initialState = {
 
 
 const fetchUsersStart = ( state, action ) => { 
-    return updateObject( state, { loading: true } );
+    return updateObject( state, { loadingFetchUsers: true } );
 };
 
 const fetchUsersSuccess = ( state, action ) => { 
@@ -32,28 +33,28 @@ const fetchUsersSuccess = ( state, action ) => {
     if(action.BranchNumber === 'Talpiot'){
         return updateObject( state, { 
             TalpiotUsers: action.users,
-            loading: false
+            loadingFetchUsers: false
         } );
     }
 
     else if(action.BranchNumber === 'GivatShaul'){
         return updateObject( state, { 
             GivatShaulUsers: action.users,
-            loading: false
+            loadingFetchUsers: false
         } );
     }
 
     else if(action.BranchNumber === 'Modiin'){
         return updateObject( state, { 
             ModiinUsers: action.users,
-            loading: false
+            loadingFetchUsers: false
         } );
     }
 
 };
 
 const fetchUsersFail = ( state, action ) => { 
-    return updateObject( state, { loading: false } );
+    return updateObject( state, { loadingFetchUsers: false } );
 };
 
 
@@ -67,8 +68,8 @@ const userDeleteSuccess = ( state, action ) => {
      
         return updateObject( state, {
             loading: false,
-            showDeleteUserModal: false,
-            showDeleteSuccessCase: true
+            showDeleteUserModal: false
+            // showDeleteSuccessCase: true
             //  tasks: state.tasks.concat( newTask ) // here we need to update my cards - (concat return a new array and therefore we added this immutably)
            // todo: state.todo.concat( newTask )
            //onFetchTasks(token, userId, branchNumber,userKey)
@@ -105,16 +106,16 @@ const addNewTaskForUserCancel = ( state, action ) => {
 
 
 
-const deleteUserModalInit = ( state, action ) => {
-    return updateObject( state, {
-        showDeleteUserModal: true,
-        userKey: action.userKey,
-        userBranchNumber: action.userBranchNumber,
-        userToken: action.userToken,
-        firstName: action.firstName,
-        lastName: action.lastName
-     } );
-};
+// const deleteUserModalInit = ( state, action ) => {
+//     return updateObject( state, {
+//         showDeleteUserModal: true,
+//         userKey: action.userKey,
+//         userBranchNumber: action.userBranchNumber,
+//         userToken: action.userToken,
+//         firstName: action.firstName,
+//         lastName: action.lastName
+//      } );
+// };
 
 const deleteUserModalCancel = ( state, action ) => {
     return updateObject( state, { showDeleteUserModal: false ,
@@ -129,50 +130,72 @@ const deleteUserModalCancel = ( state, action ) => {
 
 
 const purchaseAddNewUserInit = ( state, action ) => {
-    return updateObject( state, { showAddNewUserModel: true } );
+    return updateObject( state, { 
+        showAddNewUserModel: true
+     } );
 };
 
 const purchaseAddNewUserCancel = ( state, action ) => {
-    return updateObject( state, { showAddNewUserModel: false } ); 
+    return updateObject( state, {
+         showAddNewUserModel: false ,
+         showSuccessCase: false
+        } ); 
 };
 
 
 const authSignUpFail = (state, action) => { // get state and action
     return updateObject( state, {
-        error: action.error
-       // showAddNewUserModel: false
+        error: action.error,
+       showAddNewUserModel: false,
+       loading:false,
+       showSuccessCase: false
       //  loading: false
     });
 }
 
 const authSignUpStart = ( state, action ) => {
-    return updateObject( state, { error: null } ); // return my update state object //, loading: true
+    return updateObject( state, { 
+        // loading:true,
+        error: null
+     } ); // return my update state object //, loading: true
 };
 
 const authSignUpSuccess = (state, action) => {
     return updateObject( state, { // in a success case we want to set the token,user ID, error,loading
+        showAddNewUserModel: false,
         error: null,
-        showSuccessCase: true
+        showSuccessCase: true,
+        loading: false,
        // loading: false // because we done!
      } );
 };
 
 const purchaseToastCancel = ( state, action ) => {
-    return updateObject( state, { showSuccessCase: false,showDeleteSuccessCase: false,showAddTaskSuccessCase: false} ); 
+    return updateObject( state, {
+        error: null,
+         showSuccessCase: false,
+        // showDeleteSuccessCase: false,
+        loading: false,
+        showAddTaskSuccessCase: false
+    } ); 
 };
 
 
 const taskOpeningStart = ( state, action ) => {
+    console.log("170");
     return updateObject( state, { loading: true } ); 
 };
 
 
 const taskOpeningSuccess = ( state, action ) => {
+    console.log("176");
+
    // const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); 
         return updateObject( state, {
-            loading: false,
             showAddNewTaskModal:false,
-            showAddTaskSuccessCase: true
+            showAddTaskSuccessCase: true,
+            loading: false
+
             //  tasks: state.tasks.concat( newTask ) 
           //  todo: state.todo.concat( newTask )
         });
@@ -208,7 +231,7 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.ADD_NEW_TASK_FOR_USER_MODAL_INIT: return addNewTaskForUserInit( state, action );
         case actionTypes.ADD_NEW_TASK_FOR_USER_MODAL_CLOSE: return addNewTaskForUserCancel( state, action );
 
-        case actionTypes.DELETE_USER_MODAL_INIT: return deleteUserModalInit( state, action );
+        // case actionTypes.DELETE_USER_MODAL_INIT: return deleteUserModalInit( state, action );
         case actionTypes.DELETE_USER_MODAL_CLOSE: return deleteUserModalCancel( state, action );
 
         case actionTypes.TOAST_MODAL_CLOSE: return purchaseToastCancel( state, action );

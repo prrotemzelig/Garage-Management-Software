@@ -17,9 +17,7 @@ const initialState = { // javascript object
     error: null,
     loading: false,
     showSettingModel: false,
-    authRedirectPath: '/',
-    showResetPasswordModal: false
-
+    authRedirectPath: '/'
 };
 
 const purchaseToastCancel = ( state, action ) => {
@@ -133,11 +131,12 @@ const resetPasswordStart = ( state, action ) => {
 
 const resetPasswordSuccess = ( state, action ) => {     
         return updateObject( state, {
-            loading: false,
-            showResetPasswordModal: true
+            loading: false
         });
     
 };
+
+
 
 const resetPasswordFail = ( state, action ) => {
     return updateObject( state, {
@@ -169,6 +168,8 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.RESET_PASSWORD_START: return resetPasswordStart( state, action );
         case actionTypes.RESET_PASSWORD_SUCCESS: return resetPasswordSuccess( state, action );
         case actionTypes.RESET_PASSWORD_FAIL: return resetPasswordFail( state, action );
+        
+
         
         default: return state;
     }

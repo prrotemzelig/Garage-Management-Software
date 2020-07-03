@@ -29,6 +29,9 @@ export const toastModalClose = (  ) => {
 };
 
 
+
+
+
 export const authSignInSuccess = (token, userId,branchNumber,firstName,lastName,email,userPermissions,userKey,backgroundColor,profileImage,sidebarBackgroundColor) => { // this will get some database, and return javascript object
     return {
         type: actionTypes.AUTH_SIGN_IN_SUCCESS,
@@ -329,16 +332,16 @@ export const resetPassword = (email) => {
 
     return dispatch => {
         dispatch( resetPasswordStart() ); 
-
         firebase.auth().sendPasswordResetEmail(email, { url: 'http://localhost:3000/auth' })
         
         .then(response => {
-            dispatch(resetPasswordSuccess(response)); 
+            dispatch(resetPasswordSuccess()); 
+            alert('נשלח מייל לשחזור סיסמא');
+
         })
 
         .catch(error => {
           console.log(error.message);
-
           dispatch(resetPasswordFail(error.message));
 
         })

@@ -3,6 +3,8 @@ import axiosFireBase from 'axios';
 import axios from '../../axios-cards';
 import * as actionTypes from './actionTypes';
 //import { database } from 'firebase';
+import thunk from 'redux-thunk';
+import Promise from 'bluebird'
 
 export const fetchUsersStart = () => {
     return {
@@ -212,7 +214,7 @@ export const authSignUpFail = (error) => {
 };
 
 
-export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPermissions,email, password) => { // that will  be the one holding the async code that doing the authentication
+export  const  authSignUp = (token,userId,firstName,lastName,branchNumber,userPermissions,email, password) => { // that will  be the one holding the async code that doing the authentication
     // here we get the data of the email and password the user enter and then we check if he valid and can connect to the application
 
     let nodeBranchNumber = '';
@@ -236,8 +238,9 @@ export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPerm
     else if(userPermissions === 'בסיסי'){
         nodeUerPermissions= 'basic'
     }
-    return dispatch => { // here we want to authenticate the use
-        dispatch(authSignUpStart());
+    return dispatch => { // here we want to authenticate the use //async
+         dispatch(authSignUpStart()); //await
+
         // let dataBaseUser = { // here we  prepare the user data for the state
         //     firstName: firstName,
         //     lastName: lastName,
@@ -256,7 +259,7 @@ export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPerm
 
         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNB6T4idqQfbcC5S6BhRnFBh3cSoPaW2A';
 
-        axiosFireBase.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
+         axiosFireBase.post(url, authData) // we want to attach authData also to the post request -> the key value & the value the user enter
 
             .then(response => { // success case!  
                 let dataBaseUser = { // here we  prepare the user data for the state
@@ -271,33 +274,39 @@ export const authSignUp = (token,userId,firstName,lastName,branchNumber,userPerm
                     backgroundColor: 'light',
                     profileImage: 'anime3'
                 };             
-                //console.log(response);  
 
                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
-                axios.post(nodeBranchNumber + '/users.json' + queryParams , dataBaseUser )
-
+                  axios.post(nodeBranchNumber + '/users.json' + queryParams , dataBaseUser )
                     .then(res => { 
-                      //  console.log(res);
+             
+                         dispatch(AddNewUserModalClose());
+                         dispatch(authSignUpSuccess());
+                       // dispatch(AddNewUserModalClose());
+                        dispatch(fetchUsers(token, userId))
 
-                        dispatch(authSignUpSuccess());
-                        dispatch(AddNewUserModalClose());
-                        dispatch(fetchUsers(token, userId));
-
-                    }) 
+                    })
                     .catch(error => { // add nertwork problem!!! need to fix this rotem //post
-                       // console.log(error);
+                    //    console.log(error);
                           dispatch(authSignUpFail(error)); //err.response.data.error
 
-                //        dispatch(UserDeleteFail(error)); //err.response.data.error //post
-                    }); 
-              
+                    });
+    
             })
-            .catch(err => { // add nertwork problem!!! need to fix this rotem
-               // console.log(err);
+        
+            .catch(error => { // add nertwork problem!!! need to fix this rotem
+            //    console.log(error.response);
+            //    console.log(error.response.data.error.message);
+             //  "message": "EMAIL_EXISTS",
+             if(error.response.data.error.message==='EMAIL_EXISTS'){
+                dispatch(authSignUpFail('כתובת מייל זו רשומה למערכת')); 
+             }
+             else{
+                dispatch(authSignUpFail(error.response.data.error.message)); 
+             }
+            })
 
-                dispatch(authSignUpFail(err)); //err.response.data.error
-            });
     };
+
 };
 
 
@@ -315,24 +324,24 @@ export const toastModalClose = (  ) => {
 };
 
 
-export const deleteUserModalInit = (userKey,userBranchNumber,userToken,firstName,lastName) => { // this will be dispatched whenever we load the checkout page //** */
-    return {
-        type: actionTypes.DELETE_USER_MODAL_INIT, // just return an action
-        userKey: userKey,
-        userBranchNumber: userBranchNumber,
-        userToken: userToken,
-        firstName: firstName,
-        lastName: lastName
+// export const deleteUserModalInit = (userKey,userBranchNumber,userToken,firstName,lastName) => { // this will be dispatched whenever we load the checkout page //** */
+//     return {
+//         type: actionTypes.DELETE_USER_MODAL_INIT, // just return an action
+//         userKey: userKey,
+//         userBranchNumber: userBranchNumber,
+//         userToken: userToken,
+//         firstName: firstName,
+//         lastName: lastName
 
-    };
-};
+//     };
+// };
 
-export const deleteUserModalOpening = (userKey,userBranchNumber,userToken,firstName,lastName) => {  //token
-    return dispatch => {
-        dispatch( deleteUserModalInit(userKey,userBranchNumber,userToken,firstName,lastName) ); // dispatch to the store - we need to do that to set setModalShow to true!
+// export const deleteUserModalOpening = (userKey,userBranchNumber,userToken,firstName,lastName) => {  //token
+//     return dispatch => {
+//         dispatch( deleteUserModalInit(userKey,userBranchNumber,userToken,firstName,lastName) ); // dispatch to the store - we need to do that to set setModalShow to true!
         
-    };
-};
+//     };
+// };
 
 export const deleteUserModalCancel = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
@@ -385,6 +394,7 @@ export const taskOpeningForUser = ( taskData, token,branchNumber, userKey,list) 
         .then( response => {
            // console.log(response.data)
             dispatch(taskOpeningSuccess(response.data.name, taskData,list)); 
+            // alert('משימה הוספה בהצלחה');
 
         } )
         .catch( error => {

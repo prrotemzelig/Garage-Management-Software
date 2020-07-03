@@ -106,31 +106,6 @@ class Auth extends Component {
 }
 
 
-    resetPasswordHandler = (event) => {
-        event.preventDefault(); // we call this to prevent the reloading of the page
-
-        if(this.state.controls.email.value===''){
-            alert('נא להכניס כתובת מייל'); 
-        }
-     else{
-
-        this.props.onResetPassword(this.state.controls.email.value); // pass email value and password value
-
-//        // const config = {};
-        // firebase.initializeApp(config);
-
-// //  https://garage-management-software.firebaseapp.com/auth
-//         firebase.auth().sendPasswordResetEmail(this.state.controls.email.value, { url: 'http://localhost:3000/auth' })
-//         .then(response => {
-//         })
-//         .catch(error => {
-//         })
-    }
-        // this.setState(prevState => {
-        //     return {isSignup: !prevState.isSignup};
-        // });
-    }
-
     render () {
         const formElementsArray = [];
         for ( let key in this.state.controls ) { // here we looped through all our controls
@@ -192,10 +167,7 @@ class Auth extends Component {
                     <div style= {{textAlign: "center"}}> 
                     <Button btnType="Success">כניסה</Button></div>
                 </form>
-                <div style= {{textAlign: "center"}}> 
-                <Button style= {{textAlign: "center"}}
-                    clicked={this.resetPasswordHandler} 
-                    btnType="Danger" >?שכחת סיסמא</Button></div>
+  
                     
             </div>
             
@@ -242,9 +214,7 @@ const mapDispatchToProps = dispatch => { // we do this to be able to dispatch so
     return {
         onAuthSignIn: (email, password,branchNumber) => dispatch(actions.authSignIn(email, password,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         //onAuth: (email, password, isSignup,branchNumber) => dispatch(actions.auth(email, password,isSignup,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
-        onResetPassword: (email) => dispatch(actions.resetPassword(email))
-
+        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
         
     };
 };

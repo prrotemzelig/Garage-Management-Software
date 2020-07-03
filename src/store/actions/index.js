@@ -34,7 +34,7 @@ export {
     SettingOpening,
     SettingClose,
     updateSettingUser,
-    resetPassword 
+    resetPassword
 } from './auth';
 export {
     taskOpening,
@@ -50,7 +50,7 @@ export {
     AddNewUserModalClose,
     addNewTaskForUserModalOpening,
     addNewTaskForUserModalClose,
-    deleteUserModalOpening,
+    // deleteUserModalOpening,
     deleteUserModalClose,
     taskOpeningForUser,
     notificationOpeningForUser
