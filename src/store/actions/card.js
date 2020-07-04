@@ -32,7 +32,7 @@ export const workModalOpening = () => {  //token
 
 export const purchaseWorksCancel = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
-        type: actionTypes.WORKS_MODAL_CLOSE // just return an action
+        type: actionTypes.WORKS_MODAL_CLOSE 
     };
 };
 
@@ -50,7 +50,7 @@ export const workModalClose = (  token ) => {
 
 export const purchaseToastCancel = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
-        type: actionTypes.TOAST_MODAL_CLOSE // just return an action
+        type: actionTypes.TOAST_MODAL_CLOSE 
     };
 };
 
@@ -58,7 +58,6 @@ export const purchaseToastCancel = () => { // this will be dispatched whenever w
 export const toastModalClose = (  ) => { 
     return dispatch => {
         dispatch( purchaseToastCancel() ); // dispatch to the store - we need to do that to set setModalShow to true!
-        
     };
 };
 
@@ -113,52 +112,76 @@ export const cardUpdateFail = ( error ) => { // here we might get the error mess
 }
 
 export const cardUpdateStart = () => {
-    return {// this being a async normal action reaches redux which has the reducer
+    return {
         type: actionTypes.CARD_UPDATE_START
     };
 };
 
-//this is the async action one
-//this is the action we dispatched from the container once we click that save card button.
-export const cardUpdate = ( carData,cardData,customerData, token,branchNumber,identifiedCardID,userId ) => { 
-  //  console.log(branchNumber);
+
+
+//garageReplacementVehicle,rentalCompanyReplacementVehicle,
+
+export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token,branchNumber,identifiedCardID,userId ) => { 
     return dispatch => {
-        dispatch( cardUpdateStart() ); // dispatch to the store
+        dispatch( cardUpdateStart() ); 
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
         .then(res => {
-      //  console.log(res.data.name);
         dispatch(cardUpdateSuccess(res.data.name, carData)); 
         dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
 
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
-
         } );
 
        axios.patch(branchNumber+'/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
         .then(res => {
-      //  console.log(res.data.name);
         dispatch(cardUpdateSuccess(res.data.name, cardData)); 
-
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
-
-
         } );
 
 
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
         .then(res => {
-      //  console.log(res.data.name);
         dispatch(cardUpdateSuccess(res.data.name, customerData)); 
-
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
-
         } );
+
+
+        axios.patch(branchNumber+'/cards/'+identifiedCardID+'/garageReplacementData.json?auth=' + token, garageReplacementData)
+        .then(res => {
+        dispatch(cardUpdateSuccess(res.data.name, garageReplacementData)); 
+        })
+        .catch( error => {
+            dispatch(cardUpdateFail(error));
+        } );
+        
+        
+        
+        axios.patch(branchNumber+'/cards/'+identifiedCardID+'/rentalCompanyReplacementData.json?auth=' + token, rentalCompanyReplacementData)
+        .then(res => {
+        dispatch(cardUpdateSuccess(res.data.name, rentalCompanyReplacementData)); 
+        })
+        .catch( error => {
+            dispatch(cardUpdateFail(error));
+        } );
+        
+
+        let finalTag = '' ;
+        finalTag = {  alternateVehicleTaken: alternateVehicleTaken};
+        axios.patch(branchNumber+'/cards/'+identifiedCardID+'.json?auth=' + token, finalTag)
+        .then(res => {
+        dispatch(cardUpdateSuccess(res.data.name, alternateVehicleTaken)); 
+        })
+        .catch( error => {
+            console.log(error);
+            dispatch(cardUpdateFail(error));
+        } );
+        
     };
 };
 
@@ -200,7 +223,6 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
             console.log(response.data)
             dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
-
             // this.props.history.push( '/' ); // here we navigate away
         } )
         .catch( error => {
@@ -216,8 +238,6 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
         });
     };
 };
-
-
 
 
 
@@ -518,7 +538,6 @@ export const WorkOrPartDelete = (token,branchNumber,cardKey,itemKey,list,userId)
         axios.delete(branchNumber + '/cards/'+ cardKey +'/' + list  + '/' + itemKey + '.json' + queryParams ,null ) //x-http-method-override=DELETE
 
         .then(res => {
-        console.log(res);
         dispatch(WorkOrPartDeleteSuccess(res,list)); 
         dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 
 
@@ -565,7 +584,6 @@ export const workOrPartUpdate = ( itemData, token,branchNumber,userId,list,kind,
 
         axios.patch(branchNumber+'/' + list + '/'+ cardKey + '/' + kind + '/' + itemKey + '/.json?auth=' + token, itemData) //'/' +'/carData.json?auth=' + token
         .then(res => {            
-            console.log(res)
             dispatch(workOrPartUpdateSuccess()); 
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 

@@ -85,6 +85,7 @@ class openNew extends Component   {
     showCustomerDetailsDiv: true,
     showTinsmithingDetailsDiv:true,
     showCustomerRequestsDiv:true,
+    showReplacementCarDiv:true,
     showUploadDocDiv:true,
     showSendMailDiv: true,
 //    showWorkModel: false, 
@@ -145,7 +146,6 @@ class openNew extends Component   {
     },
 
     cardWork:{
-
       workDescription:{value: ''},
       time:{value: ''},
       gross:{ value: '' },
@@ -160,9 +160,38 @@ class openNew extends Component   {
       gross:{value: ''},
       discount:{value: ''},
       net:{ value: '' }
-    }
+    },
+
+    garageReplacementVehicle:{
+      replacementVehicleNumber:{value: '' },
+      typeReplacementVehicle:{value: ''},
+      fuelBefore:{value: ''},
+      fuelAfter:{value: ''},
+      dateOfDelivery:{value: ''},
+      returnDate:{value: ''},
+      isTaken:{value:''}
+    },
+   
+
+    rentalCompanyReplacementVehicle:{
+      nameRentalCompany:{value: '' },
+      dateOfDelivery:{value: ''},
+      returnDate:{value: ''},
+      isTaken:{value:''}
+
+    },
+
+    alternateVehicleTaken:false,
+    garageReplacementCheck:false,
+    rentalCompanyReplacementCheck:false,
+    garage_replacement_data:[],
+    rental_company_data:[],
+    garageReplacementDetails:{}, 
+    rentalCompanyDetails:{}
+
   }; 
 }
+
 
 
 componentWillUnmount() {
@@ -207,14 +236,11 @@ componentDidMount() { // we want to fetch all the cards. so for doing that, I ne
 
 
 add = () => { 
-  // console.log("357");
   let value = this.state.cardForm['licenseNumber'].value;
 
   if(value  !== '' && this.props.currentCardKey !== ''  ){
     this.setState({found: true}); // check!!
-    // console.log("208");
-
-    // console.log(this.state.found);
+ 
      // this.state.found=true;
       this.state.dataBaseCarNumber=this.state.cardForm.licenseNumber.value;
     
@@ -224,11 +250,22 @@ add = () => {
 
     this.state.cardDetails['ticketNumber'] = this.props.currentTicketNumber;
 
-
-
     for (let formElementIdentifier in this.state.vehicleData) {
       this.state.carDetails[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
   }
+
+  for (let formElementIdentifier in this.state.garageReplacementVehicle) {
+    this.state.garageReplacementDetails[formElementIdentifier] = this.state.garageReplacementVehicle[formElementIdentifier].value;
+}
+for (let formElementIdentifier in this.state.rentalCompanyReplacementVehicle) {
+  this.state.rentalCompanyDetails[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
+}
+
+
+
+this.state.garageReplacementCheck=this.state.garageReplacementVehicle['isTaken'].value;
+this.state.rentalCompanyReplacementCheck=this.state.rentalCompanyReplacementVehicle['isTaken'].value;
+
 
   for (let formElementIdentifier in this.state.customerDetails) {
     this.state.customer_details[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
@@ -236,7 +273,7 @@ add = () => {
 
       this.state.identifiedCardID=this.props.currentCardKey
       this.state.branchNumber=this.props.branchNumber;
-
+      
       // console.log(this.props.currentCardKey);
       // console.log(this.state.found);
       // console.log(this.state.dataBaseCarNumber);
@@ -276,9 +313,30 @@ for (let formElementIdentifier in this.state.customerDetails) {
   customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
 }
 
-    const card = { // here we  prepare the card data
+const garageReplacementData = {};
+for (let formElementIdentifier in this.state.garageReplacementVehicle) {
+  garageReplacementData[formElementIdentifier] = this.state.garageReplacementVehicle[formElementIdentifier].value;
+}
+
+const rentalCompanyReplacementData = {};
+for (let formElementIdentifier in this.state.rentalCompanyReplacementVehicle) {
+  rentalCompanyReplacementData[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
+}
+
+garageReplacementData['isTaken'] = this.state.garageReplacementCheck;
+rentalCompanyReplacementData['isTaken'] = this.state.rentalCompanyReplacementCheck;
+
+
+this.state.garageReplacementVehicle['isTaken'].value=this.state.garageReplacementCheck;
+this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCompanyReplacementCheck;
+
+
+    const card = { 
         cardData: formData,
         carData: carData, 
+        garageReplacementData: garageReplacementData,
+        rentalCompanyReplacementData: rentalCompanyReplacementData,
+        alternateVehicleTaken: this.state.alternateVehicleTaken,
         customerData: customerData,
         userId: this.props.userId,
         branchNumber: this.props.branchNumber
@@ -383,7 +441,7 @@ inputChangedHandler = (event) => {
 
   }
 
-  if(this.state.found === false){
+  if(this.state.found === false && event.target.id==='licenseNumber'){
     console.log("361");
     this.setTheStates(event.target.value);
   }
@@ -407,6 +465,47 @@ inputCarChangedHandler = (event) => {
       });
       this.setState({vehicleData: updatedCardForm}); 
 }
+
+
+
+inputGarageReplacementChangedHandler = (event) => { 
+  console.log(event.target.id);
+  console.log(event.target.value);
+  const updatedFormElement = updateObject(this.state.garageReplacementVehicle[event.target.id], { 
+      value: event.target.value
+  });
+  const updatedCardForm = updateObject(this.state.garageReplacementVehicle, { 
+      [event.target.id]: updatedFormElement 
+  });
+  this.setState({garageReplacementVehicle: updatedCardForm}); 
+  console.log(this.state.garageReplacementVehicle);
+
+}
+
+updateGarageReplacementInputValue=(evt,i)=> {
+  evt.preventDefault(); 
+  this.state.garage_replacement_data[i]=evt.target.value; 
+}
+
+
+inputRentalCompanyReplacementChangedHandler = (event) => { 
+
+  const updatedFormElement = updateObject(this.state.rentalCompanyReplacementVehicle[event.target.id], { 
+      value: event.target.value
+  });
+  const updatedCardForm = updateObject(this.state.rentalCompanyReplacementVehicle, { 
+      [event.target.id]: updatedFormElement 
+  });
+  this.setState({rentalCompanyReplacementVehicle: updatedCardForm}); 
+
+}
+
+
+updateRentalCompanyReplacementInputValue=(evt,i)=> {
+  evt.preventDefault(); 
+  this.state.rental_company_data[i]=evt.target.value;
+}
+
 
 inputCusChangedHandler = (event) => { 
       const updatedFormElement = updateObject(this.state.customerDetails[event.target.id], { 
@@ -689,7 +788,29 @@ cardUpdateHandler = ( event ) => { // update card
     workingPhone: this.state.customer_data[11]
   }
 
-  this.props.onCardUpdate(carData,cardData,customerData, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
+
+
+
+  const garageReplacementData={
+    replacementVehicleNumber: this.state.garage_replacement_data[0],
+    typeReplacementVehicle: this.state.garage_replacement_data[1],
+    fuelBefore: this.state.garage_replacement_data[2],
+    fuelAfter: this.state.garage_replacement_data[3],
+    dateOfDelivery: this.state.garage_replacement_data[4],
+    returnDate: this.state.garage_replacement_data[5],
+    isTaken: this.state.garageReplacementCheck
+
+  }
+
+  const rentalCompanyReplacementData={
+    nameRentalCompany: this.state.rental_company_data[0],
+    dateOfDelivery: this.state.rental_company_data[1],
+    returnDate: this.state.rental_company_data[2],
+    isTaken: this.state.rentalCompanyReplacementCheck
+
+  }
+
+  this.props.onCardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,this.state.alternateVehicleTaken, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
   this.setTheStates('');
   document.getElementById("workCardForm").reset(); 
 
@@ -712,10 +833,25 @@ cardCloseHandler = ( event ) => {
         customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
       }
 
+
+      const garageReplacementData = {};
+      for (let formElementIdentifier in this.state.garageReplacementVehicle) {
+        garageReplacementData[formElementIdentifier] = this.state.garageReplacementVehicle[formElementIdentifier].value;
+      }
+
+      const rentalCompanyReplacementData = {};
+      for (let formElementIdentifier in this.state.rentalCompanyReplacementVehicle) {
+        rentalCompanyReplacementData[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
+      }
+
+
         const card = { 
             cardData: cardData,
             carData: carData, 
             customerData: customerData,
+            garageReplacementData: garageReplacementData,
+            rentalCompanyReplacementData: rentalCompanyReplacementData,
+            alternateVehicleTaken: this.state.alternateVehicleTaken,
             userId: this.props.userId,
             branchNumber: this.props.branchNumber,
             closeDate: getDateTime()
@@ -790,8 +926,25 @@ setTheStates = (licenseNumber) => {
       customerNote:{value: ''}
     }
   
-    document.getElementById("workCardForm").reset(); 
+    let garageReplacementForm = {
+      replacementVehicleNumber:{value: ''},
+      typeReplacementVehicle:{value: '' },
+      fuelBefore:{value: ''},
+      fuelAfter:{value: ''},
+      dateOfDelivery:{value: ''},
+      returnDate:{value: ''},
+      isTaken:{value:''}
+    }
 
+    let rentalCompanyReplacementForm = {
+      nameRentalCompany:{value: ''},
+      dateOfDelivery:{value: '' },
+      returnDate:{value: ''},
+      isTaken:{value:''}
+    }
+
+
+    document.getElementById("workCardForm").reset(); 
     this.setState({car_data: []});
     this.setState({card_data: []});
     this.setState({customer_data: []});
@@ -807,6 +960,20 @@ setTheStates = (licenseNumber) => {
   
       this.setState({cardDetails: {}});
       this.setState({customer_details: {}});
+
+      this.setState({garageReplacementVehicle: garageReplacementForm});
+      this.setState({rentalCompanyReplacementVehicle: rentalCompanyReplacementForm});
+      this.setState({alternateVehicleTaken: false});
+      this.setState({garageReplacementCheck: false});
+      this.setState({rentalCompanyReplacementCheck: false});
+  
+      this.setState({garage_replacement_data: []});
+      this.setState({rental_company_data: []});
+      this.setState({garageReplacementDetails: {}});
+      this.setState({rentalCompanyDetails: {}});
+
+
+
 
       // if( licenseNumber!==''){
       //   const updatedFormElement = updateObject(this.state.cardForm['licenseNumber'], { 
@@ -838,8 +1005,20 @@ check(data,licenseNumber){
     this.state.carDetails=data.carData;
     this.state.cardDetails=data.cardData;
     this.state.customer_details=data.customerData;
+
+
+    this.state.garageReplacementDetails=data.garageReplacementData;
+    this.state.rentalCompanyDetails=data.rentalCompanyReplacementData;
+
+
     this.state.identifiedCardID=data.id;//rotem
     this.state.branchNumber=data.branchNumber;
+
+    this.state.alternateVehicleTaken=data.alternateVehicleTaken;
+    
+
+    this.state.garageReplacementCheck=data.garageReplacementData.isTaken;
+    this.state.rentalCompanyReplacementCheck=data.rentalCompanyReplacementData.isTaken;
 
 
    // if(this.state.found === true){
@@ -901,7 +1080,6 @@ this.props.onPartModalOpening( ); // this contains all the data of card //this.p
 };
 
 renderToastModal = (message) => { ///*** TOAST modal! ****
-
 
   let workButtons =
       <div class="form-group" style={{marginBottom: "4px"}}>
@@ -1439,6 +1617,28 @@ handleRemoveRow = () => {
 };
 
 
+
+
+switchModeAlternateVehicle = () => {
+  this.setState(prevState => {
+      return {alternateVehicleTaken: !prevState.alternateVehicleTaken};
+      });
+}
+
+
+switchModeGarageReplacementVehicle = () => {
+  this.setState(prevState => {
+      return {garageReplacementCheck: !prevState.garageReplacementCheck};
+      });
+}
+
+switchModeRentalCompanyReplacementCheck = () => {
+  this.setState(prevState => {
+      return {rentalCompanyReplacementCheck: !prevState.rentalCompanyReplacementCheck};
+      });
+}
+
+
 switchDivModeHandler = () => {
   this.setState(prevState => {
       return {showDetailsDiv: !prevState.showDetailsDiv};
@@ -1469,6 +1669,14 @@ switchDivModeHandlerReq = () => {
       });
 }
 
+
+switchDivModeHandlerReplacementCar = () => {
+  this.setState(prevState => {
+      return {showReplacementCarDiv: !prevState.showReplacementCarDiv};
+      });
+}
+
+
 switchDivModeHandlerDoc = () => {
   this.setState(prevState => {
       return {showUploadDocDiv: !prevState.showUploadDocDiv};
@@ -1485,7 +1693,6 @@ updateCarInputValue=(evt,i)=> {
       evt.preventDefault(); 
 
       this.state.car_data[i]=evt.target.value;
-      // console.log(this.state.car_data);
       if(i===9){
         this.state.carDetails.manufactureYear=evt.target.value;
         this.state.vehicleData.manufactureYear.value=evt.target.value;
@@ -1592,6 +1799,8 @@ onMultipleImagesDownload(node) {
     // console.log(this.state.imagesArrayForCheck);
     })
 }
+
+
 
 
 onCheckBoxImageClick(key, name, url,index,check){
@@ -2548,8 +2757,203 @@ onChange = date => this.setState({ date })
                : null }   
           </div>  
 
-          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
 
+
+
+
+          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
+            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
+              <span > רכב חליפי </span> 
+              { !this.state.showReplacementCarDiv ? 
+              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReplacementCar}/>
+              :
+              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReplacementCar}/>
+              }
+              </div>
+             
+            {this.state.showReplacementCarDiv ? 
+            <div class="card-body text-dark bg-white" >
+              <div >
+              <div class="form-row">
+            {this.state.alternateVehicleTaken ?
+                          <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                            {' '}רכב חליפי נלקח?                    
+                          </div>
+                     :
+                     <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                    {' '}רכב חליפי נלקח?   
+                  </div>
+                      } 
+                      </div>
+
+                      <div > 
+        {this.state.alternateVehicleTaken ?
+                      <div class="form-row"> 
+                        {this.state.garageReplacementCheck ?
+                          <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                            {' '}רכב מהמוסך?                    
+                        </div>
+                     :
+                     <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                    {' '}רכב מהמוסך?   
+                  </div>
+                      } 
+
+
+                  {this.state.rentalCompanyReplacementCheck ?
+                          <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                            {' '}רכב מחברת השכרה?                    
+                        </div>
+                     :
+                     <div style={{ fontSize: "14px",fontWeight: "bold"}}>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                    {' '}רכב מחברת השכרה?   
+                  </div>
+                      } 
+                </div>
+                      : null
+                      }
+                      </div>
+              </div>
+
+
+    {this.state.alternateVehicleTaken ?
+              <div class="form-row" >
+          { this.state.garageReplacementCheck?
+            <div > 
+
+        <div class="form-row" > 
+          <div class="form-row" > 
+            <div class="form-group col-md-3" >
+                {(() => {
+                   if(this.state.found){    
+                    this.state.garageReplacementVehicle.replacementVehicleNumber.value= this.state.garageReplacementDetails.replacementVehicleNumber;
+                    }    
+                 })()}  
+
+                  <label for="replacementVehicleNumber" >מספר רכב</label>
+                  <input type="text" id="replacementVehicleNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.garageReplacementVehicle.replacementVehicleNumber.value}
+                  onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,0)}/>
+                </div>
+
+                <div class="form-group col-md-3" >
+                {(() => {
+                   if(this.state.found){
+                    this.state.garageReplacementVehicle.typeReplacementVehicle.value= this.state.garageReplacementDetails.typeReplacementVehicle;
+                    }    
+                 })()}
+                  <label for="typeReplacementVehicle" >סוג רכב</label>
+                  <input type="text" id="typeReplacementVehicle" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.garageReplacementVehicle.typeReplacementVehicle.value}
+                  onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,1)}/>
+                </div>
+
+                <div class="form-group col-md-3" >
+                {(() => {
+                   if(this.state.found){
+                    this.state.garageReplacementVehicle.fuelBefore.value= this.state.garageReplacementDetails.fuelBefore;
+                    }    
+                 })()}
+                  <label for="fuelBefore" >דלק לפני</label>
+                  <input type="text" id="fuelBefore" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.garageReplacementVehicle.fuelBefore.value}
+                  onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,2)}/>
+                </div>
+
+                <div class="form-group col-md-3" >
+                {(() => {
+                   if(this.state.found){
+                    this.state.garageReplacementVehicle.fuelAfter.value= this.state.garageReplacementDetails.fuelAfter;
+                    }    
+                 })()}
+                  <label for="fuelAfter" >דלק אחרי</label>
+                  <input type="text" id="fuelAfter" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.garageReplacementVehicle.fuelAfter.value}
+                  onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,3)}/>
+                </div>
+                </div>
+
+                <div class="form-group col-md-6" >
+                {(() => {
+                   if(this.state.found){
+                      this.state.garageReplacementVehicle.dateOfDelivery.value= this.state.garageReplacementDetails.dateOfDelivery;
+                  }    
+                 })()}
+                        <label for="dateOfDelivery" >תאריך מסירה</label> 
+                        <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.garageReplacementVehicle.dateOfDelivery.value}
+                        onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,4)}/>
+                      </div>
+                      <div class="form-group col-md-6" >
+                    {(() => {
+                      if(this.state.found){
+                        this.state.garageReplacementVehicle.returnDate.value= this.state.garageReplacementDetails.returnDate;
+                        }    
+                    })()}
+                      <label for="returnDate" >תאריך החזרה</label> 
+                      <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                      defaultValue={this.state.garageReplacementVehicle.returnDate.value}
+                      onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,5)}/>
+                    </div>
+                    </div>
+                  </div>
+                  :null}
+
+    {this.state.rentalCompanyReplacementCheck?
+            <div style={{width: "100%"}} > 
+                <div class="form-row" > 
+                <div class="form-group col-md-6" >
+                {(() => {
+                   if(this.state.found){
+                    this.state.rentalCompanyReplacementVehicle.nameRentalCompany.value= this.state.rentalCompanyDetails.nameRentalCompany;
+                    }    
+                 })()}
+                  <label for="nameRentalCompany" >שם חברת ההשכרה</label>
+                  <input type="text" id="nameRentalCompany" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.rentalCompanyReplacementVehicle.nameRentalCompany.value}
+                  onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,0)}/>
+                </div>
+                </div>
+                <div class="form-row" > 
+
+<div class="form-group col-md-6" >
+          {(() => {
+             if(this.state.found){
+              this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value= this.state.rentalCompanyDetails.dateOfDelivery;
+              }    
+           })()}
+            <label for="dateOfDelivery" >תאריך מסירה</label> 
+            <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+            defaultValue={this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value}
+            onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,1)}/>
+          </div>
+          <div class="form-group col-md-6" >
+          {(() => {
+             if(this.state.found){
+              this.state.rentalCompanyReplacementVehicle.returnDate.value= this.state.rentalCompanyDetails.returnDate;
+              }    
+           })()}
+            <label for="returnDate" >תאריך החזרה</label> 
+            <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+            defaultValue={this.state.rentalCompanyReplacementVehicle.returnDate.value}
+            onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,2)}/>
+          </div>
+          </div>
+                </div>
+: null}
+                </div>
+                  :null}
+              </div> 
+               : null }   
+          </div>  
+
+          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span >העלאת תמונות וקבצים </span> 
               { !this.state.showUploadDocDiv ? 
@@ -2598,16 +3002,27 @@ onChange = date => this.setState({ date })
               <div class="card-body text-dark bg-white" >
                    <>
           <Form >
+            
+
+    
+
+                 <form>
             <FormGroup controlId="formBasicEmail" autocomplete="off">
               <Label >כתובת מייל</Label>
-              <Input type="email" name="email" value={this.state.email} placeholder="הכנס/י כתובת מייל" autocomplete="off" disabled={!this.state.formIsValid} 
+              <Input type="text" name="email" value={this.state.email} placeholder="הכנס/י כתובת מייל" autocomplete="off" disabled={!this.state.formIsValid} 
                     style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'email')} />
             </FormGroup>
+            </form>
+
+            <form>
+
             <FormGroup controlId="formBasicName">
               <Label >שם</Label>
               <Input type="text" name="name" value={this.state.name} placeholder="הכנס/י שם" autocomplete="off" disabled={!this.state.formIsValid}
                    style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'name')} />
             </FormGroup>
+            </form>
+
             <FormGroup controlId="formBasicSubject">
               <Label >נושא</Label>
               <Input type="text" name="subject" value={this.state.subject} placeholder="הכנס/י נושא" autocomplete="off" disabled={!this.state.formIsValid}
@@ -2719,12 +3134,13 @@ const mapStateToProps = state => { // here we get the state and return a javascr
   };
 };
 
+
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
     
     onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
     onCardOpening: (cardData,userId, token,branchNumber,node) => dispatch(actions.cardOpening(cardData,userId, token, branchNumber,node)),
-    onCardUpdate:(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId) => dispatch(actions.cardUpdate(carData,cardData,customerData, token, branchNumber,identifiedCardID,userId)), // this contains all the data of card 
+    onCardUpdate:(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token, branchNumber,identifiedCardID,userId) => dispatch(actions.cardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token, branchNumber,identifiedCardID,userId)), // this contains all the data of card 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
 
     onImageOrDocUploading:(file,userId ,token,branchNumber,node,cardKey,ticketNumber) => dispatch( actions.imageOrDocUploading(file,userId ,token,branchNumber,node,cardKey,ticketNumber)),
