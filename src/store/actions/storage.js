@@ -1,30 +1,44 @@
 import * as actionTypes from './actionTypes';
 import { storageRef } from "../../config";
 //import { reduxFirestore, getFirestore } from "redux-firestore";
+var async = require("async");
 
-
-export const imageOrDocUploadingStart = () => {
+export const imageOrDocUploadingStart = (currentFileUploaded,currentUploadNumber) => {
     return {
-        type: actionTypes.IMAGE_OR_DOC_UPLOADING_START
+        type: actionTypes.IMAGE_OR_DOC_UPLOADING_START,
+        currentFileUploaded: currentFileUploaded,
+        currentUploadNumber: currentUploadNumber
     };
 };
 
-export const imageOrDocUploadingProgress = (payload) => {
+export const imageOrDocUploadingProgress = (payload,currentFileUploaded) => {
     return {
         type: actionTypes.IMAGE_OR_DOC_UPLOADING_PROGRESS,
-        payload: payload
+        payload: payload,
+        currentFileUploaded: currentFileUploaded
     };
 };
 
-export const imageOrDocUploadingSuccess = ( ) => { 
+export const imageOrDocUploadingSuccess = (payload) => { 
     return { 
-        type: actionTypes.IMAGE_OR_DOC_UPLOADING_SUCCESS
+        type: actionTypes.IMAGE_OR_DOC_UPLOADING_SUCCESS,
+        // currentFileUploaded: currentFileUploaded,
+        payload: payload
        // cardId: id
   
     };
 };
 
-// this synchronous action creators
+export const allUploadIsSuccess = () => { 
+    return { 
+        type: actionTypes.ALL_UPLOAD_IS_SUCCESS
+        // currentFileUploaded: currentFileUploaded,
+        // payload: payload
+       // cardId: id
+  
+    };
+};
+
 export const imageOrDocUploadingFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
     return {
         type: actionTypes.IMAGE_OR_DOC_UPLOADING_FAIL,
@@ -35,102 +49,70 @@ export const imageOrDocUploadingFail = ( error ) => { // here we might get the e
 
 
 
-export const imageOrDocUploading = ( file,userId ,token,branchNumber,node,cardKey,ticketNumber) => { 
-  //  const firestore = getFirestore();
+export const imageOrDocUploading = ( allFiles,userId ,token,branchNumber,node,cardKey,ticketNumber) => { 
 
-    return dispatch => {
-        dispatch( imageOrDocUploadingStart() ); 
-        // let img = new Image()
-        // img.src = window.URL.createObjectURL(file[0])
-        // img.onload = () => {
-        //     console.log(img.width);
-        //     console.log(img.height);
+const promises = [];
+return dispatch => {
+    let i = 1;
 
-        // // alert(img.width + " " + img.height);
-        // }
 
-        // var metadata = {
-        //     customMetadata: {
-        //       'location': 'Yosemite, CA, USA',
-        //       'activity': 'Hiking'
-        //     }
-        //   }
-        // const metadata = {   // Create the file metadata
-        //     'width': img.width,
-        //     'height': img.height
-        //     //contentType: "image/jpeg"
-        //   };
-          //console.log(metadata);
+    async.eachLimit(allFiles,1,function(file,callback){
+       // promises.push(file1);
+    let type=file.type;
+    let finalNode;
+    if(type.includes("image/jpeg")){
+         finalNode = 'images';
+       }
+       else{
+         finalNode = 'docs';
+       }
 
-            // console.log(file[0]);
-            // console.log(file[0].offsetHeight);
-            // console.log(file[0].offsetWidth);
-
-            // console.log(file[0].w);
-
-            // console.log(file[0].h);
-
-         
-
-          const uploadTask = storageRef.child(branchNumber + "/" + ticketNumber +"/" + node + "/" + file[0].name).put(file[0]); //, metadata
-         // console.log(uploadTask);
-          uploadTask.on("state_changed",function(snapshot) {
+    let currentUploadNumber = i + "/" + allFiles.length;
+    dispatch( imageOrDocUploadingStart(file.name,currentUploadNumber)); 
+    const uploadTask = storageRef.child(branchNumber + "/" + ticketNumber +"/" + finalNode + "/" + file.name).put(file); //, metadata
+      
+         // promises.push(uploadTask);
+          uploadTask.on("state_changed", function(snapshot) {
               // Observe state change events such as progress, pause, and resume
               // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
               let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               let payload= Math.floor(progress) ;
-                    dispatch(imageOrDocUploadingProgress(payload)); 
+                    dispatch(imageOrDocUploadingProgress(payload,file.name)); 
             },
             function(error) {
               dispatch(imageOrDocUploadingFail(error)); 
             },
             function() {
-              // Handle successful uploads on complete
-              // For instance, get the download URL: https://firebasestorage.googleapis.com/...
               uploadTask.snapshot.ref.getDownloadURL()
                 .then(function(downloadURL) {
-                dispatch(imageOrDocUploadingSuccess());
-                if(node === 'images'){
+                dispatch(imageOrDocUploadingSuccess(0));
+                if(finalNode === 'images'){
                     dispatch(getImages(userId ,token,branchNumber,cardKey,ticketNumber,'/images'));
+                    i+=1;
+                    callback(null);
                 }
-                else if( node === 'docs'){
+                else if( finalNode === 'docs'){
                     dispatch(getDocs(userId ,token,branchNumber,cardKey,ticketNumber,'/docs'));
+                    i+=1;
+                    callback(null);
                 }
-
-        
-                // firestore
-                //   .collection("data")
-                //   .doc("user")
-                //   .update({
-                //     image_url: downloadURL
-                //   })
-                //   .then(() => {
-                //     //get the latest data
-                //     //once the data is sent to the firestore the latest version is stored in the redux store
-                //     console.log("84");
-                //    // get_Data(dispatch, getState, { getFirestore });
-                //   })
-                //   .catch(error => {
-                //     console.log(error);
-                //     dispatch(imageOrDocUploadingFail(error)); 
-                //   });
               });
             }
-          )
-        
-        // .catch( error => {
-        //     console.log(error);
-        //     dispatch(imageOrDocUploadingFail(error)); 
+          ) 
+})
 
-        // } )
-        
-        // .finally(function(){
-        //     console.log("189");
-        //  //   dispatch(fetchCards(token, userId, branchNumber));  // ?
-
-        // });
+    .finally(function(){
+        dispatch(allUploadIsSuccess());
+    });
+// Promise.all(promises).then(tasks => {
+//     dispatch(imageOrDocUploadingSuccess(-1));
+//     console.log('all uploads complete');
+// });
     };
+
 };
+
+
 
 
 
@@ -320,29 +302,51 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
         count = result.items.length;
         if(count === 0){
             //alert('אין תמונות להצגה'); 
-            console.log("323");
+            //console.log("323");
             dispatch( getDocsSuccess(fetchedDocs,'false',node,count) ); 
 
         }
       result.items.forEach(folder => {
-          console.log(folder);
+
               //  counterFiles += 1;   
                 folder.getDownloadURL()
                .then(function(url) {
-                // console.log(folder.getCreationTimeMillis());
 
-                fetchedDocs.push( {
-                    name: folder.name,
-                    // lastModified: folder.timeCreated,
-                    key: folder.location.path,
-                    url: url,
-                    index: countIndex,
-                    check: false
-                } );
-                countIndex += 1;
-                    if(countIndex === count) {
-                        dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
-                  }    
+                var forestRef = storageRef.child(folder.location.path);
+
+                forestRef.getMetadata().then(function(metadata) {  // Get metadata properties
+                    // Metadata now contains the metadata for 'images/forest.jpg'            
+                    var newData = new Date(metadata.timeCreated);
+                    fetchedDocs.push( {
+                        name: folder.name,
+                        lastModified: newData.toLocaleTimeString('en-US',{ hour12: false }) + " " + newData.toLocaleDateString(),
+                        key: folder.location.path,
+                        url: url,
+                        index: countIndex,
+                        check: false
+                    } );
+                    countIndex += 1;
+                        if(countIndex === count) {
+                            dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
+                      }    
+
+                    
+                }).catch(function(error) {
+                    console.log(error);
+                    dispatch(getDocsFail(error));
+                });
+                // fetchedDocs.push( {
+                //     name: folder.name,
+                //     // lastModified: folder.timeCreated,
+                //     key: folder.location.path,
+                //     url: url,
+                //     index: countIndex,
+                //     check: false
+                // } );
+                // countIndex += 1;
+                //     if(countIndex === count) {
+                //         dispatch( getDocsSuccess(fetchedDocs,'true',node,count) ); 
+                //   }    
           })
           .catch(error => {
                     dispatch(getDocsFail(error));
@@ -393,12 +397,12 @@ export const deleteDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node
         listRef.delete()
         .then(result => {
             dispatch(deleteDocsSuccess(result));
-            console.log(userId);
-            console.log(token);
-            console.log(branchNumber);
-            console.log(cardKey);
-            console.log(ticketNumber);
-            console.log(node);
+            // console.log(userId);
+            // console.log(token);
+            // console.log(branchNumber);
+            // console.log(cardKey);
+            // console.log(ticketNumber);
+            // console.log(node);
 
             dispatch(getDocs( userId ,token,branchNumber,cardKey,ticketNumber,node));
         })
@@ -434,7 +438,7 @@ export const downloadDocFail = ( error ) => {
 
 
 export const downloadDoc = ( userId ,token,branchNumber,cardKey,ticketNumber,node,name) => { 
-    console.log("459");
+   // console.log("459");
 
     return dispatch => {
             dispatch( downloadDocStart() ); 

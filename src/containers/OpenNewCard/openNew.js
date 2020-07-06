@@ -21,6 +21,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AssignmentReturnedIcon from '@material-ui/icons/AssignmentReturned';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 // import card from '../../components/Card/Card';
 // import { FaThinkPeaks } from 'react-icons/fa';
 import { Modal ,Button } from 'react-bootstrap';
@@ -29,10 +30,10 @@ import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
 import Promise from 'bluebird'
 import { storageRef } from "../../config";
-import './hoverEffect.css'
-import filesStyle from './modal2.css'
+import './hoverEffect.css';
+import  './modal2.css'; //filesStyle from
 //import './image.css';
-
+import {ProgressBar} from 'react-bootstrap';
 
 
 
@@ -86,7 +87,7 @@ class openNew extends Component   {
     showTinsmithingDetailsDiv:true,
     showCustomerRequestsDiv:true,
     showReplacementCarDiv:true,
-    showUploadDocDiv:true,
+//    showUploadDocDiv:true,
     showSendMailDiv: true,
 //    showWorkModel: false, 
     showImagesAndDoc: false,
@@ -151,7 +152,6 @@ class openNew extends Component   {
       gross:{ value: '' },
       discount:{value: ''},
       net:{ value: ''}
-
     },
   
     cardPart:{
@@ -178,7 +178,6 @@ class openNew extends Component   {
       dateOfDelivery:{value: ''},
       returnDate:{value: ''},
       isTaken:{value:''}
-
     },
 
     alternateVehicleTaken:false,
@@ -343,14 +342,12 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
     }   
 
   //  this.setState({found: true});
-
    this.props.onCardOpening(card,this.props.userId,this.props.token, this.props.branchNumber, 'cards'); // this contains all the data of card 
     this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
     // console.log(this.state.cardForm['licenseNumber'].value);
 
       // this.add();
-   
-
+  
     //   if(this.state.found === true){
     //     console.log("385");
     //     this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
@@ -359,24 +356,6 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
   //     console.log("371");
   //     return(
       
-
-  //       <div  class="toast" role="alert" aria-live="assertive" aria-atomic="true" style={{opacity: "inherit",alignSelf: "center"}}>
-  //           <div class="toast-header">
-  //             <img src="..." class="rounded mr-2" alt="..."/>
-  //             <strong class="mr-auto">Bootstrap</strong>
-  //             <small>11 mins ago</small>
-  //             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-  //                 <span aria-hidden="true">&times;</span>
-  //             </button>
-  //           </div>
-
-  //           <div class="toast-body">
-  //           Hello, world! This is a toast message.
-  //           </div>
-  //       </div>
-  
-  //     );
-  // }
  
 }
 
@@ -469,8 +448,7 @@ inputCarChangedHandler = (event) => {
 
 
 inputGarageReplacementChangedHandler = (event) => { 
-  console.log(event.target.id);
-  console.log(event.target.value);
+ 
   const updatedFormElement = updateObject(this.state.garageReplacementVehicle[event.target.id], { 
       value: event.target.value
   });
@@ -478,7 +456,6 @@ inputGarageReplacementChangedHandler = (event) => {
       [event.target.id]: updatedFormElement 
   });
   this.setState({garageReplacementVehicle: updatedCardForm}); 
-  console.log(this.state.garageReplacementVehicle);
 
 }
 
@@ -497,7 +474,6 @@ inputRentalCompanyReplacementChangedHandler = (event) => {
       [event.target.id]: updatedFormElement 
   });
   this.setState({rentalCompanyReplacementVehicle: updatedCardForm}); 
-
 }
 
 
@@ -645,11 +621,8 @@ inputNewPartChangedHandler = (event) => {
         const updatedCardForm = updateObject(this.state.cardPart, { 
             [event.target.id]: updatedFormElement 
         });
-        
         this.setState({cardPart: updatedCardForm}); 
   }
-      
-
 }
 
 
@@ -674,14 +647,12 @@ workOrPartsOpeningHandler = ( event,kind ) => {
         formData['net'] = this.state.cardPart.net.value;
         formData['kind'] = kind;
       }
-
       let cardKey = this.state.identifiedCardID;
       this.props.onWorkOrPartsOpening(formData, this.props.token, this.props.branchNumber, this.props.userId, kind,cardKey ); // this contains all the data of card 
       this.setWorkAndPartStates();
   }
 
   setWorkAndPartStates = () => {
-
       let updateCardWork = {
         workDescription:{value: ''},
         time:{value: ''},
@@ -697,7 +668,6 @@ workOrPartsOpeningHandler = ( event,kind ) => {
         discount:{value: ''},
         net:{value: ''}
       }
-    
       this.setState({cardWork: updateCardWork});
       this.setState({cardPart: updateCardPart});
       this.setState( { isAddNewWorkOrPartOpen: false } );
@@ -724,14 +694,12 @@ workOrPartsUpdateHandler = ( event,kind ) => {
         itemData['discount'] = this.state.cardPart.discount.value;
         itemData['net'] = this.state.cardPart.net.value;
         itemData['kind'] = kind;
-
       }
       let cardKey = this.state.identifiedCardID;
       let itemKey = this.state.itemKeyForUpdateWorkOrPart;
 
       this.props.onWorkOrPartUpdate(itemData, this.props.token, this.props.branchNumber, this.props.userId,'cards', kind,cardKey,itemKey ); 
       this.setWorkAndPartStates();
-
   }
   
  handleChange = date => {
@@ -741,8 +709,8 @@ workOrPartsUpdateHandler = ( event,kind ) => {
 };
 
 cardUpdateHandler = ( event ) => { // update card
-  event.preventDefault(); 
  
+  event.preventDefault(); 
   const carData ={
     carDescription: this.state.car_data[0],
     carNote: this.state.car_data[1],
@@ -772,7 +740,6 @@ cardUpdateHandler = ( event ) => { // update card
     ticketNumber: this.state.cardDetails.ticketNumber
   }
 
-
   const customerData={
     address: this.state.customer_data[0],
     cellphone: this.state.customer_data[1],
@@ -788,9 +755,6 @@ cardUpdateHandler = ( event ) => { // update card
     workingPhone: this.state.customer_data[11]
   }
 
-
-
-
   const garageReplacementData={
     replacementVehicleNumber: this.state.garage_replacement_data[0],
     typeReplacementVehicle: this.state.garage_replacement_data[1],
@@ -799,7 +763,6 @@ cardUpdateHandler = ( event ) => { // update card
     dateOfDelivery: this.state.garage_replacement_data[4],
     returnDate: this.state.garage_replacement_data[5],
     isTaken: this.state.garageReplacementCheck
-
   }
 
   const rentalCompanyReplacementData={
@@ -807,13 +770,11 @@ cardUpdateHandler = ( event ) => { // update card
     dateOfDelivery: this.state.rental_company_data[1],
     returnDate: this.state.rental_company_data[2],
     isTaken: this.state.rentalCompanyReplacementCheck
-
   }
 
   this.props.onCardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,this.state.alternateVehicleTaken, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
   this.setTheStates('');
   document.getElementById("workCardForm").reset(); 
-
 }
 
 cardCloseHandler = ( event ) => {
@@ -844,7 +805,6 @@ cardCloseHandler = ( event ) => {
         rentalCompanyReplacementData[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
       }
 
-
         const card = { 
             cardData: cardData,
             carData: carData, 
@@ -858,7 +818,6 @@ cardCloseHandler = ( event ) => {
         }   
         this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId);  
         this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards');  
-        
         this.setTheStates('');
 }
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
@@ -957,22 +916,17 @@ setTheStates = (licenseNumber) => {
      this.setState({dataBaseCarNumber: ''});
       this.setState({carDetails: {}});
       this.setState({userCarNumber: ''});
-  
       this.setState({cardDetails: {}});
       this.setState({customer_details: {}});
-
       this.setState({garageReplacementVehicle: garageReplacementForm});
       this.setState({rentalCompanyReplacementVehicle: rentalCompanyReplacementForm});
       this.setState({alternateVehicleTaken: false});
       this.setState({garageReplacementCheck: false});
       this.setState({rentalCompanyReplacementCheck: false});
-  
       this.setState({garage_replacement_data: []});
       this.setState({rental_company_data: []});
       this.setState({garageReplacementDetails: {}});
       this.setState({rentalCompanyDetails: {}});
-
-
 
 
       // if( licenseNumber!==''){
@@ -999,27 +953,18 @@ setTheStates = (licenseNumber) => {
 check(data,licenseNumber){
 
   if(data.cardData.licenseNumber===licenseNumber){
-
     this.state.found=true;
     this.state.dataBaseCarNumber=data.cardData.licenseNumber;
     this.state.carDetails=data.carData;
     this.state.cardDetails=data.cardData;
     this.state.customer_details=data.customerData;
-
-
     this.state.garageReplacementDetails=data.garageReplacementData;
     this.state.rentalCompanyDetails=data.rentalCompanyReplacementData;
-
-
     this.state.identifiedCardID=data.id;//rotem
     this.state.branchNumber=data.branchNumber;
-
     this.state.alternateVehicleTaken=data.alternateVehicleTaken;
-    
-
     this.state.garageReplacementCheck=data.garageReplacementData.isTaken;
     this.state.rentalCompanyReplacementCheck=data.rentalCompanyReplacementData.isTaken;
-
 
    // if(this.state.found === true){
       this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
@@ -1080,7 +1025,6 @@ this.props.onPartModalOpening( ); // this contains all the data of card //this.p
 };
 
 renderToastModal = (message) => { ///*** TOAST modal! ****
-
   let workButtons =
       <div class="form-group" style={{marginBottom: "4px"}}>
           <div  style={{ color: "white" ,fontSize: "16px", direction : "rtl"}}>{message}</div> 
@@ -1090,13 +1034,11 @@ renderToastModal = (message) => { ///*** TOAST modal! ****
       </div>;
     
     return (
-    
         <Modal show={true} onHide={this.closeToastModal}  
             style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
           <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
             <Modal.Title  >הודעה</Modal.Title>   
           </Modal.Header>
-       
           <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
                {workButtons}
           </Modal.Footer>
@@ -1111,7 +1053,6 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
 
   let workButtons;
   let { isAddNewWorkOrPartOpen } = this.state;
-
   let { isUpdateWorkOrPartOpen } = this.state;
   if (!isAddNewWorkOrPartOpen) {
       workButtons =
@@ -1159,12 +1100,11 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
               <input type="number" id="net" class="form-control" value={this.state.cardWork.net.value} autocomplete="off" aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
-
           </div>
         </form>
+
         <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px", justifyContent: "left"}} >
           <div>  
-
             { isUpdateWorkOrPartOpen ?  
             <div>            
            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsUpdateHandler( event, 'workData')}> <CheckIcon/> עדכון </Button> 
@@ -1174,9 +1114,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
             <div>
            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'workData')}> <CheckIcon/> אישור </Button> 
            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
-           
            </div>  
-           
            }
           
           </div>
@@ -1187,7 +1125,6 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     }
     return (
     
-    
         <Modal show={true} onHide={this.closeWorksModal}  dialogClassName={classes.ModalDialog} 
             style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
           <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
@@ -1196,7 +1133,6 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
           <Modal.Body  style={{ backgroundColor:"#6c757d", display: "block", maxHeight: "calc(100% - 120px)", overFlowY: "scroll", padding:"3px",flex: "none"}}   >
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
-    
                <div class="form-group col-md-3"   style={{ marginBottom: "4px"}}  > 
                  <label for="licenseNumber" >מספר רישוי</label>
                  <input  type="text"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"  style={{marginLeft: "10px"}} 
@@ -1228,11 +1164,8 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
             </Modal.Body>
          
             <div className={classes.separator}></div>
-    
           <Modal.Body  style={{ backgroundColor:"#6c757d" , display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none"}}   >
-         
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto"}}> 
-           
             <div class="form-group col-md-6"  style={{ marginBottom: "4px"}}   > 
                  <label for="customerRequests"  >תיאור העבודה</label>
                  <input type="text" id="customerRequests" autocomplete="off" class="form-control " style={{marginLeft: "10px"}}  
@@ -1271,16 +1204,14 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                  <input  type="number"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
                  aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
                </div>
-    
              </div> 
     
             </Modal.Body>
             <div className={classes.separator}></div>
             <Modal.Body  style={{ backgroundColor:"#6c757d", padding:"3px",flex: "none" }}   >
-    
             <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות:</div> 
             <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
-    
+  
          </Modal.Body>
     
           <Modal.Body style={{padding: "0px",flex: "auto"}} scrollable={true}>
@@ -1296,7 +1227,6 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                            <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
                        </tr>
                    </thead>
-             
                    <tbody>
 
         
@@ -1340,8 +1270,6 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
           <form  class="form-group" style={{   fontSize: "11px",textAlign:"left", marginBottom: "4px"}} >         
             <div> 
               <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal} >יציאה</Button>{' '}
-              {/* <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>עדכון</Button>{' '}
-              <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.closePartsModal}>מחיקה</Button>{' '} */}
               <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}} onClick={this.handleAddRow} >הוספה</Button> 
             </div>
           </form>
@@ -1398,18 +1326,14 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
             <div>
            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue", borderColor: "black"}}  onClick= {( event ) => this.workOrPartsOpeningHandler( event, 'partsData')}> <CheckIcon/> אישור </Button> 
            <Button bsStyle="secondary" style={{backgroundColor: "lightsteelblue",borderColor: "black"}}  onClick={this.setWorkAndPartStates}> <CloseIcon/> ביטול </Button> 
-           
            </div>  
-           
            }
           </div>
          </form>
       </div>
       ;
-
     }
     return (
-    
     
         <Modal show={true} onHide={this.closePartsModal}  dialogClassName={classes.ModalDialog} 
             style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
@@ -1451,11 +1375,8 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
             </Modal.Body>
          
             <div className={classes.separator}></div>
-    
           <Modal.Body  style={{ backgroundColor:"lightsteelblue" , display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none"}}   >
-         
             <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto"}}> 
-           
             <div class="form-group col-md-6"  style={{ marginBottom: "4px"}}   > 
                  <label for="customerRequests"  >תיאור העבודה</label>
                  <input type="text" id="customerRequests" class="form-control " autocomplete="off" style={{marginLeft: "10px"}}  
@@ -1470,7 +1391,6 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
                </div>
     
                <div class="form-row" style={{ direction: "rtl",color: "white" ,fontSize: "11px", marginRight:"auto" }}> 
-    
                <div class="form-group col-md-3"  style={{ marginBottom: "4px"}}   > 
                  <label for="cellphone" >סלולרי</label>
                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{marginLeft: "10px"}} 
@@ -1494,16 +1414,13 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
                  <input type="number"  id="speedometer" class="form-control" autocomplete="off" style={{marginLeft: "10px"}}  
                  aria-describedby="passwordHelpInline" value={this.state.carDetails.speedometer}/>
                </div>
-    
              </div> 
     
             </Modal.Body>
             <div className={classes.separator}></div>
             <Modal.Body  style={{ backgroundColor:"lightsteelblue", padding:"3px",flex: "none" }}   >
-    
             <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל חלקים:</div> 
             <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
-    
          </Modal.Body>
     
           <Modal.Body style={{padding: "0px",flex: "auto"}}>
@@ -1519,12 +1436,10 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
                            <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
                        </tr>
                    </thead>
-             
                    <tbody>
 
         
         {this.props.partsData.map( part =>  (
-
             <tr>
               <td>{part.partDescription}</td>
               <td>{part.amount}</td>
@@ -1547,14 +1462,11 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
           </Modal.Footer>
         </Modal> 
         );
-      
 }
 
 
 renderEditWorkOrPart = ( itemKey,list,workDescription,time,gross,discount,net) => { 
-  return(
-      <EditIcon style={{ fontSize:"large" }} onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net)}/>  
-  );
+  return( <EditIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net)}/> );
 }
 
 onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) =>  {
@@ -1586,24 +1498,19 @@ onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) 
   }
   //let cardKey = this.state.identifiedCardID;
   
-  // here will be the update work or part 
- // this.props.onWorkOrPartDelete(this.props.token, this.props.branchNumber,cardKey,itemKey ,list,this.props.userId); // this contains all the data of card 
 }      
 
 renderDeleteWorkOrPart = (itemKey,list) => { 
-  return(
-      <DeleteIcon style={{ fontSize:"large" }} onClick={() => this.onDeleteWorkOrPartClick(itemKey,list)}/>     
-  );
+  return( <DeleteIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.onDeleteWorkOrPartClick(itemKey,list)}/> );
 }
 
 onDeleteWorkOrPartClick = (itemKey,list) =>  {
   let cardKey = this.state.identifiedCardID;
-  this.props.onWorkOrPartDelete(this.props.token, this.props.branchNumber,cardKey,itemKey ,list,this.props.userId); // this contains all the data of card 
+  this.props.onWorkOrPartDelete(this.props.token, this.props.branchNumber,cardKey,itemKey ,list,this.props.userId);  
 }  
 
 handleAddRow = () => {
   this.setState( { isAddNewWorkOrPartOpen: true } );
-
   // this.setState((prevState, props) => {
   //   const row = {workDescription: "1",time: "2",gross: "3",discount: "4",net: "5" };
   //   return { rows: [...prevState.rows, row] };
@@ -1616,15 +1523,11 @@ handleRemoveRow = () => {
   });
 };
 
-
-
-
 switchModeAlternateVehicle = () => {
   this.setState(prevState => {
       return {alternateVehicleTaken: !prevState.alternateVehicleTaken};
       });
 }
-
 
 switchModeGarageReplacementVehicle = () => {
   this.setState(prevState => {
@@ -1637,7 +1540,6 @@ switchModeRentalCompanyReplacementCheck = () => {
       return {rentalCompanyReplacementCheck: !prevState.rentalCompanyReplacementCheck};
       });
 }
-
 
 switchDivModeHandler = () => {
   this.setState(prevState => {
@@ -1669,17 +1571,9 @@ switchDivModeHandlerReq = () => {
       });
 }
 
-
 switchDivModeHandlerReplacementCar = () => {
   this.setState(prevState => {
       return {showReplacementCarDiv: !prevState.showReplacementCarDiv};
-      });
-}
-
-
-switchDivModeHandlerDoc = () => {
-  this.setState(prevState => {
-      return {showUploadDocDiv: !prevState.showUploadDocDiv};
       });
 }
 
@@ -1691,7 +1585,6 @@ switchDivModeHandlerMail = () => {
 
 updateCarInputValue=(evt,i)=> {
       evt.preventDefault(); 
-
       this.state.car_data[i]=evt.target.value;
       if(i===9){
         this.state.carDetails.manufactureYear=evt.target.value;
@@ -1732,21 +1625,7 @@ switchShowImagesAndDoc = () => {
       });
 }
 
-// getMeta = (varA, varB) => {
-//   console.log(varA);
-//   if (typeof varB !== 'undefined') {
-//      alert(varA + ' width ' + varB + ' height');
-//      console.log(varA  + varB );
-//      return varA;
-//   } else {
-//      var img = new Image();
-//      img.src = varA;
-//      img.onload = this.getMeta(this.width, this.height);
-//   }
-// }
-
 // MakeFile() {
-  
 //   var FileSaver = require('file-saver');
 //   //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
 //   for(var i=0;i<this.state.docFiles.length;i++){
@@ -1771,7 +1650,6 @@ onMultipleDocDownload(node) { //url2,name,key,
   Object.keys(this.state.docsArrayForCheck).map((key, i) => {
     this.props.onDownloadDoc(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
      delete this.state.docsArrayForCheck[key];
-    // console.log(this.state.docsArrayForCheck);
     })
 }
 
@@ -1796,7 +1674,6 @@ onMultipleImagesDownload(node) {
   Object.keys(this.state.imagesArrayForCheck).map((key, i) => {
     this.props.onDownloadImage(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
      delete this.state.imagesArrayForCheck[key];
-    // console.log(this.state.imagesArrayForCheck);
     })
 }
 
@@ -1838,7 +1715,6 @@ if(check){ // unmarked the box
 else if(!check){ // marked the box
   //this.props.docsForCard[index].check = true;
   this.state.docsArrayForCheck[name] = true;
-
   const updatedCardForm = updateObject(this.state.docsArrayForCheck, { 
     [name]: true 
 });
@@ -1853,8 +1729,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
     return (
 //display: "inline-flex"
 
-      <Modal show={true} onHide={this.switchShowImagesAndDoc} dialogClassName={classes.Dialog} style={{ position: "fixed",display: "flex",fontFamily: "Alef Hebrew"}}>
-          <Modal.Header closeButton >
+      <Modal show={true} onHide={this.switchShowImagesAndDoc} dialogClassName={classes.Dialog} backdrop={false} 
+      style={{ position: "fixed",display: "flex",fontFamily: "Alef Hebrew"}}>
+          <Modal.Header closeButton disabled={this.props.isUploading} >
             <Modal.Title>תמונות ומסמכים לכרטיס</Modal.Title>
           </Modal.Header>
           <Modal.Body >
@@ -1868,6 +1745,11 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">מסמכים</a>
               </li>
  
+              <li class="nav-item">
+                <a class="nav-link" id="newUpload-tab" data-toggle="tab" href="#newUpload" role="tab" aria-controls="newUpload" aria-selected="false">העלאה חדשה</a>
+              </li>
+
+
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style={{opacity: "initial"}}>
@@ -1881,8 +1763,8 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                 { Object.keys(this.state.imagesArrayForCheck).length} נבחרו 
                 </p>
                 <p class="alignleft" style={{	float: "left"}}>
-                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onDeleteMultipleImages('/images') }/>
-                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleImagesDownload('/images')}/>  
+                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px",cursor: "pointer" }} onClick={() => this.onDeleteMultipleImages('/images') }/>
+                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px",cursor: "pointer" }} onClick={() => this.onMultipleImagesDownload('/images')}/>  
                 </p>
             </div>
           : null
@@ -1897,9 +1779,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                             <div class="overlay">   
                             {
                           this.state.imagesArrayForCheck[image.name] ?
-                    <CheckBoxIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
+                    <CheckBoxIcon style={{ fontSize:"large",cursor: "pointer" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
                      :
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large",cursor: "pointer" }} onClick={() => this.onCheckBoxImageClick(image.key,image.name,image.url,image.index,this.state.imagesArrayForCheck[image.name])}/>
 
                       } 
            
@@ -1908,7 +1790,8 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                         </div>
                       )}    
                             </section> 
-              </div>             
+              </div> 
+
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"  style={{opacity: "initial"}}>
           {
            Object.keys(this.state.docsArrayForCheck).length !== 0 ?
@@ -1918,8 +1801,8 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                 { Object.keys(this.state.docsArrayForCheck).length} נבחרו 
                 </p>
                 <p class="alignleft" style={{	float: "left"}}>
-                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onDeleteMultipleDocs('/docs') }/>
-                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleDocDownload('/docs')}/>  
+                <DeleteOutlineIcon style={{ fontSize:"xx-large",margin: "5px",cursor: "pointer" }} onClick={() => this.onDeleteMultipleDocs('/docs') }/>
+                  <AssignmentReturnedIcon style={{ fontSize:"xx-large",margin: "5px",cursor: "pointer" }} onClick={() => this.onMultipleDocDownload('/docs')}/>  
                 </p>
             </div>
           : null
@@ -1941,28 +1824,67 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>
                       {
                           this.state.docsArrayForCheck[file.name] ?
-                    <CheckBoxIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
+                    <CheckBoxIcon style={{ fontSize:"large",cursor: "pointer" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
                      :
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
-
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"large",cursor: "pointer" }} onClick={() => this.onCheckBoxFileClick(file.key,file.name,file.url,file.index,this.state.docsArrayForCheck[file.name])}/>
                       }{' '}
                     {file.name}
                     </td>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{file.lastModified}</td>  
-                
                     </tr>      
                  ))  
             }
        </tbody>
         </table> 
         </div>
-    
                   </div>
+
+
+              <div class="tab-pane fade" id="newUpload" role="tabpanel" aria-labelledby="newUpload-tab" style={{opacity: "initial"}}>
+              <div class="item-wrapper one" >
+                <div class="item">
+                    <form data-validation="true" action="#" method="post" enctype="multipart/form-data">
+                        <div class="item-inner">
+                            <div class="item-content">
+                                <div class="image-upload">
+                                   <label style={{cursor: "pointer",direction: "rtl"}} for="file_upload" > 
+                                   <CloudUploadIcon style={{ fontSize: "100px",color: "gainsboro",margin: "5px" }}  />
+                                        <div class="h-100">
+                                            <div class="dplay-tbl">
+                                                <div class="dplay-tbl-cell"> <i class="fa fa-cloud-upload"></i>
+                                                    <h5><b style={window.innerWidth > '500' ? {fontSize: "x-large"}: {fontSize: "larger"}} >בחר את הקבצים שלך להעלאה</b></h5>
+                                                    {window.innerWidth > '769' ?
+                                                    <h6 class="mt-10 mb-70" style={{fontSize: "medium"}}  >או גרור את הקבצים לכאן</h6>
+                                                    : null}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="file" multiple id="file_upload" value="" class="image-input" style={{height: "100%"}} data-traget-resolution="image_resolution" ondrop={ (event) =>  this.fileSelectedHandler(event,'images')} ondragover="return false"  onChange={ (event) =>  this.fileSelectedHandler(event,'images')} disabled={!this.state.formIsValid}/>
+
+                                    </label> 
+                                    {this.props.isUploading === true ?
+                                    <div>
+
+                                          <div class="dplay-tbl-cell"> <i class="fa fa-cloud-upload"></i>
+                                                    <h5><b style={{fontSize: "small",fontWeight: "bold"}} >הקבצים בהעלאה {this.props.currentUploadNumber}</b></h5>
+                                                    <h6 class="mt-10 mb-70" style={{fontSize: "small",direction: "rtl"}}  >מעלה כעת את: {this.props.currentFileUploaded} </h6>
+                                                </div>
+                                    <ProgressBar variant="success" now={this.props.payload} label={this.props.payload + "%"}  />
+                                    </div>
+                                    : null
+                                    }
+                                    </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-              
+                  </div> 
+            </div>
           </Modal.Body>
           <Modal.Footer style={{direction: "rtl"}}>    
-            <Button onClick={this.switchShowImagesAndDoc} style={{textAlign: "right"}}>סגירה</Button>
+            <Button onClick={this.switchShowImagesAndDoc} style={{textAlign: "right"}} disabled={this.props.isUploading} >סגירה</Button>
           </Modal.Footer>
         </Modal>
 
@@ -1971,12 +1893,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
 }
 
 
-
 showImagesAndDoc  = () => {
   this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
   this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
-
-
   // console.log(this.props.showGetSuccessCase);
   // if(this.props.showGetSuccessCase){
   //   console.log(this.props.imagesForCard);
@@ -1985,55 +1904,9 @@ showImagesAndDoc  = () => {
 
 
 fileSelectedHandler = (e,type) => {
-  console.log(e.target.files);
-  
-  for(var i=0;i<e.target.files.length;i++){
-    let type=e.target.files[i].type;
-    if(type.includes("image/jpeg")){
-      this.state.imageFiles.push(e.target.files[i]);
-    }
-    else{
-      this.state.docFiles.push(e.target.files[i]);
-    }
-  }
-  console.log(this.state.imageFiles);
-  console.log(this.state.docFiles);
- 
-  if(type==='images'){
-      this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'images',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
-  }
-  else{
-    this.props.onImageOrDocUploading(e.target.files,this.props.userId ,this.props.token,this.props.branchNumber,'docs',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
-
-  }
- if (e.target.files) {
-
-  /* Get files in array form */
-  const files = Array.from(e.target.files);
-
-  /* Map each file to a promise that resolves to an array of image URI's */ 
-  Promise.all(files.map(file => {
-      return (new Promise((resolve,reject) => {
-          const reader = new FileReader();
-          reader.addEventListener('load', (ev) => {
-              resolve(ev.target.result);
-          });
-          reader.addEventListener('error', reject);
-          reader.readAsDataURL(file);
-      }));
-  }))
-  .then(images => {
-
-      /* Once all promises are resolved, update state with image URI array */
-      this.setState({ imageArray : images })
-
-  }, error => {        
-      console.error(error);
-  });
-  }
-  console.log(this.state.imageArray);
- 
-
+  e.preventDefault();
+  const arrFiles = Array.from(e.target.files);
+  this.props.onImageOrDocUploading(arrFiles,this.props.userId ,this.props.token,this.props.branchNumber,'images',this.state.identifiedCardID,this.state.cardDetails['ticketNumber']);
 }
 
 
@@ -2165,32 +2038,6 @@ onChange = date => this.setState({ date })
     // }
 
 
-       /* <Toast>
-            <Toast.Header>
-            <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-             <strong className="mr-auto">Bootstrap</strong>
-              <small>11 mins ago</small>
-          </Toast.Header>
-          <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-        </Toast> */
-
-  //if(!this.state.found){
-
-    // <div  class="toast" role="alert" aria-live="assertive" aria-atomic="true" style={{opacity: "inherit",alignSelf: "center"}}>
-    //         <div class="toast-header">
-    //           <img src="..." class="rounded mr-2" alt="..."/>
-    //           <strong class="mr-auto">Bootstrap</strong>
-    //           <small>11 mins ago</small>
-    //           <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-    //               <span aria-hidden="true">&times;</span>
-    //           </button>
-    //         </div>
-
-    //         <div class="toast-body">
-    //         Hello, world! This is a toast message.
-    //         </div>
-    //     </div> 
-
   return (
     <form id="workCardForm" onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
 
@@ -2198,9 +2045,9 @@ onChange = date => this.setState({ date })
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > פרטים </span> 
               { !this.state.showDetailsDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandler}/>
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandler}/>
               :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandler}/>
+              <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandler}/>
               }
               </div>
             
@@ -2270,12 +2117,9 @@ onChange = date => this.setState({ date })
              <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > עדכון פרטי רכב </span> 
               { !this.state.showCarInfoDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCar}/>
-              :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCar}/>
-              }
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerCar}/>
+              : <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerCar}/> }
               </div>
-
 
             {this.state.showCarInfoDiv ? 
             <div class="card-body text-dark bg-white" >
@@ -2305,9 +2149,7 @@ onChange = date => this.setState({ date })
                   defaultValue={this.state.carDetails.speedometer}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,10)}/>
                 </div>
-  
-               
-  
+
                 <div class="form-group col-md-3" >
                 {(() => {
                    if(this.state.found){
@@ -2371,31 +2213,9 @@ onChange = date => this.setState({ date })
                   
                     {/* <option selected></option> */}
                     <option></option>
-                    <option>2020</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
-                    <option>2016</option>
-                    <option>2015</option>
-                    <option>2014</option>
-                    <option>2013</option>
-                    <option>2012</option>
-                    <option>2011</option>
-                    <option>2010</option>
-                    <option>2009</option>
-                    <option>2008</option>
-                    <option>2007</option>
-                    <option>2006</option>
-                    <option>2005</option>
-                    <option>2004</option>
-                    <option>2003</option>
-                    <option>2002</option>
-                    <option>2001</option>
-                    <option>2000</option>
-                    <option>1999</option>
-                    <option>1998</option>
-                    <option>1997</option>
-        
+                    <option>2020</option> <option>2019</option> <option>2018</option> <option>2017</option><option>2016</option> <option>2015</option> <option>2014</option> <option>2013</option>
+                    <option>2012</option> <option>2011</option> <option>2010</option> <option>2009</option> <option>2008</option> <option>2007</option> <option>2006</option> <option>2005</option>
+                    <option>2004</option> <option>2003</option> <option>2002</option> <option>2001</option> <option>2000</option> <option>1999</option> <option>1998</option> <option>1997</option>
                   </select>
                 </div>
 
@@ -2456,12 +2276,9 @@ onChange = date => this.setState({ date })
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > עדכון פרטי לקוח </span> 
               { !this.state.showCustomerDetailsDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCus}/>
-              :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerCus}/>
-              }
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerCus}/>
+              : <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerCus}/> }
               </div>
-
 
             {this.state.showCustomerDetailsDiv ?
             <div class="card-body text-dark bg-white" >
@@ -2619,9 +2436,9 @@ onChange = date => this.setState({ date })
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > נתוני כרטיס פחחות </span> 
               { !this.state.showTinsmithingDetailsDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerTin}/>
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerTin}/>
               :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerTin}/>
+              <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerTin}/>
               }
               </div>
 
@@ -2727,9 +2544,9 @@ onChange = date => this.setState({ date })
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > תלונות/בקשות הלקוח </span> 
               { !this.state.showCustomerRequestsDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReq}/>
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerReq}/>
               :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReq}/>
+              <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerReq}/>
               }
               </div>
              
@@ -2745,44 +2562,32 @@ onChange = date => this.setState({ date })
                   <Input type="textarea" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid}
                           defaultValue={this.state.cardForm.customerRequests.value}
                           onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/>
-
-{/* 
-                  <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.cardForm.customerRequests.value}
-                  onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/> */}
-
                 </div>
               </div> 
-              
                : null }   
           </div>  
-
-
-
-
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span > רכב חליפי </span> 
               { !this.state.showReplacementCarDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReplacementCar}/>
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerReplacementCar}/>
               :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerReplacementCar}/>
+              <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerReplacementCar}/>
               }
               </div>
-             
             {this.state.showReplacementCarDiv ? 
             <div class="card-body text-dark bg-white" >
               <div >
               <div class="form-row">
             {this.state.alternateVehicleTaken ?
                           <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()}/>
                             {' '}רכב חליפי נלקח?                    
                           </div>
                      :
                      <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()}/>
                     {' '}רכב חליפי נלקח?   
                   </div>
                       } 
@@ -2793,25 +2598,23 @@ onChange = date => this.setState({ date })
                       <div class="form-row"> 
                         {this.state.garageReplacementCheck ?
                           <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
                             {' '}רכב מהמוסך?                    
                         </div>
                      :
                      <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
                     {' '}רכב מהמוסך?   
                   </div>
                       } 
-
-
                   {this.state.rentalCompanyReplacementCheck ?
                           <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
                             {' '}רכב מחברת השכרה?                    
                         </div>
                      :
                      <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
                     {' '}רכב מחברת השכרה?   
                   </div>
                       } 
@@ -2922,7 +2725,7 @@ onChange = date => this.setState({ date })
                 </div>
                 <div class="form-row" > 
 
-<div class="form-group col-md-6" >
+    <div class="form-group col-md-6" >
           {(() => {
              if(this.state.found){
               this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value= this.state.rentalCompanyDetails.dateOfDelivery;
@@ -2946,58 +2749,24 @@ onChange = date => this.setState({ date })
           </div>
           </div>
                 </div>
-: null}
+          : null}
                 </div>
                   :null}
               </div> 
                : null }   
           </div>  
-
-          <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
-            <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
-              <span >העלאת תמונות וקבצים </span> 
-              { !this.state.showUploadDocDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerDoc}/>
-              :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerDoc}/>
-              }
-              </div>
-             
-            {this.state.showUploadDocDiv ? 
-              <div class="card-body text-dark bg-white" >
-                <div class="form-row" > 
-                  <div class="form-group col">
-                    <h5>תמונות:</h5>
-                        <input type="file" multiple onChange={ (event) =>  this.fileSelectedHandler(event,'images')} disabled={!this.state.formIsValid}/>
-                  </div>
-                  <div class="form-group col">
-                    <h5>מסמכים:</h5>    
-                        <input type="file" multiple onChange= { (event) =>  this.fileSelectedHandler(event,'doc')} disabled={!this.state.formIsValid} />
-                  </div>
-
-
-                </div>  
-                
-              </div>  
-               : null }  
-            </div> 
-
               </div> 
 
               <div class="form-group col-md-6" >
-
             <div class="card text-white bg-dark mb-6" style={{display: "flex"}}>
-
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span >שליחת מייל לשמאי/חברת ביטוח </span> 
               { !this.state.showSendMailDiv ? 
-              <AddIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerMail}/>
+              <AddIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerMail}/>
               :
-              <RemoveIcon style={{textAlign:"left",float: "left"}} onClick={this.switchDivModeHandlerMail}/>
+              <RemoveIcon style={{textAlign:"left",float: "left",cursor: "pointer"}} onClick={this.switchDivModeHandlerMail}/>
               }
               </div>
-
-            
             {this.state.showSendMailDiv ? 
               <div class="card-body text-dark bg-white" >
                    <>
@@ -3005,7 +2774,6 @@ onChange = date => this.setState({ date })
             
 
     
-
                  <form>
             <FormGroup controlId="formBasicEmail" autocomplete="off">
               <Label >כתובת מייל</Label>
@@ -3013,16 +2781,13 @@ onChange = date => this.setState({ date })
                     style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'email')} />
             </FormGroup>
             </form>
-
             <form>
-
             <FormGroup controlId="formBasicName">
               <Label >שם</Label>
               <Input type="text" name="name" value={this.state.name} placeholder="הכנס/י שם" autocomplete="off" disabled={!this.state.formIsValid}
                    style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'name')} />
             </FormGroup>
             </form>
-
             <FormGroup controlId="formBasicSubject">
               <Label >נושא</Label>
               <Input type="text" name="subject" value={this.state.subject} placeholder="הכנס/י נושא" autocomplete="off" disabled={!this.state.formIsValid}
@@ -3033,17 +2798,13 @@ onChange = date => this.setState({ date })
               <Input type="textarea" name="message" value={this.state.message} placeholder="הכנס/י הודעה" autocomplete="off" disabled={!this.state.formIsValid}
                     style={{backgroundColor: "white"}} onChange={this.handle_Change.bind(this, 'message')}/>
             </FormGroup>
-
             <Button variant="primary" type="submit" style={{textAlign:"left",direction: "ltr",float: "left"}} disabled={!this.state.formIsValid} onClick={this.handle_Submit.bind(this)}> שלח מייל </Button>
-
-
           </Form>
       </>
               </div>  
                : null }  
             </div>  
             </div>
-
             </div>
 
         <form class="form-group" > 
@@ -3054,7 +2815,6 @@ onChange = date => this.setState({ date })
         : null}
          {this.props.showWorkModel?
                 this.renderWorksModal( 'workData')
-
             :null} 
             {' '}
    </span>
@@ -3086,9 +2846,9 @@ onChange = date => this.setState({ date })
       }
 
       {' '}
-        { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null }
-        { this.props.showUpdateSuccessCase ? this.renderToastModal( 'כרטיס עודכן בהצלחה') :null }
-        { this.props.showCloseCardSuccessCase && this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נסגר בהצלחה') :null }
+        {/* { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null } */}
+        {/* { this.props.showUpdateSuccessCase ? this.renderToastModal('כרטיס עודכן בהצלחה') :null } */}
+        {/* { this.props.showCloseCardSuccessCase && this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נסגר בהצלחה') :null } */}
         { this.state.showImagesAndDoc ? this.renderImagesAndDocModal() :null }
 
         </form>
@@ -3096,11 +2856,7 @@ onChange = date => this.setState({ date })
     );
 
 }
-
 }
-
-// { this.props.showGetSuccessCase ? this.renderImagesAndDocModal() :null }
-
 
 
 const mapStateToProps = state => { // here we get the state and return a javascript object
@@ -3120,56 +2876,44 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       partsData: state.card.partsData,
       currentCardKey: state.card.currentCardKey,
       currentTicketNumber: state.card.currentTicketNumber,
-
       showGetSuccessCase: state.storage.showGetSuccessCase,
       imagesForCard: state.storage.fetchedImages,
       numberOfImages: state.storage.numberOfImages,
-
       docsForCard: state.storage.fetchedDocs,
       numberOfDocs: state.storage.numberOfDocs,
-
       resizeImagesForCard: state.storage.resizeImages,
-      backgroundColor: state.auth.backgroundColor
-
+      backgroundColor: state.auth.backgroundColor,
+      payload: state.storage.payload,
+      currentFileUploaded: state.storage.currentFileUploaded,
+      isUploading: state.storage.isUploading,
+      currentUploadNumber: state.storage.currentUploadNumber
   };
 };
 
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
-    
     onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
     onCardOpening: (cardData,userId, token,branchNumber,node) => dispatch(actions.cardOpening(cardData,userId, token, branchNumber,node)),
     onCardUpdate:(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token, branchNumber,identifiedCardID,userId) => dispatch(actions.cardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token, branchNumber,identifiedCardID,userId)), // this contains all the data of card 
     onCardDelete:(token, branchNumber, identifiedCardID,node,userId) => dispatch( actions.cardDelete(token, branchNumber, identifiedCardID,node,userId)),
-
     onImageOrDocUploading:(file,userId ,token,branchNumber,node,cardKey,ticketNumber) => dispatch( actions.imageOrDocUploading(file,userId ,token,branchNumber,node,cardKey,ticketNumber)),
     onGetImages:(userId ,token,branchNumber,cardKey,ticketNumber, node) => dispatch( actions.getImages(userId ,token,branchNumber,cardKey,ticketNumber, node)),
-   
     onDeleteImages:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.deleteImages(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
     onDeleteDocs:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.deleteDocs(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
-
     onDownloadDoc:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadDoc(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
     onDownloadImage:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadImage(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
-
     onGetDocs:(userId ,token,branchNumber,cardKey,ticketNumber, node) => dispatch( actions.getDocs(userId ,token,branchNumber,cardKey,ticketNumber, node)), 
-    
     onWorkModalOpening: () =>  dispatch(actions.workModalOpening()),   
     onWorkModalClose: (token ) =>  dispatch(actions.workModalClose(token)),
-
     onToastModalClose: () =>  dispatch(actions.toastModalClose()),
-
     onPartModalOpening: () =>  dispatch(actions.partModalOpening()),   
     onPartsModalClose: (token ) =>  dispatch(actions.partModalClose(token)),
-
     onWorkOrPartsOpening: (formData, token,branchNumber,userId, kind,cardKey) => dispatch(actions.workOrPartsOpening(formData, token, branchNumber,userId, kind,cardKey)),
     onWorkOrPartUpdate: (itemData, token,branchNumber,userId,list, kind,cardKey,itemKey) => dispatch(actions.workOrPartUpdate(itemData, token,branchNumber,userId,list, kind,cardKey,itemKey)),
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
-
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
     onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
-
-
   };
 };
 

@@ -13,7 +13,7 @@ const initialState = {
     loadingDocs: false,
     showSuccessCase: false,
     cardStorage: [],
-    payload:'',
+    payload:0,
     error: '',
     errorImages: '',
     errorDocs: '',
@@ -31,19 +31,31 @@ const initialState = {
     loadingDownloadDocs: false,
     errorDownloadDocs: false,
     loadingDownloadImage: false,
-    errorDownloadImage: false
+    errorDownloadImage: false,
+    currentFileUploaded :'',
+    isUploading: false,
+    currentUploadNumber :''
     
 };
 
 
 
 const imageOrDocUploadingStart = ( state, action ) => {
-    return updateObject( state, { loading: true } ); 
+    return updateObject( state, {
+        isUploading: true,
+         loading: true,
+         currentFileUploaded: action.currentFileUploaded,
+         payload: 0,
+         currentUploadNumber: action.currentUploadNumber
+        //  isUploading: true
+        } ); 
 };
 
 const imageOrDocUploadingProgress = ( state, action ) => {
     return updateObject( state, { 
-        payload: action.payload 
+        payload: action.payload,
+        currentFileUploaded: action.currentFileUploaded
+
     } ); 
 };
 
@@ -51,15 +63,30 @@ const imageOrDocUploadingProgress = ( state, action ) => {
 const imageOrDocUploadingSuccess = ( state, action ) => {
 
   //  const newCard = updateObject( action.cardData, { id: action.cardId } ); 
+  
     return updateObject( state, {
         loading: false,
-        showSuccessCase: true
-       // cardStorage: state.cards.concat( newCard ) 
+        showSuccessCase: true,
+        payload: action.payload,
+        currentFileUploaded: action.currentFileUploaded
+        // cardStorage: state.cards.concat( newCard ) 
     } );
-
-
-
 };
+
+const allUploadIsSuccess = ( state, action ) => {
+    
+      return updateObject( state, {
+        isUploading: false,
+          loading: false,
+          payload: 0,
+          currentFileUploaded: '',
+          currentUploadNumber: ''
+          // cardStorage: state.cards.concat( newCard ) 
+      } );
+  
+  
+  
+  };
 
 const imageOrDocUploadingFail = ( state, action ) => {
     return updateObject( state, {
@@ -282,7 +309,8 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.IMAGE_OR_DOC_UPLOADING_PROGRESS: return imageOrDocUploadingProgress( state, action );
         case actionTypes.IMAGE_OR_DOC_UPLOADING_SUCCESS: return imageOrDocUploadingSuccess( state, action );
         case actionTypes.IMAGE_OR_DOC_UPLOADING_FAIL: return imageOrDocUploadingFail( state, action );
-        
+        case actionTypes.ALL_UPLOAD_IS_SUCCESS: return allUploadIsSuccess( state, action );
+
 
 
         case actionTypes.GET_IMAGES_START: return getImagesStart( state, action );

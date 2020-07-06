@@ -122,13 +122,14 @@ export const cardUpdateStart = () => {
 //garageReplacementVehicle,rentalCompanyReplacementVehicle,
 
 export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token,branchNumber,identifiedCardID,userId ) => { 
+ let i = 0;
     return dispatch => {
         dispatch( cardUpdateStart() ); 
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, carData)); 
         dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
-
+        i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
@@ -137,6 +138,7 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
        axios.patch(branchNumber+'/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, cardData)); 
+        i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
@@ -146,21 +148,20 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, customerData)); 
+        i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
         } );
-
 
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/garageReplacementData.json?auth=' + token, garageReplacementData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, garageReplacementData)); 
+                i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
         } );
-        
-        
         
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/rentalCompanyReplacementData.json?auth=' + token, rentalCompanyReplacementData)
         .then(res => {
@@ -169,7 +170,6 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         .catch( error => {
             dispatch(cardUpdateFail(error));
         } );
-        
 
         let finalTag = '' ;
         finalTag = {  alternateVehicleTaken: alternateVehicleTaken};
@@ -180,7 +180,12 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         .catch( error => {
             console.log(error);
             dispatch(cardUpdateFail(error));
-        } );
+        } )
+
+        .finally(function(){
+             alert('כרטיס עודכן בהצלחה');
+
+        });
         
     };
 };
@@ -213,28 +218,32 @@ export const cardOpeningStart = () => {
 };
 
 export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => { 
-    console.log(cardData);
     return dispatch => {
         dispatch( cardOpeningStart() ); // dispatch to the store
         // axios.post(branchNumber + '/cards.json?auth=' + token, cardData ) // send the HTTP request 
 
         axios.post(branchNumber + '/' + node + '.json?auth=' + token, cardData ) // send the HTTP request 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            console.log(response.data)
+            // console.log(response.data)
             dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
+            if(node==='cards'){
+                alert('כרטיס נשמר בהצלחה');
+            }
+            else if(node==='closeCards'){
+                alert('כרטיס נסגר בהצלחה');
+            }
+
             // this.props.history.push( '/' ); // here we navigate away
         } )
         .catch( error => {
             console.log(error);
             dispatch(cardOpeningFail(error));
-
         } )
         
         .finally(function(){
             console.log("189");
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
-
         });
     };
 };
@@ -277,7 +286,7 @@ export const fetchCards = (token, userId,branchNumber) => { //here we run our as
         axios.get(branchNumber + '/cards.json' + queryParams) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
             
             .then( res => { // when the data is there (in the node of cards in firebase)
-                console.log(res);
+                // console.log(res);
 
                 // so with the response I'm getting, I want to set some state which actually contain my cards and then outputs them.
                 const fetchedCards = []; 
@@ -309,7 +318,7 @@ export const fetchCloseCards = (token, userId,branchNumber) => {
         axios.get(branchNumber + '/closeCards.json' + queryParams) 
             
             .then( res => { 
-                console.log(res);
+                // console.log(res);
 
                 const fetchedCards = []; 
           
@@ -360,7 +369,6 @@ export const cardDelete = ( token,branchNumber,cardKey ,node,userId) => {
     return dispatch => {
         dispatch(cardDeleteStart() ); // dispatch to the store
         //'/carData.json?auth=' + token,
-        console.log("244");
 
         const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
         axios.delete(branchNumber + '/' + node + '/'+ cardKey + '.json' + queryParams,null )
@@ -420,7 +428,7 @@ export const workOrPartsOpening = ( formData, token,branchNumber, userId,kind,ca
         axios.post(branchNumber + '/cards/' + cardKey + '/' + kind + '.json?auth=' + token ,formData ) // send the HTTP request 
 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            console.log(response.data)
+            // console.log(response.data)
             dispatch(workOrPartsOpeningSuccess());  //check if the success case ok! //response.data.name, formData,kind
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', cardKey)); 
@@ -464,7 +472,7 @@ export const GetAllCardData = (token,branchNumber,userId, kind,cardKey) => { //h
         axios.get(branchNumber + '/' + kind + '/' + cardKey + '.json' + queryParams) 
             
             .then( res => { 
-                console.log(res);
+                // console.log(res);
            //     const openCard = {carData: {},cardData: {},customerData:{},workData: {},partData: {}}; 
               const workData = [] ; 
               const partsData = [] ; 
