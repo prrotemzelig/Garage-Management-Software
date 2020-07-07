@@ -2,6 +2,35 @@ import * as actionTypes from './actionTypes';
 import axios from '../../axios-cards';
 
 
+export const purchaseNotificationInit = () => { 
+    return {
+        type: actionTypes.NOTIFICATION_OPENING 
+    };
+};
+
+
+export const NotificationOpening = () => {  
+    return dispatch => {
+        dispatch( purchaseNotificationInit() ); 
+        
+    };
+};
+
+export const purchaseNotificationCancel = () => { 
+    return {
+        type: actionTypes.NOTIFICATION_CLOSE 
+    };
+};
+
+
+export const NotificationClose = (  token ) => { 
+    return dispatch => {
+        dispatch( purchaseNotificationCancel() ); 
+        
+    };
+};
+
+
 export const notificationInit = () => { // this will be dispatched whenever we load the checkout page //** */
     return {
         type: actionTypes.NOTIFICATION_INIT // just return an action
