@@ -54,7 +54,11 @@ const card = ( props ) => {
             }
         );
     
-
+        cardDetails.push( 
+            {
+                name: props.cardData.status
+            }
+        );
 
 
         

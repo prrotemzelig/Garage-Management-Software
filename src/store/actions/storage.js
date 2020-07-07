@@ -176,9 +176,7 @@ export const getImages = ( userId ,token,branchNumber,cardKey,ticketNumber,node)
     .then(result =>  {
         count = result.items.length;
         if(count === 0){
-            //alert('אין תמונות להצגה'); 
             dispatch( getImagesSuccess(fetchedImages,'false',node,count) ); 
-
         }
     
       result.items.forEach(imageRef => {
@@ -301,19 +299,15 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
     .then(result =>  {
         count = result.items.length;
         if(count === 0){
-            //alert('אין תמונות להצגה'); 
-            //console.log("323");
             dispatch( getDocsSuccess(fetchedDocs,'false',node,count) ); 
 
         }
       result.items.forEach(folder => {
-
               //  counterFiles += 1;   
                 folder.getDownloadURL()
                .then(function(url) {
 
                 var forestRef = storageRef.child(folder.location.path);
-
                 forestRef.getMetadata().then(function(metadata) {  // Get metadata properties
                     // Metadata now contains the metadata for 'images/forest.jpg'            
                     var newData = new Date(metadata.timeCreated);

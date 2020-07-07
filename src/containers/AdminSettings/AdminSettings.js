@@ -61,8 +61,8 @@ class AdminSettings extends Component {
                 elementConfig: {
                     options: [
                         {value: 'Admin', displayValue: 'מנהל'},
-                        {value: 'User', displayValue: 'משתמש'},
-                        {value: 'basic', displayValue: 'בסיסי'}
+                        {value: 'User', displayValue: 'משתמש'}
+                        // {value: 'basic', displayValue: 'בסיסי'}
                     ]
                 },
 

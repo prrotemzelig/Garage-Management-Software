@@ -241,6 +241,24 @@ const WorkOrPartDeleteSuccess = ( state, action ) => {
 };
 
 
+
+const changeVehicleNumberStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const changeVehicleNumberSuccess = ( state, action ) => {
+    //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false
+    } );
+};
+
+const changeVehicleNumberFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) { // here Ill write my different cases
 
@@ -260,6 +278,13 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.CARD_DELETE_START: return cardDeleteStart( state, action );
         case actionTypes.CARD_DELETE_SUCCESS: return cardDeleteSuccess( state, action );
         case actionTypes.CARD_DELETE_FAIL: return cardDeleteFail( state, action );
+
+
+        case actionTypes.CHANGE_VEHICLE_NUMBER_START: return changeVehicleNumberStart( state, action );
+        case actionTypes.CHANGE_VEHICLE_NUMBER_SUCCESS: return changeVehicleNumberSuccess( state, action );
+        case actionTypes.CHANGE_VEHICLE_NUMBER_FAIL: return changeVehicleNumberFail( state, action );
+
+
 
         case actionTypes.PURCHASE_SET_CURRENT_CARD_KEY: return purchaseSetCurrentCardKey( state, action );
 

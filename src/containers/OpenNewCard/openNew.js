@@ -114,7 +114,8 @@ class openNew extends Component   {
       policyNumber:{value: ''},
       claimNumber:{value: ''},  
       dateOfDamage:{value: ''},
-      customerRequests:{ value: ''}
+      customerRequests:{ value: ''},
+      status:{ value: ''}
     },
 
     vehicleData: { 
@@ -708,6 +709,24 @@ workOrPartsUpdateHandler = ( event,kind ) => {
   });
 };
 
+
+
+
+changeVehicleNumberHandler = ( event ) => { // update card
+  event.preventDefault(); 
+  var newNumberInput = prompt("בבקשה הכנס מספר רכב מעודכן", this.state.cardForm.licenseNumber.value);
+  if (newNumberInput !== null) {
+    this.props.onChangeVehicleNumber(newNumberInput, this.props.token, this.props.branchNumber,this.state.identifiedCardID, this.props.userId ); 
+    this.setState({dataBaseCarNumber: newNumberInput});
+    this.setState({userCarNumber: newNumberInput});
+    this.state.cardForm.licenseNumber.value=newNumberInput;
+
+    // document.getElementById("demo").innerHTML =
+    // "Hello " + newNumberInput + "! How are you today?";
+  } 
+}
+
+
 cardUpdateHandler = ( event ) => { // update card
  
   event.preventDefault(); 
@@ -737,7 +756,9 @@ cardUpdateHandler = ( event ) => { // update card
     licenseNumber: this.state.cardDetails.licenseNumber,
     openingDate: this.state.cardDetails.openingDate,
     policyNumber: this.state.card_data[10],
-    ticketNumber: this.state.cardDetails.ticketNumber
+    ticketNumber: this.state.cardDetails.ticketNumber,
+    status: this.state.card_data[11]
+
   }
 
   const customerData={
@@ -852,8 +873,9 @@ setTheStates = (licenseNumber) => {
         policyNumber:{value: ''},
         claimNumber:{value: ''},
         dateOfDamage:{value: ''},
-        customerRequests:{value: ''
-        }  
+        customerRequests:{value: ''},
+        status:{ value: ''}
+ 
     }
   
     let updateVehicleForm = {
@@ -1160,6 +1182,8 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                <label htmlFor="openingDate"  >תאריך פתיחה</label>
                <input  type="text" name="openingDate" className="form-control" autocomplete="off" style={{marginLeft: "10px"}}  value={this.state.cardDetails.openingDate} />
              </div>
+
+          
              </div> 
             </Modal.Body>
          
@@ -1209,9 +1233,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
             </Modal.Body>
             <div className={classes.separator}></div>
             <Modal.Body  style={{ backgroundColor:"#6c757d", padding:"3px",flex: "none" }}   >
-            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות:</div> 
-            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
-  
+            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל עבודות: {this.props.workData.length}</div>   
          </Modal.Body>
     
           <Modal.Body style={{padding: "0px",flex: "auto"}} scrollable={true}>
@@ -1419,8 +1441,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
             </Modal.Body>
             <div className={classes.separator}></div>
             <Modal.Body  style={{ backgroundColor:"lightsteelblue", padding:"3px",flex: "none" }}   >
-            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל חלקים:</div> 
-            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל שורות:</div> 
+            <div  style={{ color: "white" ,fontSize: "12px", direction : "rtl"}}>סך הכל חלקים: {this.props.partsData.length}</div> 
          </Modal.Body>
     
           <Modal.Body style={{padding: "0px",flex: "auto"}}>
@@ -1612,6 +1633,15 @@ updateCardInputValue=(evt,i)=> {
       //return (this.state.carDetails.manufactureYear);
       return (this.state.cardForm.cardType.value);
     }
+    if(i===11){
+      this.state.cardDetails.status=evt.target.value;
+      this.state.cardForm.status.value=evt.target.value;
+      this.setState(prevState => {
+        return (this.state.cardForm.status.value);
+        });
+      //return (this.state.carDetails.manufactureYear);
+      return (this.state.cardForm.status.value);
+    }
 }
 
 updateCustomerInputValue(evt,i) {
@@ -1769,8 +1799,11 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
             </div>
           : null
           }
+                { Object.keys(this.props.imagesForCard).length === 0 ?
+                      <h5 style={{textAlign: "center"}}><b style={window.innerWidth > '500' ? {fontSize: "x-large",fontWeight: "bold"}: {fontSize: "15px",fontWeight: "bold"}} >עבור להעלאה כדי להתחיל להעלאות תמונות</b></h5>
 
-              <section style={{ display: "-webkit-box",flexWrap: "wrap"}}> 
+                :
+                <section style={{ display: "-webkit-box",flexWrap: "wrap"}}> 
                     {this.props.imagesForCard.map(image =>
                             <div className="div" ng-repeat="img in imgs" style={{width:image.width*200/image.height + 'px',flexGrow:image.width*200/image.height}} >
                             <i className="i" style={{paddingBottom:image.height/image.width*100 + '%'}}></i>
@@ -1788,8 +1821,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                     </div>
                     </div>
                         </div>
-                      )}    
-                            </section> 
+                      )} 
+          
+                            </section> }   
               </div> 
 
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"  style={{opacity: "initial"}}>
@@ -1808,6 +1842,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
           : null
           }
 
+      { Object.keys(this.props.docsForCard).length === 0 ?
+                      <h5 style={{textAlign: "center"}}><b style={window.innerWidth > '500' ? {fontSize: "x-large",fontWeight: "bold"}: {fontSize: "15px",fontWeight: "bold"}} >עבור להעלאה כדי להתחיל להעלאות מסמכים</b></h5>
+            :
               <div class="table-wrapper" style={{direction: "rtl", backgroundColor: "white"} }>
         <table class="table table-bordered" style={window.innerWidth > '376' ? {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",  tableLayout: "fixed"}: {marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
             <thead>  
@@ -1837,6 +1874,10 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
        </tbody>
         </table> 
         </div>
+
+
+
+        }
                   </div>
 
 
@@ -2062,7 +2103,7 @@ onChange = date => this.setState({ date })
                   value2={this.state.userCarNumber}
                   onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-2" >
                 {(() => {
                 if(this.state.found){
                   this.state.cardForm.ticketNumber.value=this.state.cardDetails.ticketNumber;
@@ -2078,7 +2119,7 @@ onChange = date => this.setState({ date })
                 </div>
                 
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-2" >
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
@@ -2097,7 +2138,7 @@ onChange = date => this.setState({ date })
                   </select>
                 </div>
   
-                <div className="form-group col-md-3">
+                <div className="form-group col-md-2">
                 <label for="openingDate">תאריך פתיחה</label>
                 <input  type="text" id="openingDate" autocomplete="off" className="form-control" 
                 value= {this.state.found ?  this.state.cardDetails.openingDate : this.state.reportStartDate}
@@ -2107,6 +2148,30 @@ onChange = date => this.setState({ date })
                 // onChange={(event) => this.inputChangedHandler(event)} 
                  />
               </div>
+
+              <div class="form-group col-md-3" >
+                {(() => {
+                if(this.state.found && this.state.term !==''){
+                  this.state.cardForm.status.value=this.state.cardDetails.status;
+                  //this.g(this.state.carDetails.carDescription.value);
+                  //console.log(this.state.carDetails);
+                }    
+                })()}
+                  <label for="status">סטטוס טיפול ברכב</label>
+                  <select id="status" class="form-control"  disabled={!this.state.formIsValid} style={{backgroundColor: "white"}} 
+                  value={this.state.cardForm.status.value} 
+                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,11)}>
+                      <option></option>
+                      <option>ממתין לאישור מהביטוח</option>
+                      <option>ממתין לשמאי</option>
+                      <option>ממתין לחלקים</option>
+                      <option>בתיקון</option>
+                      <option>בצביעה</option>
+                      <option>בשטיפה</option>
+                      <option>מוכן</option>
+                  </select>
+                </div>
+
               </div> 
             </div>
           : null }
@@ -2838,7 +2903,11 @@ onChange = date => this.setState({ date })
       : null}
       {' '}
       {this.state.found ? 
+      <>
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
+      {' '}
+      <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+      </>
       :   
       <div  style={{textAlign:"left"}} > 
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardOpeningHandler}>שמירת כרטיס חדש</Button> 
@@ -2913,7 +2982,13 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onWorkOrPartUpdate: (itemData, token,branchNumber,userId,list, kind,cardKey,itemKey) => dispatch(actions.workOrPartUpdate(itemData, token,branchNumber,userId,list, kind,cardKey,itemKey)),
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
-    onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
+    onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey()),
+
+
+    onChangeVehicleNumber:(newNumberInput, token, branchNumber,identifiedCardID,userId) => dispatch(actions.changeVehicleNumber(newNumberInput, token, branchNumber,identifiedCardID,userId)) 
+
+
+
   };
 };
 

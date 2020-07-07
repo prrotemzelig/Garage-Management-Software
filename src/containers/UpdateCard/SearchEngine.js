@@ -33,7 +33,6 @@ class Search extends Component {
   
   componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
       this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber); 
- 
   }
 
   onChildClicked(data,num) {
@@ -42,10 +41,18 @@ class Search extends Component {
   }
 
   check(data){
+    console.log(data);
     if(data.cardData.licenseNumber===this.state.carNumber){
       //this.setState({ found: true });
       this.state.found=true;
     }
+    console.log(this.state.found);
+
+    // else{
+    //   console.log("51");
+    //   this.state.found=false;
+
+    // }
   }
  
   isMobile() {
@@ -62,6 +69,7 @@ class Search extends Component {
 
       //this.setState({ carNumber: this.props.value });
       this.state.carNumber= this.props.value;
+      console.log(this.props.value);
           if(this.state.carNumber!== "" ){
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards= this.props.cards.map( card => (
@@ -78,11 +86,15 @@ class Search extends Component {
                   />
               ))
             }
+
+            console.log(this.state.found);
           }
       
       if(!this.state.found && this.state.carNumber!==''){
-       
+        console.log("83");
+
         return ( 
+          // alert("לא נמצאה היסטוריה עבור רכב זה");
           <div style={ this.props.backgroundColor === 'light' ? {direction: "rtl",fontFamily: "Alef Hebrew" }:{ direction: "rtl",fontFamily: "Alef Hebrew", color: "white"}}>
             <h5>לא נמצאה היסטוריה עבור רכב זה </h5></div> 
       );
@@ -90,6 +102,7 @@ class Search extends Component {
     
       if(this.state.found && this.state.carNumber!=='' && !this.state.click ){
         //this.state.found=false;
+        console.log("93");
       return (
         <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
             {direction: "rtl", backgroundColor: "white"}
@@ -98,10 +111,13 @@ class Search extends Component {
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+                        <td>מספר רכב</td> 
                         <td>שם לקוח</td>
-                        <td>מספר רכב</td>
-                        <td>תאריך הנזק</td>
                         <td>מספר כרטיס</td>
+                        <td>תאריך פתיחה</td>
+                        <td>תאריך סגירה</td>
+                        <td>פעולות</td> 
+
                     </tr> 
                 </thead>
                 <tbody >
@@ -113,19 +129,30 @@ class Search extends Component {
       }
       if(this.state.found && this.state.click){
         //this.state.found=false;
-       
+        console.log("121");
+
         return(
           <div  >
-            <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
+            {/* <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}> */}
+            {this.state.modal ?
+            
+            <div className="form-group">
+            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >חזור לטבלה</Button> 
+
             <div className="form-group">
             <ShowData
                 value={this.state.carNumber}
                 data={this.state.ticketNumber}
                 />
             </div>
-            <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
-            
-          </Modal>
+            {/* <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור את כרטיס ההיסטוריה</Button>  */}
+            </div>
+            : null}
+          {/* </Modal> */}
+
+
+          {!this.state.modal ?
+
           <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
             {direction: "rtl", backgroundColor: "white"}
             : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
@@ -133,18 +160,21 @@ class Search extends Component {
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "18px"}}>
-                        <td>שם לקוח</td>
                         <td>מספר רכב</td>
-                        <td>תאריך הנזק</td>
+                        <td>שם לקוח</td>
                         <td>מספר כרטיס</td>
+                        <td>תאריך פתיחה</td>
+                        <td>תאריך סגירה</td>
+                        <td>פעולות</td>
                     </tr>     
                 </thead>
                 <tbody >
                     {cards}
                 </tbody>  
             </table>  
-
             </div>
+
+            : null}
             </div>  
         );    
       }
@@ -152,7 +182,6 @@ class Search extends Component {
         return(
           <div ></div> 
         );
-        
       }
     }
 }
@@ -165,15 +194,12 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       userId: state.auth.userId,
       branchNumber: state.auth.branchNumber,
       backgroundColor: state.auth.backgroundColor,
-
-
   };
 };
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
-      onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) ),
-
+      onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber)),
   };
 };
 

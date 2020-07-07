@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import Card from '../../components/Card/Card';
 import axios from '../../axios-cards';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
@@ -58,7 +57,8 @@ class Cards extends Component {
                         <td>שם לקוח</td>
                         <td>תיאור רכב</td>
                         <td>תאריך פתיחה</td>
-    
+                        <td>סטטוס טיפול</td>
+
                     </tr>
                 </thead>
 

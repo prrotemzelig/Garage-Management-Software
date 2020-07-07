@@ -15,7 +15,8 @@ export {
     partModalClose,
     workOrPartUpdate,
     toastModalClose,
-    setCurrentCardKey
+    setCurrentCardKey,
+    changeVehicleNumber
 } from './card';
 export {
     imageOrDocUploading,

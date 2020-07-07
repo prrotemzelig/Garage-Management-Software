@@ -235,9 +235,9 @@ export  const  authSignUp = (token,userId,firstName,lastName,branchNumber,userPe
     else if(userPermissions === 'משתמש'){
         nodeUerPermissions= 'User'
     }
-    else if(userPermissions === 'בסיסי'){
-        nodeUerPermissions= 'basic'
-    }
+    // else if(userPermissions === 'בסיסי'){
+    //     nodeUerPermissions= 'basic'
+    // }
     return dispatch => { // here we want to authenticate the use //async
          dispatch(authSignUpStart()); //await
 

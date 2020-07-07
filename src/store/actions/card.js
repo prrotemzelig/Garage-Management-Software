@@ -604,3 +604,50 @@ export const workOrPartUpdate = ( itemData, token,branchNumber,userId,list,kind,
     };
 };
 
+
+
+
+
+
+
+
+export const changeVehicleNumberStart = () => {
+    return {
+        type: actionTypes.CHANGE_VEHICLE_NUMBER_START
+    };
+};
+
+
+export const changeVehicleNumberSuccess = ( id, cardData ) => { 
+    return { 
+        type: actionTypes.CHANGE_VEHICLE_NUMBER_SUCCESS
+  
+    };
+};
+
+export const changeVehicleNumberFail = ( error ) => { 
+    return {
+        type: actionTypes.CHANGE_VEHICLE_NUMBER_FAIL,
+        error: error 
+    };
+}
+
+
+export const changeVehicleNumber = ( newNumberInput, token, branchNumber,identifiedCardID,userId    ) => { 
+    let finalTag = '' ;
+    finalTag = {  licenseNumber: newNumberInput};
+
+    return dispatch => {
+        dispatch( changeVehicleNumberStart() );
+        axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/cardData/.json?auth=' + token , finalTag) 
+        .then(res => {            
+            dispatch(changeVehicleNumberSuccess()); 
+            dispatch(fetchCards(token, userId, branchNumber)); 
+            dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+
+        })
+        .catch( error => {
+            dispatch(changeVehicleNumberFail(error));
+        } );
+    };
+};

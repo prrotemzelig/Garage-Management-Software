@@ -9,6 +9,7 @@
     "@material-ui/icons": "^4.5.1",
     "@progress/kendo-react-excel-export": "^3.14.0",
     "@react-firebase/auth": "^0.2.10",
+    "@react-pdf/renderer": "^2.0.0-beta.6",
     "@sendgrid/mail": "^7.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -66,6 +67,7 @@
     "react-free-scrollbar": "^0.3.4",
     "react-google-picker": "^0.1.0",
     "react-hook-use-state": "^1.1.0",
+    "react-html-email": "^3.0.0",
     "react-html-table-to-excel": "^2.0.0",
     "react-icons": "^3.10.0",
     "react-image-gallery": "^1.0.7",
@@ -92,6 +94,7 @@
     "redux": "^4.0.5",
     "redux-firestore": "^0.13.0",
     "redux-thunk": "^2.3.0",
+    "sendmail": "^1.6.1",
     "simple-flexbox": "^2.3.1"
   },
   "scripts": {

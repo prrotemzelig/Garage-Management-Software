@@ -67,8 +67,8 @@ class AdminUserManagement extends Component {
                 elementConfig: {
                     options: [
                         {value: 'Admin', displayValue: 'מנהל'},
-                        {value: 'User', displayValue: 'משתמש'},
-                        {value: 'basic', displayValue: 'בסיסי'}
+                        {value: 'User', displayValue: 'משתמש'}
+                        // {value: 'basic', displayValue: 'בסיסי'}
                     ]
                 },
 
@@ -145,7 +145,7 @@ class AdminUserManagement extends Component {
             <>
             <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  
             // eslint-disable-next-line no-restricted-globals
-            onClick={() => {if(confirm("האם למחוק את משתמש " + firstName.toString() + " " + lastName.toString() + "?" )){this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken)};}}>מחק משתמש</Button>    
+            onClick={() => {if(confirm("האם למחוק את משתמש " + firstName.toString() + " " + lastName.toString() + "?" )){this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken)};}}>הסר משתמש</Button>    
             
 
             
@@ -371,8 +371,8 @@ setTheStates = () => {
             elementConfig: {
                 options: [
                     {value: 'Admin', displayValue: 'מנהל'},
-                    {value: 'User', displayValue: 'משתמש'},
-                    {value: 'basic', displayValue: 'בסיסי'}
+                    {value: 'User', displayValue: 'משתמש'}
+                    // {value: 'basic', displayValue: 'בסיסי'}
                 ]
             },
 
@@ -562,7 +562,7 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                             <option selected>בחר/י סוג הרשאות</option>
                             <option selected>{this.state.controls.userPermissions.elementConfig.options[0].displayValue}</option>
                             <option>{this.state.controls.userPermissions.elementConfig.options[1].displayValue}</option>
-                            <option>{this.state.controls.userPermissions.elementConfig.options[2].displayValue}</option>
+                            {/* <option>{this.state.controls.userPermissions.elementConfig.options[2].displayValue}</option> */}
                     </select>
                  </form>
                  </div>
@@ -868,11 +868,16 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
+                        {' '}
+                       
                         {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
+                       
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
+                        <br/>
                         {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                        {' '}
                     </td>
                     </tr>      
                     :
