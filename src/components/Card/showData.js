@@ -836,11 +836,13 @@ switchShowImagesAndDoc = () => {
                       <option></option>
                       <option>ממתין לאישור מהביטוח</option>
                       <option>ממתין לשמאי</option>
-                      <option>ממתין לחלקים</option>
+                      <option>ממתין לחלקים חליפיים</option>
+                      <option>ממתין לתחילת תיקון</option>
                       <option>בתיקון</option>
                       <option>בצביעה</option>
                       <option>בשטיפה</option>
                       <option>מוכן</option>
+                      <option>נמסר ללקוח</option>
                   </select>
                 </div>
             </div> 

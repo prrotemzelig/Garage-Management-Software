@@ -91,6 +91,7 @@ class openNew extends Component   {
     showSendMailDiv: true,
 //    showWorkModel: false, 
     showImagesAndDoc: false,
+    showCloseModal: false,
 
     cardForm: { 
       licenseNumber: {
@@ -294,7 +295,242 @@ this.state.rentalCompanyReplacementCheck=this.state.rentalCompanyReplacementVehi
       }
   }
 
- 
+
+//   {this.state.showCloseModal?
+//     this.renderShowCloseModal()
+// :null} 
+// onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
+
+  renderShowCloseModal = () => { ///*** add new user modal! ****
+
+    let workButtons =
+        <div class="form-group" style={{marginBottom: "4px"}}>
+            <div style={{textAlign:"left"}}> 
+                  <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.closeAddNewUser} >ביטול</Button>{' '}
+                  
+                  <Button bsStyle="secondary" style={{borderColor: "black"}} disabled={!this.state.allFormIsValid}  onClick={this.userSignUpHandler} >הוספת משתמש</Button>     </div>
+        </div>;
+  
+      return (
+        
+          <Modal show={this.state.showCloseModal} onHide={this.ModalCardCloseHandler}   backdrop={false}
+              style={{ display: "flex", textAlign:"right", paddingLeft: "1px" }}  >
+            <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+              <Modal.Title  >סגירת חשבון לכרטיס עבודה</Modal.Title>   
+            </Modal.Header>
+      
+              <div className={classes.separator}></div>
+            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
+                    <form autocomplete="on">
+              <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+              <form  class="form-group col-md-3"  style={{ marginBottom: "4px"}} > 
+                   <label for="firstName"  >שם לקוח</label>
+                   <input type="text" id="firstName" autocomplete="off" class="form-control " style={{marginLeft: "10px"}} defaultValue={this.state.customerDetails.customerName.value} />
+                 </form >
+      
+
+                   <div class="form-group col-md-3" >
+                  <label for="address">כתובת</label>
+                  <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.address.value}/>
+                </div> 
+
+
+                <div class="form-group col-md-3" >
+                  <label for="city">עיר</label>
+                  <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.city.value}  />
+                </div>
+
+                 <div class="form-group col-md-3" >
+                  <label for="postalCode" >מיקוד</label>
+                  <input type="number" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.postalCode.value}/>
+                </div>
+
+                <div class="form-group col-md-3" >
+                  <label for="identificationNumber" >ח.פ/ת.ז</label>
+                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  defaultValue={this.state.customerDetails.identificationNumber.value} />
+                </div> 
+
+               
+
+                <div class="form-group col-md-3" >
+                  <label for="homePhone">טלפון בית</label>
+                  <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.homePhone.value}/>
+                </div>
+
+
+                <div class="form-group col-md-3" >
+                  <label for="cellphone">סלולרי</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                 </div>
+      
+                 <div className={classes.anoSeparator}></div>
+
+                 <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto" }}> 
+      
+                 <label for="cellphone">עבודות</label>
+
+                 <div class="form-group col-md-2" >
+                  <label for="cellphone">ברוטו עבודות</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">הנחה</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">סכום ההנחה</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">נטו</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                 </div>
+                 
+                 <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+
+                 <label for="cellphone">עבודות חוץ</label>
+
+                 <div class="form-group col-md-2" >
+                  <label for="cellphone">ברוטו עבודות חוץ</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">הנחה</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">סכום ההנחה</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+
+                <div class="form-group col-md-2" >
+                  <label for="cellphone">נטו</label>
+                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.customerDetails.cellphone.value} />
+                </div>
+               </div> 
+
+               <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+
+               <label for="cellphone">חלפים</label>
+
+                    <div class="form-group col-md-2" >
+                    <label for="cellphone">ברוטו חלפים</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-2" >
+                    <label for="cellphone">הנחה</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-2" >
+                    <label for="cellphone">סכום ההנחה</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-2" >
+                    <label for="cellphone">נטו</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+                    </div> 
+
+
+
+                    <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+
+                    <div class="form-group col-md-3" >
+                    <label for="cellphone">ברוטו סך הכל</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-3" >
+                    <label for="cellphone">הנחה</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-3" >
+                    <label for="cellphone">סכום ההנחה</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+
+                    <div class="form-group col-md-3" >
+                    <label for="cellphone">נטו</label>
+                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    defaultValue={this.state.customerDetails.cellphone.value} />
+                    </div>
+                    </div> 
+
+
+
+                    <div className={classes.anoSeparator}></div>
+
+                    
+                    <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+
+                        <div class="form-group col-md-3" >
+                        <label for="cellphone">סה"כ</label>
+                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.customerDetails.cellphone.value} />
+                        </div>
+
+                        <div class="form-group col-md-3" >
+                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.customerDetails.cellphone.value} />
+                        </div>
+
+                        <div class="form-group col-md-3" >
+                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.customerDetails.cellphone.value} />
+                        </div>
+
+                        <div class="form-group col-md-3" >
+                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.customerDetails.cellphone.value} />
+                        </div>
+                        </div> 
+
+
+               </form>
+              </Modal.Body>
+            <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
+                 {workButtons}
+            </Modal.Footer>
+          </Modal> 
+          
+          );
+  }
+
+
 cardOpeningHandler = ( event ) => {
     event.preventDefault(); // with that we get the Card details
     const formData = {};
@@ -796,6 +1032,15 @@ cardUpdateHandler = ( event ) => { // update card
   this.props.onCardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,this.state.alternateVehicleTaken, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
   this.setTheStates('');
   document.getElementById("workCardForm").reset(); 
+}
+
+
+
+
+ModalCardCloseHandler = () => {
+  this.setState(prevState => {
+      return {showCloseModal: !prevState.showCloseModal};
+      });
 }
 
 cardCloseHandler = ( event ) => {
@@ -2164,11 +2409,13 @@ onChange = date => this.setState({ date })
                       <option></option>
                       <option>ממתין לאישור מהביטוח</option>
                       <option>ממתין לשמאי</option>
-                      <option>ממתין לחלקים</option>
+                      <option>ממתין לחלקים חליפיים</option>
+                      <option>ממתין לתחילת תיקון</option>
                       <option>בתיקון</option>
                       <option>בצביעה</option>
                       <option>בשטיפה</option>
                       <option>מוכן</option>
+                      <option>נמסר ללקוח</option>
                   </select>
                 </div>
 
@@ -2395,6 +2642,8 @@ onChange = date => this.setState({ date })
                   defaultValue={this.state.customerDetails.city.value}  
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,2)}/>
                 </div>
+
+
                 <div class="form-group col-md-3" >
                 {(() => {
                    if(this.state.found){
@@ -2892,21 +3141,32 @@ onChange = date => this.setState({ date })
         {this.props.showPartModel?
                 this.renderPartsModal( 'partsData')
 
-            :null}  
+            :null} 
+
+
+               {this.state.showCloseModal?
+                    this.renderShowCloseModal()
+            :null} 
+
             {' '}
       {this.state.found ? 
         <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button> 
       : null}
         {' '}
-      {this.state.found ? 
-        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.cardCloseHandler}>סגירת כרטיס</Button> 
-      : null}
+
       {' '}
       {this.state.found ? 
       <>
+      <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+      {' '}
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
       {' '}
-      <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+      {this.state.found ? 
+        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
+      : null}
+  
+
+
       </>
       :   
       <div  style={{textAlign:"left"}} > 

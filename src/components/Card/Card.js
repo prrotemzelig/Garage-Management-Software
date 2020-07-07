@@ -94,13 +94,10 @@ const card = ( props ) => {
 //     <td>@mdo</td>
 //   </tr>
     return (
-    
-        <tr  style={{fontSize: "18px", direction: "rtl"}}>
-    
+        // ,wordWrap: 'break-word'
+        <tr  style={{fontSize: "14px", direction: "rtl"}}>
         {cardsDetailsOutput}
-        </tr>  
-
- 
+        </tr>   
     );
 };
 

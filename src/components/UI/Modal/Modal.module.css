@@ -65,3 +65,11 @@
     border-top: 1px solid #DDE2FF;
     opacity: 0.06;
 }
+
+
+.anoSeparator {
+    border-top: 2px solid black;
+    opacity: 1;
+}
+
+

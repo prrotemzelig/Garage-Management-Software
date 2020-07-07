@@ -22,9 +22,17 @@ const cardSearch = ( props ) => {
         {direction: "rtl", backgroundColor: "white"}
         : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
         {cardsDetailsOutput} 
+       
+        {window.innerWidth > '376' ? 
         <td>
         <Button bsStyle="secondary" style={props.backGroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}  onClick={(event)=>props.onClicked(event,num)}   >הצג פרטים</Button>
-        </td>
+      </td> 
+       :
+       <td>
+        <Button bsStyle="secondary" style={props.backGroundColor=== 'light' ?{borderColor: "black", fontSize: "8px"}:{borderColor: "white", fontSize: "8px"}}  onClick={(event)=>props.onClicked(event,num)}   > פרטים</Button>
+        </td> 
+            }
+        
         </tr> 
     );
     }

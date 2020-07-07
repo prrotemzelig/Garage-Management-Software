@@ -108,9 +108,9 @@ class Search extends Component {
             {direction: "rtl", backgroundColor: "white"}
             : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
 
-            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
+            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",tableLayout: "fixed"}} >
                 <thead>
-                    <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+                    <tr style={{fontWeight: "bold", fontSize: "16px"}}>
                         <td>מספר רכב</td> 
                         <td>שם לקוח</td>
                         <td>מספר כרטיס</td>
@@ -157,9 +157,9 @@ class Search extends Component {
             {direction: "rtl", backgroundColor: "white"}
             : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)"}}>
 
-            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew"}} >
+            <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",tableLayout: "fixed"}} >
                 <thead>
-                    <tr style={{fontWeight: "bold", fontSize: "18px"}}>
+                    <tr style={{fontWeight: "bold", fontSize: "16px"}}>
                         <td>מספר רכב</td>
                         <td>שם לקוח</td>
                         <td>מספר כרטיס</td>
