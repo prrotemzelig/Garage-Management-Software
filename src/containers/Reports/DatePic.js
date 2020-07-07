@@ -41,18 +41,26 @@ class Datepic extends React.Component {
                 <div className="form-group"  style={{direction: "rtl"}} >
                 <h6 >בחר דיאגרמה לתצוגה</h6>
                 <select class="form-control" 
-                onChange={(event) => this.chartTypeSelected(event)} >
+                onChange={(event) => this.chartTypeSelected(event)}  >
                         <option>מקלות</option>
                         <option>עוגה</option>
                         <option>גרף</option>  
                 </select>
+                {this.props.format=="month"
+                ?
                 <DatePicker
                         selected={ this.state.startDate }
                         onChange={ this.handleChange }
-                        //dateFormat="MMMM d, yyyy"
-                        dateFormat="d/MM/yyyy"
-                        className="form-control"
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
                 />
+                :<DatePicker
+                selected={ this.state.startDate }
+                onChange={ this.handleChange }
+                dateFormat="d/MM/yyyy"
+                className="form-control"
+                />
+                }
                 </div>
                 <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}  
                 onClick={this.props.onClicked} >בחר תאריך</Button>

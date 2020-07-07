@@ -59,6 +59,8 @@ export {
 export {
     notificationOpening,
     fetchNotification,
-    notificationDelete
+    notificationDelete,
+    NotificationOpening,
+    NotificationClose,
 } from './notification';
 

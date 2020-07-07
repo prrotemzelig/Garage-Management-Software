@@ -31,8 +31,50 @@ import modal2 from './modal2.css'
 import DownloadLink from "react-download-link";
 import Download from '@axetroy/react-download';
 import { saveAs } from 'file-saver';
+import { Email, Item, Span, A, renderEmail } from 'react-html-email'
+//import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
+import ReactPDF, { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 
+
+const MyDocument = () => (
+
+  <Document>
+    <Page wrap>
+      <Text render={({ pageNumber, totalPages }) => (
+        `${pageNumber} / ${totalPages}`
+      )} fixed />
+
+      <View render={({ pageNumber }) => (
+        pageNumber % 2 === 0 && (
+          <View style={{ background: 'red' }}>
+            <Text>I'm only visible in odd pages!</Text>
+          </View>
+        )
+      )} />
+    </Page>
+  </Document>
+);
+
+const styles = StyleSheet.create({
+  page: {
+      flexDirection: 'row',
+      backgroundColor: '#fff',
+      width: '100%',
+      orientation: 'portrait',
+  },
+  view: {
+      width: '100%',
+      height: '100%',
+      padding: 0,
+      backgroundColor: 'white',
+  },
+  image: {
+      objectFit: 'cover',
+  },
+});
 
 
 const getDateTime = () => {
@@ -46,6 +88,7 @@ class openNew extends Component   {
         super(props)
     this.state = {
     //cardKey:'',
+    imagesArrayForCheck: [],
     fileUrl:'',
     name: '',
     email: '',
@@ -702,6 +745,7 @@ check(data,licenseNumber){
     this.state.identifiedCardID=data.id;//rotem
     this.state.branchNumber=data.branchNumber;
 
+    this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
 
     // console.log(this.state.found);
     // console.log(this.state.dataBaseCarNumber);
@@ -1500,6 +1544,9 @@ const download = require('download');
 }
 
 
+
+// Create Document Component
+
 renderImagesAndDocModal = () => { ///*** TOAST modal! ****
 
   const imgTag = this.buildImgTag();
@@ -1540,13 +1587,20 @@ renderImagesAndDocModal = () => { ///*** TOAST modal! ****
              <section className="photo-section" style={{ fontSize: "50%"}}>
                <h2>Select Photos</h2>
                <div className="row">
-               
+               <a href={imgTag}>Resume</a>
+
+               <Button style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleImagesDownload('/images')}>הורד</Button> 
+               <PDFDownloadLink document={<MyDocument/>} fileName="somename.pdf">
+      {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+    </PDFDownloadLink>
                  {this.props.imagesForCard.map(image => 
                 <div className="col-xs-4 col-sm-3 col-md-2" style={{wordWrap: "break-word"}}>
+                  
                   <Download file={image.key} content={image.url}>
+                  
                   <button type="button">Click and Download file</button>
                   </Download>
-                  <a id="link" href={image.url}  download={image.url}>
+                  <a id="link" href={image.url}  download={imgTag}>
                       <Button>
                       <i className="fas fa-download"/>
                       Downloadimg
@@ -1720,6 +1774,21 @@ showImagesAndDoc  = () => {
   // if(this.props.showGetSuccessCase){
   //   console.log(this.props.imagesForCard);
   // }
+  return(
+    <Button style={{ fontSize:"xx-large",margin: "5px" }} onClick={() => this.onMultipleImagesDownload('/images')}>הורד</Button> 
+
+  );
+
+  
+}
+onMultipleImagesDownload(node) {
+
+  console.log( this.props.imagesForCard);
+  console.log(this.props.userId +" "+this.props.token+" "+this.props.branchNumber);
+  this.props.imagesForCard.map(image => 
+    this.props.onDownloadImage(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,image.key)
+    );
+ 
 }
 
 
@@ -1779,7 +1848,7 @@ fileSelectedHandler = (e,type) => {
 
 handle_Submit(e) {
   e.preventDefault()
-  var nodemailer = require('nodemailer');
+  //var nodemailer = require('nodemailer');
   const { name, email, subject, message } = this.state
   /*const account={
     user:"oswald.auer37@ethereal.email",
@@ -1808,8 +1877,9 @@ handle_Submit(e) {
   });*/
   var FileSaver = require('file-saver');
   //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
- 
   
+  const imgTag = this.buildImgTag();
+
   let templateParams = {
     from_name: name,
     to_name: email,
@@ -1817,12 +1887,15 @@ handle_Submit(e) {
     message_html: message  
     
    }
+
    emailjs.send(
     'gmail',
     'template_ioZDdoH7',
      templateParams,
     'user_4U9CbkH78jIK0dza4aWEp'
    )
+   this.resetForm()
+  
    /*const sgMail = require('@sendgrid/mail');
    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
    const msg = {
@@ -1836,7 +1909,7 @@ handle_Submit(e) {
 sgMail.send(msg);*/
    
  
-   this.resetForm()
+   
 }
 
 resetForm() {
@@ -2578,7 +2651,7 @@ onChange = date => this.setState({ date })
                         <input type="file" multiple onChange= { (event) =>  this.fileSelectedHandler(event,'doc')} disabled={!this.state.formIsValid} />
                   </div>
                   <Button bsStyle="secondary" style={{height: 35,borderColor: "black", marginTop: 20 }}  
-                  onClick={e => this.MakeFile()} >הורד תמונות וקבצים</Button> 
+                  onClick={e => this.onMultipleImagesDownload('/images')} >הורד תמונות וקבצים</Button> 
                 </div>  
                 
               </div>  
@@ -2659,7 +2732,7 @@ onChange = date => this.setState({ date })
             :null}  
             {' '}
       {this.state.found ? 
-        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.showImagesAndDoc}>תמונות/מסמכים שהועלו</Button> 
+        <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.renderImagesAndDocModal}>תמונות/מסמכים שהועלו</Button> 
        
       : null}
         {' '}
@@ -2740,7 +2813,10 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
 
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
-    onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey())
+    onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey()),
+    onDownloadImage:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadImage(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
+    onGetImages:(userId ,token,branchNumber,cardKey,ticketNumber, node) => dispatch( actions.getImages(userId ,token,branchNumber,cardKey,ticketNumber, node)),
+
 
 
     

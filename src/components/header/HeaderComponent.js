@@ -14,6 +14,14 @@ import { StreamApp, NotificationDropdown,FlatFeed } from 'react-activity-feed';
 import { Modal ,Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import IconButton from '@material/react-icon-button';
+import Badge from '@material-ui/core/Badge';
+import ShowMessages from "../../components/Messages/showMessages.js";
+import GooglePicker from 'react-google-picker';
+
+
+
+
 
 
 
@@ -106,11 +114,14 @@ class HeaderComponent extends Component {
         this.state = {
           backgroundcolor: "blue",
           modal: false,
+          notificationLength: 0,
+          fileId:[],
           sidebarOpened:
             document.documentElement.className.indexOf("nav-open") !== -1
         };
      }
-     componentDidMount() { 
+    componentDidMount() { 
+        this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumber
         this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
     }
     modalOpen() {
@@ -128,38 +139,22 @@ class HeaderComponent extends Component {
             this.props.onSettingClose(); // this contains all the data of card 
         }
     }  
-    notify = () =>{
-        let notification=this.props.notification;
-        console.log(this.props.notification);
-        for(var i=0;i<notification.length;i++){
-            if(notification[i].type=="task"){
-                let notificationData=notification[i].description+":נוספה משימה חדשה "+'\n';
-                notificationData+='\n'+notification[i].openedBy+" על ידי";
-                //this.props.onNotificationDelete(this.props.token,this.props.branchnumber,this.props.UserKey,notification[i].id,this.props.userId);
-
-                toast.info(notificationData);
-                //this.deleteNotification(notification[i].id);
-            }
+    onNotificationClick = () =>  {
+        this.setState({notificationLength: 0});
+        if(!this.props.shownotificationmodel){
+        this.props.onNotificationOpening(); // this contains all the data of card 
         }
-        this.deleteNotification();
-        if(notification.length==0){
-            this.modalOpen();
-            //this.setState({ modal: true });
+        else{
+            this.props.onNotificationClose(); // this contains all the data of card 
         }
     } 
-
-    deleteNotification = () =>{
-        let notification=this.props.notification;
-        console.log(this.props.notification);
-
-        for(var i=0;i<notification.length;i++){
-            console.log(this.props.branchnumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
-            this.props.onNotificationDelete(this.props.token,this.props.branchnumber,this.props.UserKey,notification[i].notificationKey,this.props.userId);
+    
+    render(){   
+        this.state.notificationLength=this.props.notification.length;
+       if(this.state.notificationLength===0 && this.props.shownotificationmodel){
+        this.state.modal=true;
+        this.props.onNotificationClose();
         }
-    }
-
-    render(){        
-        
         let thisUserBranchNumber ='';
         if(this.props.branchnumber==='Talpiot'){
             thisUserBranchNumber='תלפיות';
@@ -181,7 +176,7 @@ class HeaderComponent extends Component {
         }
 
         const { icon, title, ...otherProps } = this.props;
-        
+        console.log(this.state.fileId);
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
             <Row vertical="center" style={{position: "left"}}>
@@ -192,29 +187,20 @@ class HeaderComponent extends Component {
                </Row>
             <Row vertical="center" style={{position: "left"}}>
                 <div className={css(styles.iconStyles)}>
-                    <IconSearch />
-                </div>
-                <div className={css(styles.iconStyles)}>
-                <button onClick={this.notify}><IconBellNew /></button>
-                <div>
-                <ToastContainer
-                position="top-left"
-                autoClose={false}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                />
-                </div>
+
+                <Button style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}
+                onClick={this.onNotificationClick}>
+                    <Badge color="secondary" badgeContent={this.state.notificationLength}>
+                        <IconBellNew/>
+                    </Badge> 
+                </Button>
+
+                {this.props.shownotificationmodel && this.state.notificationLength!==0 ? <ShowMessages /> : null }
                 <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
             <div className="form-group">
                 אין הודעות חדשות
             </div>
             <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
-            
           </Modal>
                 </div>
                 <div className={css(styles.separator)}></div> 
@@ -230,6 +216,46 @@ class HeaderComponent extends Component {
                {this.props.showsettingmodel ? <FixedPlugin /> : null }
 
             </Row>
+            {/*
+            <GooglePicker clientId={'741474190729-lt27j6e7a0ui96hkjo528bru8nfl1214.apps.googleusercontent.com'}
+              developerKey={'AIzaSyAssXpUUKyyrAw-CkkUWbIMewCoshxGuq8'}
+              scope={['https://www.googleapis.com/auth/drive']}
+              onChange={data => console.log('on change:', data)}
+              onAuthFailed={data => console.log('on auth failed:', data)}
+              multiselect={true}
+              navHidden={true}
+              authImmediate={false}
+              viewId={'DOCS'}
+              mimeTypes={['image/png', 'image/jpeg', 'image/jpg']}
+              createPicker={ (google, oauthToken) => {
+                const googleViewId = google.picker.ViewId.DOCS;
+                const uploadView = new google.picker.DocsUploadView();
+                const docsView = new google.picker.DocsView(googleViewId)
+                    .setIncludeFolders(true)
+                    .setSelectFolderEnabled(true);
+
+                const picker = new window.google.picker.PickerBuilder()
+                .enableFeature(google.picker.Feature.SIMPLE_UPLOAD_ENABLED)
+                  .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                    .addView(docsView)
+                    .addView(uploadView)
+                    .setOAuthToken(oauthToken)
+                    .setDeveloperKey('AIzaSyAssXpUUKyyrAw-CkkUWbIMewCoshxGuq8')
+                    .setCallback((data)=>{
+                      if (data.action == google.picker.Action.PICKED) {
+                          var fileId = data.docs[0].id;
+                          alert('The user selected: ' + fileId);
+                          this.state.fileId.push("https://drive.google.com/file/d/"+fileId+"/view");
+                          //picker();
+                      }
+                    });
+                picker.build().setVisible(true);
+            }}>
+            <span>Click here</span>
+            <div className="google"></div>
+        </GooglePicker>
+        */
+    }
         </Row>
     )
     }
@@ -251,11 +277,8 @@ const mapStateToProps = state => {
         UserKey: state.auth.userKey,
         userId: state.auth.userId,
         notificationKey: state.notification.notificationId,
-        loading: state.notification.loading
-
-
-
-
+        loading: state.notification.loading,
+        shownotificationmodel: state.notification.showNotificationModel
 
     };
 };
@@ -265,7 +288,10 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onSettingOpening: () => dispatch( actions.SettingOpening() ),
     onSettingClose: () => dispatch( actions.SettingClose() ),
     onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
-    onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId))
+    onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId)),
+    onFetchUsers: (token,userId) => dispatch( actions.fetchUsers(token, userId)), 
+    onNotificationOpening: () => dispatch( actions.NotificationOpening() ),
+    onNotificationClose: () => dispatch( actions.NotificationClose() ),
 
   };
 };

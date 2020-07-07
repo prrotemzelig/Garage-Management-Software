@@ -3,6 +3,7 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
     notification:[],
+    showNotificationModel: false,
     loading: false
 
 };
@@ -46,6 +47,13 @@ const fetchNotificationFail = ( state, action ) => {
 };
 
 
+const purchaseNotificationInit = ( state, action ) => {
+    return updateObject( state, { showNotificationModel: true } );
+};
+
+const purchaseNotificationCancel = ( state, action ) => {
+    return updateObject( state, { showNotificationModel: false } ); 
+};
 
 const notificationDeleteStart = ( state, action ) => {
     return updateObject( state, { loading: true } ); 
@@ -79,6 +87,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.NOTIFICATION_DELETE_START: return notificationDeleteStart( state, action );
         case actionTypes.NOTIFICATION_DELETE_SUCCESS: return notificationDeleteFail( state, action );
         case actionTypes.NOTIFICATION_DELETE_FAIL: return notificationDeleteSuccess( state, action );
+
+        case actionTypes.NOTIFICATION_OPENING: return purchaseNotificationInit( state, action );
+        case actionTypes.NOTIFICATION_CLOSE: return purchaseNotificationCancel( state, action );
 
         default: return state; // return the current state
     }
