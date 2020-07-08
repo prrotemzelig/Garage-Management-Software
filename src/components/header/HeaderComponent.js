@@ -14,7 +14,6 @@ import { StreamApp, NotificationDropdown,FlatFeed } from 'react-activity-feed';
 import { Modal ,Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import IconButton from '@material/react-icon-button';
 import Badge from '@material-ui/core/Badge';
 import ShowMessages from "../../components/Messages/showMessages.js";
 import GooglePicker from 'react-google-picker';

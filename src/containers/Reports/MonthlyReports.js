@@ -27,6 +27,7 @@ class MonthlyReports extends Component {
       chartType:'',
       excelData:[],
       month:'',
+      hebrewMonth:'',
       year:'',
       countMonthOpen:0,
       countMonthClose:0,
@@ -65,7 +66,7 @@ chartSelected(data){
     if(data==='מקלות'){this.state.chartType="Bar";}
     if(data==='גרף'){this.state.chartType="Line";}
 }
-/*
+
 createMountlyReport(data){
   for(var i=0; i<data.length; i++){
     let openingDate=data[i].cardData.openingDate;
@@ -96,9 +97,16 @@ createMountlyReport(data){
       else{
         parts_card=Object.values(data[i].partsData);
         for(var j=0;j<parts_card.length;j++){
-          this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
-          this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
-          this.state.counter=1;
+          if(parts_card[j].amount === undefined || parts_card[j].amount === null || parts_card[j].amount === ''){}
+          else{
+            this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
+            this.state.counter=1;
+          }
+          if(parts_card[j].net === undefined || parts_card[j].net === null || parts_card[j].net === ''){}
+          else{
+            this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
+            this.state.counter=1;
+          }
         }
       }
     }  
@@ -115,15 +123,19 @@ createMountlyReport(data){
       else{
         work_card=Object.values(data[i].workData);
         for(var j=0;j<work_card.length;j++){
+          if(work_card[j].net === undefined || work_card[j].net === null || work_card[j].net === ''){
+          }
+          else{
           this.state.countMonthWork+=1;
           this.state.countMonthRevenue+=parseInt(work_card[j].net, 10) ;
           this.state.counter=1;
+          }
         }
       }
     }  
   }
 }
-*/
+/*
 createReport(data){
 
   for(var i=0; i<data.length; i++){
@@ -193,6 +205,7 @@ createReport(data){
     }  
   }
 }
+*/
 isMobile() {
   let check = false;
   ((a => {
@@ -228,20 +241,20 @@ render() {
       for(var i=0;i<this.state.closeCard.length;i++){
         cards.push(this.state.closeCard[i]);
       }
-      this. createReport(cards);     
+      this.createMountlyReport(cards);     
       if(this.state.counter==0){this.modalOpen();}
-      if(this.state.month==1){this.state.month="ינואר"};
-      if(this.state.month==2){this.state.month="פברואר"};
-      if(this.state.month==3){this.state.month="מרץ"};
-      if(this.state.month==4){this.state.month="אפריל"};
-      if(this.state.month==5){this.state.month="מאי"};
-      if(this.state.month==6){this.state.month="יוני"};
-      if(this.state.month==7){this.state.month="יולי"};
-      if(this.state.month==8){this.state.month="אוגוסט"};
-      if(this.state.month==9){this.state.month="ספטמבר"};
-      if(this.state.month==10){this.state.month="אוקטובר"};
-      if(this.state.month==11){this.state.month="נובמבר"};
-      if(this.state.month==12){this.state.month="דצמבר"};
+      if(this.state.month==1){this.state.hebrewMonth="ינואר"};
+      if(this.state.month==2){this.state.hebrewMonth="פברואר"};
+      if(this.state.month==3){this.state.hebrewMonth="מרץ"};
+      if(this.state.month==4){this.state.hebrewMonth="אפריל"};
+      if(this.state.month==5){this.state.hebrewMonth="מאי"};
+      if(this.state.month==6){this.state.hebrewMonth="יוני"};
+      if(this.state.month==7){this.state.hebrewMonth="יולי"};
+      if(this.state.month==8){this.state.hebrewMonth="אוגוסט"};
+      if(this.state.month==9){this.state.hebrewMonth="ספטמבר"};
+      if(this.state.month==10){this.state.hebrewMonth="אוקטובר"};
+      if(this.state.month==11){this.state.hebrewMonth="נובמבר"};
+      if(this.state.month==12){this.state.hebrewMonth="דצמבר"};
     }
  
   const data = {
@@ -375,7 +388,7 @@ render() {
         </div>
          <ExcelExport
                     data={dataExcel}  
-                    fileName={"דוח עבור חודש "+this.state.month+".xlsx"}
+                    fileName={"דוח עבור חודש "+this.state.hebrewMonth+".xlsx"}
                     ref={(exporter) => { this._exporter = exporter; }}>
                     <ExcelExportColumn field="openCards" title="כרטיסים פתוחים" locked={true} width={150} />
                     <ExcelExportColumn field="closeCards" title="כרטיסים סגורים" width={150} />
