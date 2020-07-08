@@ -5,19 +5,18 @@ import * as actions from '../../store/actions/index';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
-import IconSearch from '../../assets/icon-search';
+// import IconSearch from '../../assets/icon-search';
 import IconBellNew from '../../assets/icon-bell-new';
 import { connect } from 'react-redux';
 import FixedPlugin from "../../components/FixedPlugin/FixedPlugin.js";
 import SettingsIcon from '@material-ui/icons/Settings';
-import { StreamApp, NotificationDropdown,FlatFeed } from 'react-activity-feed';
+// import { StreamApp, NotificationDropdown,FlatFeed } from 'react-activity-feed';
 import { Modal ,Button } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import IconButton from '@material/react-icon-button';
 import Badge from '@material-ui/core/Badge';
 import ShowMessages from "../../components/Messages/showMessages.js";
-import GooglePicker from 'react-google-picker';
+// import GooglePicker from 'react-google-picker';
 
 
 
@@ -211,7 +210,7 @@ class HeaderComponent extends Component {
                     <img src={userProfileImage} alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
                 </Row>
                 <SettingsIcon onClick={() => this.onSettingClick()} 
-                style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
+                style={{fontSize:"large",cursor: "pointer",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}/>
               
                {this.props.showsettingmodel ? <FixedPlugin /> : null }
 

@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { f } from "./config";
+//import { f } from "./config";
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'; //compose allows us to compose our own set of enhancers and middleware is just one kind of enhancer
-import { reduxFirestore, getFirestore } from "redux-firestore";
-import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
+import {  getFirestore } from "redux-firestore"; //reduxFirestore
+import {  getFirebase } from "react-redux-firebase"; //reactReduxFirebase
 
 import thunk from 'redux-thunk';
 import './index.module.css';
@@ -29,11 +29,11 @@ import notificationReducer from './store/reducers/notification'; // we must impo
 
 
 // react-redux-firebase config
-const rrfConfig = {
-  userProfile: "users",
-  useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
-  attachAuthIsReady: true // attaches auth is ready promise to store
-};
+// const rrfConfig = {
+//   userProfile: "users",
+//   useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
+//   attachAuthIsReady: true // attaches auth is ready promise to store
+// };
 
 
 //  "composeEnhancersjust" holds a function

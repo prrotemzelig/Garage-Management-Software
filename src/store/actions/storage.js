@@ -51,7 +51,7 @@ export const imageOrDocUploadingFail = ( error ) => { // here we might get the e
 
 export const imageOrDocUploading = ( allFiles,userId ,token,branchNumber,node,cardKey,ticketNumber) => { 
 
-const promises = [];
+//const promises = [];
 return dispatch => {
     let i = 1;
 

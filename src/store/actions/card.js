@@ -122,14 +122,14 @@ export const cardUpdateStart = () => {
 //garageReplacementVehicle,rentalCompanyReplacementVehicle,
 
 export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,alternateVehicleTaken, token,branchNumber,identifiedCardID,userId ) => { 
- let i = 0;
+ //let i = 0;
     return dispatch => {
         dispatch( cardUpdateStart() ); 
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/carData.json?auth=' + token, carData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, carData)); 
         dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
-        i+=1;
+       // i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
@@ -138,7 +138,7 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
        axios.patch(branchNumber+'/cards/'+identifiedCardID+'/cardData.json?auth=' + token, cardData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, cardData)); 
-        i+=1;
+       // i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
@@ -148,7 +148,7 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/customerData.json?auth=' + token, customerData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, customerData)); 
-        i+=1;
+       // i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));
@@ -157,7 +157,7 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         axios.patch(branchNumber+'/cards/'+identifiedCardID+'/garageReplacementData.json?auth=' + token, garageReplacementData)
         .then(res => {
         dispatch(cardUpdateSuccess(res.data.name, garageReplacementData)); 
-                i+=1;
+               // i+=1;
         })
         .catch( error => {
             dispatch(cardUpdateFail(error));

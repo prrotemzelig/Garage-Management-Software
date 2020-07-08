@@ -6,7 +6,7 @@ import axios from '../../axios-cards';
 import * as actions from '../../store/actions/index';
 import { Button } from 'react-bootstrap';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { Card, CardHeader, CardBody, CardFooter } from 'react-simple-card';
+import { Card, CardHeader, CardBody } from 'react-simple-card'; //CardFooter
 import classes from './showMessages.module.css';
 
 
@@ -43,7 +43,7 @@ deleteNotification(e,data){
     let message=[];
     for(var i=0;i<notification.length;i++){
       let id='';
-        if(notification[i].type=="task"){
+        if(notification[i].type==="task"){
           id=notification[i].id;
           let notification1=" נוספה משימה חדשה: ";
           let notification3="'"+notification[i].description+"'";
@@ -62,7 +62,7 @@ deleteNotification(e,data){
             </Card>;
           Toast.push(message);
         }
-        if(notification[i].type=="closeCard"){
+        if(notification[i].type==="closeCard"){
           id=notification[i].id;
           let notification1=" נסגר כרטיס עבודה "+notification[i].description;
           let notification2=" על ידי: "+notification[i].openedBy;
@@ -76,7 +76,7 @@ deleteNotification(e,data){
             </Card>;
           Toast.push(message);
         }
-        if(notification[i].type=="openCard"){
+        if(notification[i].type==="openCard"){
           id=notification[i].id;
           let notification1=" נפתח כרטיס עבודה חדש "+notification[i].description;
           let notification2=" על ידי: "+notification[i].openedBy;

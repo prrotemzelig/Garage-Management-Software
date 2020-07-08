@@ -651,7 +651,7 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
     const formData = {};
         formData['title'] = this.state.taskForm.newTaskForUser.title;
         formData['checked'] = false;
-        formData['tag'] = 'NEW';
+        formData['tag'] = this.props.AdminFirstName  ; //'חדש'
         formData['list'] = 'todo';
         formData['isEdit'] = false;
         formData['openedByFirstName'] = this.props.AdminFirstName;
@@ -840,9 +840,9 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
              <tr style={{fontWeight: "bold", fontSize: "18px"}}>
                     <th  scope="col" style={{ textAlign: "right"}}>סניף</th>
                     <th  scope="col" style={{ textAlign: "right"}}>שם</th>
-                    <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
                     <th  scope="col" style={{ textAlign: "right"}}>הרשאות</th>
-                    <th  scope="col" style={{ textAlign: "right"}}>פעולות</th> 
+                    <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
+                    <th  scope="col" style={{ textAlign: "right",width:"30%"}}>פעולות</th> 
                 </tr>
 
             :
@@ -865,8 +865,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                     <tr> 
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות</td>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
-                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                    <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                         {' '}
                        
@@ -875,7 +875,7 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                        
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
-                        <br/>
+                       
                         {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
                         {' '}
                     </td>
@@ -907,8 +907,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                 <tr> 
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>גבעת שאול</td>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
-                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
@@ -941,8 +941,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                 <tr> 
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מודיעין</td>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
-                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.userPermissions}</td>
+                <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                     {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}

@@ -188,6 +188,11 @@ class TasksComponent extends React.Component {
         } 
     }
 
+    if(tag !== 'רגיל' && tag !== 'דחוף' && tag !== 'חדש'){
+        console.log(tag);
+        backgroundColor = '#666666';
+        color = 'white'; 
+    }
         // if(tag === 'URGENT'){
         //     backgroundColor= "#FEC400";
         //     color= "#FFFFFF"; }
@@ -258,7 +263,7 @@ class TasksComponent extends React.Component {
         <Row horizontal="center" vertical="center">
 
             <EditIcon 
-            style={{ fontSize:"large" }}
+            style={{ fontSize:"large",cursor: "pointer" }}
             onClick={() => this.onEditClick(title, tag, checked, taskKey, list, isEdit)}/>  
             
              <Dropdown isOpen={isEdit} direction="up" toggle={this.closeAddButton}  >
@@ -334,16 +339,20 @@ class TasksComponent extends React.Component {
     }
 
     getNextTag = (tag) => { //(except = 'דחוף')
-        let tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
+        let tagLabels = ['URGENT', 'NEW', 'DEFAULT','ADMIN'];
         // const tagIndex = (tagLabels.indexOf(except) + 1) % 3;
         if(tag === 'דחוף')
             return TAGS[tagLabels[1]];
             
-        if(tag === 'חדש')
+        else if(tag === 'חדש')
             return TAGS[tagLabels[2]];
 
-        if(tag === 'רגיל')
+        else if(tag === 'רגיל')
             return TAGS[tagLabels[0]];
+
+        else
+            return TAGS[tagLabels[0]];
+        
     }
 
     onTagClick = (taskKey,tag,list) =>  {

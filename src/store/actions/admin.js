@@ -3,8 +3,8 @@ import axiosFireBase from 'axios';
 import axios from '../../axios-cards';
 import * as actionTypes from './actionTypes';
 //import { database } from 'firebase';
-import thunk from 'redux-thunk';
-import Promise from 'bluebird'
+//import thunk from 'redux-thunk';
+//import Promise from 'bluebird'
 
 export const fetchUsersStart = () => {
     return {

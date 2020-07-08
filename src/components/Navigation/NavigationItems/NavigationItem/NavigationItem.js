@@ -17,8 +17,8 @@ static propTypes = {
     };
 
 render(){
-    
-    const { match, location, history } = this.props; // I want to get the current location to know with icon need to be light!
+   // const { match, location, history } = this.props; // I want to get the current location to know with icon need to be light!    
+    const { location } = this.props; // I want to get the current location to know with icon need to be light!
     let isActive = location.pathname === this.props.link;
 
 return(

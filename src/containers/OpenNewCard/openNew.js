@@ -28,8 +28,8 @@ import { Modal ,Button } from 'react-bootstrap';
 import classes from '../../components/UI/Modal/Modal.module.css';
 import * as emailjs from 'emailjs-com'
 import { Form, FormGroup, Label, Input } from 'reactstrap' // FormFeedback,
-import Promise from 'bluebird'
-import { storageRef } from "../../config";
+//import Promise from 'bluebird'
+//import { storageRef } from "../../config";
 import './hoverEffect.css';
 import  './modal2.css'; //filesStyle from
 //import './image.css';
@@ -134,7 +134,7 @@ class openNew extends Component   {
     },
  
     customerDetails:{
-      customerNumber:{value: ''},
+      // customerNumber:{value: ''},
       customerName:{value: ''},
       address:{value: ''},
       city:{value: ''},
@@ -188,12 +188,49 @@ class openNew extends Component   {
     garage_replacement_data:[],
     rental_company_data:[],
     garageReplacementDetails:{}, 
-    rentalCompanyDetails:{}
+    rentalCompanyDetails:{},
 
-  }; 
+    invoiceClosure:{
+      allWorksGross:{value: 0.00 },
+      allWorksDiscount:{value: 0.00},
+      allWorksDiscountAmount:{value: 0.00},
+      allWorksNet:{value: 0.00},
+      allExteriorWorksGross:{value: 0.00 },
+      allExteriorWorksDiscount:{value: 0.00},
+      allExternalWorksDiscountAmount:{value: 0.00},
+      allExteriorWorksNet:{value: 0.00},
+      allPartsGross:{value: 0.00},
+      allPartsDiscount:{value: 0.00},
+      allPartsDiscountAmount:{value:0.00},
+      allPartsNet:{value: 0.00 },
+      totalGross:{value: 0.00},
+      totalDiscount:{value: 0.00},
+      totalDiscountAmount:{value: 0.00},
+      totalNet:{value: 0.00},
+      amountOfVAT:{value: 0.00 },
+      totalPayment:{value:  0.00}
+    }
+
+  };
+      // this.newSet = this.newSet.bind(this);
+
 }
 
+    //  this.state.invoiceClosure.amountOfVAT.value= 0.17 * this.state.invoiceClosure.totalNet.value;
+    //  this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalNet.value + this.state.invoiceClosure.amountOfVAT.value ;
+      //  this.state.invoiceClosure.allWorksNet.value=allWorksGross;
+      // this.state.invoiceClosure.allPartsNet.value=allPartsGross;
 
+
+      // newSet() {
+      //   const allWorksNet = this.state.invoiceClosure.allWorksGross.value;
+      //   const allPartsNet = this.state.invoiceClosure.allPartsGross;
+      //   const amountOfVAT = 0.17 * this.state.invoiceClosure.totalNet;
+      //   const totalPayment = this.state.invoiceClosure.totalNet + this.state.invoiceClosure.amountOfVAT;
+      //   console.log(allWorksNet);
+      //   this.setState({
+      //     allWorksNet: allWorksNet,allPartsNet: allPartsNet, amountOfVAT: amountOfVAT, totalPayment: totalPayment });
+      // }
 
 componentWillUnmount() {
      this.setTheStates('');
@@ -301,226 +338,425 @@ this.state.rentalCompanyReplacementCheck=this.state.rentalCompanyReplacementVehi
 // :null} 
 // onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
 
+
+
+inputInvoiceWorksGrossChangedHandler = (event) => { //rotem need to do // רותם לעשות
+  if(event.target.id === 'allWorksGross' ){
+    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+      value: event.target.value
+  });
+  let finalNetValue;
+  if(this.state.invoiceClosure.allWorksDiscount.value !== '')
+    finalNetValue = event.target.value - (this.state.invoiceClosure.allWorksDiscount.value * event.target.value )/100 ; //calculate the final price after discount
+  else
+    finalNetValue= event.target.value;
+  
+  const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allWorksNet'], { 
+    value: finalNetValue
+});
+
+  const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+      [event.target.id]: updatedFormElement,
+      ['allWorksNet']: updatedFormElementForNet 
+  });
+  
+  this.setState({invoiceClosure: updatedCardForm}); 
+  }
+
+  else if(event.target.id === 'allWorksDiscount'){
+          const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+            value: event.target.value
+        });
+
+        const finalNetValue = this.state.invoiceClosure.allWorksGross.value - (event.target.value * this.state.invoiceClosure.allWorksGross.value )/100 ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allWorksNet'], { 
+          value: finalNetValue
+      });
+
+      const finalAmountValue = this.state.invoiceClosure.allWorksGross.value - finalNetValue; //calculate the total amount of the discount
+      const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['allWorksDiscountAmount'], { 
+        value: finalAmountValue
+    });
+
+        const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+            [event.target.id]: updatedFormElement,
+            ['allWorksNet']: updatedFormElementForNet,
+            ['allWorksDiscountAmount']: updatedFormElementForFinalAmountValue,
+        });
+        this.setState({invoiceClosure: updatedCardForm}); 
+      }
+  
+      console.log(this.state.invoiceClosure);
+  // else{
+  //         const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+  //           value: event.target.value
+  //       });
+  //       const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+  //           [event.target.id]: updatedFormElement 
+  //       });
+  //       this.setState({invoiceClosure: updatedCardForm}); 
+  // }
+}
+
+
+
+inputInvoicePartsGrossChangedHandler = (event) => { //rotem need to do // רותם לעשות
+  if(event.target.id === 'allPartsGross' ){
+    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+      value: event.target.value
+  });
+  let finalNetValue;
+  if(this.state.invoiceClosure.allPartsDiscount.value !== '')
+    finalNetValue = event.target.value - (this.state.invoiceClosure.allPartsDiscount.value * event.target.value )/100 ; //calculate the final price after discount
+  else
+    finalNetValue= event.target.value;
+  
+  const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allPartsNet'], { 
+    value: finalNetValue
+});
+
+  const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+      [event.target.id]: updatedFormElement,
+      ['allPartsNet']: updatedFormElementForNet 
+  });
+  
+  this.setState({invoiceClosure: updatedCardForm}); 
+  }
+
+  else if(event.target.id === 'allPartsDiscount'){
+          const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+            value: event.target.value
+        });
+
+        const finalNetValue = this.state.invoiceClosure.allPartsGross.value - (event.target.value * this.state.invoiceClosure.allPartsGross.value )/100 ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allPartsNet'], { 
+          value: finalNetValue
+      });
+
+      const finalAmountValue = this.state.invoiceClosure.allPartsGross.value - finalNetValue; //calculate the total amount of the discount
+      const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['allPartsDiscountAmount'], { 
+        value: finalAmountValue
+    });
+
+        const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+            [event.target.id]: updatedFormElement,
+            ['allPartsNet']: updatedFormElementForNet,
+            ['allPartsDiscountAmount']: updatedFormElementForFinalAmountValue,
+        });
+        this.setState({invoiceClosure: updatedCardForm}); 
+      }
+
+            console.log(this.state.invoiceClosure);
+
+  
+  // else{
+  //         const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+  //           value: event.target.value
+  //       });
+  //       const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+  //           [event.target.id]: updatedFormElement 
+  //       });
+  //       this.setState({invoiceClosure: updatedCardForm}); 
+  // }
+}
+
+
+
+currency = (num) => {
+  num = parseFloat(num);
+  if(isNaN(num)){
+    return isNaN(num);
+  }
+  else{
+    num = num.toFixed(2);
+   //num = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'); // work but not in react
+    return num;
+  }
+}
+
+
   renderShowCloseModal = () => { ///*** add new user modal! ****
+
+    var allWorksGross= 0;
+    var allPartsGross= 0;
+
+    for(var i=0; i < this.props.workData.length ; i++){
+      allWorksGross += parseInt(this.props.workData[i].net, 10) ;
+     }
+
+     for(var j=0; j < this.props.partsData.length ; j++){
+      allPartsGross += parseInt(this.props.partsData[j].net, 10);
+     }
+     this.state.invoiceClosure.allWorksGross.value=allWorksGross;
+      this.state.invoiceClosure.allPartsGross.value=allPartsGross;
+
+     this.state.invoiceClosure.totalGross.value= allWorksGross + allPartsGross;
+     this.state.invoiceClosure.allWorksNet.value= allWorksGross - this.state.invoiceClosure.allWorksDiscountAmount.value ;
+     this.state.invoiceClosure.allPartsNet.value= allPartsGross - this.state.invoiceClosure.allPartsDiscountAmount.value ;
+    //  this.state.invoiceClosure.allWorksNet.value=allWorksGross;
+    //  this.state.invoiceClosure.allPartsNet.value=allPartsGross;
+    this.state.invoiceClosure.totalNet.value= this.state.invoiceClosure.allWorksNet.value + this.state.invoiceClosure.allPartsGross.value;
+
+     this.state.invoiceClosure.amountOfVAT.value= 0.17 * this.state.invoiceClosure.totalNet.value;
+     this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalNet.value + this.state.invoiceClosure.amountOfVAT.value ;
+   
+
+      // allWorksGross = this.currency(allWorksGross); 
+      // allPartsGross = this.currency(allPartsGross); 
+
+   
+   
+
+      console.log(this.state.invoiceClosure.totalGross.value);
+
+      // this.state.invoiceClosure.totalGross.value = this.currency(this.state.invoiceClosure.totalGross.value);
+      console.log(this.state.invoiceClosure.totalGross.value);
+
 
     let workButtons =
         <div class="form-group" style={{marginBottom: "4px"}}>
             <div style={{textAlign:"left"}}> 
-                  <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.closeAddNewUser} >ביטול</Button>{' '}
+                  <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.ModalCardCloseHandler} >יציאה</Button>{' '}
                   
-                  <Button bsStyle="secondary" style={{borderColor: "black"}} disabled={!this.state.allFormIsValid}  onClick={this.userSignUpHandler} >הוספת משתמש</Button>     </div>
+                  <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={this.cardCloseHandler} >סגירת חשבון</Button>     </div>
         </div>;
   
+  // <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
       return (
         
           <Modal show={this.state.showCloseModal} onHide={this.ModalCardCloseHandler}   backdrop={false}
               style={{ display: "flex", textAlign:"right", paddingLeft: "1px" }}  >
-            <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+            <Modal.Header closeButton   >
               <Modal.Title  >סגירת חשבון לכרטיס עבודה</Modal.Title>   
             </Modal.Header>
       
               <div className={classes.separator}></div>
             <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
-                    <form autocomplete="on">
-              <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+                    <div autocomplete="off">
+              <div class="form-row" autocomplete="off" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
               <form  class="form-group col-md-3"  style={{ marginBottom: "4px"}} > 
                    <label for="firstName"  >שם לקוח</label>
-                   <input type="text" id="firstName" autocomplete="off" class="form-control " style={{marginLeft: "10px"}} defaultValue={this.state.customerDetails.customerName.value} />
+                   <input type="text" id="firstName" autocomplete="off" class="form-control " style={{marginLeft: "10px"}} value={this.state.customerDetails.customerName.value} />
                  </form >
       
-
-                   <div class="form-group col-md-3" >
+                   <form class="form-group col-md-3" >
                   <label for="address">כתובת</label>
-                  <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.address.value}/>
-                </div> 
+                  <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}}  
+                  value={this.state.customerDetails.address.value}/>
+                </form> 
 
-
-                <div class="form-group col-md-3" >
+                <form class="form-group col-md-3" >
                   <label for="city">עיר</label>
-                  <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.city.value}  />
-                </div>
+                  <input type="text" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.customerDetails.city.value}  />
+                </form>
 
-                 <div class="form-group col-md-3" >
+                 <form class="form-group col-md-3" >
                   <label for="postalCode" >מיקוד</label>
-                  <input type="number" id="postalCode" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.postalCode.value}/>
-                </div>
+                  <input type="number" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.customerDetails.postalCode.value}/>
+                </form>
 
-                <div class="form-group col-md-3" >
+                <form class="form-group col-md-3" >
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
-                  <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
-                  defaultValue={this.state.customerDetails.identificationNumber.value} />
-                </div> 
+                  <input ref="identificationNumber" type="text"  class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
+                  value={this.state.customerDetails.identificationNumber.value} />
+                </form> 
 
-               
-
-                <div class="form-group col-md-3" >
+                <form class="form-group col-md-3" >
                   <label for="homePhone">טלפון בית</label>
-                  <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.homePhone.value}/>
-                </div>
+                  <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.customerDetails.homePhone.value}/>
+                </form>
 
 
-                <div class="form-group col-md-3" >
+                <form class="form-group col-md-3" >
                   <label for="cellphone">סלולרי</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+                  <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.customerDetails.cellphone.value} />
+                </form>
 
                  </div>
       
                  <div className={classes.anoSeparator}></div>
 
+              <form class="form-group " >
+                 </form>
                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto" }}> 
-      
+        
+        
+                 <form class="form-group col-md-2" >
                  <label for="cellphone">עבודות</label>
+                 </form>
 
-                 <div class="form-group col-md-2" >
-                  <label for="cellphone">ברוטו עבודות</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
+                 <div class="form-group col-md-3" >
+                  <label for="allWorksGross">ברוטו</label>
+                  <input type="number" id="allWorksGross" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.invoiceClosure.allWorksGross.value} />
                 </div>
 
                 <div class="form-group col-md-2" >
-                  <label for="cellphone">הנחה</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
+                  <label for="allWorksDiscount">הנחה</label>
+                  <input type="number" id="allWorksDiscount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                 value={this.state.invoiceClosure.allWorksDiscount.value} 
+                 onChange = {(event) => this.inputInvoiceWorksGrossChangedHandler(event)} />
                 </div>
 
-                <div class="form-group col-md-2" >
-                  <label for="cellphone">סכום ההנחה</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+           
 
                 <div class="form-group col-md-2" >
-                  <label for="cellphone">נטו</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
+                  <label for="allWorksDiscountAmount">סכום ההנחה</label>
+                  <input type="number" id="allWorksDiscountAmount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.invoiceClosure.allWorksDiscountAmount.value} />
                 </div>
+
+                <form class="form-group col-md-3" >
+                  <label for="allWorksNet">נטו</label>
+                  <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  value={this.state.invoiceClosure.allWorksNet.value} />
+                </form>
 
                  </div>
                  
                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
-
+                 
+                 <form class="form-group col-md-2" >
                  <label for="cellphone">עבודות חוץ</label>
+                 </form>
 
-                 <div class="form-group col-md-2" >
-                  <label for="cellphone">ברוטו עבודות חוץ</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+                 <form class="form-group col-md-3" >
+                  {/* <label for="cellphone">עבודות חוץ</label> */}
+                  <input type="number" id="allExteriorWorksGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.invoiceClosure.allExteriorWorksGross.value} />
+                </form>
 
-                <div class="form-group col-md-2" >
-                  <label for="cellphone">הנחה</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+                <form class="form-group col-md-2" >
+                  {/* <label for="cellphone">הנחה</label> */}
+                  <input type="number" id="allExteriorWorksDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.invoiceClosure.allExteriorWorksDiscount.value} />
+                </form>
 
-                <div class="form-group col-md-2" >
-                  <label for="cellphone">סכום ההנחה</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+                <form class="form-group col-md-2" >
+                  {/* <label for="cellphone">סכום ההנחה</label> */}
+                  <input type="number" id="allExternalWorksDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.invoiceClosure.allExternalWorksDiscountAmount.value} />
+                </form>
 
-                <div class="form-group col-md-2" >
-                  <label for="cellphone">נטו</label>
-                  <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.customerDetails.cellphone.value} />
-                </div>
+                <form class="form-group col-md-3" >
+                  {/* <label for="cellphone">נטו</label> */}
+                  <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  defaultValue={this.state.invoiceClosure.allExteriorWorksNet.value} />
+                </form>
                </div> 
 
                <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
 
-               <label for="cellphone">חלפים</label>
+               <form class="form-group col-md-2" >
+                 <label for="cellphone">חלקים</label>
+                 </form>
+                    <form class="form-group col-md-3" >
+                    {/* <label for="cellphone">חלפים</label> */}
+                    <input type="number" id="allPartsGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    value={this.state.invoiceClosure.allPartsGross.value} />
+                    </form>
 
-                    <div class="form-group col-md-2" >
-                    <label for="cellphone">ברוטו חלפים</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
+                    <form class="form-group col-md-2" >
+                    {/* <label for="cellphone">הנחה</label> */}
+                    <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    value={this.state.invoiceClosure.allPartsDiscount.value}
+                    onChange = {(event) => this.inputInvoicePartsGrossChangedHandler(event)} />
+              
+                    </form>
 
-                    <div class="form-group col-md-2" >
-                    <label for="cellphone">הנחה</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
+                    <form class="form-group col-md-2" >
+                    {/* <label for="cellphone">סכום ההנחה</label> */}
+                    <input type="number" id="allPartsDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    value={this.state.invoiceClosure.allPartsDiscountAmount.value} />
+                    </form>
 
-                    <div class="form-group col-md-2" >
-                    <label for="cellphone">סכום ההנחה</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
-
-                    <div class="form-group col-md-2" >
-                    <label for="cellphone">נטו</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
+                    <form class="form-group col-md-3" >
+                    {/* <label for="cellphone">נטו</label> */}
+                    <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    value={this.state.invoiceClosure.allPartsNet.value} />
+                    </form>
                     </div> 
 
 
 
-                    <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
-
-                    <div class="form-group col-md-3" >
-                    <label for="cellphone">ברוטו סך הכל</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
-
-                    <div class="form-group col-md-3" >
-                    <label for="cellphone">הנחה</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
-
-                    <div class="form-group col-md-3" >
-                    <label for="cellphone">סכום ההנחה</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
-
-                    <div class="form-group col-md-3" >
-                    <label for="cellphone">נטו</label>
-                    <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    defaultValue={this.state.customerDetails.cellphone.value} />
-                    </div>
-                    </div> 
 
 
 
                     <div className={classes.anoSeparator}></div>
 
                     
+                    <div class="form-row" >
+                 </div>
                     <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
 
-                        <div class="form-group col-md-3" >
-                        <label for="cellphone">סה"כ</label>
-                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.customerDetails.cellphone.value} />
-                        </div>
 
-                        <div class="form-group col-md-3" >
-                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.customerDetails.cellphone.value} />
-                        </div>
+                    {/* <form class="form-row" >
+                 </form> */}
+                    <form class="form-group col-md-2" >
+                 <label for="cellphone">סה"כ</label>
+                 </form>
 
-                        <div class="form-group col-md-3" >
-                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.customerDetails.cellphone.value} />
-                        </div>
+                        <form class="form-group col-md-3" >
+                        {/* <label for="cellphone">סה"כ</label> */}
+                        <input type="number" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        value={this.state.invoiceClosure.totalGross.value} />
+                        </form>
 
-                        <div class="form-group col-md-3" >
-                        <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.customerDetails.cellphone.value} />
-                        </div>
+                        <form class="form-group col-md-2" >
+                        <input type="number" id="totalDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.invoiceClosure.totalDiscount.value} />
+                        </form>
+
+                        <form class="form-group col-md-2" >
+                        <input type="number" id="totalDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.invoiceClosure.totalDiscountAmount.value} />
+                        </form>
+
+                        <form class="form-group col-md-3" >
+                        <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.invoiceClosure.totalNet.value} />
+                        </form>
                         </div> 
 
 
-               </form>
+                        <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}> 
+
+
+                          <form class="form-group col-md-3" >
+                          {/* <label for="cellphone">סה"כ</label> */}
+                          <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                          defaultValue={this.state.invoiceClosure.amountOfVAT.value} />
+                          </form>
+
+
+                          <form class="form-group col-md-2" >
+                      <label for="cellphone">מע"מ 17%</label>
+                      </form>
+                        
+                          </div> 
+
+                          <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}> 
+
+                                <form class="form-group col-md-4" >
+                                {/* <label for="cellphone">סה"כ</label> */}
+                                <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                                defaultValue={this.state.invoiceClosure.totalPayment.value} />
+                                </form>
+
+                                <form class="form-group col-md-2" >
+                            <label for="cellphone">סה"כ לתשלום</label>
+                            </form>
+                              
+                             </div> 
+
+
+                          
+
+               </div>
               </Modal.Body>
             <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
                  {workButtons}
@@ -624,7 +860,7 @@ inputChangedHandler = (event) => {
   else
     this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value});
 
-    let cards;    
+   // let cards;    
 
 
     // onMultipleDocDownload(node) { //url2,name,key,
@@ -1003,7 +1239,7 @@ cardUpdateHandler = ( event ) => { // update card
     city: this.state.customer_data[2],
     customerName: this.state.customer_data[3],
     customerNote: this.state.customer_data[4],
-    customerNumber: this.state.customer_data[5],
+    // customerNumber: this.state.customer_data[5],
     homePhone: this.state.customer_data[6],
     identificationNumber: this.state.customer_data[7],
     mailAdress: this.state.customer_data[8],
@@ -1071,12 +1307,20 @@ cardCloseHandler = ( event ) => {
         rentalCompanyReplacementData[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
       }
 
+
+      const invoiceClosureData = {};
+      for (let formElementIdentifier in this.state.invoiceClosure) {
+        invoiceClosureData[formElementIdentifier] = this.state.invoiceClosure[formElementIdentifier].value;
+      }
+
+      
         const card = { 
             cardData: cardData,
             carData: carData, 
             customerData: customerData,
             garageReplacementData: garageReplacementData,
             rentalCompanyReplacementData: rentalCompanyReplacementData,
+            invoiceClosureData: invoiceClosureData,
             alternateVehicleTaken: this.state.alternateVehicleTaken,
             userId: this.props.userId,
             branchNumber: this.props.branchNumber,
@@ -1138,7 +1382,7 @@ setTheStates = (licenseNumber) => {
     }
    
     let updateCustomerForm = {
-      customerNumber:{value: ''},
+      // customerNumber:{value: ''},
       customerName:{value: '' },
       address:{value: ''},
       city:{value: ''},
@@ -1170,6 +1414,29 @@ setTheStates = (licenseNumber) => {
     }
 
 
+    let invoiceClosureForm = {
+      allWorksGross:{value: 0.00 },
+      allWorksDiscount:{value: 0.00},
+      allWorksDiscountAmount:{value: 0.00},
+      allWorksNet:{value: 0.00},
+      allExteriorWorksGross:{value: 0.00 },
+      allExteriorWorksDiscount:{value: 0.00},
+      allExternalWorksDiscountAmount:{value: 0.00},
+      allExteriorWorksNet:{value: 0.00},
+      allPartsGross:{value: 0.00},
+      allPartsDiscount:{value: 0.00},
+      allPartsDiscountAmount:{value:0.00},
+      allPartsNet:{value: 0.00 },
+      totalGross:{value: 0.00},
+      totalDiscount:{value: 0.00},
+      totalDiscountAmount:{value: 0.00},
+      totalNet:{value: 0.00},
+      amountOfVAT:{value: 0.00},
+      totalPayment:{value:0.00}
+    }
+   
+
+
     document.getElementById("workCardForm").reset(); 
     this.setState({car_data: []});
     this.setState({card_data: []});
@@ -1187,9 +1454,12 @@ setTheStates = (licenseNumber) => {
       this.setState({customer_details: {}});
       this.setState({garageReplacementVehicle: garageReplacementForm});
       this.setState({rentalCompanyReplacementVehicle: rentalCompanyReplacementForm});
+      this.setState({invoiceClosure: invoiceClosureForm});
+
       this.setState({alternateVehicleTaken: false});
       this.setState({garageReplacementCheck: false});
       this.setState({rentalCompanyReplacementCheck: false});
+      this.setState({showCloseModal: false});
       this.setState({garage_replacement_data: []});
       this.setState({rental_company_data: []});
       this.setState({garageReplacementDetails: {}});
@@ -1338,7 +1608,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
       <div > 
         <form  class="form-group" style={{fontSize: "11px", marginBottom: "4px"}}  >
           <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
-            <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
+            <div class="form-group col-md-5" style={{ marginBottom: "4px"}}  >       
               <label for="workDescription" >תיאור עבודה</label>
               <input type="text" id="workDescription" class="form-control" value={this.state.cardWork.workDescription.value} autocomplete="off" aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
@@ -1350,19 +1620,19 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
 
-            <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
+            <div class="form-group col-md-2"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
              <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
 
-            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
+            <div class="form-group col-md-2 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
               <input type="number" id="discount" class="form-control" value={this.state.cardWork.discount.value} autocomplete="off" aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
 
-            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
+            <div class="form-group col-md-2 "  style={{ marginBottom: "4px"}}  >
               <label for="net">נטו</label> 
               <input type="number" id="net" class="form-control" value={this.state.cardWork.net.value} autocomplete="off" aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
@@ -1548,7 +1818,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
       <div > 
         <form  class="form-group" style={{fontSize: "11px", marginBottom: "4px"}}  >
           <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
-            <div class="form-group col-md-8" style={{ marginBottom: "4px"}}  >       
+            <div class="form-group col-md-5" style={{ marginBottom: "4px"}}  >       
               <label for="partDescription" >תיאור חלק</label>        
               <input type="text" id="partDescription" class="form-control" autocomplete="off" value={this.state.cardPart.partDescription.value} aria-describedby="passwordHelpInline"
                onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
@@ -1560,19 +1830,19 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
                onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
                </div>
 
-            <div class="form-group col-md-1"  style={{ marginBottom: "4px"}}  >
+            <div class="form-group col-md-2"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
              <input type="number" id="gross" class="form-control" value={this.state.cardPart.gross.value} aria-describedby="passwordHelpInline" autocomplete="off" 
                onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
                </div>
 
-            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}   >
+            <div class="form-group col-md-2 "  style={{ marginBottom: "4px"}}   >
               <label for="discount">הנחה %</label>
               <input type="number" id="discount" class="form-control" value={this.state.cardPart.discount.value} aria-describedby="passwordHelpInline" autocomplete="off" 
                onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
                </div>
 
-            <div class="form-group col-md-1 "  style={{ marginBottom: "4px"}}  >
+            <div class="form-group col-md-2 "  style={{ marginBottom: "4px"}}  >
               <label for="net">נטו</label>
               <input type="number" id="net" class="form-control" value={this.state.cardPart.net.value} aria-describedby="passwordHelpInline" autocomplete="off" 
                onChange = {(event) => this.inputNewPartChangedHandler(event) }/>
@@ -2232,7 +2502,7 @@ handle_Change = (param, e) => {
 
 sendEmail(e) {
  
-  const { name, email, subject, message } = this.state
+  const { name, email, message } = this.state //subject
   // create a new XMLHttpRequest
   var xhr = new XMLHttpRequest();
 
@@ -2595,7 +2865,7 @@ onChange = date => this.setState({ date })
             {this.state.showCustomerDetailsDiv ?
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
-                <div class="form-group col-md-3" >
+                {/* <div class="form-group col-md-3" >
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerNumber.value= this.state.customer_details.customerNumber;
@@ -2605,7 +2875,7 @@ onChange = date => this.setState({ date })
                   <input type="text" id="customerNumber" class="form-control" autocomplete="off"
                   defaultValue={this.state.customerDetails.customerNumber.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,5)}/>
-                </div>
+                </div> */}
   
                 <div class="form-group col-md-3" >
                 {(() => {

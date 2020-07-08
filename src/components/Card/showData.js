@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import DatePicker from "react-datepicker";
+//import DatePicker from "react-datepicker";
 import { connect } from 'react-redux';
 // import classes from '../../components/Card/Card.module.css';
 // import Card from './CardSearch';
@@ -42,7 +42,7 @@ class showData extends Component   {
         showImagesAndDoc: false,
         isAddNewWorkOrPartOpen: false,
         isUpdateWorkOrPartOpen: false,
-        showImagesAndDoc: false,
+        // showImagesAndDoc: false,
         imagesArrayForCheck: [],
         docsArrayForCheck: [],
 
@@ -742,10 +742,10 @@ switchShowImagesAndDoc = () => {
         const worksDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         this.state.ticketNumber=this.props.data;
         this.state.CarNumber=this.props.value;
-        let cards;
+        //let cards;
         if(this.state.userCarNumber!==""){
-          console.log("761");
-          cards = this.props.cards.map( card => (
+          console.log("761"); //cards = 
+          this.props.cards.map( card => (
             this.check(card)
           ))
         }
@@ -760,13 +760,10 @@ switchShowImagesAndDoc = () => {
           partsDetails.push( {name: this.state.parts[0].net+'.00'}  );
         }
         
-        const partsDetailsOutput = partsDetails.map(ig => {
-          // here we return some JSX
-          //we can use in ig.name as a unique key because it is unique here
-          return  <td 
-              
-                  cardData={ig.name}>{ig.name} </td>;
-      });
+      //   const partsDetailsOutput = partsDetails.map(ig => {
+      //     return  <td 
+      //             cardData={ig.name}>{ig.name} </td>;
+      // });
       if(this.state.works[0]===null || this.state.works[0]=== undefined || this.state.works[0] === ''){
       }
       else{
@@ -776,13 +773,10 @@ switchShowImagesAndDoc = () => {
       worksDetails.push( {name: this.state.works[0].discount+'.00'}  );
       worksDetails.push( {name: this.state.works[0].net+'.00'}  );
       }
-        const worksDetailsOutput = worksDetails.map(ig => {
-          // here we return some JSX
-          //we can use in ig.name as a unique key because it is unique here
-          return  <td 
-              
-                  cardData={ig.name}>{ig.name} </td>;
-      });
+      //   const worksDetailsOutput = worksDetails.map(ig => {
+      //     return  <td 
+      //             cardData={ig.name}>{ig.name} </td>;
+      // });
 
       return(
 
@@ -958,11 +952,11 @@ switchShowImagesAndDoc = () => {
           {this.state.showCustomerDetailsDiv ?
           <div class="card-body text-dark bg-white" >
             <div class="form-row" > 
-              <div class="form-group col-md-3" >
+              {/* <div class="form-group col-md-3" >
                 <label for="customerNumber" >מספר לקוח</label>
                 <input type="text" id="customerNumber" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}}
                 value={this.state.customer_details.customerNumber}/>
-              </div>
+              </div> */}
 
               <div class="form-group col-md-3" >
                 <label for="customerName">שם לקוח</label>
@@ -1290,6 +1284,8 @@ switchShowImagesAndDoc = () => {
           :null}  
           {' '}
       <Button bsStyle="secondary" style={{borderColor: "black"}}    onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button> 
+      {' '}
+      <Button bsStyle="secondary" style={{borderColor: "black"}}    onClick={this.switchShowImagesAndDoc}> חשבון סופי</Button> 
       { this.state.showImagesAndDoc ? this.renderImagesAndDocModal() :null }
       </form>
     </form>

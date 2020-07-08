@@ -6,6 +6,16 @@ import { Button } from 'react-bootstrap';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+const months = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר']
+const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
+
+const locale = {
+  localize: {
+    month: n => months[n],
+    day: n => days[n]
+  },
+  formatLong: {}
+}
 class Datepic extends React.Component {
 
         constructor (props) {
@@ -38,29 +48,34 @@ class Datepic extends React.Component {
         <div class="form-row" style={{direction: "rtl"}} > 
            <div className="text-center"  style={this.props.backgroundColor=== 'light' ?{direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}} >
              <form onSubmit={ this.onFormSubmit } style={{direction: "rtl"}}>
-                <div className="form-group"  style={{direction: "rtl"}} >
+                <div className="form-group"  style={{direction: "rtl",textAlign: "-webkit-center"}} >
                 <h6 >בחר דיאגרמה לתצוגה</h6>
+                <div style={{width: "fit-content"}}> 
                 <select class="form-control" 
                 onChange={(event) => this.chartTypeSelected(event)}  >
                         <option>מקלות</option>
                         <option>עוגה</option>
                         <option>גרף</option>  
                 </select>
-                {this.props.format=="month"
+                {this.props.format==="month"
                 ?
                 <DatePicker
                         selected={ this.state.startDate }
                         onChange={ this.handleChange }
                         dateFormat="MM/yyyy"
                         showMonthYearPicker
+                        locale={locale}
                 />
                 :<DatePicker
                 selected={ this.state.startDate }
                 onChange={ this.handleChange }
                 dateFormat="d/MM/yyyy"
                 className="form-control"
+                locale={locale}
                 />
                 }
+
+                </div>
                 </div>
                 <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}  
                 onClick={this.props.onClicked} >בחר תאריך</Button>
