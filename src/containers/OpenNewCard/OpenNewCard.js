@@ -1,4 +1,4 @@
-
+// /*
 
 // import React, { Component } from 'react';
 // import { connect } from 'react-redux';
@@ -1646,7 +1646,7 @@
 //                 </div>
 //               </div>
 //                 )}
-//               </div>
+//               {/* </div>
 //             </section>
 //             </div>
 //           </div>
@@ -1659,7 +1659,7 @@
 //             <hr />
 
         
-//         </div>
+//         </div> */}
 
 
 // //       <div class="modal fade"  id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
@@ -1713,6 +1713,7 @@
 // //     </div>
 // //   </div>
 // // </div>
+// /*
 //     ); 
       
 
@@ -1766,7 +1767,7 @@
 // </Modal.Footer>
 // </Modal>  */
 
-
+// /*
 
 // showImagesAndDoc  = () => {
 // //  this.props.onGetImagesOrDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'])
@@ -1790,7 +1791,7 @@
 //     );
  
 // }
-
+// /*
 
 // fileSelectedHandler = (e,type) => {
 //   console.log(e.target.files);
@@ -1817,10 +1818,8 @@
 //       //this.props.onImageOrDocUploading(this.state.docFiles);
 //  if (e.target.files) {
 
-//   /* Get files in array form */
 //   const files = Array.from(e.target.files);
 
-//   /* Map each file to a promise that resolves to an array of image URI's */ 
 //   Promise.all(files.map(file => {
 //       return (new Promise((resolve,reject) => {
 //           const reader = new FileReader();
@@ -1833,7 +1832,6 @@
 //   }))
 //   .then(images => {
 
-//       /* Once all promises are resolved, update state with image URI array */
 //       this.setState({ imageArray : images })
 
 //   }, error => {        
@@ -1875,6 +1873,7 @@
 //       console.log('Email sent: ' + info);
 //     }
 //   });*/
+//   /*
 //   var FileSaver = require('file-saver');
 //   //var blob = new Blob([this.props.imagesForCard[i].url], {type: "image.jpg;charset=utf-8"});
   
@@ -1909,9 +1908,10 @@
 // sgMail.send(msg);*/
    
  
-   
+//  /*  
 // }
 
+// /*
 // resetForm() {
 //   this.setState({
 //     name: '',
@@ -2018,8 +2018,10 @@
 //     }, (error) => {
 //         console.log(error.text);
 //     });*/
+//     /*
 // }
 
+// /*
 // onChange = date => this.setState({ date })
 
 //   render () {
@@ -2061,7 +2063,7 @@
 //     //         Hello, world! This is a toast message.
 //     //         </div>
 //     //     </div> 
-
+// /*
 //   return (
 //     <form id="workCardForm" onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
 
@@ -2240,7 +2242,6 @@
 //                    value={ this.state.vehicleData.manufactureYear.value}  
 //                   disabled={!this.state.formIsValid} onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,9)}>
                   
-//                     {/* <option selected></option> */}
 //                     <option></option>
 //                     <option>2020</option>
 //                     <option>2019</option>
@@ -2621,7 +2622,7 @@
 //                   <input type="text" id="customerRequests" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
 //                   defaultValue={this.state.cardForm.customerRequests.value}
 //                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,4)}/> */}
-
+// /*
 //                 </div>
 //               </div> 
               
@@ -2761,8 +2762,8 @@
 // }
 
 // }
-
-
+// */
+// /*
 // const mapStateToProps = state => { // here we get the state and return a javascript object
 //   return {
 //       cards: state.card.cards, // we get my cards from state. we state cards we are reaching out to the card reducer and with cards we then reach out to cards property in the state of my reducer 
@@ -2828,7 +2829,7 @@
 // };
 
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(openNew,axios));
-
+// */
 
 // // import React, { Component } from 'react';
 // // import { connect } from 'react-redux';

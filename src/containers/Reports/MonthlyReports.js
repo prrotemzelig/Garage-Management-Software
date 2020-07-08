@@ -395,7 +395,7 @@ render() {
         </div>
          <ExcelExport
                     data={dataExcel}  
-                    fileName={"דוח עבור חודש "+this.state.month+".xlsx"}
+                    fileName={"דוח עבור חודש "+this.state.hebrewMonth+".xlsx"}
                     ref={(exporter) => { this._exporter = exporter; }}>
                     <ExcelExportColumn field="openCards" title="כרטיסים פתוחים" locked={true} width={150} />
                     <ExcelExportColumn field="closeCards" title="כרטיסים סגורים" width={150} />
