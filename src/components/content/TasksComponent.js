@@ -277,8 +277,8 @@ class TasksComponent extends React.Component {
             {list=== 'todo' ?
                           
                 <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC",direction: "rtl"}}>
-                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר ל DOING</DropdownItem>
-                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר ל DONE</DropdownItem>  
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר לבטיפול</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר לטופל</DropdownItem>  
                 <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
  
                 </DropdownMenu>
@@ -288,8 +288,8 @@ class TasksComponent extends React.Component {
              {list==='doing' ?
              <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC", direction: "rtl"}}>
 
-                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר ל TODO</DropdownItem>
-                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר ל DONE</DropdownItem>
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר לטיפול</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "done")}>העבר לטופל</DropdownItem>
                 <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
 
                 </DropdownMenu>
@@ -298,8 +298,8 @@ class TasksComponent extends React.Component {
 
              {list==='done' ?
                 <DropdownMenu style={{textAlign: "right", backgroundColor: "#F7F8FC"}}>
-                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר ל TODO</DropdownItem>
-                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר ל DOING</DropdownItem>
+                <DropdownItem value="option-1" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "todo")}>העבר לטיפול</DropdownItem>
+                <DropdownItem value="option-2" onClick={() => this.onMoveClick(title,checked,tag,list,taskKey,!isEdit, "doing")}>העבר לבטיפול</DropdownItem>
                 <DropdownItem value="option-3" onClick={() => this.onDeleteClick(taskKey,list)}>מחק</DropdownItem>
 
                 </DropdownMenu>
