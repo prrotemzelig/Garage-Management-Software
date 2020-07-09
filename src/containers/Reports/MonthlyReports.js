@@ -34,9 +34,9 @@ class MonthlyReports extends Component {
       countMonthWork:0,
       countMonthParts:0,
       countMonthRevenue:0,
+      countYearRevenue:0,
       counter:0,
-      modal: false
-
+      modal: false,
     }
     this.onChildClicked = this.onChildClicked.bind(this);
     this.getData=this.getData.bind(this);
@@ -71,7 +71,7 @@ createMountlyReport(data){
   for(var i=0; i<data.length; i++){
     let openingDate=data[i].cardData.openingDate;
     let closeDate=data[i].closeDate;
-
+    //countYearRevenue
     if(openingDate.includes(this.state.month+"."+this.state.year)){
       this.state.countMonthOpen+=1;
       this.state.counter=1;
@@ -133,6 +133,21 @@ createMountlyReport(data){
         }
       }
     }  
+  }
+}
+createYearReport(data){
+  console.log(data);
+  for(var i=0; i<data.length; i++){
+    let closeDate=data[i].closeDate;
+
+    console.log(data[i].invoiceClosureData.totalPayment)
+    if(closeDate.includes(this.state.year)){
+      if(data[i].invoiceClosureData.totalPayment === undefined || data[i].invoiceClosureData.totalPayment === null || data[i].invoiceClosureData.totalPayment === ''){
+      }
+      else{
+        this.state.countYearRevenue+=parseInt(data[i].invoiceClosureData.totalPayment, 10) ;
+      }
+    }
   }
 }
 
@@ -216,7 +231,12 @@ isMobile() {
 _exporter;
 export = () => {
         this._exporter.save();
-    }
+}
+_ExporterY;
+ExportY = () => {
+        this._ExporterY.save();
+}
+
 render() {
   let cards=[];
   let is_mobile=this.isMobile();
@@ -232,15 +252,16 @@ render() {
       this.state.countMonthWork=0;
       this.state.countMonthParts=0;
       this.state.countMonthRevenue=0;
+      this.state.countYearRevenue=0;
       this.state.counter=0;
 
       for(var i=0;i<this.state.card.length;i++){
         cards.push(this.state.card[i]);
       }
-      
       for(var j=0;j<this.state.closeCard.length;j++){
         cards.push(this.state.closeCard[j]);
       }
+      this.createYearReport(this.state.closeCard);
       this.createMountlyReport(cards);
       if(this.state.counter===0){this.modalOpen();}
       if(this.state.month===1){this.state.hebrewMonth="ינואר"};
@@ -326,12 +347,115 @@ render() {
       }]
   };
   const dataExcel = [
+    { //סך ההכנסות עבור עבודות
+      //סך ההכנסות עבור חלקים
+      //סך ההכנסות עבור עבודות חוץ
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      //countParts:"",
+      works: this.state.countMonthWork,
+      //countWorks:"",
+      revenue: this.state.countMonthRevenue,
+      //outWorks:""
+    }
+  ];
+  const dataExcelYear = [
     {
-        openCards: this.state.countMonthOpen,
-        closeCards: this.state.countMonthClose,
-        parts: this.state.countMonthParts,
-        works: this.state.countMonthWork,
-        revenue: this.state.countMonthRevenue
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'ינואר'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'פברואר'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'מרץ'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'אפריל'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'מאי'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'יוני'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'יולי'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'אוגוסט'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'ספטמבר'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'אוקטובר'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'נובמבר'
+    },
+    {
+      openCards: this.state.countMonthOpen,
+      closeCards: this.state.countMonthClose,
+      parts: this.state.countMonthParts,
+      works: this.state.countMonthWork,
+      revenue: this.state.countMonthRevenue,
+      month: 'דצמבר'
     }
   ];
 
@@ -368,35 +492,57 @@ render() {
          ? 
          <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
           
-          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Bar barSize="2000px" width="100px" height="85px" data={data} /></div> : <div></div>}
-          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Bar barSize="2000px" width="100px" height="85px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Line barSize="2000px" width="100px" height="85px" data={data_Line} /> </div>: <div></div>}  
-          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> </div> : <div></div>}
          </div>
          : 
          <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
-          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Bar barSize="2000px" height="65px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Bar barSize="2000px" height="65px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Line barSize="2000px" height="65px" data={data_Line} /></div> : <div></div>}  
-          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countMonthRevenue}</h5></div>
+          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
+          <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
           <Pie type="doughnut2d" barSize="2000px" height="65px" dataFormat="JSON" data={data_pie} /></div> : <div></div>}
          </div>
          }
          <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
          <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}   
-         onClick={ this.export  }>הפקת דוח חודשי לטבלת לאקסל</Button> 
+         onClick={ this.export  }>הפקת דוח חודשי לטבלת אקסל</Button>
+         <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}   
+         onClick={ this.ExportY  }>הפקת דוח שנתי לטבלת אקסל</Button>  
         </div>
          <ExcelExport
                     data={dataExcel}  
                     fileName={"דוח עבור חודש "+this.state.hebrewMonth+".xlsx"}
                     ref={(exporter) => { this._exporter = exporter; }}>
+                    <ExcelExportColumn field="openCards" title="כרטיסים פתוחים" locked={true} width={150} />
+                    <ExcelExportColumn field="closeCards" title="כרטיסים סגורים" width={150} />
+                    <ExcelExportColumn field="parts" title="חלקים שנמכרו" width={150} />
+                    <ExcelExportColumn field="works" title="עבודות שהתבצעו" width={150} />
+                    <ExcelExportColumn field="revenue" title="סכום ההכנסות" width={150} />
+                    <ExcelExportColumnGroup title="Availability" headerCellOptions={{ textAlign: 'center' }}></ExcelExportColumnGroup>
+        </ExcelExport>
+        <ExcelExport
+                    data={dataExcelYear}  
+                    fileName={"דוח עבור שנת "+this.state.year+".xlsx"}
+                    ref={(ExporterY) => { this._ExporterY = ExporterY; }}>
+                    <ExcelExportColumn field="month" title="חודש" width={150} />
                     <ExcelExportColumn field="openCards" title="כרטיסים פתוחים" locked={true} width={150} />
                     <ExcelExportColumn field="closeCards" title="כרטיסים סגורים" width={150} />
                     <ExcelExportColumn field="parts" title="חלקים שנמכרו" width={150} />

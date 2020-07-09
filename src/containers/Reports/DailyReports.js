@@ -279,29 +279,29 @@ render() {
          ? 
          <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
           
-          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Bar barSize="2000px" width="100px" height="85px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Bar barSize="2000px" width="100px" height="85px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Line" ?<div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div> 
+          {this.state.chartType==="Line" ?<div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div> 
           <Line barSize="2000px" width="100px" height="85px" data={data_line} /> </div>: <div></div>}  
-         {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+         {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Pie type="doughnut2d" width="100px" barSize="2000px" height="85px" dataFormat="JSON" data={data_pie} /> </div> : <div></div>}
          </div>
          : 
          <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
-          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Bar barSize="2000px" height="65px" data={data} /> </div>: <div></div>}
-          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="Bar" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Bar barSize="2000px" height="65px" data={data} /> </div> : <div></div>}
-          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="Line" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Line barSize="2000px" height="65px" data={data_line} /> </div>: <div></div>}  
-          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות: "+this.state.countRevenue}</h5></div>
+          {this.state.chartType==="Pie" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור תאריך "+this.state.date+": "+this.state.countRevenue}</h5></div>
           <Pie type="doughnut2d" barSize="2000px" height="65px" dataFormat="JSON" data={data_pie} /></div> : <div></div>}
          </div>
          }
          <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
-         <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}   onClick={this.export}>הפקת דוח יומי לטבלת לאקסל</Button> 
+         <Button bsStyle="secondary" style={this.props.backgroundColor=== 'light' ?{borderColor: "black"}:{borderColor: "white"}}   onClick={this.export}>הפקת דוח יומי לטבלת אקסל</Button> 
         </div>
          <ExcelExport
                     data={dataExcel}  
