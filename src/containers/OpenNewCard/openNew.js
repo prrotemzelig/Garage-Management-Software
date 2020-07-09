@@ -125,7 +125,7 @@ class openNew extends Component   {
       engineCapacity:{value: '' },
       color:{value: '' },
       chalkModel:{ value: ''},
-      lastVisit:{value: '' },
+      // lastVisit:{value: '' },
       manufactureYear:{value: ''},
       deliveryDate:{value: ''},
       driverName:{value: ''},
@@ -1212,7 +1212,7 @@ cardUpdateHandler = ( event ) => { // update card
     deliveryDate: this.state.car_data[5],
     driverName: this.state.car_data[6],
     engineCapacity: this.state.car_data[7],
-    lastVisit: this.state.car_data[8],
+    // lastVisit: this.state.car_data[8],
     manufactureYear: this.state.car_data[9],
     speedometer: this.state.car_data[10]
   }
@@ -1374,7 +1374,7 @@ setTheStates = (licenseNumber) => {
       engineCapacity:{value: ''},
       color:{value: ''},
       chalkModel:{value: ''},
-      lastVisit:{value: ''},
+      // lastVisit:{value: ''},
       manufactureYear:{value: ''},
       deliveryDate:{value: ''},
       driverName:{value: '' },
@@ -2770,7 +2770,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,2)}/>
                 </div>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                {/* <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.lastVisit.value= this.state.carDetails.lastVisit;
@@ -2780,7 +2780,7 @@ onChange = date => this.setState({ date })
                   <input type="datetime-local"  id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" disabled={!this.state.formIsValid} 
                   defaultValue={this.state.vehicleData.lastVisit.value} style={{backgroundColor: "white"}}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,8)}/>
-                </div>
+                </div> */}
   
                 <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {

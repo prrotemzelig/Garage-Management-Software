@@ -889,11 +889,11 @@ switchShowImagesAndDoc = () => {
                 value={this.state.carDetails.chalkModel}/>
               </div>
 
-              <div class="form-group col-md-3" >
+              {/* <div class="form-group col-md-3" >
                 <label for="lastVisit">ביקור אחרון</label>
                 <input type="datetime-local"  id="lastVisit" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" 
                 value={this.state.carDetails.lastVisit} style={{backgroundColor: "white"}}/>
-              </div>
+              </div> */}
 
               <div class="form-group col-md-3" >
             
