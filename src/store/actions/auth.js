@@ -146,6 +146,8 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                             .catch(err => { // add nertwork problem!!! need to fix this rotem //post                       
                                 //console.log(err);
                                 //console.log(err.message);
+                                console.log(err.response.data.error.message);
+                                console.log(err.message);
 
                                 dispatch(authSignInFail(err.message)); //err.response.data.error //post
                             }); //post
@@ -159,7 +161,11 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                 }) //get
 
                     .catch(error => { // add nertwork problem!!! need to fix this rotem  //get
-                        dispatch(authSignInFail(error.message)); //err.response.data.error //get
+                        // console.log(error.response.message);
+                        // console.log(error.message);
+                        console.log(error.response);
+                        console.log(error.response.data.error);
+                        dispatch(authSignInFail(error.response.data.error)); //err.response.data.error //get
                 }); //get
     };
 };

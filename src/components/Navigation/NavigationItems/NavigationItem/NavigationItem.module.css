@@ -31,7 +31,8 @@
 .NavigationItem a.active {
     color: #615D5B;
     background-color: rgba(221, 226, 255, 0.08);
-    border-right: 3px solid #DDE2FF;
+    border-right: 3px solid white;
+    /* DDE2FF */
     color: white ;
 
    

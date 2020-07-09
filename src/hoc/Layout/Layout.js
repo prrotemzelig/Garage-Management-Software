@@ -47,6 +47,7 @@ class Layout extends Component{
     
 //    margin-right: 230px;
     render(){
+        console.log(this.props.isAuthenticated);
         let sidebarColor;
         let userBackgroundColor ; 
         
@@ -54,7 +55,8 @@ class Layout extends Component{
             sidebarColor = 'linear-gradient(0deg, #ba54f5 0%, #e14eca 100%)';
         }
         else if(this.props.sidebarBackgroundColor==='blue'){
-            sidebarColor = 'linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%)';
+            sidebarColor =  'linear-gradient(50deg, #bbdefb 0%, #64b5f6 100%)';
+            //'linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%)';
         }
         else if(this.props.sidebarBackgroundColor==='green'){
             
@@ -73,28 +75,34 @@ class Layout extends Component{
 
         }
 
+        // style={this.props.backgroundColor=== 'light' ? {direction: "rtl", backgroundColor: "white"}
+        //     : {direction: "rtl", backgroundColor: "#27293d" , color: "rgba(255, 255, 255, 0.8)",  tableLayout: "fixed"}}
         return(
             <Aux >  
-            <Row className={css(styles.container)} style={{backgroundColor:userBackgroundColor}}>
-                
+            <Row className={this.props.isAuthenticated ? css(styles.container) : null} style={{backgroundColor:userBackgroundColor}}>
+            {this.props.isAuthenticated ?
+            
             <Toolbar
                 backgroundColor={this.props.backgroundColor}
                 isAuth={this.props.isAuthenticated}
                 drawerToggleClicked={this.sideDrawerToggleHandler}
                 colorBackground={sidebarColor}/>
+                : null}
+        {this.props.isAuthenticated ?
             <SideDrawer 
                 isAuth={this.props.isAuthenticated}
                 open={this.state.showSideDrawer}
                 closed={this.sideDrawerClosedHandler}
                 colorBackground={sidebarColor}/> 
-
-            <Column flexGrow={1} className={css(styles.mainBlock)}>
+               
+            :null}
+            <Column flexGrow={1} className={this.props.isAuthenticated ? css(styles.mainBlock) : null}>
          {this.props.isAuthenticated ?
                 <HeaderComponent title={this.props.firstName}  style={{direction: "rtl"}}/>
                 : 
-                <Header style={{direction: "rtl"}}/>
+                null
                 } 
-            <main className={classes.Content}>
+            <main className={this.props.isAuthenticated ? classes.Content : null}>
               
                 {this.props.children}
             </main>
@@ -106,6 +114,7 @@ class Layout extends Component{
     }
 } 
 
+//<Header style={{direction: "rtl"}}
 
 
 const mapStateToProps = state => {

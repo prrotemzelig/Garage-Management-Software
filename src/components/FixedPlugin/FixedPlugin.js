@@ -114,12 +114,18 @@ class FixedPlugin extends Component {
             <div className={classes.adjustmentsLine}>
               <div className={classes.badgeColors}>
                <div> 
-              <img src={require("../../assets/anime3.png")} alt="avatar"  className={classes.avatar} 
-              onClick={() => { this.handleSidebarBgClick("anime3",'profileImage'); }}/>
-              <img src={require("../../assets/anime6.png")} alt="avatar"  className={classes.avatar}
-              onClick={() => { this.handleSidebarBgClick("anime6",'profileImage'); }} />
-              <img src={require("../../assets/anime3.png")} alt="avatar"  className={classes.avatar} 
-              onClick={() => { this.handleSidebarBgClick("anime3",'profileImage');}}/>
+              <img src={require("../../assets/anime7.jpg")} alt="avatar"  className={classes.avatar} 
+              onClick={() => { this.handleSidebarBgClick("anime7",'profileImage'); }}/>
+              <img src={require("../../assets/anime12.jpg")} alt="avatar"  className={classes.avatar}
+              onClick={() => { this.handleSidebarBgClick("anime12",'profileImage'); }} />
+              <img src={require("../../assets/anime10.jpg")} alt="avatar"  className={classes.avatar} 
+              onClick={() => { this.handleSidebarBgClick("anime10",'profileImage');}}/>
+               <img src={require("../../assets/anime9.jpg")} alt="avatar"  className={classes.avatar} 
+              onClick={() => { this.handleSidebarBgClick("anime9",'profileImage');}}/>
+               <img src={require("../../assets/anime2.png")} alt="avatar"  className={classes.avatar} 
+              onClick={() => { this.handleSidebarBgClick("anime2",'profileImage');}}/>
+               <img src={require("../../assets/anime13.jpg")} alt="avatar"  className={classes.avatar} 
+              onClick={() => { this.handleSidebarBgClick("anime13",'profileImage');}}/>
               </div>
         
               </div>

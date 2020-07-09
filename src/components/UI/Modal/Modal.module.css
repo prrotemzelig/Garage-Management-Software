@@ -35,6 +35,13 @@
         max-width : 100% ;
         display:table;
     }
+    .ModalDialog2 {
+        /* display: block; 
+        width: 1200px; 
+        overflow-y:none;
+        max-width: 100%;
+        height: auto; */
+    }
 }
 
 .Dialog {
@@ -73,3 +80,31 @@
 }
 
 
+
+.ModalDialog2 {
+    /* display: flex;
+     textAlign:right; 
+     paddingLeft: 1px;  */
+        /* width: 700px; */
+    /* overflow-y: none; */
+    max-width: 100%;
+    /* right: 0; */
+    /* right: 25%; */
+    /* left: 10%; */
+    /* vertical-align: middle; */
+    /* position: absolute; */
+    /* left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); */
+    /* display: inline-block;
+    vertical-align: middle;
+    flex-flow: wrap;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    max-height: 100%;
+    overflow-y: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 20px; */
+}

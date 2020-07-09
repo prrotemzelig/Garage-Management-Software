@@ -272,7 +272,7 @@ export  const  authSignUp = (token,userId,firstName,lastName,branchNumber,userPe
                     Tasks:[],
                     sidebarBackgroundColor: 'blue',
                     backgroundColor: 'light',
-                    profileImage: 'anime3'
+                    profileImage: 'anime7'
                 };             
 
                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 

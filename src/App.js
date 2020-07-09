@@ -68,12 +68,16 @@ class App extends Component {
     resize = () => this.forceUpdate();
 
   render () {
-    
+  //   <Switch>
+  //   <Route path="/" exact component={OpeningPage} />
+  //   <Route path="/auth" component={asyncAuth} />
+  //   <Redirect to="/" />
+  // </Switch>
     let routes = (
       <Switch>
-        <Route path="/" exact component={OpeningPage} />
+        {/* <Route path="/" exact component={OpeningPage} /> */}
         <Route path="/auth" component={asyncAuth} />
-        <Redirect to="/" />
+        <Redirect to="/auth" />
       </Switch>
     );
 
@@ -97,7 +101,7 @@ class App extends Component {
           
 
           <Redirect to="/main" />
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> */}
         </Switch>
       );
     } // <switch is for : only  load 1 of these routes each time the first one which matches a path, the given path

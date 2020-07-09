@@ -525,52 +525,52 @@ currency = (num) => {
       return (
         
           <Modal show={this.state.showCloseModal} onHide={this.ModalCardCloseHandler}   backdrop={false}
-              style={{ display: "flex", textAlign:"right", paddingLeft: "1px" }}  >
+          dialogClassName={classes.ModalDialog2}   >
             <Modal.Header closeButton   >
               <Modal.Title  >סגירת חשבון לכרטיס עבודה</Modal.Title>   
             </Modal.Header>
       
               <div className={classes.separator}></div>
-            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"3px",flex: "none",marginRight: "5px" ,marginBottom: "15px", marginTop: "15px" , marginLeft: "5px" }}   >
+            <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"0px",flex: "none",marginRight: "5px" ,marginBottom: "5px", marginTop: "5px" , marginLeft: "5px" }}   >
                     <div autocomplete="off">
               <div class="form-row" autocomplete="off" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
-              <form  class="form-group col-md-3"  style={{ marginBottom: "4px"}} > 
+              <form  class="form-group col-md-3"  style={{ marginBottom: "1rem"}} > 
                    <label for="firstName"  >שם לקוח</label>
                    <input type="text" id="firstName" autocomplete="off" class="form-control " style={{marginLeft: "10px"}} value={this.state.customerDetails.customerName.value} />
                  </form >
       
-                   <form class="form-group col-md-3" >
+                   <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="address">כתובת</label>
                   <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}}  
                   value={this.state.customerDetails.address.value}/>
                 </form> 
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="city">עיר</label>
                   <input type="text" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.customerDetails.city.value}  />
                 </form>
 
-                 <form class="form-group col-md-3" >
+                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="postalCode" >מיקוד</label>
                   <input type="number" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.customerDetails.postalCode.value}/>
                 </form>
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}} >
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
                   <input ref="identificationNumber" type="text"  class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
                   value={this.state.customerDetails.identificationNumber.value} />
                 </form> 
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="homePhone">טלפון בית</label>
                   <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.customerDetails.homePhone.value}/>
                 </form>
 
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="cellphone">סלולרי</label>
                   <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.customerDetails.cellphone.value} />
@@ -580,22 +580,22 @@ currency = (num) => {
       
                  <div className={classes.anoSeparator}></div>
 
-              <form class="form-group " >
+              <form class="form-group " style={{ marginBottom: "1rem"}}>
                  </form>
                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto" }}> 
         
         
-                 <form class="form-group col-md-2" >
+                 <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                  <label for="cellphone">עבודות</label>
                  </form>
 
-                 <div class="form-group col-md-3" >
+                 <div class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksGross">ברוטו</label>
                   <input type="number" id="allWorksGross" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksGross.value} />
                 </div>
 
-                <div class="form-group col-md-2" >
+                <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksDiscount">הנחה</label>
                   <input type="number" id="allWorksDiscount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                  value={this.state.invoiceClosure.allWorksDiscount.value} 
@@ -604,13 +604,13 @@ currency = (num) => {
 
            
 
-                <div class="form-group col-md-2" >
+                <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksDiscountAmount">סכום ההנחה</label>
                   <input type="number" id="allWorksDiscountAmount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksDiscountAmount.value} />
                 </div>
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksNet">נטו</label>
                   <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksNet.value} />
@@ -620,29 +620,29 @@ currency = (num) => {
                  
                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
                  
-                 <form class="form-group col-md-2" >
+                 <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                  <label for="cellphone">עבודות חוץ</label>
                  </form>
 
-                 <form class="form-group col-md-3" >
+                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">עבודות חוץ</label> */}
                   <input type="number" id="allExteriorWorksGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.invoiceClosure.allExteriorWorksGross.value} />
                 </form>
 
-                <form class="form-group col-md-2" >
+                <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">הנחה</label> */}
                   <input type="number" id="allExteriorWorksDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.invoiceClosure.allExteriorWorksDiscount.value} />
                 </form>
 
-                <form class="form-group col-md-2" >
+                <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">סכום ההנחה</label> */}
                   <input type="number" id="allExternalWorksDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.invoiceClosure.allExternalWorksDiscountAmount.value} />
                 </form>
 
-                <form class="form-group col-md-3" >
+                <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">נטו</label> */}
                   <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.invoiceClosure.allExteriorWorksNet.value} />
@@ -651,16 +651,16 @@ currency = (num) => {
 
                <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
 
-               <form class="form-group col-md-2" >
+               <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                  <label for="cellphone">חלקים</label>
                  </form>
-                    <form class="form-group col-md-3" >
+                    <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">חלפים</label> */}
                     <input type="number" id="allPartsGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsGross.value} />
                     </form>
 
-                    <form class="form-group col-md-2" >
+                    <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">הנחה</label> */}
                     <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsDiscount.value}
@@ -668,13 +668,13 @@ currency = (num) => {
               
                     </form>
 
-                    <form class="form-group col-md-2" >
+                    <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">סכום ההנחה</label> */}
                     <input type="number" id="allPartsDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsDiscountAmount.value} />
                     </form>
 
-                    <form class="form-group col-md-3" >
+                    <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">נטו</label> */}
                     <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsNet.value} />
@@ -691,32 +691,32 @@ currency = (num) => {
                     
                     <div class="form-row" >
                  </div>
-                    <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+                    <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto",paddingTop: "15px"}}> 
 
 
                     {/* <form class="form-row" >
                  </form> */}
-                    <form class="form-group col-md-2" >
+                    <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                  <label for="cellphone">סה"כ</label>
                  </form>
 
-                        <form class="form-group col-md-3" >
+                        <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                         {/* <label for="cellphone">סה"כ</label> */}
                         <input type="number" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         value={this.state.invoiceClosure.totalGross.value} />
                         </form>
 
-                        <form class="form-group col-md-2" >
+                        <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         defaultValue={this.state.invoiceClosure.totalDiscount.value} />
                         </form>
 
-                        <form class="form-group col-md-2" >
+                        <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         defaultValue={this.state.invoiceClosure.totalDiscountAmount.value} />
                         </form>
 
-                        <form class="form-group col-md-3" >
+                        <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         defaultValue={this.state.invoiceClosure.totalNet.value} />
                         </form>
@@ -725,31 +725,32 @@ currency = (num) => {
 
                         <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}> 
 
+                        <form class="form-group col-md-4" style={{ padding:"10px", backgroundColor: "gray", borderBottom: "1px solid black", borderLeft:"1px solid black",borderTop: "1px solid black"}}>
+                                {/* <label for="cellphone">סה"כ</label> */}
+                                <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                                defaultValue={this.state.invoiceClosure.totalPayment.value} />
+                                </form>
 
-                          <form class="form-group col-md-3" >
+                                <form class="form-group col-md-1" style={{ paddingTop: "10px", backgroundColor: "gray", borderBottom: "1px solid black", borderRight:"1px solid black",borderTop: "1px solid black"}}>
+                            <label for="cellphone">סה"כ לתשלום</label>
+                            </form>
+
+                          <form class="form-group col-md-3" style={{ marginBottom: "1rem", paddingRight: "0px", margin:"10px",marginRight: "0px"}}>
                           {/* <label for="cellphone">סה"כ</label> */}
                           <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                           defaultValue={this.state.invoiceClosure.amountOfVAT.value} />
                           </form>
 
 
-                          <form class="form-group col-md-2" >
-                      <label for="cellphone">מע"מ 17%</label>
+                          <form class="form-group col-md-1" style={{ margin: "10px", marginLeft: "0px"}}>
+                      <label for="cellphone" style={{textAlign: "right"}}> מע"מ 17%</label>
                       </form>
                         
-                          </div> 
+                          {/* </div>  */}
 
-                          <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}> 
+                          {/* <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}>  */}
 
-                                <form class="form-group col-md-4" >
-                                {/* <label for="cellphone">סה"כ</label> */}
-                                <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                                defaultValue={this.state.invoiceClosure.totalPayment.value} />
-                                </form>
-
-                                <form class="form-group col-md-2" >
-                            <label for="cellphone">סה"כ לתשלום</label>
-                            </form>
+                             
                               
                              </div> 
 
@@ -2610,7 +2611,7 @@ onChange = date => this.setState({ date })
             {this.state.showDetailsDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                   <label for="licenseNumber" >מספר רישוי</label>
                   <input  type="number"  id="licenseNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{ webkitAppearance: "none" , margin: "0"}}
 
@@ -2618,7 +2619,7 @@ onChange = date => this.setState({ date })
                   value2={this.state.userCarNumber}
                   onChange={(event) => this.inputChangedHandler(event)}/>
                 </div>
-                <div class="form-group col-md-2" >
+                <div class="form-group col-md-2" style={{marginBottom: "2px"}} >
                 {(() => {
                 if(this.state.found){
                   this.state.cardForm.ticketNumber.value=this.state.cardDetails.ticketNumber;
@@ -2634,7 +2635,7 @@ onChange = date => this.setState({ date })
                 </div>
                 
   
-                <div class="form-group col-md-2" >
+                <div class="form-group col-md-2" style={{marginBottom: "2px"}}>
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
@@ -2653,7 +2654,7 @@ onChange = date => this.setState({ date })
                   </select>
                 </div>
   
-                <div className="form-group col-md-2">
+                <div className="form-group col-md-2" style={{marginBottom: "2px"}}>
                 <label for="openingDate">תאריך פתיחה</label>
                 <input  type="text" id="openingDate" autocomplete="off" className="form-control" 
                 value= {this.state.found ?  this.state.cardDetails.openingDate : this.state.reportStartDate}
@@ -2664,7 +2665,7 @@ onChange = date => this.setState({ date })
                  />
               </div>
 
-              <div class="form-group col-md-3" >
+              <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.cardForm.status.value=this.state.cardDetails.status;
@@ -2706,7 +2707,7 @@ onChange = date => this.setState({ date })
             {this.state.showCarInfoDiv ? 
             <div class="card-body text-dark bg-white" >
               <div class="form-row">              
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.vehicleData.carDescription.value=this.state.carDetails.carDescription;
@@ -2719,7 +2720,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,0)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                  {(() => {
                    if(this.state.found && this.state.term !==''){
                     this.state.vehicleData.speedometer.value= this.state.carDetails.speedometer;
@@ -2732,7 +2733,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,10)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.engineCapacity.value= this.state.carDetails.engineCapacity;
@@ -2745,7 +2746,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,7)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.color.value= this.state.carDetails.color;
@@ -2757,7 +2758,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,4)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.chalkModel.value= this.state.carDetails.chalkModel;
@@ -2769,7 +2770,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,2)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.lastVisit.value= this.state.carDetails.lastVisit;
@@ -2781,7 +2782,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,8)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.manufactureYear.value= this.state.carDetails.manufactureYear;
@@ -2801,7 +2802,7 @@ onChange = date => this.setState({ date })
                   </select>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.deliveryDate.value= this.state.carDetails.deliveryDate;
@@ -2813,7 +2814,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,5)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.driverName.value= this.state.carDetails.driverName;
@@ -2825,7 +2826,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,6)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.code.value= this.state.carDetails.code;
@@ -2837,7 +2838,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,3)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.carNote.value= this.state.carDetails.carNote;
@@ -2877,7 +2878,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,5)}/>
                 </div> */}
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerName.value= this.state.customer_details.customerName;
@@ -2889,7 +2890,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,3)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.address.value= this.state.customer_details.address;
@@ -2901,7 +2902,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,0)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.city.value= this.state.customer_details.city;
@@ -2914,7 +2915,7 @@ onChange = date => this.setState({ date })
                 </div>
 
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.postalCode.value= this.state.customer_details.postalCode;
@@ -2926,7 +2927,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,10)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.homePhone.value= this.state.customer_details.homePhone;
@@ -2938,7 +2939,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,6)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.cellphone.value= this.state.customer_details.cellphone;
@@ -2950,7 +2951,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,1)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.workingPhone.value= this.state.customer_details.workingPhone;
@@ -2962,7 +2963,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,11)}/>
                 </div>
                 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.identificationNumber.value= this.state.customer_details.identificationNumber;
@@ -2974,7 +2975,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,7)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.mailAdress.value= this.state.customer_details.mailAdress;
@@ -2986,7 +2987,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,8)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.orderNumber.value= this.state.customer_details.orderNumber;
@@ -2998,7 +2999,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,9)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerNote.value= this.state.customer_details.customerNote;
@@ -3030,7 +3031,7 @@ onChange = date => this.setState({ date })
             {this.state.showTinsmithingDetailsDiv ?
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.insuranceAgent.value= this.state.cardDetails.insuranceAgent;
@@ -3042,7 +3043,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,6)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.appraiser.value= this.state.cardDetails.appraiser;
@@ -3054,7 +3055,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,0)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.insuranceCompany.value= this.state.cardDetails.insuranceCompany;
@@ -3066,7 +3067,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,7)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.customerParticipation.value= this.state.cardDetails.customerParticipation;
@@ -3078,7 +3079,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.policyNumber.value= this.state.cardDetails.policyNumber;
@@ -3090,7 +3091,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,10)}/>
                 </div>
   
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.claimNumber.value= this.state.cardDetails.claimNumber;
@@ -3102,7 +3103,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,2)}/>
                 </div>
 
-            <div class="form-group col-md-3" >
+            <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.dateOfDamage.value= this.state.cardDetails.dateOfDamage;
@@ -3122,7 +3123,7 @@ onChange = date => this.setState({ date })
           </div>
   
           <div class="form-row" > 
-          <div class="form-group col-md-6" >
+          <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
@@ -3216,7 +3217,7 @@ onChange = date => this.setState({ date })
 
         <div class="form-row" > 
           <div class="form-row" > 
-            <div class="form-group col-md-3" >
+            <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){    
                     this.state.garageReplacementVehicle.replacementVehicleNumber.value= this.state.garageReplacementDetails.replacementVehicleNumber;
@@ -3229,7 +3230,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,0)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.typeReplacementVehicle.value= this.state.garageReplacementDetails.typeReplacementVehicle;
@@ -3241,7 +3242,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,1)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.fuelBefore.value= this.state.garageReplacementDetails.fuelBefore;
@@ -3253,7 +3254,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,2)}/>
                 </div>
 
-                <div class="form-group col-md-3" >
+                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.fuelAfter.value= this.state.garageReplacementDetails.fuelAfter;
@@ -3266,7 +3267,7 @@ onChange = date => this.setState({ date })
                 </div>
                 </div>
 
-                <div class="form-group col-md-6" >
+                <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                       this.state.garageReplacementVehicle.dateOfDelivery.value= this.state.garageReplacementDetails.dateOfDelivery;
@@ -3277,7 +3278,7 @@ onChange = date => this.setState({ date })
                         defaultValue={this.state.garageReplacementVehicle.dateOfDelivery.value}
                         onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,4)}/>
                       </div>
-                      <div class="form-group col-md-6" >
+                      <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
                     {(() => {
                       if(this.state.found){
                         this.state.garageReplacementVehicle.returnDate.value= this.state.garageReplacementDetails.returnDate;
@@ -3295,7 +3296,7 @@ onChange = date => this.setState({ date })
     {this.state.rentalCompanyReplacementCheck?
             <div style={{width: "100%"}} > 
                 <div class="form-row" > 
-                <div class="form-group col-md-6" >
+                <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.rentalCompanyReplacementVehicle.nameRentalCompany.value= this.state.rentalCompanyDetails.nameRentalCompany;
@@ -3309,7 +3310,7 @@ onChange = date => this.setState({ date })
                 </div>
                 <div class="form-row" > 
 
-    <div class="form-group col-md-6" >
+    <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
           {(() => {
              if(this.state.found){
               this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value= this.state.rentalCompanyDetails.dateOfDelivery;
@@ -3320,7 +3321,7 @@ onChange = date => this.setState({ date })
             defaultValue={this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value}
             onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,1)}/>
           </div>
-          <div class="form-group col-md-6" >
+          <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
           {(() => {
              if(this.state.found){
               this.state.rentalCompanyReplacementVehicle.returnDate.value= this.state.rentalCompanyDetails.returnDate;
@@ -3341,7 +3342,7 @@ onChange = date => this.setState({ date })
           </div>  
               </div> 
 
-              <div class="form-group col-md-6" >
+              <div class="form-group col-md-6" style={{marginBottom: "2px"}}>
             <div class="card text-white bg-dark mb-6" style={{display: "flex"}}>
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
               <span >שליחת מייל לשמאי/חברת ביטוח </span> 

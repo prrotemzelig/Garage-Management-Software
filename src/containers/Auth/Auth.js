@@ -8,6 +8,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
+import IconPerson2 from '../../assets/icon-person2';
 
 //import { firebase } from 'firebase';
 //import firebase from "firebase/app";
@@ -73,79 +74,124 @@ class Auth extends Component {
         isSignup: true
     }
 
-    inputChangedHandler = ( event, controlName ) => {
+//     inputChangedHandler = ( event, controlName ) => {
      
-        const updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
-            [controlName]: updateObject( this.state.controls[controlName], { //here we want to update the control name
-                value: event.target.value,
-                valid: checkValidity( event.target.value, this.state.controls[controlName].validation ),
-                touched: true
-            } )
-        } );
-        this.setState( { controls: updatedControls } );
-    }
+//         const updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
+//             [controlName]: updateObject( this.state.controls[controlName], { //here we want to update the control name
+//                 value: event.target.value,
+//                 valid: checkValidity( event.target.value, this.state.controls[controlName].validation ),
+//                 touched: true
+//             } )
+//         } );
+//         this.setState( { controls: updatedControls } );
+//     }
 
-    submitHandler = (event) => {
-        event.preventDefault(); // we call this to prevent the reloading of the page
+//     submitHandler = (event) => {
+//         event.preventDefault(); // we call this to prevent the reloading of the page
 
-        if(this.state.controls.email.value==='' && this.state.controls.password.value===''){
-            alert('נא להכניס כתובת מייל וסיסמא'); 
-        }
-        else if(this.state.controls.email.value===''){
-            alert('נא להכניס כתובת מייל'); 
-        }
-        else if(this.state.controls.password.value===''){
-            alert('נא להכניס סיסמא'); 
-        }
-        else{
-        //console.log("71" + this.state.controls.branchNumber.value);
+//         if(this.state.controls.email.value==='' && this.state.controls.password.value===''){
+//             alert('נא להכניס כתובת מייל וסיסמא'); 
+//         }
+//         else if(this.state.controls.email.value===''){
+//             alert('נא להכניס כתובת מייל'); 
+//         }
+//         else if(this.state.controls.password.value===''){
+//             alert('נא להכניס סיסמא'); 
+//         }
+//         else{
+//         //console.log("71" + this.state.controls.branchNumber.value);
         
-        this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
-        //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
+//         this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
+//         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
+//     }
+// }
+
+inputChangedHandler = ( event ) => {
+    event.preventDefault(); // we call this to prevent the reloading of the page
+
+    const updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
+        [event.target.id]: updateObject( this.state.controls[event.target.id], { //here we want to update the control name
+            value: event.target.value,
+            valid: checkValidity( event.target.value, this.state.controls[event.target.id].validation ),
+            touched: true
+        } )
+    } );
+    this.setState( { controls: updatedControls } );
+    console.log(this.state.controls);
+}
+
+submitHandler = (event) => {
+    event.preventDefault(); // we call this to prevent the reloading of the page
+
+    if(this.state.controls.email.value==='' && this.state.controls.password.value===''){
+        alert('נא להכניס כתובת מייל וסיסמא'); 
     }
+    else if(this.state.controls.email.value===''){
+        alert('נא להכניס כתובת מייל'); 
+    }
+    else if(this.state.controls.password.value===''){
+        alert('נא להכניס סיסמא'); 
+    }
+    else{
+    //console.log("71" + this.state.controls.branchNumber.value);
+    console.log(this.state.controls.email.value);
+    console.log(this.state.controls.password.value);
+    console.log(this.state.controls.branchNumber.value);
+    let branchNumber;
+    if( this.state.controls.branchNumber.value==='תלפיות')
+        branchNumber='Talpiot';
+    else if( this.state.controls.branchNumber.value==='גבעת שאול')
+        branchNumber= 'GivatShaul';
+    else if( this.state.controls.branchNumber.value==='מודיעין')
+        branchNumber= 'Modiin';
+
+    console.log(branchNumber);
+    this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, branchNumber); // pass email value and password value
+    //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
+}
 }
 
 
     render () {
-        const formElementsArray = [];
-        for ( let key in this.state.controls ) { // here we looped through all our controls
-            formElementsArray.push( {
-                id: key,
-                config: this.state.controls[key]
-            } );
-        }
+        // const formElementsArray = [];
+        // for ( let key in this.state.controls ) { // here we looped through all our controls
+        //     formElementsArray.push( {
+        //         id: key,
+        //         config: this.state.controls[key]
+        //     } );
+        // }
 
-        let form = formElementsArray.map( formElement => (  // here we looped through all our formElementsArray to create our form ( we map this into an array of jsx elements)
+        // let form = formElementsArray.map( formElement => (  // here we looped through all our formElementsArray to create our form ( we map this into an array of jsx elements)
         
-            <Input
-                key={formElement.id}
-                text={formElement.config.text}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                changed={( event ) => this.inputChangedHandler( event, formElement.id )} />
+        //     <Input
+        //         key={formElement.id}
+        //         text={formElement.config.text}
+        //         elementType={formElement.config.elementType}
+        //         elementConfig={formElement.config.elementConfig}
+        //         value={formElement.config.value}
+        //         invalid={!formElement.config.valid}
+        //         shouldValidate={formElement.config.validation}
+        //         touched={formElement.config.touched}
+        //         changed={( event ) => this.inputChangedHandler( event, formElement.id )} />
                
-        ) );
+        // ) );
 
-        if (this.props.loading) {
-            form = <Spinner /> 
-        }
+    //     if (this.props.loading) {
+    //         form = <Spinner /> 
+    //     }
 
-        let errorMessage = null;
+    //     let errorMessage = null;
 
-        if (this.props.error) { // if it's not null -> // we get message from firebase. the error come from firebase and its given me a javascript object
-        //<p>{this.props.error.message}</p>
-       // console.log(this.props.error);
-            errorMessage = (
-                <div> 
+    //     if (this.props.error) { // if it's not null -> // we get message from firebase. the error come from firebase and its given me a javascript object
+    //     //<p>{this.props.error.message}</p>
+    //    // console.log(this.props.error);
+    //         errorMessage = (
+    //             <div> 
                 
-                <p>{this.props.error}</p>
-            </div>
-                );
-        }
+    //             <p>{this.props.error}</p>
+    //         </div>
+    //             );
+    //     }
 
         let authRedirect = null;
         if (this.props.isAuthenticated) {
@@ -154,28 +200,132 @@ class Auth extends Component {
 
         return (   
            
-                
-        <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
-            <div className={classes.Auth}>
-                <div style= {{textAlign: "center"}}> 
-                 <h3 style={{ paddingBottom: "20px"}}>התחברות</h3>
-                {authRedirect}
-                {errorMessage}</div>
-                <form onSubmit={this.submitHandler}>
-                    {form}
+            <div class="head">
+            <div>
+            <div class="brand">
+            <a>
+              <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/logo.png' alt=""/>
+            </a>
+          </div>
+         
+          <div class="login">
+           {this.props.loading?
+          <div class="authent">
+            <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg' alt=""/>
+            <p>מתחבר...</p>
+          </div>: null}
 
-                    <div style= {{textAlign: "center"}}> 
-                    <Button btnType="Success">כניסה</Button></div>
-                </form>
-  
-                    
+          {this.props.error?
+          <div class="authent">
+            {/* <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg' alt=""/> */}
+            <p>{this.props.error}</p>
+          </div>: null}
+
+            <div class="login_title">
+            <IconPerson2 fill={'white'}/>
+              <span style={{  marginRight: "15px"}}>התחבר לחשבונך</span>
+              
+
             </div>
+            <div class="login_fields">
+
+            <form class="login_fields__user">
+                <div class="icon">
+                  <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/user_icon_copy.png' alt=""/>
+                </div>
+                
+                {/* <input placeholder='סניף' type='text' style={{width: "100%"}} class="input"  autocomplete="off"/> */}
+                  {/* <div class='validation'>
+                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png'/>
+                  </div> */}
+                {/* </input> */}
+             
+
+                <select placeholder='סניף' type='text' id="branchNumber" onChange={(event) => this.inputChangedHandler(event)}
+                style={{width: "99%", color: "#afb1be",marginTop: "-2px",background: "#32364a",left: "0",padding: "10px 65px",borderTop: "2px solid #393d52",borderBottom: "2px solid #393d52",borderRight: "none",borderLeft: "none",outline: "none",boxShadow: "none",  fontFamily: "Alef Hebrew"}} class="input"  autocomplete="off">
+                      <option>בחר/י סניף</option>
+                      <option>תלפיות</option>
+                      <option>גבעת שאול</option>
+                      <option>מודיעין</option>
             
-         </div> 
+                  </select>
+              </form>
+
+
+              <form class="login_fields__user">
+                <div class="icon">
+                  <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/user_icon_copy.png' alt=""/>
+                </div>
+                    {authRedirect}
+
+                <input placeholder='כתובת מייל' id="email" type='text' style={{width: "99%"}} class="input"  autocomplete="off" onChange={(event) => this.inputChangedHandler(event)}/>
+                  {/* <div class='validation'>
+                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png'/>
+                  </div> */}
+                {/* </input> */}
+              </form>
+
+              <div class="login_fields__password"  >
+                <div class="icon">
+                  <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/lock_icon_copy.png' alt=""/>
+                </div>
+                <form>
+                <input placeholder='סיסמא' id="password" type='password' style={{width: "99%"}} class="input"  autocomplete="off" onChange={(event) => this.inputChangedHandler(event)}/>
+                </form>
+                <div class="validation">
+                  <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/tick.png' alt=""/>
+                </div>
+              </div>
+
+              <div class="login_fields__submit">
+                <input type='submit' value='כניסה' class="input" onClick={(event) => this.submitHandler(event)}/>
+               
+              </div>
+
+              <div class="login_fields__submit">
+                <div class="forgot">
+                  <a alt="">שכחת סיסמא? פנה למנהל</a>
+                </div>
+              </div>
+            </div>
+            <div class="success">
+              <h2>Authentication Success</h2>
+              <p>Welcome back</p>
+            </div>
+            <div class="disclaimer">
+              <p>ברוכים הבאים למוסכניק האתר הטוב ביותר לניהול המוסך שלך! כאן תוכל לנהל באופן מלא את המוסך שלך ולקבל את חווית המשתמש הטובה ביותר</p>
+            </div>
+          </div>
+          
+          <div class="love">
+            <p>נעשה ב <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/love_copy.png" alt=""/> על ידי <a > רותם ואריאל </a></p>
+          </div>
+       
+ </div>
+ </div>  
+       
           
         );
     }
 }
+
+// <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   
+// <div className={classes.Auth}>
+//     <div style= {{textAlign: "center"}}> 
+//      <h3 style={{ paddingBottom: "20px"}}>התחברות</h3>
+//     {authRedirect}
+//     {errorMessage}</div>
+//     <form onSubmit={this.submitHandler}>
+//         {form}
+
+//         <div style= {{textAlign: "center"}}> 
+//         <Button btnType="Success">כניסה</Button></div>
+//     </form>
+
+        
+// </div>
+
+// </div> 
 
 
 // <div  style={{ backgroundColor: "rgb(247, 248, 252)"}}>   

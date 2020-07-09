@@ -2,6 +2,7 @@ import React from 'react';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import Logo from '../../assets/icon-logo';
+import Iconcolumns from '../../assets/icon-columns';
 
 const styles = StyleSheet.create({
     container: {
@@ -29,9 +30,11 @@ function LogoComponent() {
         <Row className={css(styles.container)} horizontal="center" vertical="center">
          
             <span className={css(styles.title)}>סרגל כלים</span>
-            <Logo />
+          <Iconcolumns fill={'white'}/>
         </Row>
     );
 }
 
 export default LogoComponent;
+
+//  <Logo />

@@ -167,12 +167,30 @@ class HeaderComponent extends Component {
         }
           
         let userProfileImage;
-        if(this.props.profileimage==='anime3'){
-            userProfileImage = require("../../assets/anime3.png");
+        if(this.props.profileimage==='anime7'){
+            userProfileImage = require("../../assets/anime7.jpg");
         }
-        else if(this.props.profileimage==='anime6'){
-            userProfileImage = require("../../assets/anime6.png");
+        else if(this.props.profileimage==='anime12'){
+            userProfileImage = require("../../assets/anime12.jpg");
         }
+
+        else if(this.props.profileimage==='anime10'){
+            userProfileImage = require("../../assets/anime10.jpg");
+        }
+
+         else if(this.props.profileimage==='anime9'){
+            userProfileImage = require("../../assets/anime9.jpg");
+        }
+
+        else if(this.props.profileimage==='anime2'){
+            userProfileImage = require("../../assets/anime2.png");
+        }
+
+        else if(this.props.profileimage==='anime13'){
+            userProfileImage = require("../../assets/anime13.jpg");
+        }
+
+
 
         const { icon, title, ...otherProps } = this.props;
         console.log(this.state.fileId);

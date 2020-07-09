@@ -10,11 +10,18 @@ import IconOverview from '../../../assets/icon-overview.js';
 import IconTickets from '../../../assets/icon-tickets.js';
 import IconIdeas from '../../../assets/icon-ideas.js';
 import IconContacts from '../../../assets/icon-contacts';
-// import IconAgents from '../../../assets/icon-agents';
+ import IconAgents from '../../../assets/icon-agents';
 import IconArticles from '../../../assets/icon-articles';
 import IconSettings from '../../../assets/icon-settings';
 import IconSubscription from '../../../assets/icon-subscription';
-// import IconBurger from '../../../assets/icon-burger';
+import IconPerson from '../../../assets/icon-person';
+ import IconBurger from '../../../assets/icon-burger';
+ import IconHouse from '../../../assets/icon-house';
+ import IconArrowRight from '../../../assets/icon-arrowRight';
+ import IconHistory from '../../../assets/icon-history';
+ import IconCollection from '../../../assets/icon-collection';
+ import IconCalendar3 from '../../../assets/icon-calendar3';
+ import IconArchive from '../../../assets/icon-archive';
 // import SettingsIcon from '@material-ui/icons/Settings';
 // import MetisMenu from 'react-metismenu';
 // import SideMenu from 'react-sidemenu';
@@ -56,20 +63,20 @@ const navigationItems = (props ) => (
     <ul className={classes.NavigationItems}>
 
             {props.isAuthenticated
-            ? <NavigationItem icon={IconIdeas} link="/main" exact>ראשי   </NavigationItem> 
-            : <NavigationItem icon={IconOverview} link="/" exact>ראשי   </NavigationItem> }
+            ? <NavigationItem icon={IconHouse} link="/main" exact>ראשי   </NavigationItem> 
+            : <NavigationItem icon={IconHouse} link="/" exact>ראשי   </NavigationItem> }
 
 
-            {props.isAuthenticated ? <NavigationItem  icon={IconTickets} link="/updateTicketStatus">כרטיס עבודה    </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconSubscription} link="/openCards">כרטיסים פתוחים   </NavigationItem> : null}
-            {props.isAuthenticated ? <NavigationItem icon={IconContacts} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/dailyReports" > דוחות יומיים   </NavigationItem>  : null}
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconOverview} link="/MonthlyReports">דוחות חודשיים   </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem  icon={IconCollection} link="/updateTicketStatus">כרטיס עבודה    </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem icon={IconAgents} link="/openCards">כרטיסים פתוחים   </NavigationItem> : null}
+            {props.isAuthenticated ? <NavigationItem icon={IconHistory} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconArchive} link="/dailyReports" > דוחות יומיים   </NavigationItem>  : null}
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconCalendar3} link="/MonthlyReports">דוחות חודשיים   </NavigationItem> : null}
             {/* {props.isAuthenticated ? <NavigationItem icon={IconAgents} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null} */}
            
             <div className={classes.separator}></div>
 
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconSettings} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
+            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconPerson} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
 
             {/* {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconSettings} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null} */}
 
@@ -77,7 +84,7 @@ const navigationItems = (props ) => (
 
             {!props.isAuthenticated
             ? <NavigationItem icon={IconArticles} link="/auth">התחברות   </NavigationItem>
-            : <NavigationItem icon={IconArticles} link="/logout">יציאה   </NavigationItem>}
+            : <NavigationItem icon={IconArrowRight} link="/logout">יציאה   </NavigationItem>}
 
     </ul>
     </div>
