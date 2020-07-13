@@ -224,9 +224,11 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
 
         axios.post(branchNumber + '/' + node + '.json?auth=' + token, cardData ) // send the HTTP request 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            // console.log(response.data)
+            console.log(response);
             dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
+             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', response.data.name)); 
+
             if(node==='cards'){
                 alert('כרטיס נשמר בהצלחה');
             }
@@ -494,7 +496,8 @@ export const GetAllCardData = (token,branchNumber,userId, kind,cardKey) => { //h
                     } );
                 }
             }
-
+            console.log(workData);
+            console.log(partsData);
           dispatch(GetAllCardDataSuccess(workData,partsData ));
 
             //dispatch(GetAllCardDataSuccess(cardData,carData , customerData, workData ));

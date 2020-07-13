@@ -116,7 +116,7 @@ class openingPage extends Component {
             } )
         } );
         this.setState( { controls: updatedControls } );
-        console.log(this.state.controls);
+        // console.log(this.state.controls);
     }
 
     submitHandler = (event) => {
@@ -133,9 +133,9 @@ class openingPage extends Component {
         }
         else{
         //console.log("71" + this.state.controls.branchNumber.value);
-        console.log(this.state.controls.email.value);
-        console.log(this.state.controls.password.value);
-        console.log(this.state.controls.branchNumber.value);
+        // console.log(this.state.controls.email.value);
+        // console.log(this.state.controls.password.value);
+        // console.log(this.state.controls.branchNumber.value);
         this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
     }

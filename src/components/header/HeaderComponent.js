@@ -193,7 +193,7 @@ class HeaderComponent extends Component {
 
 
         const { icon, title, ...otherProps } = this.props;
-        console.log(this.state.fileId);
+        // console.log(this.state.fileId);
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
             <Row vertical="center" style={{position: "left"}}>

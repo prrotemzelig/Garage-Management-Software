@@ -9,6 +9,9 @@ import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity} from '../../shared/utility'; 
 import IconPerson2 from '../../assets/icon-person2';
+import IconCollection2 from '../../assets/icon-collection2';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+import axios from '../../axios-cards';
 
 //import { firebase } from 'firebase';
 //import firebase from "firebase/app";
@@ -134,9 +137,9 @@ submitHandler = (event) => {
     }
     else{
     //console.log("71" + this.state.controls.branchNumber.value);
-    console.log(this.state.controls.email.value);
-    console.log(this.state.controls.password.value);
-    console.log(this.state.controls.branchNumber.value);
+    // console.log(this.state.controls.email.value);
+    // console.log(this.state.controls.password.value);
+    // console.log(this.state.controls.branchNumber.value);
     let branchNumber;
     if( this.state.controls.branchNumber.value==='תלפיות')
         branchNumber='Talpiot';
@@ -145,7 +148,7 @@ submitHandler = (event) => {
     else if( this.state.controls.branchNumber.value==='מודיעין')
         branchNumber= 'Modiin';
 
-    console.log(branchNumber);
+    // console.log(branchNumber);
     this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, branchNumber); // pass email value and password value
     //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
 }
@@ -230,9 +233,12 @@ submitHandler = (event) => {
             <div class="login_fields">
 
             <form class="login_fields__user">
-                <div class="icon">
+              <div class="icon">
+            <IconCollection2 fill={'white'}/>
+            </div>
+                {/* <div class="icon">
                   <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/user_icon_copy.png' alt=""/>
-                </div>
+                </div> */}
                 
                 {/* <input placeholder='סניף' type='text' style={{width: "100%"}} class="input"  autocomplete="off"/> */}
                   {/* <div class='validation'>
@@ -369,4 +375,6 @@ const mapDispatchToProps = dispatch => { // we do this to be able to dispatch so
     };
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )( Auth );
+export default connect( mapStateToProps, mapDispatchToProps )(withErrorHandler(Auth,axios) );
+
+// export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(openNew,axios));

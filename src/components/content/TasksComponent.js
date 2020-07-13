@@ -189,7 +189,7 @@ class TasksComponent extends React.Component {
     }
 
     if(tag !== 'רגיל' && tag !== 'דחוף' && tag !== 'חדש'){
-        console.log(tag);
+        // console.log(tag);
         backgroundColor = '#666666';
         color = 'white'; 
     }

@@ -45,7 +45,11 @@ class showData extends Component   {
         // showImagesAndDoc: false,
         imagesArrayForCheck: [],
         docsArrayForCheck: [],
-
+        closeDate: '',
+        partsDetails: [],
+        worksDetails: [],
+        showCloseModal: false,
+        invoiceClosureData: {}
         }
       }
   
@@ -293,7 +297,8 @@ closePartsModal = (event) => {
 
 
 renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
-
+// console.log(this.props.workData);
+// console.log(this.props.partsData);
   let workButtons;
   let { isAddNewWorkOrPartOpen } = this.state;
   let { isUpdateWorkOrPartOpen } = this.state;
@@ -466,12 +471,13 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                            <th  scope="col" style={{ textAlign: "right"}}>ברוטו</th>
                            <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
                            <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>עבודת חוץ</th>
                        </tr>
                    </thead>
                    <tbody>
 
-        
-        {this.props.workData.map( work =>  (
+
+        {this.state.worksDetails.map( work =>  (
 
             <tr>
               <td>{work.workDescription}</td>
@@ -479,7 +485,15 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
               <td>{work.gross}</td>
               <td>{work.discount}</td> 
               <td>{work.net}</td>
-            
+              {work.isExteriorWork ?
+                      <td>
+                      <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} id="isExteriorWork"  />
+                      </td>
+                     :
+                     <td>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} id="isExteriorWork"  />
+                    </td>
+              } 
             </tr>
         ))
       }
@@ -674,8 +688,8 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
                    </thead>
                    <tbody>
 
-        
-        {this.props.partsData.map( part =>  (
+  
+        {this.state.partsDetails.map( part =>  (
             <tr>
               <td>{part.partDescription}</td>
               <td>{part.amount}</td>
@@ -697,6 +711,271 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
         );
 }
 
+ModalCardCloseHandler = () => {
+
+  // let invoiceClosureForm = {
+  //   allWorksGross:{value: 0.00 },
+  //   allWorksDiscount:{value: 0.00},
+  //   allWorksDiscountAmount:{value: 0.00},
+  //   allWorksNet:{value: 0.00},
+  //   allExteriorWorksGross:{value: 0.00 },
+  //   allExteriorWorksDiscount:{value: 0.00},
+  //   allExternalWorksDiscountAmount:{value: 0.00},
+  //   allExteriorWorksNet:{value: 0.00},
+  //   allPartsGross:{value: 0.00},
+  //   allPartsDiscount:{value: 0.00},
+  //   allPartsDiscountAmount:{value:0.00},
+  //   allPartsNet:{value: 0.00 },
+  //   totalGross:{value: 0.00},
+  //   totalDiscount:{value: 0.00},
+  //   totalDiscountAmount:{value: 0.00},
+  //   totalNet:{value: 0.00},
+  //   amountOfVAT:{value: 0.00},
+  //   totalPayment:{value:0.00}
+  // }
+
+  // this.setState({invoiceClosure: invoiceClosureForm});
+  // this.setState({invoiceClosureIsCalculated: false});
+
+  this.setState(prevState => {
+      return {showCloseModal: !prevState.showCloseModal};
+      });
+}
+
+renderShowCloseModal = () => { ///*** invoice closure modal! ****
+
+
+  let workButtons =
+      <div class="form-group" style={{marginBottom: "4px"}}>
+          <div style={{textAlign:"left"}}> 
+                <Button bsStyle="secondary" style={{borderColor: "black"}} onClick={this.ModalCardCloseHandler} >יציאה</Button>    </div>
+      </div>;
+
+// <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+    return (
+      
+        <Modal show={this.state.showCloseModal} onHide={this.ModalCardCloseHandler}   backdrop={false}
+        dialogClassName={classes.ModalDialog2}  >
+          <Modal.Header closeButton   >
+            <Modal.Title  >סגירת חשבון לכרטיס עבודה</Modal.Title>   
+          </Modal.Header>
+    
+            <div className={classes.separator}></div>
+          <Modal.Body  style={{  display: "block", maxHeight: "calc(100% - 120px)",overFlowY: "auto", padding:"0px",flex: "none",marginRight: "5px" ,marginBottom: "5px", marginTop: "5px" , marginLeft: "5px" }}   >
+                  <div autocomplete="off">
+            <div class="form-row" autocomplete="off" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+            <form  class="form-group col-md-3"  style={{ marginBottom: "1rem"}} > 
+                 <label for="firstName"  >שם לקוח</label>
+                 <input type="text" id="firstName" autocomplete="off" class="form-control " style={{marginLeft: "10px"}} 
+                 value={this.state.customer_details.customerName} />
+               </form >
+    
+                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="address">כתובת</label>
+                <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}}  
+                value={this.state.customer_details.address}/>
+              </form> 
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="city">עיר</label>
+                <input type="text" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.customer_details.city}  />
+              </form>
+
+               <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="postalCode" >מיקוד</label>
+                <input type="number" class="form-control " aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.customer_details.postalCode}/>
+              </form>
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}} >
+                <label for="identificationNumber" >ח.פ/ת.ז</label>
+                <input ref="identificationNumber" type="text"  class="form-control " autocomplete="off" style={{backgroundColor: "white"}} aria-describedby="passwordHelpInline" 
+                value={this.state.customer_details.identificationNumber} />
+              </form> 
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="homePhone">טלפון בית</label>
+                <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.customer_details.homePhone}/>
+              </form>
+
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="cellphone">סלולרי</label>
+                <input type="number" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  
+                value={this.state.customer_details.cellphone} />
+              </form>
+
+               </div>
+    
+               <div className={classes.anoSeparator}></div>
+
+            <form class="form-group " style={{ marginBottom: "1rem"}}>
+               </form>
+               <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto" }}> 
+      
+      
+               <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+               <label for="cellphone">עבודות</label>
+               </form>
+
+               <div class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="allWorksGross">ברוטו</label>
+                <input type="number" id="allWorksGross" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allWorksGross} />
+              </div>
+
+              <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                <label for="allWorksDiscount">% הנחה</label>
+                <input type="number" id="allWorksDiscount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
+               value={this.state.invoiceClosureData.allWorksDiscount} 
+               />
+              </div>
+
+         
+
+              <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                <label for="allWorksDiscountAmount">סכום ההנחה</label>
+                <input type="number" id="allWorksDiscountAmount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}}
+                value={this.state.invoiceClosureData.allWorksDiscountAmount}
+             />
+              </div>
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <label for="allWorksNet">נטו</label>
+                <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allWorksNet} />
+              </form>
+               </div>
+               
+               <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+               
+               <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+               <label for="cellphone">עבודות חוץ</label>
+               </form>
+
+               <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <input type="number" id="allExteriorWorksGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allExteriorWorksGross} />
+              </form>
+
+              <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                <input type="number" id="allExteriorWorksDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allExteriorWorksDiscount}/>
+              </form>
+
+              <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                <input type="number" id="allExternalWorksDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allExternalWorksDiscountAmount}/>
+              </form>
+
+              <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                value={this.state.invoiceClosureData.allExteriorWorksNet} />
+              </form>
+             </div> 
+
+             <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
+
+             <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+               <label for="cellphone">חלקים</label>
+               </form>
+                  <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                  <input type="number" id="allPartsGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                  value={this.state.invoiceClosureData.allPartsGross} />
+                  </form>
+
+                  <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                  {/* <label for="cellphone">הנחה</label> */}
+                  <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                  value={this.state.invoiceClosureData.allPartsDiscount} />
+                  </form>
+
+                  <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                  {/* <label for="cellphone">סכום ההנחה</label> */}
+                  <input type="number" id="allPartsDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                  value={this.state.invoiceClosureData.allPartsDiscountAmount} />
+                  </form>
+
+                  <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                  {/* <label for="cellphone">נטו</label> */}
+                  <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                  value={this.state.invoiceClosureData.allPartsNet} />
+                  </form>
+                  </div> 
+
+                  <div className={classes.anoSeparator}></div>
+                  
+                  <div class="form-row" >
+               </div>
+                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto",paddingTop: "15px"}}> 
+
+
+                  {/* <form class="form-row" >
+               </form> */}
+                  <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+               <label for="cellphone">סה"כ</label>
+               </form>
+
+                      <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                      <input type="number" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                      value={this.state.invoiceClosureData.totalGross} />
+                      </form>
+
+                      <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                      <input type="number" id="totalDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                      value={this.state.invoiceClosureData.totalDiscount}/>
+                      </form>
+
+                      <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
+                      <input type="number" id="totalDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                      value={this.state.invoiceClosureData.totalDiscountAmount} />
+                      </form>
+
+                      <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
+                      <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                      value={this.state.invoiceClosureData.totalNet} />
+                      </form>
+                      </div> 
+
+                     
+                      <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right",direction: "rtl"}}> 
+
+                      <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                      <label for="customerParticipation">השתתפות הלקוח</label>
+                      <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  
+                      value={this.state.cardDetails.customerParticipation}/>
+                    </div>
+
+                    <div class="form-group col-md-3"  >
+                    <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
+                    <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                        value={this.state.invoiceClosureData.amountOfVAT}/>
+                  </div>
+
+                  <div class="form-group col-md-6"  >
+                  <div class="form-group" style={{ margin:"0px", backgroundColor: "gray", border: "1px solid black"}}>
+                          <div for="totalPayment" style={{fontWeight: "bold"}}>סה"כ לתשלום</div>
+                          
+                      <div  style={{ padding:"10px", backgroundColor: "gray"}}>
+                              <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  
+                              value={this.state.invoiceClosureData.totalPayment} />
+                              </div>
+
+                      </div>         
+               </div>                       
+            </div> 
+             </div>
+            </Modal.Body>
+          <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
+               {workButtons}
+          </Modal.Footer>
+        </Modal> 
+        
+        );
+}
+
 switchShowImagesAndDoc = () => {
   this.setState(prevState => {
       return {showImagesAndDoc: !prevState.showImagesAndDoc,imagesArrayForCheck:[], docsArrayForCheck: []};
@@ -704,6 +983,7 @@ switchShowImagesAndDoc = () => {
 }
 
       check(data){
+        // console.log(data);
         if(data.cardData.licenseNumber===this.state.CarNumber && data.cardData.ticketNumber===this.state.ticketNumber){
           this.state.carDetails=data.carData;
           this.state.cardDetails=data.cardData;
@@ -711,6 +991,12 @@ switchShowImagesAndDoc = () => {
           this.state.garageReplacementVehicle=data.garageReplacementData;
           this.state.rentalCompanyReplacementVehicle=data.rentalCompanyReplacementData;
           this.state.alternateVehicleTaken=data.alternateVehicleTaken;
+          this.state.closeDate=data.closeDate;
+          this.state.worksDetails = data.workData;
+          this.state.partsDetails = data.partsData;
+          this.state.invoiceClosureData = data.invoiceClosureData;
+          
+
 
           let part=[];
           let parts_card;
@@ -744,7 +1030,7 @@ switchShowImagesAndDoc = () => {
         this.state.CarNumber=this.props.value;
         //let cards;
         if(this.state.userCarNumber!==""){
-          console.log("761"); //cards = 
+          // console.log("761"); //cards = 
           this.props.cards.map( card => (
             this.check(card)
           ))
@@ -912,7 +1198,7 @@ switchShowImagesAndDoc = () => {
 
               <div class="form-group col-md-3" >
                 <label for="deliveryDate" >תאריך מסירה</label> 
-                <input type="datetime-local" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
+                <input type="date" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
                 value={this.state.carDetails.deliveryDate} />
               </div>
 
@@ -935,6 +1221,13 @@ switchShowImagesAndDoc = () => {
                 <input  type="text"  id="carNote" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
                 value={this.state.carDetails.carNote}/>
               </div>
+
+
+              <div className="form-group col-md-3">
+              <label for="openingDate">תאריך סגירה</label>
+              <input  type="text" id="openingDate" autocomplete="off" className="form-control" 
+              value= {  this.state.closeDate } />
+            </div>
             </div> 
           </div> 
             : null } 
@@ -1084,7 +1377,7 @@ switchShowImagesAndDoc = () => {
 
           <div class="form-group col-md-3" >
                 <label for="dateOfDamage">תאריך נזק</label>
-                <input type="datetime-local" id="dateOfDamage" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  selected={this.state.startDate} 
+                <input type="date" id="dateOfDamage" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  selected={this.state.startDate} 
                 value={this.state.cardDetails.dateOfDamage}/>
             </div>
          </div>
@@ -1194,13 +1487,13 @@ switchShowImagesAndDoc = () => {
               <div class="form-group col-md-6" >
             
                       <label for="dateOfDelivery" >תאריך מסירה</label> 
-                      <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}}  
+                      <input type="date" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}}  
                       value={this.state.garageReplacementVehicle.dateOfDelivery}/>
                     </div>
                     <div class="form-group col-md-6" >
               
                     <label for="returnDate" >תאריך החזרה</label> 
-                    <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
+                    <input type="date" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
                     value={this.state.garageReplacementVehicle.returnDate}/>
                   </div>
                   </div>
@@ -1220,13 +1513,13 @@ switchShowImagesAndDoc = () => {
 
   <div class="form-group col-md-6" >
           <label for="dateOfDelivery" >תאריך מסירה</label> 
-          <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}}  
+          <input type="date" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}}  
           value={this.state.rentalCompanyReplacementVehicle.dateOfDelivery} />
         </div>
         <div class="form-group col-md-6" >
       
           <label for="returnDate" >תאריך החזרה</label> 
-          <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
+          <input type="date" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} 
           value={this.state.rentalCompanyReplacementVehicle.returnDate}/>
         </div>
         </div>
@@ -1283,9 +1576,13 @@ switchShowImagesAndDoc = () => {
               this.renderPartsModal( 'partsData')
           :null}  
           {' '}
+
+          {this.state.showCloseModal?
+                    this.renderShowCloseModal()
+            :null} 
       <Button bsStyle="secondary" style={{borderColor: "black"}}    onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button> 
       {' '}
-      <Button bsStyle="secondary" style={{borderColor: "black"}}    onClick={this.switchShowImagesAndDoc}> חשבון סופי</Button> 
+      <Button bsStyle="secondary" style={{borderColor: "black"}}    onClick={this.ModalCardCloseHandler}> חשבון סופי</Button> 
       { this.state.showImagesAndDoc ? this.renderImagesAndDocModal() :null }
       </form>
     </form>

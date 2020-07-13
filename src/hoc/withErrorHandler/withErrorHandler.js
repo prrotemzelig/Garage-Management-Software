@@ -14,7 +14,31 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
                 return req;
             });
             this.resInterceptor = axios.interceptors.response.use(res => res, error => {
-                this.setState({error: error});
+                console.log(error);
+                let errorInHebrew;
+                console.log(error);
+                console.log(error.message);
+                console.log(error.response);
+                if(error.response !== undefined ){
+                if(error.response.data.error === 'Auth token is expired'){
+                    errorInHebrew='פג תוקף המשתמש, נא להתחבר מחדש';
+                    console.log(errorInHebrew);
+
+                }
+            }
+
+                else if(error.message === 'Network Error'){
+                    errorInHebrew='אין חיבור אינטרנט'; 
+                    console.log(errorInHebrew);
+
+                }
+                console.log(errorInHebrew);
+                
+            //    console.log(error.response.data.error);
+               console.log(error);
+               console.log(error.response);
+            //    console.log(error.response.data);
+                this.setState({error: errorInHebrew});
             });
         }
 
@@ -28,12 +52,16 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
         }
 
         render () {
+           // console.log(this.state.error);
+            //Request failed with status code 401
+            //Network error
+            //Auth token is expired - שיתחברו מחדש
             return (
                 <Aux>
                     <Modal 
                         show={this.state.error}
                         modalClosed = {this.errorConfirmedHandler}>
-                        {this.state.error ? this.state.error.message : null}
+                        {this.state.error ? this.state.error : null}
                     </Modal>
                     <WrappedComponent {...this.props} />
                 </Aux>
@@ -44,3 +72,11 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
 
 export default withErrorHandler;
 
+{/* <Aux>
+<Modal 
+    show={this.state.error}
+    modalClosed = {this.errorConfirmedHandler}>
+    {this.state.error ? this.state.error.message : null}
+</Modal>
+<WrappedComponent {...this.props} />
+</Aux> */}

@@ -47,7 +47,7 @@ class Layout extends Component{
     
 //    margin-right: 230px;
     render(){
-        console.log(this.props.isAuthenticated);
+     //   console.log(this.props.isAuthenticated);
         let sidebarColor;
         let userBackgroundColor ; 
         

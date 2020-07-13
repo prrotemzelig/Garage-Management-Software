@@ -163,10 +163,14 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                     .catch(error => { // add nertwork problem!!! need to fix this rotem  //get
                         // console.log(error.response.message);
                         // console.log(error.message);
-                        console.log(error.response);
-                        console.log(error.response.data.error);
-                        dispatch(authSignInFail(error.response.data.error)); //err.response.data.error //get
-                }); //get
+                            // console.log(error.response);
+                        console.log(error);
+                        console.log(error.message);
+                        //console.log(error.response.data.error);
+                        // dispatch(authSignInFail(error.response.data.error)); //err.response.data.error //get
+                        dispatch(authSignInFail(error.message)); //err.response.data.error //get
+
+                    }); //get
     };
 };
 
