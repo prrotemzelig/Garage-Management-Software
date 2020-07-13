@@ -238,12 +238,85 @@ class openNew extends Component   {
       //   this.setState({
       //     allWorksNet: allWorksNet,allPartsNet: allPartsNet, amountOfVAT: amountOfVAT, totalPayment: totalPayment });
       // }
+// onUnload(event) { 
+//   console.log("hey");
+
+//   if(window.location.reload(false)){
+//        this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+//       console( "This page is reloaded" );
+
+//   }
+
+  // if (window.performance) {
+  //   if (performance.navigation.type === 1) {
+  //     this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+  //     console( "This page is reloaded" );
+  //   } else {
+  //     console( "This page is not reloaded");
+  //   }
+  // }
+
+//}
+
+
+beforePageReloadHandler = (event) => { 
+  event.preventDefault();
+
+  // console.log("263");
+  if(this.state.identifiedCardID !== ''){
+    //  console.log(this.state.identifiedCardID);
+     while(this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID)){
+      // console.log("270");
+
+     }
+   }
+  //  console.log("270");
+
+   return "unloading";
+
+
+}
 
 componentWillUnmount() {
+  // console.log("262");
+  //window.addEventListener('beforeunload', this.beforePageReloadHandler);
+
+//  window.removeEventListener("beforeunload", this.beforePageReloadHandler);
+    // console.log("276")
+    window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
+
+   if(this.state.identifiedCardID !== ''){
+      // console.log(this.state.identifiedCardID);
+      this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+   }
+    //  console.log("289");
+     window.removeEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
+
+ //  window.removeEventListener('beforeunload', this.beforePageReloadHandler);
+
+
      this.setTheStates('');
+
+    // window.addEventListener("beforeunload", this.beforePageReloadHandler);
+
+    //  if(this.state.identifiedCardID !== ''){
+    //   console.log(this.state.identifiedCardID);
+    //   this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+    // }
+
+//     if(window.location.reload(true)){
+//       this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+//      console( "This page is reloaded" );
+
+//  }
 }
 
 componentDidUpdate(prevProps,prevState) {
+  // console.log("305");
+  //window.removeEventListener('beforeunload', this.beforePageReloadHandler);
+  window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
+  // console.log("310");
+
   // console.log("671");
   // console.log(this.props.currentCardKey);
   // console.log(this.state.identifiedCardID);
@@ -275,8 +348,11 @@ componentDidUpdate(prevProps,prevState) {
 }
 
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
-  console.log("212");
+  // console.log("212");
   this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+  window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
+  // console.log("346");
+
 }
 
 
@@ -1104,16 +1180,16 @@ currency = (num) => {
 
                         <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                         <label for="customerParticipation">השתתפות הלקוח</label>
-                        <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="text"  id="customerParticipation" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
                         defaultValue={this.state.cardForm.customerParticipation.value}
                         onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
                       </div>
 
                       <div class="form-group col-md-3"  >
                       <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
-                      <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                      <input type="number" id="amountOfVAT" class="form-control"  autocomplete="off" style={{backgroundColor: "white"}} 
                           value={this.state.invoiceClosure.amountOfVAT.value}
-                      onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
+                      />
                     </div>
 
                     <div class="form-group col-md-6"  >
@@ -1184,7 +1260,9 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
         alternateVehicleTaken: this.state.alternateVehicleTaken,
         customerData: customerData,
         userId: this.props.userId,
-        branchNumber: this.props.branchNumber
+        branchNumber: this.props.branchNumber,
+        isTheCardOpenByUser: true,
+        byWhoTheCardOpen: this.props.firstName + " " + this.props.lastName
     }   
 
   //  this.setState({found: true});
@@ -1246,9 +1324,9 @@ inputChangedHandler = (event) => {
 
 
   if(event.target.value!==""){
+    this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
 
     for(var i=0; i < this.props.cards.length ; i++){
-     // console.log(this.props.cards);
       if(this.check(this.props.cards[i],event.target.value)){
         console.log("369");
         break;
@@ -1259,8 +1337,6 @@ inputChangedHandler = (event) => {
     //   if(this.check(card,event.target.value)){
     //   }
     //   else{
-    //     console.log("364");
-
     //   }
     // })
 
@@ -1615,7 +1691,7 @@ workOrPartsUpdateHandler = ( event,kind ) => {
 
 changeVehicleNumberHandler = ( event ) => { // update card
   event.preventDefault(); 
-  var newNumberInput = prompt("בבקשה הכנס מספר רכב מעודכן", this.state.cardForm.licenseNumber.value);
+  var newNumberInput = prompt("בבקשה הכנס מספר רישוי מעודכן", this.state.cardForm.licenseNumber.value);
   if (newNumberInput !== null) {
     this.props.onChangeVehicleNumber(newNumberInput, this.props.token, this.props.branchNumber,this.state.identifiedCardID, this.props.userId ); 
     this.setState({dataBaseCarNumber: newNumberInput});
@@ -1695,6 +1771,8 @@ cardUpdateHandler = ( event ) => { // update card
   }
 
   this.props.onCardUpdate(carData,cardData,customerData,garageReplacementData,rentalCompanyReplacementData,this.state.alternateVehicleTaken, this.props.token, this.props.branchNumber,this.state.identifiedCardID,this.props.userId); // this contains all the data of card
+  this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+
   this.setTheStates('');
   document.getElementById("workCardForm").reset(); 
 }
@@ -1801,6 +1879,7 @@ cardCloseHandler = ( event ) => {
 
 
 setTheStates = (licenseNumber) => {
+  console.log("1876");
   let valueLicenseNumber;
   if(licenseNumber !== ''){
     valueLicenseNumber = licenseNumber;
@@ -1962,9 +2041,16 @@ setTheStates = (licenseNumber) => {
 
 
 check(data,licenseNumber){
-
+//console.log(data.cardData.licenseNumber);
+console.log(licenseNumber);
   if(data.cardData.licenseNumber===licenseNumber){
-    this.state.found=true;
+    if(data.isTheCardOpenByUser){
+      
+        alert("כרטיס לרכב " + licenseNumber + " נעול ונמצא בעריכה של " + data.byWhoTheCardOpen );
+    }
+    else if(!data.isTheCardOpenByUser){
+
+      this.state.found=true;
     this.state.dataBaseCarNumber=data.cardData.licenseNumber;
     this.state.carDetails=data.carData;
     this.state.cardDetails=data.cardData;
@@ -1979,8 +2065,10 @@ check(data,licenseNumber){
 
    // if(this.state.found === true){
       this.props.onGetAllCardData(this.props.token,this.props.branchNumber, this.props.userId, 'cards', this.state.identifiedCardID);
+      this.props.onMarkCardIsOpen(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID,this.props.firstName,this.props.lastName);
       this.props.onGetImages(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/images');
      this.props.onGetDocs(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'],'/docs');
+
 
     //}
     // this.setState({found: true});
@@ -1993,10 +2081,16 @@ check(data,licenseNumber){
     // this.setState({branchNumber: data.branchNumber});
 
     return true;
+    }
+    
   }
 
 
   else if(data.cardData.licenseNumber!==licenseNumber && this.state.dataBaseCarNumber !== data.cardData.licenseNumber ){
+    if(this.state.identifiedCardID !== ''){
+      console.log(this.state.identifiedCardID);
+      this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+    }
    // this.setTheStates(licenseNumber);
     this.state.found=false;
     return false;
@@ -3160,9 +3254,9 @@ onChange = date => this.setState({ date })
     //   ))
     // }
 
-
-  return (
-    <form id="workCardForm" onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}  class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
+//onSubmit={this.state.found ? this.cardUpdateHandler : this.cardOpeningHandler}
+  return ( // onLoad={(event) => this.beforePageReloadHandler(event)} 
+    <form id="workCardForm" class="form-group" style={{direction: "rtl",   fontSize: "11px"}} >  
 
           <div class="card text-white bg-dark mb-3" style={{display: "flex"}}>
             <div class="card-header"style={{fontSize: "14px",fontWeight: "bold"}} >
@@ -4158,6 +4252,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       showCloseCardSuccessCase: state.card.showCloseCardSuccessCase,
       token: state.auth.token,
       userId: state.auth.userId,
+      firstName: state.auth.firstName,
+      lastName: state.auth.lastName,
       showWorkModel: state.card.showWorkModel,
       showPartModel: state.card.showPartModel,
       branchNumber: state.auth.branchNumber,
@@ -4203,6 +4299,9 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onWorkOrPartDelete: (token, branchNumber, cardKey,itemKey ,list,userId) => dispatch( actions.WorkOrPartDelete(token,branchNumber,cardKey,itemKey,list,userId)),
     onGetAllCardData: (token,branchNumber,userId, kind,cardKey) => dispatch(actions.GetAllCardData(token,branchNumber,userId, kind,cardKey)),
     onSetCurrentCardKey: () => dispatch(actions.setCurrentCardKey()),
+    onMarkCardIsOpen: (token,branchNumber,userId,cardKey,firstName,lastName) => dispatch(actions.markCardIsOpen(token,branchNumber,userId,cardKey,firstName,lastName)),
+    onMarkCardIsClosed: (token,branchNumber,userId,cardKey) => dispatch(actions.markCardIsClosed(token,branchNumber,userId,cardKey)),
+
 
 
     onChangeVehicleNumber:(newNumberInput, token, branchNumber,identifiedCardID,userId) => dispatch(actions.changeVehicleNumber(newNumberInput, token, branchNumber,identifiedCardID,userId)) 

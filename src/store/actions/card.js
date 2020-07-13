@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-cards';
+import axios2 from 'axios';
 
 export const purchaseSetCurrentCardKey = () => { 
     return {
@@ -496,8 +497,8 @@ export const GetAllCardData = (token,branchNumber,userId, kind,cardKey) => { //h
                     } );
                 }
             }
-            console.log(workData);
-            console.log(partsData);
+            // console.log(workData);
+            // console.log(partsData);
           dispatch(GetAllCardDataSuccess(workData,partsData ));
 
             //dispatch(GetAllCardDataSuccess(cardData,carData , customerData, workData ));
@@ -652,5 +653,145 @@ export const changeVehicleNumber = ( newNumberInput, token, branchNumber,identif
         .catch( error => {
             dispatch(changeVehicleNumberFail(error));
         } );
+    };
+};
+
+
+
+
+
+
+
+
+
+export const markCardIsOpenStart = () => {
+    return {
+        type: actionTypes.MARK_CARD_IS_OPEN_START
+    };
+};
+
+
+export const markCardIsOpenSuccess = ( id, cardData ) => { 
+    return { 
+        type: actionTypes.MARK_CARD_IS_OPEN_SUCCESS
+  
+    };
+};
+
+export const markCardIsOpenFail = ( error ) => { 
+    return {
+        type: actionTypes.MARK_CARD_IS_OPEN_FAIL,
+        error: error 
+    };
+}
+
+export const markCardIsOpen = ( token, branchNumber,userId,identifiedCardID,firstName,lastName ) => { 
+    // console.log(token);
+    // console.log(branchNumber);
+    // console.log(identifiedCardID);
+    // console.log(userId);
+    // console.log(firstName);
+    // console.log(lastName);
+    let isOpen = '' ;
+    let whoOpened = '' ;
+    isOpen = {  isTheCardOpenByUser: true};
+    whoOpened = {  byWhoTheCardOpen: firstName + " " + lastName};
+
+    return dispatch => {
+        dispatch( markCardIsOpenStart() );
+        axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
+        .then(res => {            
+            dispatch(markCardIsOpenSuccess()); 
+            dispatch(fetchCards(token, userId, branchNumber)); 
+            dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+
+        })
+        .catch( error => {
+            dispatch(markCardIsOpenFail(error));
+        } );
+
+
+        axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened) 
+        .then(res => {            
+            dispatch(markCardIsOpenSuccess()); 
+            dispatch(fetchCards(token, userId, branchNumber)); 
+            dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+
+        })
+        .catch( error => {
+            dispatch(markCardIsOpenFail(error));
+        } );
+    };
+};
+
+
+
+
+
+export const markCardIsClosedStart = () => {
+    return {
+        type: actionTypes.MARK_CARD_IS_CLOSED_START
+    };
+};
+
+
+export const markCardIsClosedSuccess = ( id, cardData ) => { 
+    return { 
+        type: actionTypes.MARK_CARD_IS_CLOSED_SUCCESS
+  
+    };
+};
+
+export const markCardIsClosedFail = ( error ) => { 
+    return {
+        type: actionTypes.MARK_CARD_IS_CLOSED_FAIL,
+        error: error 
+    };
+}
+
+export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) => { 
+    let isOpen = '' ;
+    let whoOpened = '' ;
+    isOpen = {  isTheCardOpenByUser: false};
+    whoOpened = {  byWhoTheCardOpen: ''};
+
+    // console.log(token);
+    // console.log(branchNumber);
+    // console.log(userId);
+    // console.log(identifiedCardID);
+
+    return dispatch => {
+        const requestOne = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen);
+        const requestTwo = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened);
+        // console.log(requestOne);
+        // console.log(requestTwo);
+        dispatch( markCardIsClosedStart() );
+      //  axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
+      axios2.all([requestOne, requestTwo])
+        .then(axios2.spread((...responses) => {       
+            const responseOne = responses[0]
+            const responseTwo = responses[1]
+            // console.log(responseOne);     
+            // console.log(responseTwo);     
+            dispatch(markCardIsClosedSuccess()); 
+            dispatch(fetchCards(token, userId, branchNumber)); 
+            dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+
+        }))
+        .catch( error => {
+            dispatch(markCardIsClosedFail(error));
+        } );
+
+
+       // axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened) 
+        // .then(res => {            
+        //     dispatch(markCardIsClosedSuccess()); 
+        //     dispatch(fetchCards(token, userId, branchNumber)); 
+        //     dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+
+        // })
+        // .catch( error => {
+        //     dispatch(markCardIsClosedFail(error));
+        // } );
     };
 };
