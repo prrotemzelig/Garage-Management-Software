@@ -92,6 +92,11 @@ class openNew extends Component   {
 //    showWorkModel: false, 
     showImagesAndDoc: false,
     showCloseModal: false,
+    invoiceClosureIsCalculated: false,
+    isPercentWorkEntered : false,
+    isPercentPartEntered : false,
+    isPercentExteriorEntered : false,
+    isPercentTotalEntered : false,
 
     cardForm: { 
       licenseNumber: {
@@ -153,7 +158,8 @@ class openNew extends Component   {
       time:{value: ''},
       gross:{ value: '' },
       discount:{value: ''},
-      net:{ value: ''}
+      net:{ value: ''}, 
+      isExteriorWork: {value: ''}
     },
   
     cardPart:{
@@ -185,7 +191,7 @@ class openNew extends Component   {
     alternateVehicleTaken:false,
     garageReplacementCheck:false,
     rentalCompanyReplacementCheck:false,
-    garage_replacement_data:[],
+    garage_replacement_data:[5],
     rental_company_data:[],
     garageReplacementDetails:{}, 
     rentalCompanyDetails:{},
@@ -210,6 +216,7 @@ class openNew extends Component   {
       amountOfVAT:{value: 0.00 },
       totalPayment:{value:  0.00}
     }
+    
 
   };
       // this.newSet = this.newSet.bind(this);
@@ -340,126 +347,496 @@ this.state.rentalCompanyReplacementCheck=this.state.rentalCompanyReplacementVehi
 
 
 
-inputInvoiceWorksGrossChangedHandler = (event) => { //rotem need to do // רותם לעשות
-  if(event.target.id === 'allWorksGross' ){
+inputInvoiceWorksGrossChangedHandler = (event) => { //finished :)
+  
+  var value;
+  if(event.target.value=== ''){
+    value = 0;
+  }
+  else if(event.target.value !== ''){
+    value = event.target.value;
+  }
+  
+  if(event.target.value === '' ){
+    this.state.isPercentWorkEntered = false   ;
+  }
+ else if(event.target.value === '0'){
+    this.state.isPercentWorkEntered = false   ;
+  }
+  else{
+    this.state.isPercentWorkEntered  = true;
+  }
+
+  if(event.target.id === 'allWorksDiscountAmount' ){ // כל העבודות ברוטו
     const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-      value: event.target.value
+      value: value
   });
-  let finalNetValue;
-  if(this.state.invoiceClosure.allWorksDiscount.value !== '')
-    finalNetValue = event.target.value - (this.state.invoiceClosure.allWorksDiscount.value * event.target.value )/100 ; //calculate the final price after discount
+
+  var finalNetValue;
+  if(this.state.invoiceClosure.allWorksDiscountAmount.value !== '')
+    finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allWorksGross.value) - (parseFloat(value))).toFixed(2) ; 
   else
-    finalNetValue= event.target.value;
+    finalNetValue= parseFloat(value).toFixed(2);
   
   const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allWorksNet'], { 
     value: finalNetValue
 });
 
+    var finalWorksDiscountValue;
+    
+    if(this.state.invoiceClosure.allWorksDiscountAmount.value !== '')
+        finalWorksDiscountValue = parseFloat(100*(parseFloat(parseFloat(value) / (parseFloat(this.state.invoiceClosure.allWorksGross.value))))).toFixed(2) ; 
+    else
+        finalWorksDiscountValue= parseFloat(0).toFixed(2);
+
+      const updatedFormElementForWorksDiscount = updateObject(this.state.invoiceClosure['allWorksDiscount'], { 
+        value: finalWorksDiscountValue
+      });
+
+      var totalDiscountAmount = parseFloat(parseFloat(value) + parseFloat(this.state.invoiceClosure.allPartsDiscountAmount.value)  + parseFloat(this.state.invoiceClosure.allExternalWorksDiscountAmount.value)).toFixed(2) ;
+      var totalDiscount = 100*(parseFloat(parseFloat(totalDiscountAmount) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+
+      var totalNet = parseFloat(parseFloat(finalNetValue) + parseFloat(this.state.invoiceClosure.allPartsNet.value)  + parseFloat(this.state.invoiceClosure.allExteriorWorksNet.value)).toFixed(2) ;
+      var amountOfVAT = parseFloat(0.17 * parseFloat(totalNet)).toFixed(2);
+      var totalPayment = parseFloat(parseFloat(totalNet) + parseFloat(amountOfVAT)).toFixed(2) ;
+
+          const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { 
+            value: totalNet
+        });
+
+        const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { 
+          value: amountOfVAT
+        });
+
+        const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { 
+        value: totalPayment
+        });
+
+        const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { 
+          value: totalDiscountAmount
+          });
+
+          const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { 
+            value: totalDiscount
+            });
+
   const updatedCardForm = updateObject(this.state.invoiceClosure, { 
       [event.target.id]: updatedFormElement,
-      ['allWorksNet']: updatedFormElementForNet 
+      ['allWorksNet']: updatedFormElementForNet,
+      ['allWorksDiscount']: updatedFormElementForWorksDiscount,
+      ['totalNet']: updatedFormElementForTotalNet,
+      ['amountOfVAT']: updatedFormElementForVat,
+      ['totalPayment']: updatedFormElementForFinalTotalPayment,
+      ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+      ['totalDiscount']: updatedFormElementForFinalTotalDiscount
   });
   
   this.setState({invoiceClosure: updatedCardForm}); 
   }
 
-  else if(event.target.id === 'allWorksDiscount'){
+
+
+  else if(event.target.id === 'allWorksDiscount'){ // הנחה לעבודות פה לחשב נטו וגם מחיר סופי שוב 
           const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-            value: event.target.value
+            value: value
         });
 
-        const finalNetValue = this.state.invoiceClosure.allWorksGross.value - (event.target.value * this.state.invoiceClosure.allWorksGross.value )/100 ; //calculate the final price after discount
+        const finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allWorksGross.value) - (parseFloat(value) * parseFloat(this.state.invoiceClosure.allWorksGross.value) )/100).toFixed(2) ; //calculate the final price after discount
         const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allWorksNet'], { 
           value: finalNetValue
       });
 
-      const finalAmountValue = this.state.invoiceClosure.allWorksGross.value - finalNetValue; //calculate the total amount of the discount
+      const finalAmountValue = parseFloat(parseFloat(this.state.invoiceClosure.allWorksGross.value) - parseFloat(finalNetValue)).toFixed(2); //calculate the total amount of the discount
       const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['allWorksDiscountAmount'], { 
         value: finalAmountValue
     });
 
+    
+      var totalDiscountAmount2 = parseFloat(parseFloat(finalAmountValue) + parseFloat(this.state.invoiceClosure.allPartsDiscountAmount.value)  + parseFloat(this.state.invoiceClosure.allExternalWorksDiscountAmount.value)).toFixed(2) ;
+      var totalDiscount2 = 100*(parseFloat(parseFloat(totalDiscountAmount2) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+
+      var totalNet2 = parseFloat(parseFloat(finalNetValue) + parseFloat(this.state.invoiceClosure.allPartsNet.value)  + parseFloat(this.state.invoiceClosure.allExteriorWorksNet.value)).toFixed(2) ;
+      var amountOfVAT2 = parseFloat(0.17 * parseFloat(totalNet2)).toFixed(2);
+      var totalPayment2 = parseFloat(parseFloat(totalNet2) + parseFloat(amountOfVAT2)).toFixed(2) ;
+
+          const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { 
+            value: totalNet2
+        });
+  
+        const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { 
+          value: amountOfVAT2
+        });
+  
+        const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { 
+        value: totalPayment2
+        });
+
+        const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { 
+          value: totalDiscountAmount2
+          });
+
+          const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { 
+            value: totalDiscount2
+            });
+  
         const updatedCardForm = updateObject(this.state.invoiceClosure, { 
             [event.target.id]: updatedFormElement,
             ['allWorksNet']: updatedFormElementForNet,
             ['allWorksDiscountAmount']: updatedFormElementForFinalAmountValue,
+            ['totalNet']: updatedFormElementForTotalNet,
+            ['amountOfVAT']: updatedFormElementForVat,
+            ['totalPayment']: updatedFormElementForFinalTotalPayment,
+            ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+            ['totalDiscount']: updatedFormElementForFinalTotalDiscount
         });
-        this.setState({invoiceClosure: updatedCardForm}); 
+        this.setState({invoiceClosure: updatedCardForm});
       }
   
-      console.log(this.state.invoiceClosure);
-  // else{
-  //         const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-  //           value: event.target.value
-  //       });
-  //       const updatedCardForm = updateObject(this.state.invoiceClosure, { 
-  //           [event.target.id]: updatedFormElement 
-  //       });
-  //       this.setState({invoiceClosure: updatedCardForm}); 
-  // }
 }
 
 
 
-inputInvoicePartsGrossChangedHandler = (event) => { //rotem need to do // רותם לעשות
-  if(event.target.id === 'allPartsGross' ){
-    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-      value: event.target.value
-  });
-  let finalNetValue;
-  if(this.state.invoiceClosure.allPartsDiscount.value !== '')
-    finalNetValue = event.target.value - (this.state.invoiceClosure.allPartsDiscount.value * event.target.value )/100 ; //calculate the final price after discount
+
+
+
+inputInvoiceExternalWorksChangedHandler = (event) => { 
+  var value;
+  if(event.target.value=== ''){
+    value = 0;
+  }
+  else if(event.target.value !== ''){
+    value = event.target.value;
+  }
+
+  if(event.target.value === '' ){
+    this.state.isPercentExteriorEntered = false;
+  }
+ else if(event.target.value === '0'){
+    this.state.isPercentExteriorEntered = false;
+  }
+  else{
+    this.state.isPercentExteriorEntered  = true;
+  }
+
+  if(event.target.id === 'allExternalWorksDiscountAmount' ){
+    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { value: value});
+
+  var finalNetValue;
+  if(this.state.invoiceClosure.allExternalWorksDiscountAmount.value !== '')
+    finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allExteriorWorksGross.value) - (parseFloat(value))).toFixed(2) ; 
   else
-    finalNetValue= event.target.value;
+    finalNetValue= parseFloat(value).toFixed(2);
   
-  const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allPartsNet'], { 
-    value: finalNetValue
-});
+  const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allExteriorWorksNet'], { value: finalNetValue});
+
+    var finalWorksDiscountValue; 
+    if(this.state.invoiceClosure.allExternalWorksDiscountAmount.value !== '')
+        finalWorksDiscountValue = parseFloat(100*(parseFloat(parseFloat(value) / (parseFloat(this.state.invoiceClosure.allExteriorWorksGross.value))))).toFixed(2) ; 
+    else
+        finalWorksDiscountValue= parseFloat(0).toFixed(2);
+
+      const updatedFormElementForWorksDiscount = updateObject(this.state.invoiceClosure['allExteriorWorksDiscount'], { value: finalWorksDiscountValue });
+
+      var totalDiscountAmount = parseFloat( parseFloat(this.state.invoiceClosure.allWorksDiscountAmount.value) + parseFloat(this.state.invoiceClosure.allPartsDiscountAmount.value)  + parseFloat(value)).toFixed(2) ;
+      var totalDiscount = 100*(parseFloat(parseFloat(totalDiscountAmount) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+
+      var totalNet = parseFloat(parseFloat(this.state.invoiceClosure.allWorksNet.value)  + parseFloat(this.state.invoiceClosure.allPartsNet.value)  + parseFloat(finalNetValue) ).toFixed(2) ;
+      var amountOfVAT = parseFloat(0.17 * parseFloat(totalNet)).toFixed(2);
+      var totalPayment = parseFloat(parseFloat(totalNet) + parseFloat(amountOfVAT)).toFixed(2) ;
+
+      const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { value: totalNet });
+      const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { value: amountOfVAT });
+      const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { value: totalPayment });
+      const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { value: totalDiscountAmount });
+      const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { value: totalDiscount });
 
   const updatedCardForm = updateObject(this.state.invoiceClosure, { 
       [event.target.id]: updatedFormElement,
-      ['allPartsNet']: updatedFormElementForNet 
+      ['allExteriorWorksNet']: updatedFormElementForNet,
+      ['allExteriorWorksDiscount']: updatedFormElementForWorksDiscount,
+      ['totalNet']: updatedFormElementForTotalNet,
+      ['amountOfVAT']: updatedFormElementForVat,
+      ['totalPayment']: updatedFormElementForFinalTotalPayment,
+      ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+      ['totalDiscount']: updatedFormElementForFinalTotalDiscount
   });
   
   this.setState({invoiceClosure: updatedCardForm}); 
+  
+}
+
+
+  else if(event.target.id === 'allExteriorWorksDiscount'){
+          const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+            value: value
+        });
+
+        const finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allExteriorWorksGross.value) - (parseFloat(value) * parseFloat(this.state.invoiceClosure.allExteriorWorksGross.value) )/100).toFixed(2) ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allExteriorWorksNet'], { 
+          value: finalNetValue
+      });
+
+      const finalAmountValue = parseFloat(parseFloat(this.state.invoiceClosure.allExteriorWorksGross.value) - parseFloat(finalNetValue)).toFixed(2); //calculate the total amount of the discount
+      const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['allExternalWorksDiscountAmount'], { 
+        value: finalAmountValue
+    });
+    var totalDiscountAmount2 = parseFloat(parseFloat(this.state.invoiceClosure.allWorksDiscountAmount.value) + parseFloat(this.state.invoiceClosure.allPartsDiscountAmount.value)  + parseFloat(finalAmountValue)).toFixed(2) ;
+    var totalDiscount2 = 100*(parseFloat(parseFloat(totalDiscountAmount2) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+
+    var totalNet2 = parseFloat(parseFloat(this.state.invoiceClosure.allWorksNet.value)  + parseFloat(this.state.invoiceClosure.allPartsNet.value) + parseFloat(finalNetValue)).toFixed(2) ;
+    var amountOfVAT2 = parseFloat(0.17 * parseFloat(totalNet2)).toFixed(2);
+    var totalPayment2 = parseFloat(parseFloat(totalNet2) + parseFloat(amountOfVAT2)).toFixed(2)  ;
+
+        const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { 
+          value: totalNet2
+      });
+
+      const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { 
+        value: amountOfVAT2
+      });
+
+      const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { 
+      value: totalPayment2
+      });
+
+      const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { 
+        value: totalDiscountAmount2
+        });
+
+        const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { 
+          value: totalDiscount2
+          });
+
+
+        const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+            [event.target.id]: updatedFormElement,
+            ['allExteriorWorksNet']: updatedFormElementForNet,
+            ['allExternalWorksDiscountAmount']: updatedFormElementForFinalAmountValue,
+            ['totalNet']: updatedFormElementForTotalNet,
+            ['amountOfVAT']: updatedFormElementForVat,
+            ['totalPayment']: updatedFormElementForFinalTotalPayment,
+            ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+            ['totalDiscount']: updatedFormElementForFinalTotalDiscount
+        });
+        this.setState({invoiceClosure: updatedCardForm}); 
+      }
+}
+
+
+inputInvoicePartsGrossChangedHandler = (event) => { //rotem need to do // רותם לעשות
+
+  var value;
+  if(event.target.value=== ''){
+    value = 0;
+  }
+  else if(event.target.value !== ''){
+    value = event.target.value;
+  }
+
+  if(event.target.value === '' ){
+    this.state.isPercentPartEntered = false   ;
+  }
+ else if(event.target.value === '0'){
+    this.state.isPercentPartEntered = false   ;
+  }
+  else{
+    this.state.isPercentPartEntered  = true;
+  }
+
+  if(event.target.id === 'allPartsDiscountAmount' ){
+    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { value: value});
+
+    var finalNetValue;
+    if(this.state.invoiceClosure.allPartsDiscountAmount.value !== '')
+      finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allPartsGross.value) - (parseFloat(value))).toFixed(2) ; 
+    else
+      finalNetValue= parseFloat(value).toFixed(2);
+    
+    const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allPartsNet'], { value: finalNetValue});
+    
+      var finalWorksDiscountValue; 
+      if(this.state.invoiceClosure.allPartsDiscountAmount.value !== '')
+          finalWorksDiscountValue = parseFloat(100*(parseFloat(parseFloat(value) / (parseFloat(this.state.invoiceClosure.allPartsGross.value))))).toFixed(2) ; 
+      else
+          finalWorksDiscountValue= parseFloat(0).toFixed(2);
+  
+        const updatedFormElementForWorksDiscount = updateObject(this.state.invoiceClosure['allPartsDiscount'], { value: finalWorksDiscountValue });
+  
+        var totalDiscountAmount = parseFloat( parseFloat(this.state.invoiceClosure.allWorksDiscountAmount.value) +  parseFloat(value) + parseFloat(this.state.invoiceClosure.allExternalWorksDiscountAmount.value)  ).toFixed(2) ;
+        var totalDiscount = 100*(parseFloat(parseFloat(totalDiscountAmount) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+  
+        var totalNet = parseFloat(parseFloat(this.state.invoiceClosure.allWorksNet.value)  + parseFloat(finalNetValue)+  parseFloat(this.state.invoiceClosure.allExteriorWorksNet.value) ).toFixed(2) ;
+        var amountOfVAT = parseFloat(0.17 * parseFloat(totalNet)).toFixed(2);
+        var totalPayment = parseFloat(parseFloat(totalNet) + parseFloat(amountOfVAT)).toFixed(2) ;
+  
+        const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { value: totalNet });
+        const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { value: amountOfVAT });
+        const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { value: totalPayment });
+        const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { value: totalDiscountAmount });
+        const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { value: totalDiscount });
+  
+    const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+        [event.target.id]: updatedFormElement,
+        ['allPartsNet']: updatedFormElementForNet,
+        ['allPartsDiscount']: updatedFormElementForWorksDiscount,
+        ['totalNet']: updatedFormElementForTotalNet,
+        ['amountOfVAT']: updatedFormElementForVat,
+        ['totalPayment']: updatedFormElementForFinalTotalPayment,
+        ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+        ['totalDiscount']: updatedFormElementForFinalTotalDiscount
+    });
+    
+    this.setState({invoiceClosure: updatedCardForm}); 
   }
 
   else if(event.target.id === 'allPartsDiscount'){
           const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-            value: event.target.value
+            value: value
         });
 
-        const finalNetValue = this.state.invoiceClosure.allPartsGross.value - (event.target.value * this.state.invoiceClosure.allPartsGross.value )/100 ; //calculate the final price after discount
+        const finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.allPartsGross.value) - (parseFloat(value) * parseFloat(this.state.invoiceClosure.allPartsGross.value) )/100).toFixed(2) ; //calculate the final price after discount
         const updatedFormElementForNet = updateObject(this.state.invoiceClosure['allPartsNet'], { 
           value: finalNetValue
       });
 
-      const finalAmountValue = this.state.invoiceClosure.allPartsGross.value - finalNetValue; //calculate the total amount of the discount
+      const finalAmountValue = parseFloat(parseFloat(this.state.invoiceClosure.allPartsGross.value) - parseFloat(finalNetValue)).toFixed(2); //calculate the total amount of the discount
       const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['allPartsDiscountAmount'], { 
         value: finalAmountValue
     });
+
+
+    var totalDiscountAmount2 = parseFloat( parseFloat(this.state.invoiceClosure.allWorksDiscountAmount.value) + parseFloat(finalAmountValue)  + parseFloat(this.state.invoiceClosure.allExternalWorksDiscountAmount.value)).toFixed(2) ;
+    var totalDiscount2 = 100*(parseFloat(parseFloat(totalDiscountAmount2) / parseFloat(this.state.invoiceClosure.totalGross.value)).toFixed(4)) ;
+
+    var totalNet2 = parseFloat(parseFloat(this.state.invoiceClosure.allWorksNet.value) + parseFloat(finalNetValue) + parseFloat(this.state.invoiceClosure.allExteriorWorksNet.value)).toFixed(2) ;
+    var amountOfVAT2 = parseFloat(0.17 * parseFloat(totalNet2)).toFixed(2);
+    var totalPayment2 = parseFloat(parseFloat(totalNet2) + parseFloat(amountOfVAT2)).toFixed(2) ;
+
+        const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { 
+          value: totalNet2
+      });
+
+      const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { 
+        value: amountOfVAT2
+      });
+
+      const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { 
+      value: totalPayment2
+      });
+
+      const updatedFormElementForFinalTotalDiscountAmount = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { 
+        value: totalDiscountAmount2
+        });
+
+        const updatedFormElementForFinalTotalDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { 
+          value: totalDiscount2
+          });
+
 
         const updatedCardForm = updateObject(this.state.invoiceClosure, { 
             [event.target.id]: updatedFormElement,
             ['allPartsNet']: updatedFormElementForNet,
             ['allPartsDiscountAmount']: updatedFormElementForFinalAmountValue,
+            ['totalNet']: updatedFormElementForTotalNet,
+            ['amountOfVAT']: updatedFormElementForVat,
+            ['totalPayment']: updatedFormElementForFinalTotalPayment,
+            ['totalDiscountAmount']: updatedFormElementForFinalTotalDiscountAmount,
+            ['totalDiscount']: updatedFormElementForFinalTotalDiscount
         });
         this.setState({invoiceClosure: updatedCardForm}); 
       }
-
-            console.log(this.state.invoiceClosure);
-
-  
-  // else{
-  //         const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
-  //           value: event.target.value
-  //       });
-  //       const updatedCardForm = updateObject(this.state.invoiceClosure, { 
-  //           [event.target.id]: updatedFormElement 
-  //       });
-  //       this.setState({invoiceClosure: updatedCardForm}); 
-  // }
 }
 
+
+inputInvoiceTotalDiscountChangedHandler = (event) => { 
+
+  var value;
+  if(event.target.value=== ''){
+    value = 0;
+  }
+  else if(event.target.value !== ''){
+    value = event.target.value;
+  }
+
+  if(event.target.value === '' ){ this.state.isPercentTotalEntered = false ;}
+  else if(event.target.value === '0'){this.state.isPercentTotalEntered = false;}
+  else{this.state.isPercentTotalEntered  = true;}
+
+  if(event.target.id === 'totalDiscountAmount' ){
+    const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { value: value});
+
+    var finalNetValue;
+    if(this.state.invoiceClosure.totalDiscountAmount.value !== '')
+      finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.totalGross.value) - (parseFloat(value))).toFixed(2) ; 
+    else
+      finalNetValue= parseFloat(value).toFixed(2);
+    
+    const updatedFormElementForNet = updateObject(this.state.invoiceClosure['totalNet'], { value: finalNetValue});
+    
+      var finalWorksDiscountValue; 
+      if(this.state.invoiceClosure.totalDiscountAmount.value !== '')
+          finalWorksDiscountValue = parseFloat(100*(parseFloat(parseFloat(value) / (parseFloat(this.state.invoiceClosure.totalGross.value))))).toFixed(2) ; 
+      else
+          finalWorksDiscountValue= parseFloat(0).toFixed(2);
+
+        const updatedFormElementForWorksDiscount = updateObject(this.state.invoiceClosure['totalDiscount'], { value: finalWorksDiscountValue });
+  
+        var totalNet = parseFloat(parseFloat(this.state.invoiceClosure.allWorksNet.value)  + parseFloat(this.state.invoiceClosure.allPartsNet.value)  + parseFloat(finalNetValue) ).toFixed(2) ;
+        var amountOfVAT = parseFloat(0.17 * parseFloat(totalNet)).toFixed(2);
+        var totalPayment = parseFloat(parseFloat(totalNet) + parseFloat(amountOfVAT)).toFixed(2) ;
+  
+        const updatedFormElementForTotalNet = updateObject(this.state.invoiceClosure['totalNet'], { value: totalNet });
+        const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { value: amountOfVAT });
+        const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { value: totalPayment });
+    
+    const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+        [event.target.id]: updatedFormElement,
+        ['totalNet']: updatedFormElementForNet,
+        ['totalDiscount']: updatedFormElementForWorksDiscount,
+        ['totalNet']: updatedFormElementForTotalNet,
+        ['amountOfVAT']: updatedFormElementForVat,
+        ['totalPayment']: updatedFormElementForFinalTotalPayment
+    });
+    
+    this.setState({invoiceClosure: updatedCardForm}); 
+  }
+
+  else if(event.target.id === 'totalDiscount'){
+          const updatedFormElement = updateObject(this.state.invoiceClosure[event.target.id], { 
+            value: value
+        });
+
+        const finalNetValue = parseFloat(parseFloat(this.state.invoiceClosure.totalGross.value) - (parseFloat(value) * parseFloat(this.state.invoiceClosure.totalGross.value) )/100).toFixed(2) ; //calculate the final price after discount
+        const updatedFormElementForNet = updateObject(this.state.invoiceClosure['totalNet'], { 
+          value: finalNetValue
+      });
+
+      const finalAmountValue = parseFloat(parseFloat(this.state.invoiceClosure.totalGross.value) - parseFloat(finalNetValue)).toFixed(2); //calculate the total amount of the discount
+      const updatedFormElementForFinalAmountValue = updateObject(this.state.invoiceClosure['totalDiscountAmount'], { 
+        value: finalAmountValue
+    });
+
+    var amountOfVAT = parseFloat(0.17 * parseFloat(finalNetValue)).toFixed(2);
+    var totalPayment = parseFloat(parseFloat(finalNetValue) + parseFloat(amountOfVAT)).toFixed(2) ;
+      
+    const updatedFormElementForVat = updateObject(this.state.invoiceClosure['amountOfVAT'], { 
+        value: amountOfVAT
+      });
+
+      const updatedFormElementForFinalTotalPayment = updateObject(this.state.invoiceClosure['totalPayment'], { 
+      value: totalPayment
+      });
+
+        const updatedCardForm = updateObject(this.state.invoiceClosure, { 
+            [event.target.id]: updatedFormElement,
+            ['totalNet']: updatedFormElementForNet,
+            ['totalDiscountAmount']: updatedFormElementForFinalAmountValue,
+            ['amountOfVAT']: updatedFormElementForVat,
+            ['totalPayment']: updatedFormElementForFinalTotalPayment
+        });
+        this.setState({invoiceClosure: updatedCardForm}); 
+      }
+}
 
 
 currency = (num) => {
@@ -475,43 +852,41 @@ currency = (num) => {
 }
 
 
-  renderShowCloseModal = () => { ///*** add new user modal! ****
+  renderShowCloseModal = () => { ///*** invoice closure modal! ****
 
+    if(!this.state.invoiceClosureIsCalculated){
     var allWorksGross= 0;
+    var allExteriorWorksGross = 0;
     var allPartsGross= 0;
 
     for(var i=0; i < this.props.workData.length ; i++){
-      allWorksGross += parseInt(this.props.workData[i].net, 10) ;
+      if(this.props.workData[i].isExteriorWork){
+        allExteriorWorksGross += parseInt(this.props.workData[i].net, 10) ;
+      }
+      else if(!this.props.workData[i].isExteriorWork){
+        allWorksGross += parseInt(this.props.workData[i].net, 10) ;
+      }
      }
 
      for(var j=0; j < this.props.partsData.length ; j++){
       allPartsGross += parseInt(this.props.partsData[j].net, 10);
      }
-     this.state.invoiceClosure.allWorksGross.value=allWorksGross;
-      this.state.invoiceClosure.allPartsGross.value=allPartsGross;
+      allWorksGross = parseFloat(allWorksGross);
+      allPartsGross = parseFloat(allPartsGross);
+      allExteriorWorksGross = parseFloat(allExteriorWorksGross);
 
-     this.state.invoiceClosure.totalGross.value= allWorksGross + allPartsGross;
-     this.state.invoiceClosure.allWorksNet.value= allWorksGross - this.state.invoiceClosure.allWorksDiscountAmount.value ;
-     this.state.invoiceClosure.allPartsNet.value= allPartsGross - this.state.invoiceClosure.allPartsDiscountAmount.value ;
-    //  this.state.invoiceClosure.allWorksNet.value=allWorksGross;
-    //  this.state.invoiceClosure.allPartsNet.value=allPartsGross;
-    this.state.invoiceClosure.totalNet.value= this.state.invoiceClosure.allWorksNet.value + this.state.invoiceClosure.allPartsGross.value;
-
-     this.state.invoiceClosure.amountOfVAT.value= 0.17 * this.state.invoiceClosure.totalNet.value;
-     this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalNet.value + this.state.invoiceClosure.amountOfVAT.value ;
-   
-
-      // allWorksGross = this.currency(allWorksGross); 
-      // allPartsGross = this.currency(allPartsGross); 
-
-   
-   
-
-      console.log(this.state.invoiceClosure.totalGross.value);
-
-      // this.state.invoiceClosure.totalGross.value = this.currency(this.state.invoiceClosure.totalGross.value);
-      console.log(this.state.invoiceClosure.totalGross.value);
-
+    this.state.invoiceClosure.allWorksGross.value= parseFloat(allWorksGross).toFixed(2);
+    this.state.invoiceClosure.allPartsGross.value=parseFloat(allPartsGross).toFixed(2);
+    this.state.invoiceClosure.allExteriorWorksGross.value=parseFloat(allExteriorWorksGross).toFixed(2);
+    this.state.invoiceClosure.totalGross.value= parseFloat(allWorksGross + allPartsGross + allExteriorWorksGross).toFixed(2);
+    this.state.invoiceClosure.allWorksNet.value= parseFloat(allWorksGross - this.state.invoiceClosure.allWorksDiscountAmount.value).toFixed(2) ;
+    this.state.invoiceClosure.allPartsNet.value= parseFloat(allPartsGross - this.state.invoiceClosure.allPartsDiscountAmount.value).toFixed(2) ;
+    this.state.invoiceClosure.allExteriorWorksNet.value= parseFloat(allExteriorWorksGross - this.state.invoiceClosure.allExternalWorksDiscountAmount.value).toFixed(2) ;
+    this.state.invoiceClosure.totalNet.value= (parseFloat(this.state.invoiceClosure.allWorksNet.value) + parseFloat(this.state.invoiceClosure.allPartsNet.value) + parseFloat(this.state.invoiceClosure.allExteriorWorksNet.value)).toFixed(2);
+    this.state.invoiceClosure.amountOfVAT.value= (0.17 * parseFloat(this.state.invoiceClosure.totalNet.value)).toFixed(2);
+    this.state.invoiceClosure.totalPayment.value=(parseFloat(this.state.invoiceClosure.totalNet.value) + parseFloat(this.state.invoiceClosure.amountOfVAT.value)).toFixed(2) ;
+    this.state.invoiceClosureIsCalculated =true;
+    }
 
     let workButtons =
         <div class="form-group" style={{marginBottom: "4px"}}>
@@ -596,10 +971,10 @@ currency = (num) => {
                 </div>
 
                 <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
-                  <label for="allWorksDiscount">הנחה</label>
+                  <label for="allWorksDiscount">% הנחה</label>
                   <input type="number" id="allWorksDiscount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                  value={this.state.invoiceClosure.allWorksDiscount.value} 
-                 onChange = {(event) => this.inputInvoiceWorksGrossChangedHandler(event)} />
+                 onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoiceWorksGrossChangedHandler(event) : null} />
                 </div>
 
            
@@ -607,7 +982,8 @@ currency = (num) => {
                 <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksDiscountAmount">סכום ההנחה</label>
                   <input type="number" id="allWorksDiscountAmount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.invoiceClosure.allWorksDiscountAmount.value} />
+                  value={this.state.invoiceClosure.allWorksDiscountAmount.value}
+                  onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoiceWorksGrossChangedHandler(event) : null} />
                 </div>
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
@@ -615,7 +991,6 @@ currency = (num) => {
                   <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksNet.value} />
                 </form>
-
                  </div>
                  
                  <div class="form-row" style={{ direction: "rtl" ,fontSize: "11px", marginRight:"auto"}}> 
@@ -627,25 +1002,27 @@ currency = (num) => {
                  <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">עבודות חוץ</label> */}
                   <input type="number" id="allExteriorWorksGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.invoiceClosure.allExteriorWorksGross.value} />
+                  value={this.state.invoiceClosure.allExteriorWorksGross.value} />
                 </form>
 
                 <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">הנחה</label> */}
                   <input type="number" id="allExteriorWorksDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.invoiceClosure.allExteriorWorksDiscount.value} />
+                  value={this.state.invoiceClosure.allExteriorWorksDiscount.value}
+                  onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoiceExternalWorksChangedHandler(event) : null}/>
                 </form>
 
                 <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">סכום ההנחה</label> */}
                   <input type="number" id="allExternalWorksDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.invoiceClosure.allExternalWorksDiscountAmount.value} />
+                  value={this.state.invoiceClosure.allExternalWorksDiscountAmount.value}
+                  onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoiceExternalWorksChangedHandler(event) : null}/>
                 </form>
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">נטו</label> */}
                   <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  defaultValue={this.state.invoiceClosure.allExteriorWorksNet.value} />
+                  value={this.state.invoiceClosure.allExteriorWorksNet.value} />
                 </form>
                </div> 
 
@@ -664,14 +1041,14 @@ currency = (num) => {
                     {/* <label for="cellphone">הנחה</label> */}
                     <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsDiscount.value}
-                    onChange = {(event) => this.inputInvoicePartsGrossChangedHandler(event)} />
-              
+                    onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoicePartsGrossChangedHandler(event) : null} />
                     </form>
 
                     <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">סכום ההנחה</label> */}
                     <input type="number" id="allPartsDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                    value={this.state.invoiceClosure.allPartsDiscountAmount.value} />
+                    value={this.state.invoiceClosure.allPartsDiscountAmount.value} 
+                    onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoicePartsGrossChangedHandler(event) : null}/>
                     </form>
 
                     <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
@@ -683,11 +1060,7 @@ currency = (num) => {
 
 
 
-
-
-
                     <div className={classes.anoSeparator}></div>
-
                     
                     <div class="form-row" >
                  </div>
@@ -708,55 +1081,53 @@ currency = (num) => {
 
                         <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.invoiceClosure.totalDiscount.value} />
+                        value={this.state.invoiceClosure.totalDiscount.value}
+                        onChange={(!this.state.isPercentWorkEntered && !this.state.isPercentPartEntered && !this.state.isPercentExteriorEntered)
+                           ? (event) => this.inputInvoiceTotalDiscountChangedHandler(event) : null}  />
                         </form>
 
                         <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalDiscountAmount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.invoiceClosure.totalDiscountAmount.value} />
+                        value={this.state.invoiceClosure.totalDiscountAmount.value} 
+                        onChange={(!this.state.isPercentWorkEntered && !this.state.isPercentPartEntered && !this.state.isPercentExteriorEntered)
+                          ? (event) => this.inputInvoiceTotalDiscountChangedHandler(event) : null}  />
                         </form>
 
                         <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                         <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                        defaultValue={this.state.invoiceClosure.totalNet.value} />
+                        value={this.state.invoiceClosure.totalNet.value} />
                         </form>
                         </div> 
 
+                       
+                        <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right",direction: "rtl"}}> 
 
-                        <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}> 
+                        <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                        <label for="customerParticipation">השתתפות הלקוח</label>
+                        <input type="text"  id="customerParticipation" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        defaultValue={this.state.cardForm.customerParticipation.value}
+                        onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
+                      </div>
 
-                        <form class="form-group col-md-4" style={{ padding:"10px", backgroundColor: "gray", borderBottom: "1px solid black", borderLeft:"1px solid black",borderTop: "1px solid black"}}>
-                                {/* <label for="cellphone">סה"כ</label> */}
+                      <div class="form-group col-md-3"  >
+                      <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
+                      <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                          value={this.state.invoiceClosure.amountOfVAT.value}
+                      onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
+                    </div>
+
+                    <div class="form-group col-md-6"  >
+                    <div class="form-group" style={{ margin:"0px", backgroundColor: "gray", border: "1px solid black"}}>
+                            <div for="totalPayment" style={{fontWeight: "bold"}}>סה"כ לתשלום</div>
+                            
+                        <div  style={{ padding:"10px", backgroundColor: "gray"}}>
                                 <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                                defaultValue={this.state.invoiceClosure.totalPayment.value} />
-                                </form>
+                                value={this.state.invoiceClosure.totalPayment.value} />
+                                </div>
 
-                                <form class="form-group col-md-1" style={{ paddingTop: "10px", backgroundColor: "gray", borderBottom: "1px solid black", borderRight:"1px solid black",borderTop: "1px solid black"}}>
-                            <label for="cellphone">סה"כ לתשלום</label>
-                            </form>
-
-                          <form class="form-group col-md-3" style={{ marginBottom: "1rem", paddingRight: "0px", margin:"10px",marginRight: "0px"}}>
-                          {/* <label for="cellphone">סה"כ</label> */}
-                          <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                          defaultValue={this.state.invoiceClosure.amountOfVAT.value} />
-                          </form>
-
-
-                          <form class="form-group col-md-1" style={{ margin: "10px", marginLeft: "0px"}}>
-                      <label for="cellphone" style={{textAlign: "right"}}> מע"מ 17%</label>
-                      </form>
-                        
-                          {/* </div>  */}
-
-                          {/* <div class="form-row" style={{ fontSize: "11px", marginRight:"auto",textAlign:"right"}}>  */}
-
-                             
-                              
-                             </div> 
-
-
-                          
-
+                        </div>         
+                 </div>                       
+              </div> 
                </div>
               </Modal.Body>
             <Modal.Footer style={{padding: "5px", display: "block", borderTop: "3px solid #e5e5e5", backgroundColor: "silver"}} >
@@ -780,6 +1151,7 @@ cardOpeningHandler = ( event ) => {
   for (let formElementIdentifier in this.state.vehicleData) {
     carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
   }
+  // console.log(this.state.vehicleData);
 
 const customerData = {};
 for (let formElementIdentifier in this.state.customerDetails) {
@@ -917,6 +1289,7 @@ inputCarChangedHandler = (event) => {
           [event.target.id]: updatedFormElement 
       });
       this.setState({vehicleData: updatedCardForm}); 
+      // console.log(this.state.vehicleData);
 }
 
 
@@ -1011,6 +1384,26 @@ inputNewWorkChangedHandler = (event) => {
         });
         this.setState({cardWork: updatedCardForm}); 
   }
+
+  else if(event.target.id === 'isExteriorWork'){
+    let updatedFormElement;
+    if(this.state.cardWork.isExteriorWork.value === false){
+           updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+            value: true
+        });
+      }
+        else if(this.state.cardWork.isExteriorWork.value === true){
+           updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
+            value: false
+        });
+        }
+        const updatedCardForm = updateObject(this.state.cardWork, { 
+            [event.target.id]: updatedFormElement 
+        });
+        
+        this.setState({cardWork: updatedCardForm}); 
+        console.log(this.state.cardWork);
+  }
   
   else{
           const updatedFormElement = updateObject(this.state.cardWork[event.target.id], { 
@@ -1103,6 +1496,8 @@ inputNewPartChangedHandler = (event) => {
 workOrPartsOpeningHandler = ( event,kind ) => {
       event.preventDefault(); 
       const formData = {};
+      this.state.invoiceClosureIsCalculated = false;
+
 
       if(kind === 'workData'){
           formData['workDescription'] = this.state.cardWork.workDescription.value;
@@ -1111,6 +1506,8 @@ workOrPartsOpeningHandler = ( event,kind ) => {
           formData['discount'] = this.state.cardWork.discount.value;
           formData['net'] = this.state.cardWork.net.value;
           formData['kind'] = kind;
+          formData['isExteriorWork'] = false;
+
       }
 
       else if( kind === 'partsData'){ 
@@ -1120,6 +1517,7 @@ workOrPartsOpeningHandler = ( event,kind ) => {
         formData['discount'] = this.state.cardPart.discount.value;
         formData['net'] = this.state.cardPart.net.value;
         formData['kind'] = kind;
+
       }
       let cardKey = this.state.identifiedCardID;
       this.props.onWorkOrPartsOpening(formData, this.props.token, this.props.branchNumber, this.props.userId, kind,cardKey ); // this contains all the data of card 
@@ -1150,6 +1548,8 @@ workOrPartsOpeningHandler = ( event,kind ) => {
 
 workOrPartsUpdateHandler = ( event,kind ) => {
       event.preventDefault(); // with that we get the task details
+      this.state.invoiceClosureIsCalculated = false;
+
       const itemData = {};
 
       if(kind === 'workData'){
@@ -1157,8 +1557,10 @@ workOrPartsUpdateHandler = ( event,kind ) => {
         itemData['time'] = this.state.cardWork.time.value;
         itemData['gross'] = this.state.cardWork.gross.value;
         itemData['discount'] = this.state.cardWork.discount.value;
-        itemData['net'] = this.state.cardWork.net.value;
+        itemData['net'] = this.state.cardWork.net.value; 
         itemData['kind'] = kind;
+        itemData['isExteriorWork'] = this.state.cardWork.isExteriorWork.value; 
+
       }
 
       else if( kind === 'partsData'){ 
@@ -1176,6 +1578,32 @@ workOrPartsUpdateHandler = ( event,kind ) => {
       this.setWorkAndPartStates();
   }
   
+
+
+  exteriorWorkUpdateHandler = (workKey,kind,workDescription,time,gross,discount,net,isExteriorWork ) => {
+  //  event.preventDefault(); // with that we get the task details
+    this.state.invoiceClosureIsCalculated = false;
+
+
+      const itemData = {};
+      itemData['workDescription'] = workDescription;
+      itemData['time'] = time;
+      itemData['gross'] = gross;
+      itemData['discount'] = discount;
+      itemData['net'] = net; 
+      itemData['kind'] = kind;
+      itemData['isExteriorWork'] = !isExteriorWork ; 
+
+    console.log(itemData);
+
+    let cardKey = this.state.identifiedCardID;
+    let itemKey = this.state.itemKeyForUpdateWorkOrPart;
+
+    this.props.onWorkOrPartUpdate(itemData, this.props.token, this.props.branchNumber, this.props.userId,'cards', kind,cardKey,workKey ); 
+    this.setWorkAndPartStates();
+}
+
+
  handleChange = date => {
   this.setState({
     startDate: date
@@ -1203,6 +1631,7 @@ changeVehicleNumberHandler = ( event ) => { // update card
 cardUpdateHandler = ( event ) => { // update card
  
   event.preventDefault(); 
+
   const carData ={
     carDescription: this.state.car_data[0],
     carNote: this.state.car_data[1],
@@ -1231,7 +1660,6 @@ cardUpdateHandler = ( event ) => { // update card
     policyNumber: this.state.card_data[10],
     ticketNumber: this.state.cardDetails.ticketNumber,
     status: this.state.card_data[11]
-
   }
 
   const customerData={
@@ -1273,8 +1701,32 @@ cardUpdateHandler = ( event ) => { // update card
 
 
 
-
 ModalCardCloseHandler = () => {
+
+  let invoiceClosureForm = {
+    allWorksGross:{value: 0.00 },
+    allWorksDiscount:{value: 0.00},
+    allWorksDiscountAmount:{value: 0.00},
+    allWorksNet:{value: 0.00},
+    allExteriorWorksGross:{value: 0.00 },
+    allExteriorWorksDiscount:{value: 0.00},
+    allExternalWorksDiscountAmount:{value: 0.00},
+    allExteriorWorksNet:{value: 0.00},
+    allPartsGross:{value: 0.00},
+    allPartsDiscount:{value: 0.00},
+    allPartsDiscountAmount:{value:0.00},
+    allPartsNet:{value: 0.00 },
+    totalGross:{value: 0.00},
+    totalDiscount:{value: 0.00},
+    totalDiscountAmount:{value: 0.00},
+    totalNet:{value: 0.00},
+    amountOfVAT:{value: 0.00},
+    totalPayment:{value:0.00}
+  }
+
+  this.setState({invoiceClosure: invoiceClosureForm});
+  this.setState({invoiceClosureIsCalculated: false});
+
   this.setState(prevState => {
       return {showCloseModal: !prevState.showCloseModal};
       });
@@ -1284,9 +1736,12 @@ cardCloseHandler = ( event ) => {
       event.preventDefault(); 
 
       const cardData = {};
-      for (let formElementIdentifier in this.state.cardForm) {
-        cardData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
-      }
+    for (let formElementIdentifier in this.state.cardForm) {
+      cardData[formElementIdentifier] = this.state.cardForm[formElementIdentifier].value;
+  }
+
+  cardData["openingDate"] =  this.state.cardDetails.openingDate;
+
       const carData = {};
       for (let formElementIdentifier in this.state.vehicleData) {
         carData[formElementIdentifier] = this.state.vehicleData[formElementIdentifier].value;
@@ -1297,28 +1752,39 @@ cardCloseHandler = ( event ) => {
         customerData[formElementIdentifier] = this.state.customerDetails[formElementIdentifier].value;
       }
 
-
+  
       const garageReplacementData = {};
       for (let formElementIdentifier in this.state.garageReplacementVehicle) {
-        garageReplacementData[formElementIdentifier] = this.state.garageReplacementVehicle[formElementIdentifier].value;
+          garageReplacementData[formElementIdentifier] = this.state.garageReplacementVehicle[formElementIdentifier].value;
       }
+
 
       const rentalCompanyReplacementData = {};
       for (let formElementIdentifier in this.state.rentalCompanyReplacementVehicle) {
         rentalCompanyReplacementData[formElementIdentifier] = this.state.rentalCompanyReplacementVehicle[formElementIdentifier].value;
       }
 
-
       const invoiceClosureData = {};
       for (let formElementIdentifier in this.state.invoiceClosure) {
         invoiceClosureData[formElementIdentifier] = this.state.invoiceClosure[formElementIdentifier].value;
       }
-
       
+      garageReplacementData["isTaken"] =  this.state.garageReplacementCheck;
+      rentalCompanyReplacementData["isTaken"] =  this.state.rentalCompanyReplacementCheck;
+
+    //  console.log(cardData);
+    
+    
+    //   console.log(rentalCompanyReplacementData);
+    //   console.log(garageReplacementData);
+    //   console.log("hey");
+
         const card = { 
             cardData: cardData,
             carData: carData, 
             customerData: customerData,
+            workData: this.props.workData,
+            partsData:this.props.partsData,
             garageReplacementData: garageReplacementData,
             rentalCompanyReplacementData: rentalCompanyReplacementData,
             invoiceClosureData: invoiceClosureData,
@@ -1437,7 +1903,6 @@ setTheStates = (licenseNumber) => {
     }
    
 
-
     document.getElementById("workCardForm").reset(); 
     this.setState({car_data: []});
     this.setState({card_data: []});
@@ -1465,6 +1930,12 @@ setTheStates = (licenseNumber) => {
       this.setState({rental_company_data: []});
       this.setState({garageReplacementDetails: {}});
       this.setState({rentalCompanyDetails: {}});
+      this.setState({invoiceClosureIsCalculated: false});
+
+      this.setState({isPercentWorkEntered: false});
+      this.setState({isPercentPartEntered: false});
+      this.setState({isPercentExteriorEntered: false});
+      this.setState({isPercentTotalEntered: false});
 
 
       // if( licenseNumber!==''){
@@ -1486,6 +1957,8 @@ setTheStates = (licenseNumber) => {
      // }
 
   }
+
+
 
 
 check(data,licenseNumber){
@@ -1607,6 +2080,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     else {
       workButtons = 
       <div > 
+
         <form  class="form-group" style={{fontSize: "11px", marginBottom: "4px"}}  >
           <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div class="form-group col-md-5" style={{ marginBottom: "4px"}}  >       
@@ -1763,6 +2237,8 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
                            <th  scope="col" style={{ textAlign: "right"}}>הנחה</th>
                            <th  scope="col" style={{ textAlign: "right"}}>נטו</th>
                            <th  scope="col" style={{ textAlign: "right"}}>פעולות</th>
+                           <th  scope="col" style={{ textAlign: "right"}}>עבודת חוץ</th>
+
                        </tr>
                    </thead>
                    <tbody>
@@ -1778,8 +2254,18 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
               <td>{work.net}</td>
               <td>
                     {this.renderDeleteWorkOrPart(work.workKey,list)}
-                    {this.renderEditWorkOrPart(work.workKey,list,work.workDescription,work.time,work.gross,work.discount,work.net)}
+                    {this.renderEditWorkOrPart(work.workKey,list,work.workDescription,work.time,work.gross,work.discount,work.net,work.isExteriorWork)}
               </td>
+              {work.isExteriorWork ?
+                      <td>
+                      <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} id="isExteriorWork" onClick={() => this.exteriorWorkUpdateHandler(work.workKey,'workData',work.workDescription,work.time,work.gross,work.discount,work.net,work.isExteriorWork)} />
+                      </td>
+                     :
+                     
+                     <td>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} id="isExteriorWork" onClick={() => this.exteriorWorkUpdateHandler(work.workKey,'workData',work.workDescription,work.time,work.gross,work.discount,work.net,work.isExteriorWork)} />
+                    </td>
+              } 
             </tr>
         ))
       }
@@ -1985,7 +2471,7 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
               <td>{part.net}</td>
               <td>
                     {this.renderDeleteWorkOrPart(part.workKey,list)}
-                    {this.renderEditWorkOrPart(part.workKey,list,part.partDescription,part.amount,part.gross,part.discount,part.net)}
+                    {this.renderEditWorkOrPart(part.workKey,list,part.partDescription,part.amount,part.gross,part.discount,part.net,'')}
               </td>
             </tr>
         ))
@@ -2002,11 +2488,11 @@ renderPartsModal = (list) => { /// *** parttttttt modal! ****
 }
 
 
-renderEditWorkOrPart = ( itemKey,list,workDescription,time,gross,discount,net) => { 
-  return( <EditIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net)}/> );
+renderEditWorkOrPart = ( itemKey,list,workDescription,time,gross,discount,net,isExteriorWork) => { 
+  return( <EditIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.onEditWorkOrPartClick( itemKey,list,workDescription,time,gross,discount,net,isExteriorWork)}/> );
 }
 
-onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) =>  {
+onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net,isExteriorWork) =>  {
   this.setState({isUpdateWorkOrPartOpen: true});
   this.setState({isAddNewWorkOrPartOpen: true});
   this.setState({itemKeyForUpdateWorkOrPart: itemKey});
@@ -2018,7 +2504,8 @@ onEditWorkOrPartClick = ( itemKey,list,workDescription,time,gross,discount,net) 
       time:{value: time},
       gross:{value: gross},
       discount:{value: discount},
-      net:{value: net}
+      net:{value: net},
+      isExteriorWork: {value: isExteriorWork}
     }
     this.setState({cardWork: updateCardWork});
   }
@@ -2123,6 +2610,7 @@ switchDivModeHandlerMail = () => {
 updateCarInputValue=(evt,i)=> {
       evt.preventDefault(); 
       this.state.car_data[i]=evt.target.value;
+      
       if(i===9){
         this.state.carDetails.manufactureYear=evt.target.value;
         this.state.vehicleData.manufactureYear.value=evt.target.value;
@@ -2132,10 +2620,21 @@ updateCarInputValue=(evt,i)=> {
         //return (this.state.carDetails.manufactureYear);
         return (this.state.vehicleData.manufactureYear.value);
       }
+
+      if(i===10){
+        this.state.carDetails.speedometer=evt.target.value;
+        this.state.vehicleData.speedometer.value=evt.target.value;
+        this.setState(prevState => {
+          return (this.state.vehicleData.speedometer.value);
+          });
+        return (this.state.vehicleData.speedometer.value);
+      }
       //value={this.state.carDetails.manufactureYear}
 }
 
 updateCardInputValue=(evt,i)=> {
+  console.log(evt.target.value);
+  console.log(evt.target.id);
   evt.preventDefault(); 
     this.state.card_data[i]=evt.target.value;
 
@@ -2149,7 +2648,7 @@ updateCardInputValue=(evt,i)=> {
       //return (this.state.carDetails.manufactureYear);
       return (this.state.cardForm.cardType.value);
     }
-    if(i===11){
+    else if(i===11){
       this.state.cardDetails.status=evt.target.value;
       this.state.cardForm.status.value=evt.target.value;
       this.setState(prevState => {
@@ -2158,10 +2657,77 @@ updateCardInputValue=(evt,i)=> {
       //return (this.state.carDetails.manufactureYear);
       return (this.state.cardForm.status.value);
     }
+
+    else if(i===4){
+      // this.state.cardForm.customerRequests.value
+      this.state.cardDetails.customerRequests=evt.target.value;
+      this.state.cardForm.customerRequests.value=evt.target.value;
+      this.setState(prevState => {
+        return (this.state.cardForm.customerRequests.value);
+        });
+      //return (this.state.carDetails.manufactureYear);
+      return (this.state.cardForm.customerRequests.value);
+    }
+   // else{
+
+    //   const updatedFormElement = updateObject(this.state.cardForm[evt.target.id], { 
+    //     value: evt.target.value
+    // });
+    // const updatedCardForm = updateObject(this.state.cardForm, { 
+    //     [evt.target.id]: updatedFormElement 
+    // });
+    // this.setState({cardForm: updatedCardForm}); 
+    // this.setState({cardDetails: updatedCardForm}); 
+    // console.log(this.state.cardForm);
+    // console.log(this.state.cardDetails);
+    // this.state.cardDetails.customerRequests
+    //}
 }
 
+// this.setState(prevState => {
+//   return {showImagesAndDoc: !prevState.showImagesAndDoc,imagesArrayForCheck:[], docsArrayForCheck: []};
+//   });
+  
 updateCustomerInputValue(evt,i) {
   this.state.customer_data[i]=evt.target.value;
+
+  this.state.customerDetails.customerName.value= this.state.customer_details.customerName;
+
+  if(i===1){
+    this.state.customer_details.cellphone=evt.target.value;
+    this.state.customerDetails.cellphone.value=evt.target.value;
+    this.setState(prevState => {
+      return (this.state.customerDetails.cellphone.value);
+      });
+    return (this.state.customerDetails.cellphone.value);
+  }
+
+  else if(i===3){
+    this.state.customer_details.customerName=evt.target.value;
+    this.state.customerDetails.customerName.value=evt.target.value;
+    this.setState(prevState => {
+      return (this.state.customerDetails.customerName.value);
+      });
+    return (this.state.customerDetails.customerName.value);
+  }
+
+  else if(i===6){
+    this.state.customer_details.homePhone=evt.target.value;
+    this.state.customerDetails.homePhone.value=evt.target.value;
+    this.setState(prevState => {
+      return (this.state.customerDetails.homePhone.value);
+      });
+    return (this.state.customerDetails.homePhone.value);
+  }
+  else if(i===9){
+    this.state.customer_details.orderNumber=evt.target.value;
+    this.state.customerDetails.orderNumber.value=evt.target.value;
+    this.setState(prevState => {
+      return (this.state.customerDetails.orderNumber.value);
+      });
+    return (this.state.customerDetails.orderNumber.value);
+  }
+
 }
 
 
@@ -2623,11 +3189,13 @@ onChange = date => this.setState({ date })
                 {(() => {
                 if(this.state.found){
                   this.state.cardForm.ticketNumber.value=this.state.cardDetails.ticketNumber;
+                  
                 }    
               })()}
                   <label for="ticketNumber">מספר כרטיס</label>
-                  <input type="text" id="ticketNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline"
-                  defaultValue={this.state.cardForm.ticketNumber.value} 
+                  <input type="text" id="ticketNumber" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" 
+                  disabled={!this.state.formIsValid} style={{backgroundColor: "white"}}
+                  value={this.state.cardForm.ticketNumber.value} 
                   // {this.props.cards.length +1}
                   // value={this.state.cardForm.ticketNumber.value}
                   //  onChange={(event) => this.inputChangedHandler(event)}
@@ -2639,6 +3207,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.cardForm.cardType.value=this.state.cardDetails.cardType;
+                  if(this.state.card_data[1] !== undefined ){
+                      this.state.cardForm.cardType.value = this.state.card_data[1];
+                  } 
                   //this.g(this.state.carDetails.carDescription.value);
                   //console.log(this.state.carDetails);
                 }    
@@ -2671,6 +3242,9 @@ onChange = date => this.setState({ date })
                   this.state.cardForm.status.value=this.state.cardDetails.status;
                   //this.g(this.state.carDetails.carDescription.value);
                   //console.log(this.state.carDetails);
+                  if(this.state.card_data[11] !== undefined ){
+                    this.state.cardForm.status.value = this.state.card_data[11];
+                } 
                 }    
                 })()}
                   <label for="status">סטטוס טיפול ברכב</label>
@@ -2711,7 +3285,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                 if(this.state.found && this.state.term !==''){
                   this.state.vehicleData.carDescription.value=this.state.carDetails.carDescription;
-                  //this.g(this.state.carDetails.carDescription.value);
+                  if(this.state.car_data[0] !== undefined ){
+                    this.state.vehicleData.carDescription.value = this.state.car_data[0]; 
+                } 
                 }    
                 })()}
                   <label for="carDescription">תאור הרכב</label>
@@ -2725,6 +3301,9 @@ onChange = date => this.setState({ date })
                    if(this.state.found && this.state.term !==''){
                     this.state.vehicleData.speedometer.value= this.state.carDetails.speedometer;
                     //this.state.carDetails.speedometer=this.state.term;
+                    if(this.state.car_data[10] !== undefined ){
+                      this.state.vehicleData.speedometer.value = this.state.car_data[10]; 
+                  } 
                     }    
                  })()}
                   <label for="speedometer">מד אוץ</label>
@@ -2737,6 +3316,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.engineCapacity.value= this.state.carDetails.engineCapacity;
+                    if(this.state.car_data[7] !== undefined ){
+                      this.state.vehicleData.engineCapacity.value = this.state.car_data[7]; 
+                  } 
                     }    
                  })()}
                   <label for="engineCapacity">נפח מנוע</label>
@@ -2750,6 +3332,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.color.value= this.state.carDetails.color;
+                    if(this.state.car_data[4] !== undefined ){
+                      this.state.vehicleData.color.value = this.state.car_data[4]; 
+                  } 
                     }    
                  })()}
                   <label for="color" >צבע</label>
@@ -2762,6 +3347,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.chalkModel.value= this.state.carDetails.chalkModel;
+                    if(this.state.car_data[2] !== undefined ){
+                      this.state.vehicleData.chalkModel.value = this.state.car_data[2]; 
+                  } 
                     }    
                  })()}
                   <label for="chalkModel">דגם גיר</label>
@@ -2786,6 +3374,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.manufactureYear.value= this.state.carDetails.manufactureYear;
+                       if(this.state.car_data[9] !== undefined ){
+                    this.state.vehicleData.manufactureYear.value = this.state.car_data[9]; 
+                } 
                     // console.log(this.state.vehicleData.manufactureYear.value)
                     }    
                  })()}
@@ -2806,10 +3397,13 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.deliveryDate.value= this.state.carDetails.deliveryDate;
+                    if(this.state.car_data[5] !== undefined ){
+                      this.state.vehicleData.deliveryDate.value = this.state.car_data[5]; 
+                  } 
                     }    
                  })()}
                   <label for="deliveryDate" >תאריך מסירה</label> 
-                  <input type="datetime-local" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="date" id="deliveryDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.vehicleData.deliveryDate.value}
                   onChange={!this.state.found ? (event) => this.inputCarChangedHandler(event) : (evt) => this.updateCarInputValue(evt,5)}/>
                 </div>
@@ -2818,6 +3412,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.driverName.value= this.state.carDetails.driverName;
+                    if(this.state.car_data[6] !== undefined ){
+                      this.state.vehicleData.driverName.value = this.state.car_data[6]; 
+                  } 
                     }    
                  })()}
                   <label for="driverName">שם הנהג</label>
@@ -2830,6 +3427,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.code.value= this.state.carDetails.code;
+                    if(this.state.car_data[3] !== undefined ){
+                      this.state.vehicleData.code.value = this.state.car_data[3]; 
+                  } 
                     }    
                  })()}
                   <label for="code">קודן</label>
@@ -2842,6 +3442,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.vehicleData.carNote.value= this.state.carDetails.carNote;
+                        if(this.state.car_data[1] !== undefined ){
+                      this.state.vehicleData.carNote.value = this.state.car_data[1]; 
+                  } 
                     }    
                  })()}
                   <label for="carNote">הערה לרכב</label>
@@ -2882,18 +3485,24 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerName.value= this.state.customer_details.customerName;
+                    if(this.state.customer_data[3] !== undefined ){ 
+                      this.state.customerDetails.customerName.value = this.state.customer_data[3]; 
+                  } 
                     }    
                  })()}
                   <label for="customerName">שם לקוח</label>
                   <input type="text" id="customerName" class="form-control"  autocomplete="off"
-                  defaultValue={this.state.customerDetails.customerName.value}
+                  defaultValue={this.state.customerDetails.customerName.value} disabled={!this.state.formIsValid} style={{backgroundColor: "white"}}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,3)}/>
                 </div>
   
                 <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
-                   if(this.state.found){
+                   if(this.state.found){ 
                     this.state.customerDetails.address.value= this.state.customer_details.address;
+                    if(this.state.customer_data[0] !== undefined ){
+                      this.state.customerDetails.address.value = this.state.customer_data[0]; 
+                  } 
                     }    
                  })()}
                   <label for="address">כתובת</label>
@@ -2906,6 +3515,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.city.value= this.state.customer_details.city;
+                    if(this.state.customer_data[2] !== undefined ){
+                      this.state.customerDetails.city.value = this.state.customer_data[2]; 
+                  } 
                     }    
                  })()}
                   <label for="city">עיר</label>
@@ -2919,6 +3531,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.postalCode.value= this.state.customer_details.postalCode;
+                    if(this.state.customer_data[10] !== undefined ){
+                      this.state.customerDetails.postalCode.value = this.state.customer_data[10]; 
+                  } 
                     }    
                  })()}
                   <label for="postalCode" >מיקוד</label>
@@ -2931,6 +3546,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.homePhone.value= this.state.customer_details.homePhone;
+                    if(this.state.customer_data[6] !== undefined ){
+                      this.state.customerDetails.homePhone.value = this.state.customer_data[6]; 
+                  } 
                     }    
                  })()}
                   <label for="homePhone">טלפון בית</label>
@@ -2943,6 +3561,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.cellphone.value= this.state.customer_details.cellphone;
+                    if(this.state.customer_data[1] !== undefined ){
+                      this.state.customerDetails.cellphone.value = this.state.customer_data[1]; 
+                  } 
                     }    
                  })()}
                   <label for="cellphone">סלולרי</label>
@@ -2955,6 +3576,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.workingPhone.value= this.state.customer_details.workingPhone;
+                    if(this.state.customer_data[11] !== undefined ){
+                      this.state.customerDetails.workingPhone.value = this.state.customer_data[11]; 
+                  } 
                     }    
                  })()}
                   <label for="workingPhone">טלפון עבודה</label>
@@ -2967,6 +3591,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.identificationNumber.value= this.state.customer_details.identificationNumber;
+                    if(this.state.customer_data[7] !== undefined ){
+                      this.state.customerDetails.identificationNumber.value = this.state.customer_data[7]; 
+                  } 
                     }    
                  })()}
                   <label for="identificationNumber" >ח.פ/ת.ז</label>
@@ -2979,6 +3606,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.mailAdress.value= this.state.customer_details.mailAdress;
+                    if(this.state.customer_data[8] !== undefined ){
+                      this.state.customerDetails.mailAdress.value = this.state.customer_data[8]; 
+                  } 
                     }    
                  })()}
                   <label for="mailAdress">כתובת מייל</label>
@@ -2991,6 +3621,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.orderNumber.value= this.state.customer_details.orderNumber;
+                    if(this.state.customer_data[9] !== undefined ){
+                      this.state.customerDetails.orderNumber.value = this.state.customer_data[9]; 
+                  }
                     }    
                  })()}
                   <label for="orderNumber">מספר הזמנה</label>
@@ -3003,6 +3636,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerNote.value= this.state.customer_details.customerNote;
+                    if(this.state.customer_data[4] !== undefined ){
+                      this.state.customerDetails.customerNote.value = this.state.customer_data[4]; 
+                  }
                     }    
                  })()}
                   <label for="customerNote">הערה ללקוח</label>
@@ -3035,6 +3671,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.insuranceAgent.value= this.state.cardDetails.insuranceAgent;
+                    if(this.state.card_data[6] !== undefined ){
+                      this.state.cardForm.insuranceAgent.value = this.state.card_data[6];
+                  } 
                     }    
                  })()}
                   <label for="insuranceAgent" >סוכן ביטוח</label>
@@ -3047,6 +3686,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.appraiser.value= this.state.cardDetails.appraiser;
+                    if(this.state.card_data[0] !== undefined ){
+                      this.state.cardForm.appraiser.value = this.state.card_data[0];
+                  } 
                     }    
                  })()}
                   <label for="appraiser">שמאי</label>
@@ -3059,6 +3701,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.insuranceCompany.value= this.state.cardDetails.insuranceCompany;
+                    if(this.state.card_data[7] !== undefined ){
+                      this.state.cardForm.insuranceCompany.value = this.state.card_data[7];
+                  } 
                     }    
                  })()}
                   <label for="insuranceCompany">חברת ביטוח</label>
@@ -3071,6 +3716,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.customerParticipation.value= this.state.cardDetails.customerParticipation;
+                    if(this.state.card_data[3] !== undefined ){
+                      this.state.cardForm.customerParticipation.value = this.state.card_data[3];
+                  } 
                     }    
                  })()}
                   <label for="customerParticipation">השתתפות הלקוח</label>
@@ -3083,6 +3731,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.policyNumber.value= this.state.cardDetails.policyNumber;
+                    if(this.state.card_data[10] !== undefined ){
+                      this.state.cardForm.policyNumber.value = this.state.card_data[10];
+                  } 
                     }    
                  })()}
                   <label for="policyNumber">מס. פוליסה</label>
@@ -3095,6 +3746,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.claimNumber.value= this.state.cardDetails.claimNumber;
+                    if(this.state.card_data[2] !== undefined ){
+                      this.state.cardForm.claimNumber.value = this.state.card_data[2];
+                  } 
                     }    
                  })()}
                   <label for="claimNumber">תביעה</label>
@@ -3107,10 +3761,13 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.cardForm.dateOfDamage.value= this.state.cardDetails.dateOfDamage;
+                    if(this.state.card_data[5] !== undefined ){
+                      this.state.cardForm.dateOfDamage.value = this.state.card_data[5];
+                  } 
                     }    
                  })()}
                   <label for="dateOfDamage">תאריך נזק</label>
-                  <input type="datetime-local" id="dateOfDamage" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} selected={this.state.startDate} 
+                  <input type="date" id="dateOfDamage" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} selected={this.state.startDate} 
                   defaultValue={this.state.cardForm.dateOfDamage.value}
 
                   onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,5)}/>
@@ -3139,8 +3796,13 @@ onChange = date => this.setState({ date })
             <div class="card-body text-dark bg-white" >
               <div class="form-row" > 
                 {(() => {
-                   if(this.state.found){
+                   if(this.state.found){ // && this.state.cardDetails.customerRequests!== ''
+                    //  console.log(this.state.cardDetails.customerRequests);
+                    //  console.log(this.state.cardForm.customerRequests.value);
                     this.state.cardForm.customerRequests.value= this.state.cardDetails.customerRequests;
+                    if(this.state.card_data[4] !== undefined ){
+                      this.state.cardForm.customerRequests.value = this.state.card_data[4];
+                  } 
                     }    
                  })()}
                   <label for="customerRequests" >תלונות/בקשות הלקוח</label>
@@ -3166,13 +3828,13 @@ onChange = date => this.setState({ date })
               <div >
               <div class="form-row">
             {this.state.alternateVehicleTaken ?
-                          <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                          <div style={{ fontSize: "14px",fontWeight: "bold"}} disabled={!this.state.formIsValid}>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()} disabled={!this.state.formIsValid}/>
                             {' '}רכב חליפי נלקח?                    
                           </div>
                      :
-                     <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()}/>
+                     <div style={{ fontSize: "14px",fontWeight: "bold"}} disabled={!this.state.formIsValid}>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeAlternateVehicle()} disabled={!this.state.formIsValid}/>
                     {' '}רכב חליפי נלקח?   
                   </div>
                       } 
@@ -3183,23 +3845,23 @@ onChange = date => this.setState({ date })
                       <div class="form-row"> 
                         {this.state.garageReplacementCheck ?
                           <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()} disabled={!this.state.formIsValid}/>
                             {' '}רכב מהמוסך?                    
                         </div>
                      :
                      <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeGarageReplacementVehicle()} disabled={!this.state.formIsValid}/>
                     {' '}רכב מהמוסך?   
                   </div>
                       } 
                   {this.state.rentalCompanyReplacementCheck ?
                           <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                            <CheckBoxIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()} disabled={!this.state.formIsValid}/>
                             {' '}רכב מחברת השכרה?                    
                         </div>
                      :
                      <div style={{ fontSize: "14px",fontWeight: "bold"}}>
-                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()}/>
+                    <CheckBoxOutlineBlankIcon style={{ fontSize:"x-large",cursor: "pointer" }} onClick={() => this.switchModeRentalCompanyReplacementCheck()} disabled={!this.state.formIsValid}/>
                     {' '}רכב מחברת השכרה?   
                   </div>
                       } 
@@ -3221,6 +3883,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){    
                     this.state.garageReplacementVehicle.replacementVehicleNumber.value= this.state.garageReplacementDetails.replacementVehicleNumber;
+                    if(this.state.garage_replacement_data[0] !== undefined ){
+                      this.state.garageReplacementVehicle.replacementVehicleNumber.value = this.state.garage_replacement_data[0];
+                  }
                     }    
                  })()}  
 
@@ -3234,6 +3899,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.typeReplacementVehicle.value= this.state.garageReplacementDetails.typeReplacementVehicle;
+                    if(this.state.garage_replacement_data[1] !== undefined ){
+                      this.state.garageReplacementVehicle.typeReplacementVehicle.value = this.state.garage_replacement_data[1];
+                  }
                     }    
                  })()}
                   <label for="typeReplacementVehicle" >סוג רכב</label>
@@ -3246,6 +3914,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.fuelBefore.value= this.state.garageReplacementDetails.fuelBefore;
+                    if(this.state.garage_replacement_data[2] !== undefined ){
+                      this.state.garageReplacementVehicle.fuelBefore.value = this.state.garage_replacement_data[2];
+                  }
                     }    
                  })()}
                   <label for="fuelBefore" >דלק לפני</label>
@@ -3258,6 +3929,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.garageReplacementVehicle.fuelAfter.value= this.state.garageReplacementDetails.fuelAfter;
+                    if(this.state.garage_replacement_data[3] !== undefined ){
+                      this.state.garageReplacementVehicle.fuelAfter.value = this.state.garage_replacement_data[3];
+                  }
                     }    
                  })()}
                   <label for="fuelAfter" >דלק אחרי</label>
@@ -3271,10 +3945,13 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                       this.state.garageReplacementVehicle.dateOfDelivery.value= this.state.garageReplacementDetails.dateOfDelivery;
+                      if(this.state.garage_replacement_data[4] !== undefined ){
+                        this.state.garageReplacementVehicle.dateOfDelivery.value = this.state.garage_replacement_data[4];
+                    }
                   }    
                  })()}
                         <label for="dateOfDelivery" >תאריך מסירה</label> 
-                        <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="date" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         defaultValue={this.state.garageReplacementVehicle.dateOfDelivery.value}
                         onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,4)}/>
                       </div>
@@ -3282,10 +3959,13 @@ onChange = date => this.setState({ date })
                     {(() => {
                       if(this.state.found){
                         this.state.garageReplacementVehicle.returnDate.value= this.state.garageReplacementDetails.returnDate;
+                        if(this.state.garage_replacement_data[5] !== undefined ){
+                          this.state.garageReplacementVehicle.returnDate.value = this.state.garage_replacement_data[5];
+                      }
                         }    
                     })()}
                       <label for="returnDate" >תאריך החזרה</label> 
-                      <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                      <input type="date" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                       defaultValue={this.state.garageReplacementVehicle.returnDate.value}
                       onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,5)}/>
                     </div>
@@ -3300,6 +3980,9 @@ onChange = date => this.setState({ date })
                 {(() => {
                    if(this.state.found){
                     this.state.rentalCompanyReplacementVehicle.nameRentalCompany.value= this.state.rentalCompanyDetails.nameRentalCompany;
+                    if(this.state.rental_company_data[0] !== undefined ){
+                      this.state.rentalCompanyReplacementVehicle.nameRentalCompany.value = this.state.rental_company_data[0];
+                  }
                     }    
                  })()}
                   <label for="nameRentalCompany" >שם חברת ההשכרה</label>
@@ -3314,10 +3997,13 @@ onChange = date => this.setState({ date })
           {(() => {
              if(this.state.found){
               this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value= this.state.rentalCompanyDetails.dateOfDelivery;
+              if(this.state.rental_company_data[1] !== undefined ){
+                this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value = this.state.rental_company_data[1];
+            }
               }    
            })()}
             <label for="dateOfDelivery" >תאריך מסירה</label> 
-            <input type="datetime-local" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+            <input type="date" id="dateOfDelivery" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
             defaultValue={this.state.rentalCompanyReplacementVehicle.dateOfDelivery.value}
             onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,1)}/>
           </div>
@@ -3325,10 +4011,13 @@ onChange = date => this.setState({ date })
           {(() => {
              if(this.state.found){
               this.state.rentalCompanyReplacementVehicle.returnDate.value= this.state.rentalCompanyDetails.returnDate;
+              if(this.state.rental_company_data[2] !== undefined ){
+                this.state.rentalCompanyReplacementVehicle.returnDate.value = this.state.rental_company_data[2];
+            }
               }    
            })()}
             <label for="returnDate" >תאריך החזרה</label> 
-            <input type="datetime-local" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+            <input type="date" id="returnDate" class="form-control" autocomplete="off" aria-describedby="passwordHelpInline" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
             defaultValue={this.state.rentalCompanyReplacementVehicle.returnDate.value}
             onChange={!this.state.found ? (event) => this.inputRentalCompanyReplacementChangedHandler(event) : (evt) => this.updateRentalCompanyReplacementInputValue(evt,2)}/>
           </div>

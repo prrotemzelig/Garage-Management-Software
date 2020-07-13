@@ -41,13 +41,13 @@ class Search extends Component {
   }
 
   check(data){
-    console.log(data);
+    // console.log(data);
     if(data.cardData.licenseNumber===this.state.carNumber){
     //  this.setState({ found: true });
       
       this.state.found=true;
     }
-    console.log(this.state.found);
+    // console.log(this.state.found);
 
     // else{
     //   console.log("51");
@@ -72,7 +72,7 @@ class Search extends Component {
 
 //      this.setState({ carNumber: this.props.value });
      this.state.carNumber= this.props.value;
-      console.log(this.props.value);
+      // console.log(this.props.value);
           if(this.state.carNumber!== "" ){
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards= this.props.cards.map( card => (
@@ -91,11 +91,11 @@ class Search extends Component {
               ))
             }
 
-            console.log(this.state.found);
+            // console.log(this.state.found);
           }
       
       if(!this.state.found && this.state.carNumber!==''){
-        console.log("83");
+        // console.log("83");
 
         return ( 
           // alert("לא נמצאה היסטוריה עבור רכב זה");
@@ -106,7 +106,7 @@ class Search extends Component {
     
       if(this.state.found && this.state.carNumber!=='' && !this.state.click ){
         //this.state.found=false;
-        console.log("93");
+        // console.log("93");
       return (
         <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
             {direction: "rtl", backgroundColor: "white"}
@@ -133,7 +133,7 @@ class Search extends Component {
       }
       if(this.state.found && this.state.click){
         //this.state.found=false;
-        console.log("121");
+        // console.log("121");
 
         return(
           <div  >
