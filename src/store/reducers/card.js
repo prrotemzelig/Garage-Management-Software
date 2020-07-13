@@ -259,6 +259,42 @@ const changeVehicleNumberFail = ( state, action ) => {
 
 
 
+
+const markCardIsOpenStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const markCardIsOpenSuccess = ( state, action ) => {
+    //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false
+    } );
+};
+
+const markCardIsOpenFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+
+
+
+const markCardIsClosedStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const markCardIsClosedSuccess = ( state, action ) => {
+    //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    return updateObject( state, {
+        loading: false
+    } );
+};
+
+const markCardIsClosedFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) { // here Ill write my different cases
 
@@ -285,6 +321,15 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.CHANGE_VEHICLE_NUMBER_FAIL: return changeVehicleNumberFail( state, action );
 
 
+        case actionTypes.MARK_CARD_IS_OPEN_START: return markCardIsOpenStart( state, action );
+        case actionTypes.MARK_CARD_IS_OPEN_SUCCESS: return markCardIsOpenSuccess( state, action );
+        case actionTypes.MARK_CARD_IS_OPEN_FAIL: return markCardIsOpenFail( state, action );
+
+
+
+        case actionTypes.MARK_CARD_IS_CLOSED_START: return markCardIsClosedStart( state, action );
+        case actionTypes.MARK_CARD_IS_CLOSED_SUCCESS: return markCardIsClosedSuccess( state, action );
+        case actionTypes.MARK_CARD_IS_CLOSED_FAIL: return markCardIsClosedFail( state, action );
 
         case actionTypes.PURCHASE_SET_CURRENT_CARD_KEY: return purchaseSetCurrentCardKey( state, action );
 
