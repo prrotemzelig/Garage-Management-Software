@@ -174,7 +174,6 @@ render() {
       this.createReport(cards);
       if(this.state.counter===0){this.modalOpen();}
     }
-   
   const data = {
     animationEnabled: true,
     //exportEnabled: true,
@@ -251,7 +250,7 @@ render() {
   ];
 
      return (
-      <div style={{direction: "rtl" }}>
+      <div style={{direction: "rtl" ,fontFamily: "Alef Hebrew"}}>
       
        <Grid container direction="column">
         
