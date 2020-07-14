@@ -262,15 +262,18 @@ class openNew extends Component   {
 beforePageReloadHandler = (event) => { 
   event.preventDefault();
 
-  // console.log("263");
+ // console.log("265");
   if(this.state.identifiedCardID !== ''){
-    //  console.log(this.state.identifiedCardID);
-     while(this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID)){
-      // console.log("270");
+    // console.log(this.state.identifiedCardID);
+     //while(
+       this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID)
+      //console.log("269");
 
-     }
+     
    }
-  //  console.log("270");
+  // console.log("273");
+   this.forceUpdate();
+ //  console.log("275");
 
    return "unloading";
 
@@ -278,26 +281,22 @@ beforePageReloadHandler = (event) => {
 }
 
 componentWillUnmount() {
-  // console.log("262");
+  //console.log("262");
   //window.addEventListener('beforeunload', this.beforePageReloadHandler);
 
-//  window.removeEventListener("beforeunload", this.beforePageReloadHandler);
-    // console.log("276")
-    window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
 
    if(this.state.identifiedCardID !== ''){
-      // console.log(this.state.identifiedCardID);
+     // console.log(this.state.identifiedCardID);
       this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
    }
-    //  console.log("289");
-     window.removeEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
+    // console.log("289");
+     window.removeEventListener('beforeunload', this.beforePageReloadHandler.bind(this)); //.bind(this)
 
  //  window.removeEventListener('beforeunload', this.beforePageReloadHandler);
 
 
      this.setTheStates('');
 
-    // window.addEventListener("beforeunload", this.beforePageReloadHandler);
 
     //  if(this.state.identifiedCardID !== ''){
     //   console.log(this.state.identifiedCardID);
@@ -312,10 +311,10 @@ componentWillUnmount() {
 }
 
 componentDidUpdate(prevProps,prevState) {
-  // console.log("305");
+  //console.log("305");
   //window.removeEventListener('beforeunload', this.beforePageReloadHandler);
   window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
-  // console.log("310");
+  //console.log("310");
 
   // console.log("671");
   // console.log(this.props.currentCardKey);
@@ -353,6 +352,18 @@ componentDidMount() { // we want to fetch all the cards. so for doing that, I ne
   window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
   // console.log("346");
 
+//  window.addEventListener("beforeunload", this.beforePageReloadHandler);
+
+//   if(reload(false)){
+//     // this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+//    console( "317" );
+
+// }
+// else{
+//   this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
+//   console( "This page is reloaded" );
+
+// }
 }
 
 

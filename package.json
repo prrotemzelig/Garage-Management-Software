@@ -53,6 +53,7 @@
     "react-activity-feed": "^0.10.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-app-components": "^1.0.6",
+    "react-beforeunload": "^2.2.2",
     "react-bootstrap-modal": "^4.2.0",
     "react-bootstrap-sidebar": "0.0.1",
     "react-bootstrap-spinner": "^1.0.0",

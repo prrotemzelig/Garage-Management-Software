@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-cards';
 import axios2 from 'axios';
+var async = require("async");
+
 
 export const purchaseSetCurrentCardKey = () => { 
     return {
@@ -765,21 +767,28 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
         const requestTwo = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened);
         // console.log(requestOne);
         // console.log(requestTwo);
+        async.eachLimit([requestOne,requestTwo],1,function(file,callback){
+
         dispatch( markCardIsClosedStart() );
       //  axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
-      axios2.all([requestOne, requestTwo])
+      axios2.all([file]) //[requestOne, requestTwo]
         .then(axios2.spread((...responses) => {       
             const responseOne = responses[0]
-            const responseTwo = responses[1]
+           // const responseTwo = responses[1]
             // console.log(responseOne);     
             // console.log(responseTwo);     
+            //console.log("780");
             dispatch(markCardIsClosedSuccess()); 
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
+            this.forceUpdate();
+            callback(null);
 
         }))
         .catch( error => {
             dispatch(markCardIsClosedFail(error));
+            callback(null);
+
         } );
 
 
@@ -793,5 +802,6 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
         // .catch( error => {
         //     dispatch(markCardIsClosedFail(error));
         // } );
-    };
+    });
+        }
 };

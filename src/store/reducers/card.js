@@ -14,7 +14,8 @@ const initialState = {
     workData: [],
     partsData: [],
     currentCardKey: '',
-    currentTicketNumber: ''
+    currentTicketNumber: '',
+    loadingMarkCardIsClosed: false
 
 };
 
@@ -279,18 +280,18 @@ const markCardIsOpenFail = ( state, action ) => {
 
 
 const markCardIsClosedStart = ( state, action ) => {
-    return updateObject( state, { loading: true } ); 
+    return updateObject( state, { loadingMarkCardIsClosed: true } ); 
 };
 
 const markCardIsClosedSuccess = ( state, action ) => {
     //const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     return updateObject( state, {
-        loading: false
+        loadingMarkCardIsClosed: false
     } );
 };
 
 const markCardIsClosedFail = ( state, action ) => {
-    return updateObject( state, { loading: false } );
+    return updateObject( state, { loadingMarkCardIsClosed: false } );
 };
 
 
