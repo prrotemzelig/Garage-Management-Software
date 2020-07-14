@@ -29,6 +29,7 @@ class MonthlyReports extends Component {
       month:'',
       hebrewMonth:'',
       year:'',
+      yearReports:[],
       countMonthOpen:0,
       countMonthClose:0,
       countMonthWork:0,
@@ -37,6 +38,7 @@ class MonthlyReports extends Component {
       countYearRevenue:0,
       counter:0,
       modal: false,
+      arr:[],
     }
     this.onChildClicked = this.onChildClicked.bind(this);
     this.getData=this.getData.bind(this);
@@ -67,19 +69,24 @@ chartSelected(data){
     if(data==='גרף'){this.state.chartType="Line";}
 }
 
-createMountlyReport(data){
+createMountlyReport(data,month){
+  this.state.arr=[0,0,0,0,0];
+  var t=0;
   for(var i=0; i<data.length; i++){
     let openingDate=data[i].cardData.openingDate;
     let closeDate=data[i].closeDate;
     //countYearRevenue
-    if(openingDate.includes(this.state.month+"."+this.state.year)){
+    if(openingDate.includes(month+"."+this.state.year)){
       this.state.countMonthOpen+=1;
+      this.state.arr[0]+=1;
       this.state.counter=1;
       if(closeDate === undefined || closeDate === null || closeDate === ''){
       }
       else{
-        if(closeDate.includes(this.state.month+"."+this.state.year)){
+        if(closeDate.includes(month+"."+this.state.year)){
           this.state.countMonthClose+=1;
+          this.state.arr[1]+=1;
+
           this.state.counter=1;
         }
       }
@@ -91,7 +98,7 @@ createMountlyReport(data){
     parts=data[k].partsData;
 
     let openingDate=data[k].cardData.openingDate;
-    if(openingDate.includes(this.state.month+"."+this.state.year)){
+    if(openingDate.includes(month+"."+this.state.year)){
       if(parts === undefined || parts === null || parts === ''){
       }
       else{
@@ -100,16 +107,21 @@ createMountlyReport(data){
           if(parts_card[j].amount === undefined || parts_card[j].amount === null || parts_card[j].amount === ''){}
           else{
             this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
+            this.state.arr[2]+=parseInt(parts_card[j].amount, 10) ;
+
             this.state.counter=1;
           }
           if(parts_card[j].net === undefined || parts_card[j].net === null || parts_card[j].net === ''){}
           else{
             this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
+            this.state.arr[4]+=parseInt(parts_card[j].net, 10) ;
+
             this.state.counter=1;
           }
         }
       }
     }  
+
   }
   for(var s=0; s<data.length; s++){
     let work=[];
@@ -117,7 +129,7 @@ createMountlyReport(data){
     work=data[s].workData;
 
     let openingDate=data[s].cardData.openingDate;
-    if(openingDate.includes(this.state.month+"."+this.state.year)){
+    if(openingDate.includes(month+"."+this.state.year)){
       if(work === undefined || work === null || work === ''){
       }
       else{
@@ -127,13 +139,23 @@ createMountlyReport(data){
           }
           else{
           this.state.countMonthWork+=1;
+          this.state.arr[3]+=1;
+
           this.state.countMonthRevenue+=parseInt(work_card[z].net, 10) ;
+          this.state.arr[4]+=parseInt(work_card[z].net, 10) ;
+
           this.state.counter=1;
           }
         }
       }
-    }  
+    } 
   }
+
+  console.log(this.state.arr);
+  this.state.yearReports.push(this.state.arr);
+  //console.log(this.state.yearReports);
+
+ // return this.state.arr;
 }
 createYearReport(data){
   console.log(data);
@@ -236,6 +258,7 @@ _ExporterY;
 ExportY = () => {
         this._ExporterY.save();
 }
+CustomGroupFooter = () => (`סכום הכנסות כולל:  ${(this.state.countYearRevenue).toFixed(2)}`);
 
 render() {
   let cards=[];
@@ -262,7 +285,11 @@ render() {
         cards.push(this.state.closeCard[j]);
       }
       this.createYearReport(this.state.closeCard);
-      this.createMountlyReport(cards);
+      for(var i=1;i<13;i++){
+        this.createMountlyReport(cards,i);
+      }
+      console.log(this.state.yearReports);
+
       if(this.state.counter===0){this.modalOpen();}
       if(this.state.month===1){this.state.hebrewMonth="ינואר"};
       if(this.state.month===2){this.state.hebrewMonth="פברואר"};
@@ -360,107 +387,113 @@ render() {
       //outWorks:""
     }
   ];
-  const dataExcelYear = [
+  let dataExcelYear =[];
+if(this.state.yearReports[0] === undefined || this.state.yearReports[0] === null || this.state.yearReports[0] === ''){}
+else{
+
+  dataExcelYear = [
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[0][0],
+      closeCards: this.state.yearReports[0][1],
+      parts: this.state.yearReports[0][2],
+      works: this.state.yearReports[0][3],
+      revenue: this.state.yearReports[0][4],
       month: 'ינואר'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[1][0],
+      closeCards: this.state.yearReports[1][1],
+      parts: this.state.yearReports[1][2],
+      works: this.state.yearReports[1][3],
+      revenue: this.state.yearReports[1][4],
       month: 'פברואר'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[2][0],
+      closeCards: this.state.yearReports[2][1],
+      parts: this.state.yearReports[2][2],
+      works: this.state.yearReports[2][3],
+      revenue: this.state.yearReports[2][4],
       month: 'מרץ'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[3][0],
+      closeCards: this.state.yearReports[3][1],
+      parts: this.state.yearReports[3][2],
+      works: this.state.yearReports[3][3],
+      revenue: this.state.yearReports[3][4],
       month: 'אפריל'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[4][0],
+      closeCards: this.state.yearReports[4][1],
+      parts: this.state.yearReports[4][2],
+      works: this.state.yearReports[4][3],
+      revenue: this.state.yearReports[4][4],
       month: 'מאי'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[5][0],
+      closeCards: this.state.yearReports[5][1],
+      parts: this.state.yearReports[5][2],
+      works: this.state.yearReports[5][3],
+      revenue: this.state.yearReports[5][4],
       month: 'יוני'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[6][0],
+      closeCards: this.state.yearReports[6][1],
+      parts: this.state.yearReports[6][2],
+      works: this.state.yearReports[6][3],
+      revenue: this.state.yearReports[6][4],
       month: 'יולי'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[7][0],
+      closeCards: this.state.yearReports[7][1],
+      parts: this.state.yearReports[7][2],
+      works: this.state.yearReports[7][3],
+      revenue: this.state.yearReports[7][4],
       month: 'אוגוסט'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[8][0],
+      closeCards: this.state.yearReports[8][1],
+      parts: this.state.yearReports[8][2],
+      works: this.state.yearReports[8][3],
+      revenue: this.state.yearReports[8][4],
       month: 'ספטמבר'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[9][0],
+      closeCards: this.state.yearReports[9][1],
+      parts: this.state.yearReports[9][2],
+      works: this.state.yearReports[9][3],
+      revenue: this.state.yearReports[9][4],
       month: 'אוקטובר'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[10][0],
+      closeCards: this.state.yearReports[10][1],
+      parts: this.state.yearReports[10][2],
+      works: this.state.yearReports[10][3],
+      revenue: this.state.yearReports[10][4],
       month: 'נובמבר'
     },
     {
-      openCards: this.state.countMonthOpen,
-      closeCards: this.state.countMonthClose,
-      parts: this.state.countMonthParts,
-      works: this.state.countMonthWork,
-      revenue: this.state.countMonthRevenue,
+      openCards: this.state.yearReports[11][0],
+      closeCards: this.state.yearReports[11][1],
+      parts: this.state.yearReports[11][2],
+      works: this.state.yearReports[11][3],
+      revenue: this.state.yearReports[11][4],
       month: 'דצמבר'
     }
   ];
+  console.log(dataExcelYear); 
+}
 
      return (
-      <div style={{direction: "rtl" }}>
+      <div style={{direction: "rtl" ,fontFamily: "Alef Hebrew"}}>
       
        <Grid container direction="column">
         
@@ -490,7 +523,7 @@ render() {
 
          {is_mobile 
          ? 
-         <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}}>
+         <div style={this.props.backgroundColor=== 'light' ? {direction: "rtl"}:{direction: "rtl",backgroundColor:"white" }}>
           
           {this.state.chartType==="" ? <div><div style={{display: "flex",justifyContent: "center",alignItems: "center"}}><h5>{"סכום ההכנסות עבור חודש "+this.state.hebrewMonth+": "+this.state.countMonthRevenue+"   "}</h5>
           <h5>{"סכום ההכנסות עבור שנת "+this.state.year+": "+this.state.countYearRevenue}</h5></div>
@@ -548,8 +581,14 @@ render() {
                     <ExcelExportColumn field="parts" title="חלקים שנמכרו" width={150} />
                     <ExcelExportColumn field="works" title="עבודות שהתבצעו" width={150} />
                     <ExcelExportColumn field="revenue" title="סכום ההכנסות" width={150} />
-
+                   
                     <ExcelExportColumnGroup title="Availability" headerCellOptions={{ textAlign: 'center' }}></ExcelExportColumnGroup>
+                    <ExcelExportColumn
+                        field="Discontinued"
+                        title="Discontinued"
+                        hidden={false}
+                        groupHeader={this.CustomGroupHeader}
+                    />
         </ExcelExport>
       
          </Grid>

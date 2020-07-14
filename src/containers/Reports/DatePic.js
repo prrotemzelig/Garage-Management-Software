@@ -45,7 +45,7 @@ class Datepic extends React.Component {
 
         render() {   
         return (
-        <div class="form-row" style={{direction: "rtl"}} > 
+        <div class="form-row" style={{direction: "rtl" ,fontFamily: "Alef Hebrew"}} > 
            <div className="text-center"  style={this.props.backgroundColor=== 'light' ?{direction: "rtl"}:{direction: "rtl",backgroundColor:"white"}} >
              <form onSubmit={ this.onFormSubmit } style={{direction: "rtl"}}>
                 <div className="form-group"  style={{direction: "rtl",textAlign: "-webkit-center"}} >
