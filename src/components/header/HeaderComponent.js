@@ -121,8 +121,19 @@ class HeaderComponent extends Component {
      }
     componentDidMount() { 
         this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumber
+        console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId);
+
         this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
     }
+    componentDidUpdate(prevProps, prevState){
+        this.state.notificationLength=0;
+        for(var i=0;i<this.props.notification.length;i++){
+            if(this.props.notification[i].show=="false"){
+                this.state.notificationLength+=1;
+            }
+        }
+    }
+
     modalOpen() {
         this.setState({ modal: true });
     }
@@ -140,8 +151,23 @@ class HeaderComponent extends Component {
     }  
     onNotificationClick = () =>  {
         this.setState({notificationLength: 0});
+        for(var i=0;i<this.props.notification.length;i++){
+            if(this.props.notification[i].show=="false"){
+                const notificationData={
+                    type: this.props.notification[i].type,
+                    description: this.props.notification[i].description,
+                    openedBy: this.props.notification[i].openedBy,
+                    show: 'true'
+                }
+                console.log(notificationData);
+                console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId+"  "+this.props.notification[i].id);
+                this.props.onNotificationUpdate(notificationData, this.props.token, this.props.branchnumber, this.props.UserKey,this.props.userId,this.props.notification[i].id); // this contains all the data of card 
+            }
+        }
+
         if(!this.props.shownotificationmodel){
-        this.props.onNotificationOpening(); // this contains all the data of card 
+            this.setState({notificationLength: 0});
+            this.props.onNotificationOpening(); // this contains all the data of card 
         }
         else{
             this.props.onNotificationClose(); // this contains all the data of card 
@@ -149,8 +175,17 @@ class HeaderComponent extends Component {
     } 
     
     render(){   
-        this.state.notificationLength=this.props.notification.length;
-       if(this.state.notificationLength===0 && this.props.shownotificationmodel){
+        //console.log(this.props.notification);
+        let not=this.props.notification;
+        this.state.notificationLength=0;
+        for(var i=0;i<this.props.notification.length;i++){
+            if(this.props.notification[i].show=="false"){
+                this.state.notificationLength+=1;
+            }
+        }
+        
+        //this.state.notificationLength=this.props.notification.length;
+       if(this.props.notification.length===0 && this.props.shownotificationmodel){
         this.state.modal=true;
         this.props.onNotificationClose();
         }
@@ -212,7 +247,7 @@ class HeaderComponent extends Component {
                     </Badge> 
                 </Button>
 
-                {this.props.shownotificationmodel && this.state.notificationLength!==0 ? <ShowMessages /> : null }
+                {this.props.shownotificationmodel && this.props.notification.length!==0 ? <ShowMessages /> : null }
                 <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
             <div className="form-group">
                 אין הודעות חדשות
@@ -309,6 +344,7 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onFetchUsers: (token,userId) => dispatch( actions.fetchUsers(token, userId)), 
     onNotificationOpening: () => dispatch( actions.NotificationOpening() ),
     onNotificationClose: () => dispatch( actions.NotificationClose() ),
+    onNotificationUpdate: (updateData,token,branchNumber,userKey,userId,notificationKey) => dispatch( actions.notificationUpdate(updateData,token,branchNumber,userKey,userId,notificationKey) ),
 
   };
 };

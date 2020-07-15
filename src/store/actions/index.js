@@ -65,5 +65,6 @@ export {
     notificationDelete,
     NotificationOpening,
     NotificationClose,
+    notificationUpdate,
 } from './notification';
 

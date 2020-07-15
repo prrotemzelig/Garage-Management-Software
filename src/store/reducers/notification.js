@@ -18,10 +18,10 @@ const notificationOpeningStart = ( state, action ) => {
 };
 
 const notificationOpeningSuccess = ( state, action ) => {
-    const newNotification = updateObject( action.notificationData, { notificationKey: action.notificationId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
+    const newNotification = updateObject( action.notificationData, { id: action.notificationId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
         return updateObject( state, {
-            loading: false,
-            notification: state.notification.concat( newNotification )
+            loading: false
+           // notification: state.notification.concat( newNotification )
         });
     
 
@@ -73,6 +73,18 @@ const notificationDeleteSuccess = ( state, action ) => {
   
 };
 
+const notificationUpdateStart = ( state, action ) => {
+    return updateObject( state, { loading: true } ); 
+};
+
+const notificationUpdateFail = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
+const notificationUpdateSuccess = ( state, action ) => {
+    return updateObject( state, { loading: false } );
+};
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) { // here Ill write my different cases
         case actionTypes.NOTIFICATION_INIT: return notificationInit( state, action );
@@ -90,6 +102,10 @@ const reducer = ( state = initialState, action ) => {
 
         case actionTypes.NOTIFICATION_OPENING: return purchaseNotificationInit( state, action );
         case actionTypes.NOTIFICATION_CLOSE: return purchaseNotificationCancel( state, action );
+
+        case actionTypes.NOTIFICATION_UPDATE_START: return notificationUpdateStart( state, action );
+        case actionTypes.NOTIFICATION_UPDATE_SUCCESS: return notificationUpdateSuccess( state, action );
+        case actionTypes.NOTIFICATION_UPDATE_FAIL: return notificationUpdateFail( state, action );
 
         default: return state; // return the current state
     }
