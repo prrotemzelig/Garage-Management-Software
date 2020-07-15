@@ -70,6 +70,7 @@ export const notificationOpening = ( notificationData, token,branchNumber, userK
 
     return dispatch => {
         dispatch( notificationOpeningStart() ); // dispatch to the store
+        console.log(branchNumber+"  j  "+userKey);
         axios.post(branchNumber + '/users/' + userKey + '/notification.json' ,notificationData ) // send the HTTP request 
 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
@@ -110,13 +111,13 @@ export const fetchNotificationStart = () => {
 export const fetchNotification = (token, userId,branchNumber,userKey) => { //here we run our async code
     return dispatch => {
         dispatch(fetchNotificationStart()); // we need to do that to set loading to true!
-
+        console.log(branchNumber);
+        console.log(userKey);
     //    const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
         axios.get(branchNumber + '/users/'+ userKey +'/notification.json' ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
-            
             .then( res => { // when the data is there (in the node of cards in firebase)
                const fetchedNotification = [] ; 
-              
+              console.log(res.data);
         
                 for ( let key in res.data ) { //in the cards node in the firebase, I'm not getting an array but I'll get back a javascript object
                 fetchedNotification.push( {
@@ -176,6 +177,53 @@ export const notificationDelete = ( token,branchNumber,userKey,notificationKey ,
         })
         .catch( error => {
             dispatch(notificationDeleteFail(error));
+            console.log(error);
+        } );
+
+    };
+};
+
+export const notificationUpdateStart = () => {
+    return {// this being a async normal action reaches redux which has the reducer
+        type: actionTypes.NOTIFICATION_UPDATE_START
+    };
+};
+
+// this synchronous action creators
+export const notificationUpdateSuccess = ( id, notificationData) => { // here we expect to get the id of the newly created card, so the card which was created on the backend, on the database on our backend, we expect to get this as an id here because we want to pass it on the action which we actually create here, so that in the reducer, we can use that action to actually add the new card to our cards array.
+    //also I want the cardData
+    return { // here we return object where I have a type
+        type: actionTypes.NOTIFICATION_UPDATE_SUCCESS,
+        notificationId: id, 
+        notificationData: notificationData,
+    };
+};
+
+// this synchronous action creators
+export const notificationUpdateFail = ( error ) => { // here we might get the error message, but we simply want to return a new object of type
+    return {
+        type: actionTypes.NOTIFICATION_UPDATE_FAIL,
+        error: error // pass on the error
+    };
+}
+
+//this is the async action one
+//this is the action we dispatched from the container once we click that save card button.
+export const notificationUpdate = ( updateData, token,branchNumber,userKey ,userId,notificationKey) => { 
+
+
+    return dispatch => {
+        dispatch( notificationUpdateStart() ); // dispatch to the store
+        console.log(branchNumber +" "+userKey +" "+notificationKey+" "+ updateData);
+        console.log( updateData);
+        axios.patch(branchNumber + '/users/'+ userKey +'/notification/'+notificationKey+'/.json' , updateData)
+
+        .then(res => {
+        console.log(res.data);
+        dispatch(notificationUpdateSuccess(res.data.name, updateData)); 
+        })
+        .catch( error => {
+            dispatch(notificationUpdateFail(error));
             console.log(error);
         } );
 

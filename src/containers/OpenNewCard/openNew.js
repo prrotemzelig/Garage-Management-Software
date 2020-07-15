@@ -349,6 +349,7 @@ componentDidUpdate(prevProps,prevState) {
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
   // console.log("212");
   this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+  this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumbers
   window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
   // console.log("346");
 
@@ -1277,9 +1278,42 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
     }   
 
   //  this.setState({found: true});
-   this.props.onCardOpening(card,this.props.userId,this.props.token, this.props.branchNumber, 'cards'); // this contains all the data of card 
-    this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
-    // console.log(this.state.cardForm['licenseNumber'].value);
+  this.props.onCardOpening(card,this.props.userId,this.props.token, this.props.branchNumber, 'cards'); // this contains all the data of card 
+  this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+
+  const notification={};
+  notification['type']='openCard';
+  notification['description']=this.state.cardForm.licenseNumber.value;
+  notification['openedBy'] = this.props.AdminFirstName+' '+this.props.AdminLastName;
+  notification['show']='false';
+ 
+  if(this.props.branchNumber==="Talpiot"){
+      for(var i=0;i<this.props.TalpiotUsers.length;i++){
+        if(this.props.TalpiotUsers[i].keyUser===this.props.UserKey){}
+        else{
+          this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser);
+        }
+      }
+  }
+  if(this.props.branchNumber==="GivatShaul"){
+    for(var j=0;j<this.props.GivatShaulUsers.length;j++){
+      if(this.props.GivatShaulUsers[j].keyUser===this.props.UserKey){}
+      else{
+        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser);
+      }
+    }
+  }
+  if(this.props.branchNumber==="Modiin"){
+    for(var k=0;k<this.props.ModiinUsers.length;k++){
+      if(this.props.ModiinUsers[k].keyUser===this.props.UserKey){}
+      else{
+        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser);
+      }
+    }
+  }
+
+
+  // console.log(this.state.cardForm['licenseNumber'].value);
 
       // this.add();
   
@@ -1885,9 +1919,43 @@ cardCloseHandler = ( event ) => {
         this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId);  
         this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards');  
         this.setTheStates('');
+        console.log(this.state.cardForm.licenseNumber.value);
+        const notification={};
+        notification['type']='closeCard';
+        notification['description']=this.state.cardForm.licenseNumber.value;
+        notification['openedBy'] = this.props.AdminFirstName+' '+this.props.AdminLastName;
+        notification['show']='false';
+        if(this.props.branchNumber==="Talpiot"){
+          for(var i=0;i<this.props.TalpiotUsers.length;i++){
+            if(this.props.TalpiotUsers[i].keyUser===this.props.UserKey){}
+            else{
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser);
+            }
+          }
+        }
+        if(this.props.branchNumber==="GivatShaul"){
+          for(var j=0;j<this.props.GivatShaulUsers.length;j++){
+            if(this.props.GivatShaulUsers[j].keyUser===this.props.UserKey){}
+            else{
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser);
+            }
+          }
+        }
+        if(this.props.branchNumber==="Modiin"){
+          for(var k=0;k<this.props.ModiinUsers.length;k++){
+            if(this.props.ModiinUsers[k].keyUser===this.props.UserKey){}
+            else{
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser);
+            }
+          }
+        }
+      
 }
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
+createNotification(notification,userKey){
+    this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, userKey);
 
+}
 
 setTheStates = (licenseNumber) => {
   console.log("1876");
@@ -4282,7 +4350,18 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       payload: state.storage.payload,
       currentFileUploaded: state.storage.currentFileUploaded,
       isUploading: state.storage.isUploading,
-      currentUploadNumber: state.storage.currentUploadNumber
+      currentUploadNumber: state.storage.currentUploadNumber,
+      AdminFirstName: state.auth.firstName,
+      AdminLastName: state.auth.lastName,
+      userBranchNumber: state.admin.userBranchNumber,
+      userKey: state.admin.userKey,
+      UserKey: state.auth.userKey,
+
+      TalpiotUsers: state.admin.TalpiotUsers,
+      GivatShaulUsers: state.admin.GivatShaulUsers,
+      ModiinUsers: state.admin.ModiinUsers,
+
+
   };
 };
 
@@ -4315,7 +4394,10 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
 
 
 
-    onChangeVehicleNumber:(newNumberInput, token, branchNumber,identifiedCardID,userId) => dispatch(actions.changeVehicleNumber(newNumberInput, token, branchNumber,identifiedCardID,userId)) 
+    onChangeVehicleNumber:(newNumberInput, token, branchNumber,identifiedCardID,userId) => dispatch(actions.changeVehicleNumber(newNumberInput, token, branchNumber,identifiedCardID,userId)) ,
+    onFetchUsers: (token,userId) => dispatch( actions.fetchUsers(token, userId)), //allBranchsNumbers 
+    onNotificationOpening: (notification, token,branchNumber,userKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey)),
+
 
 
 

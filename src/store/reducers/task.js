@@ -19,6 +19,7 @@ const taskOpeningStart = ( state, action ) => {
 };
 
 const taskOpeningSuccess = ( state, action ) => {
+    
     const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
     if(action.list === 'todo'){
         return updateObject( state, {

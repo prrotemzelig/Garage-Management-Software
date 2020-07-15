@@ -11,7 +11,19 @@
     transition: all 150ms linear;
     
 }
-
+.showMessagesPhone{
+    left: 250px;
+    position: fixed;
+    box-sizing: border-box;
+    width: 64px;
+    height: 80px;
+    z-index: 1031;
+    border-radius: 8px 0 0 8px;
+    text-align: center;
+    top: 60px;
+    transition: all 150ms linear;
+    
+}
 .messageHeader{
     color: black;
     height: 40px;
@@ -77,7 +89,7 @@
     .badge{
         border: 2px solid white;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -89,7 +101,7 @@
     .badgePrimary {
         border: 2px solid white;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -104,7 +116,7 @@
     .badgeSuccess {
         border: 2px solid white;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -118,7 +130,7 @@
     .badgeSecondary {
         border: 2px solid white;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -132,7 +144,7 @@
     .badgeInfo {
         border: 2px solid white;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -148,7 +160,7 @@
     .badgeSuccess:hover{
         border-color: black-states;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -163,7 +175,7 @@
      .badgeInfo:hover{
          border-color: black-states;
          border-radius: 50%;
-         cursor: pointer;
+         /* cursor: pointer; */
          display: inline-block;
          height: 23px;
          margin-right: 5px;
@@ -177,7 +189,7 @@
     .badgePrimary:hover {
         border-color: black-states;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -195,7 +207,7 @@
     .badge .active {
         border: 1px solid info;
         border-radius: 50%;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: inline-block;
         height: 23px;
         margin-right: 5px;
@@ -358,7 +370,7 @@
                   padding-left: 0;
                   padding-right: 0;
                   opacity: 1;
-                  cursor: pointer;
+                  /* cursor: pointer; */
                   display: block;
                   max-height: 100px;
                   overflow: hidden;
@@ -410,6 +422,7 @@
 
     .dropdown{
         .dropdownMenu{
+            
              -webkit-transform: translateY(-15%);
              -moz-transform: translateY(-15%);
              -o-transform: translateY(-15%);
