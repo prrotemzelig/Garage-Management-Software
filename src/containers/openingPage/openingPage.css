@@ -26,6 +26,10 @@
 .head ::-webkit-input-placeholder {
   color: #4E546D;
 }
+
+.head ::-webkit-button-placeholder {
+  color: #4E546D;
+}
 .head .authent {
     font-weight: bold;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#35394a', endColorstr='#1f222e',GradientType=1 );
@@ -181,6 +185,8 @@
 .head .login_fields input[type='password'] {
   color: #64b5f6 !important;
 }
+
+
 .head .login_fields input[type='text'], .head .login_fields input[type='password'] {
   color: #afb1be;
   width: 190px;
@@ -206,6 +212,12 @@ input:-internal-autofill-selected {
   color: -internal-light-dark-color(black, white) !important;
 }
 
+button:-internal-autofill-selected {
+  -webkit-appearance: menulist-button;
+  background-color:#32364a !important;
+  background-image: none !important;
+  color: -internal-light-dark-color(black, white) !important;
+}
 .head .login_fields__user, .head .login_fields__password {
   position: relative;
 }
@@ -227,7 +239,7 @@ input:-internal-autofill-selected {
 .head .login_fields__submit .forgot a {
   color: #606479;
 }
-.head .login_fields__submit input {
+.head .login_fields__submit button {
   border-radius: 50px;
   background: transparent;
   padding: 10px 50px;
@@ -240,11 +252,11 @@ input:-internal-autofill-selected {
   -webkit-transition-duration: .2s;
           transition-duration: .2s;
 }
-.head .login_fields__submit input:focus {
+.head .login_fields__submit button:focus {
   box-shadow: none;
   outline: none;
 }
-.head .login_fields__submit input:hover {
+.head .login_fields__submit button:hover {
   color: white;
   background: #64b5f6;
   cursor: pointer;

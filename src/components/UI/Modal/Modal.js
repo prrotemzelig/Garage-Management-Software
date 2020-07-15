@@ -61,5 +61,5 @@ there we have to provide a clicked property and we have to do something there.
 then we have to do something and we simply trigger a prop on that modal which should be modalClosed. 
 and now, modalClosed is now a property we have to add to the modal component when we add it to JSX (to our output), and we use that modal in the burger builder.
 clicked={props.modalClosed} -> its a reference to the method we want to execute once the backdrop fires clicked
-in the BurgerBuilder.js we have to add this modal closed property to modal because we just added it in there as a reference to the method we want to execute once the backdrop fires clicked
+in the .js we have to add this modal closed property to modal because we just added it in there as a reference to the method we want to execute once the backdrop fires clicked
 */

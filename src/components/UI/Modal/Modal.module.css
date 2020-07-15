@@ -14,7 +14,8 @@
 
 }
 
-@media (min-width: 400px) {
+/* @media (min-width: 400px) { */
+@media (min-width: 500px) {
     .Modal {
         width: 500px;
         left: calc(50% - 250px);
@@ -22,51 +23,65 @@
     }
       
     .ModalDialog {
-        display: block; 
+        /* display: grid; */
+        display: flex; 
         width: 1200px; 
         overflow-y:none;
-        max-width: 100%;
+        /* max-width: 100%; */
+        max-width: 90%;
         height: auto;
+        flex-grow: 1;
+        justify-content: center;
+        max-height: 100%;
+        /* overflow-y: auto; */
+        /* max-width: 100%; */
+        height: auto;
+        margin: 20px;
     }
     .Dialog {
+        min-width: 900px;
+        /* width: 900px; */
+        display: block;
         flex-grow: 1;
-        display: flex;
+        /* display: flex; */
         padding-right: 17px;
-        max-width : 100% ;
-        display:table;
+        /* max-width : 100% ; */
+        /* display:table; */
     }
-    .ModalDialog2 {
+    /* .ModalDialog2 {
         /* display: block; 
         width: 1200px; 
         overflow-y:none;
         max-width: 100%;
-        height: auto; */
-    }
+        height: auto; 
+    } */
 }
 
-.Dialog {
+/* .Dialog {
     flex-grow: 1;
     display: flex;
     padding-right: 17px;
     max-width : 100% ;
     display:table;
 
-}
+} */
 
 
-.ModalDialog {
-    display: inline-block;
-    vertical-align: middle;
-    flex-flow: wrap;
-    display: flex;
-    flex-grow: 1;
+/* .ModalDialog {
+    /* display: grid; */
+    /* display: inline-block; */
+    /* vertical-align: middle; */
+    /* flex-flow: wrap; */
+    /* display: flex; */
+    
+    /* flex-grow: 1;
     justify-content: center;
     max-height: 100%;
     overflow-y: auto;
     max-width: 100%;
     height: auto;
-    margin: 20px;
-}
+    margin: 20px; */
+/* } */ 
 
 .separator {
     border-top: 1px solid #DDE2FF;

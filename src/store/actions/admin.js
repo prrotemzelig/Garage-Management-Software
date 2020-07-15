@@ -106,11 +106,13 @@ export const UserDelete = (token,userBranchNumber,userKey,userId,userToken) => {
             axiosFireBase.post(url,{idToken: userToken}) // we want to attach authData also to the post request -> the key value & the value the user enter
                             .then(response => { 
                                 //console.log(response);
+                                console.log(response);
                                 alert('משתמש נמחק בהצלחה');
                                 dispatch(UserDeleteSuccess(response)); //list 
                                 dispatch(fetchUsers(token, userId));
                             }) 
                             .catch(err => { // add nertwork problem!!! need to fix this rotem //post
+                                console.log(err);
                                 dispatch(UserDeleteFail(err)); //err.response.data.error //post
                             }); //post
                     

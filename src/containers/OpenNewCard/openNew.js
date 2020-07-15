@@ -2244,7 +2244,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
     
         <Modal show={true} onHide={this.closeWorksModal}  dialogClassName={classes.ModalDialog} 
             style={{ display: "flex", textAlign:"right", paddingLeft: "1px"  }}  >
-          <Modal.Header closeButton style={{ padding: "5px", textAlign:"right", borderBottom: "2px solid black"}}   >
+          <Modal.Header closeButton style={{ padding: "10px", textAlign:"right", borderBottom: "2px solid black"}}   >
             <Modal.Title  >עבודות לכרטיס</Modal.Title>   
           </Modal.Header>
     
@@ -2945,9 +2945,9 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
     
     return (
 //display: "inline-flex"
-
+//,display: "flex"
       <Modal show={true} onHide={this.switchShowImagesAndDoc} dialogClassName={classes.Dialog} backdrop={false} 
-      style={{ position: "fixed",display: "flex",fontFamily: "Alef Hebrew"}}>
+      style={{ position: "fixed",fontFamily: "Alef Hebrew"}}>
           <Modal.Header closeButton disabled={this.props.isUploading} >
             <Modal.Title>תמונות ומסמכים לכרטיס</Modal.Title>
           </Modal.Header>
@@ -2990,7 +2990,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
                       <h5 style={{textAlign: "center"}}><b style={window.innerWidth > '500' ? {fontSize: "x-large",fontWeight: "bold"}: {fontSize: "15px",fontWeight: "bold"}} >עבור להעלאה כדי להתחיל להעלאות תמונות</b></h5>
 
                 :
-                <section style={{ display: "-webkit-box",flexWrap: "wrap"}}> 
+                <section style={{ display: "flex",flexWrap: "wrap"}}> 
                     {this.props.imagesForCard.map(image =>
                             <div className="div" ng-repeat="img in imgs" style={{width:image.width*200/image.height + 'px',flexGrow:image.width*200/image.height}} >
                             <i className="i" style={{paddingBottom:image.height/image.width*100 + '%'}}></i>

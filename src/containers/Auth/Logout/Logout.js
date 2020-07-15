@@ -10,7 +10,8 @@ class Logout extends Component {
     }
 
     render () {
-        return <Redirect to="/"/>; // here we redirect to the path we need o change. we want to redirect declaratively
+        return <Redirect to="/auth"/>; // here we redirect to the path we need o change. we want to redirect declaratively
+       // return <Redirect to="/"/>; // here we redirect to the path we need o change. we want to redirect declaratively
     }
 }
 

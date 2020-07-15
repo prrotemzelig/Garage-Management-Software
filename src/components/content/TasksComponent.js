@@ -455,7 +455,7 @@ class TasksComponent extends React.Component {
         return (
             <div class="form-row" style={{direction: "rtl", fontWeight : "none" ,marginBottom: "4px" }} > 
             <div  class="form-group col-md-4"> 
-            <CardComponent containerStyles={this.props.containerStyles} title="לטיפול" link="ראה הכל" subtitle="היום"
+            <CardComponent containerStyles={this.props.containerStyles} title="לטיפול"  subtitle="היום"
                 items={[
                     <Row horizontal="space-between" vertical="center">
                         <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autoComplete="off" id="toDoNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
@@ -469,7 +469,7 @@ class TasksComponent extends React.Component {
             </div> 
 
             <div  class="form-group col-md-4"> 
-            <CardComponent containerStyles={this.props.containerStyles} title="בטיפול" link="ראה הכל" subtitle="היום"
+            <CardComponent containerStyles={this.props.containerStyles} title="בטיפול"  subtitle="היום"
             items={[
                 <Row horizontal="space-between" vertical="center">
                     <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="doingNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 
@@ -483,7 +483,7 @@ class TasksComponent extends React.Component {
     </div>
 
 <div  class="form-group col-md-4"> 
-        <CardComponent containerStyles={this.props.containerStyles} title="טופל" link="ראה הכל" subtitle="היום"
+        <CardComponent containerStyles={this.props.containerStyles} title="טופל" subtitle="היום"
         items={[
             <Row horizontal="space-between" vertical="center">
                     <input className={css(styles.itemTitle, styles.greyTitle)} type="text" autocomplete="off" id="doneNewTask" class="form-control" aria-describedby="passwordHelpInline"  placeholder= "יצירת משימה חדשה" 

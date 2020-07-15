@@ -146,17 +146,24 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                             .catch(err => { // add nertwork problem!!! need to fix this rotem //post                       
                                 //console.log(err);
                                 //console.log(err.message);
+                                let error ;
+                                if( err.response.data.error.message==='INVALID_PASSWORD'){
+                                    error = 'סיסמא שגויה';
+                                }
+                                else{
+                                    error = err.message;
+                                }
                                 console.log(err.response.data.error.message);
-                                console.log(err.message);
+                                console.log(err.message); //err.message
 
-                                dispatch(authSignInFail(err.message)); //err.response.data.error //post
+                                dispatch(authSignInFail(error)); //err.response.data.error //post
                             }); //post
                         
                         break; //get
                     }             
                 } //get
                 if(!userFound){
-                    dispatch(authSignInFail("USER CANNOT LOGIN")); //err.response.data.error //get
+                    dispatch(authSignInFail("משתמש לא רשום")); //err.response.data.error //get
                 }
                 }) //get
 

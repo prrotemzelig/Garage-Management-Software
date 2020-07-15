@@ -95,7 +95,7 @@ const card = ( props ) => {
 //   </tr>
     return (
         // ,wordWrap: 'break-word'
-        <tr  style={{fontSize: "14px", direction: "rtl"}}>
+        <tr  style={{fontSize: "12px", direction: "rtl"}}>
         {cardsDetailsOutput}
         </tr>   
     );

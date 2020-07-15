@@ -28,6 +28,7 @@ class Auth extends Component {
 // db = firebase.firestore();
     state = {
         controls: {
+          formIsValid: false,
             branchNumber: {
                 elementType: 'select',
                 elementConfig: {
@@ -39,7 +40,7 @@ class Auth extends Component {
                 },
                 value: 'Talpiot',
                 validation: {},
-                valid: true,
+                valid: false,
                 touched: false,
                 text: ' סניף'
             },
@@ -67,7 +68,7 @@ class Auth extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    minLength: 6
+                    minLength: 6   //change to 6
                 },
                 valid: false,
                 touched: false,
@@ -111,16 +112,77 @@ class Auth extends Component {
 
 inputChangedHandler = ( event ) => {
     event.preventDefault(); // we call this to prevent the reloading of the page
+    let updatedControls ; 
+    if(event.target.id === 'branchNumber'){
+      let ifValid;
+      console.log(event.target.value);
+      if(event.target.value !== 'בחר/י סניף'){
+        ifValid = true;
+      }
+      else{
+        ifValid = false
+      }
+      console.log(ifValid);
+       updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
+        [event.target.id]: updateObject( this.state.controls[event.target.id], { //here we want to update the control name
+            value: event.target.value,
+            valid: ifValid,
+            touched: true
+        } )
+    } );
 
-    const updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
+    let formIsValid = false;
+    console.log(this.state.controls.branchNumber.valid);
+    console.log(this.state.controls.email.valid);
+    console.log(ifValid);
+    if(this.state.controls.password.valid && this.state.controls.email.valid && ifValid){
+      formIsValid = true;
+      console.log(formIsValid);
+    }
+    console.log(formIsValid);
+
+    this.setState( { controls: updatedControls,formIsValid: formIsValid } );
+    console.log(this.state.controls);
+    }
+    else{
+       updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
         [event.target.id]: updateObject( this.state.controls[event.target.id], { //here we want to update the control name
             value: event.target.value,
             valid: checkValidity( event.target.value, this.state.controls[event.target.id].validation ),
             touched: true
         } )
     } );
-    this.setState( { controls: updatedControls } );
+
+    let formIsValid = false; //password email
+
+    if(event.target.id === 'password'){
+      if(this.state.controls.branchNumber.valid && this.state.controls.email.valid && checkValidity( event.target.value, this.state.controls[event.target.id].validation )){
+        formIsValid = true;
+        console.log(formIsValid);
+      }
+    }
+    else if(event.target.id === 'email'){
+      if(this.state.controls.branchNumber.valid && checkValidity( event.target.value, this.state.controls[event.target.id].validation && this.state.controls.email.valid )){
+        formIsValid = true;
+        console.log(formIsValid);
+      }
+    }
+    
+    console.log(formIsValid);
+
+    this.setState( { controls: updatedControls,formIsValid: formIsValid } );
     console.log(this.state.controls);
+    }
+
+    // let formIsValid = false;
+    // if(this.state.controls.branchNumber.valid && this.state.controls.email.valid && this.state.controls.password.valid){
+    //   formIsValid = true;
+    //   console.log(formIsValid);
+    // }
+    // console.log(formIsValid);
+
+    // this.setState( { controls: updatedControls,formIsValid: formIsValid } );
+    // console.log(this.state.controls);
 }
 
 submitHandler = (event) => {
@@ -221,7 +283,7 @@ submitHandler = (event) => {
           {this.props.error?
           <div class="authent">
             {/* <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg' alt=""/> */}
-            <p>{this.props.error}</p>
+            <p style={{fontSize: "20px"}}>{this.props.error}</p>
           </div>: null}
 
             <div class="login_title">
@@ -284,7 +346,8 @@ submitHandler = (event) => {
               </div>
 
               <div class="login_fields__submit">
-                <input type='submit' value='כניסה' class="input" onClick={(event) => this.submitHandler(event)}/>
+                <button type='submit' value='11כניסה' class="input" onClick={(event) => this.submitHandler(event)} disabled={!this.state.formIsValid} >כניסה11
+                  </button>
                
               </div>
 

@@ -764,15 +764,20 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
 
     return dispatch => {
         const requestOne = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen);
-        const requestTwo = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened);
+     //   const requestTwo = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened);
         // console.log(requestOne);
         // console.log(requestTwo);
-        async.eachLimit([requestOne,requestTwo],1,function(file,callback){
+    //    async.eachLimit([requestOne,requestTwo],1,function(file,callback){
+        console.log(requestOne);
+      //  console.log(requestTwo);
 
-        dispatch( markCardIsClosedStart() );
-      //  axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
-      axios2.all([file]) //[requestOne, requestTwo]
-        .then(axios2.spread((...responses) => {       
+        // dispatch( markCardIsClosedStart() );
+        axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
+    //  axios2.all([file]) //[requestOne, requestTwo]
+        .then(axios2.spread((...responses) => {   
+            dispatch( markCardIsClosedStart() );
+            console.log("779");
+
             const responseOne = responses[0]
            // const responseTwo = responses[1]
             // console.log(responseOne);     
@@ -781,13 +786,14 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
             dispatch(markCardIsClosedSuccess()); 
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 
-            this.forceUpdate();
-            callback(null);
+           // this.forceUpdate();
+         //   callback(null);
 
         }))
         .catch( error => {
+            console.log(error);
             dispatch(markCardIsClosedFail(error));
-            callback(null);
+           // callback(null);
 
         } );
 
@@ -802,6 +808,6 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
         // .catch( error => {
         //     dispatch(markCardIsClosedFail(error));
         // } );
-    });
+   // });
         }
 };
