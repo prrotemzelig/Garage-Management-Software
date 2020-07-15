@@ -346,7 +346,7 @@ submitHandler = (event) => {
               </div>
 
               <div class="login_fields__submit">
-                <button type='submit' value='11כניסה' class="input" onClick={(event) => this.submitHandler(event)} disabled={!this.state.formIsValid} >כניסה11
+                <button type='submit' value='כניסה' class="input" onClick={(event) => this.submitHandler(event)} disabled={!this.state.formIsValid} >כניסה
                   </button>
                
               </div>

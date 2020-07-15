@@ -63,8 +63,8 @@ const navigationItems = (props ) => (
     <ul className={classes.NavigationItems}>
 
             {props.isAuthenticated
-            ? <NavigationItem icon={IconHouse} link="/main" exact>11ראשי   </NavigationItem> 
-            : <NavigationItem icon={IconHouse} link="/" exact>11ראשי   </NavigationItem> }
+            ? <NavigationItem icon={IconHouse} link="/main" exact>ראשי   </NavigationItem> 
+            : <NavigationItem icon={IconHouse} link="/" exact>ראשי   </NavigationItem> }
 
 
             {props.isAuthenticated ? <NavigationItem  icon={IconCollection} link="/updateTicketStatus">כרטיס עבודה    </NavigationItem> : null}
