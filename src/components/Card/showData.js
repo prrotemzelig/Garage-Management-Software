@@ -168,12 +168,12 @@ onCheckBoxImageClick(key, name, url,index,check){
 
 renderImagesAndDocModal = () => { ///*** images and docs modal! ****
   //,top: "50%",  left: "50%",transform: "translate(-50%, -50%)",wordWrap: "break-word",width: "min-content"
-  
+  //,display: "flex"
   return (
 //display: "inline-flex"
 
     <Modal show={true} onHide={this.switchShowImagesAndDoc} dialogClassName={classes.Dialog} backdrop={false} 
-    style={{ position: "fixed",display: "flex",fontFamily: "Alef Hebrew"}}>
+    style={{ position: "fixed",fontFamily: "Alef Hebrew"}}>
         <Modal.Header closeButton disabled={this.props.isUploading} >
           <Modal.Title>תמונות ומסמכים לכרטיס</Modal.Title>
         </Modal.Header>
@@ -205,7 +205,7 @@ renderImagesAndDocModal = () => { ///*** images and docs modal! ****
           </div>
         : null
         }
-            <section style={{ display: "-webkit-box",flexWrap: "wrap"}}> 
+            <section style={{ display: "flex",flexWrap: "wrap"}}> 
                   {this.props.imagesForCard.map(image =>
                           <div className="div" ng-repeat="img in imgs" style={{width:image.width*200/image.height + 'px',flexGrow:image.width*200/image.height}} >
                           <i className="i" style={{paddingBottom:image.height/image.width*100 + '%'}}></i>
