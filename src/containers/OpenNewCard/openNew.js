@@ -4256,10 +4256,64 @@ onChange = date => this.setState({ date })
 
         <form class="form-group" > 
         <span>    
-        {this.state.found ?    
-     <Button bsStyle="secondary" style={{borderColor: "black"}}   onClick= {( event ) => this.openWorkModal( event, 'workData')} disabled={!this.state.formIsValid} > עבודות </Button> 
-               
-        : null}
+        {this.state.found ?  
+        
+        <div class="form-group">  
+         
+
+         {window.innerWidth > '500' ? 
+        <div class="form-row" style={{    placeContent: "center"}}>
+
+<Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}   onClick= {( event ) => this.openWorkModal( event, 'workData')} disabled={!this.state.formIsValid} > עבודות </Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  onClick= {( event ) => this.openPartModal( event, 'PartsData')}  disabled={!this.state.formIsValid} >חלקים</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid}  onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button>
+     {' '} 
+   
+ 
+       
+     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
+      </div> 
+       :
+       <div class="form-group">
+
+<div class="form-group" style={{    width: "100%", display: "inline-flex"}}>
+
+<Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}   onClick= {( event ) => this.openWorkModal( event, 'workData')} disabled={!this.state.formIsValid} > עבודות </Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  onClick= {( event ) => this.openPartModal( event, 'PartsData')}  disabled={!this.state.formIsValid} >חלקים</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",fontSize: "13px"}}  disabled={!this.state.formIsValid}  onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button>
+     {' '} 
+   </div>
+ 
+   <div class="form-group" style={{    width: "100%", display: "inline-flex"}}>
+
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
+     {' '}
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",fontSize: "13px"}}  disabled={!this.state.formIsValid}  onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
+</div>
+        </div> 
+            }
+
+   
+
+   
+     </div>
+        : 
+        <div style={{textAlign:"left"}}>
+      <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardOpeningHandler}>שמירת כרטיס חדש</Button> 
+      </div>
+      }
+
+
          {this.props.showWorkModel?
                 this.renderWorksModal( 'workData')
             :null} 
@@ -4267,10 +4321,10 @@ onChange = date => this.setState({ date })
    </span>
 
    
-   {this.state.found ? 
+   {/* {this.state.found ? 
       <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick= {( event ) => this.openPartModal( event, 'PartsData')}  disabled={!this.state.formIsValid} >חלקים</Button> 
   
-    :null} 
+    :null}  */}
         {this.props.showPartModel?
                 this.renderPartsModal( 'partsData')
 
@@ -4282,13 +4336,13 @@ onChange = date => this.setState({ date })
             :null} 
 
             {' '}
-      {this.state.found ? 
+      {/* {this.state.found ? 
         <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.switchShowImagesAndDoc}> תמונות ומסמכים</Button> 
-      : null}
+      : null} */}
         {' '}
 
       {' '}
-      {this.state.found ? 
+      {/* {this.state.found ? 
       <>
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
       {' '}
@@ -4305,7 +4359,7 @@ onChange = date => this.setState({ date })
       <div  style={{textAlign:"left"}} > 
       <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid} onClick={this.cardOpeningHandler}>שמירת כרטיס חדש</Button> 
       </div>  
-      }
+      } */}
 
       {' '}
         {/* { this.props.showSuccessCase ? this.renderToastModal( 'כרטיס נשמר בהצלחה') :null } */}

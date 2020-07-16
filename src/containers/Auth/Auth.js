@@ -115,14 +115,12 @@ inputChangedHandler = ( event ) => {
     let updatedControls ; 
     if(event.target.id === 'branchNumber'){
       let ifValid;
-      console.log(event.target.value);
       if(event.target.value !== 'בחר/י סניף'){
         ifValid = true;
       }
       else{
         ifValid = false
       }
-      console.log(ifValid);
        updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
         [event.target.id]: updateObject( this.state.controls[event.target.id], { //here we want to update the control name
             value: event.target.value,
@@ -132,17 +130,10 @@ inputChangedHandler = ( event ) => {
     } );
 
     let formIsValid = false;
-    console.log(this.state.controls.branchNumber.valid);
-    console.log(this.state.controls.email.valid);
-    console.log(ifValid);
     if(this.state.controls.password.valid && this.state.controls.email.valid && ifValid){
       formIsValid = true;
-      console.log(formIsValid);
     }
-    console.log(formIsValid);
-
     this.setState( { controls: updatedControls,formIsValid: formIsValid } );
-    console.log(this.state.controls);
     }
     else{
        updatedControls = updateObject( this.state.controls, { // pass the old object we want to update
@@ -152,26 +143,24 @@ inputChangedHandler = ( event ) => {
             touched: true
         } )
     } );
-
-    let formIsValid = false; //password email
-
+    let formIsValid = false;
     if(event.target.id === 'password'){
       if(this.state.controls.branchNumber.valid && this.state.controls.email.valid && checkValidity( event.target.value, this.state.controls[event.target.id].validation )){
         formIsValid = true;
-        console.log(formIsValid);
+      }
+      else{
+        formIsValid = false;
       }
     }
     else if(event.target.id === 'email'){
-      if(this.state.controls.branchNumber.valid && checkValidity( event.target.value, this.state.controls[event.target.id].validation && this.state.controls.email.valid )){
+      if(this.state.controls.branchNumber.valid && checkValidity( event.target.value, this.state.controls[event.target.id].validation) && this.state.controls.password.valid ){
         formIsValid = true;
-        console.log(formIsValid);
+      }
+      else{
+        formIsValid = false;
       }
     }
-    
-    console.log(formIsValid);
-
     this.setState( { controls: updatedControls,formIsValid: formIsValid } );
-    console.log(this.state.controls);
     }
 
     // let formIsValid = false;
@@ -346,7 +335,7 @@ submitHandler = (event) => {
               </div>
 
               <div class="login_fields__submit">
-                <button type='submit' value='כניסה' class="input" onClick={(event) => this.submitHandler(event)} disabled={!this.state.formIsValid} >כניסה
+                <button type='submit' value='כניסה' class="input" onClick={(event) => this.submitHandler(event)} disabled={!this.state.formIsValid} style={!this.state.formIsValid ? {cursor: "not-allowed"}: {}}>כניסה
                   </button>
                
               </div>
