@@ -309,7 +309,7 @@ render() {
     animationEnabled: true,
     //exportEnabled: true,
     //theme: "light1", // "light1", "dark1", "dark2"
-    labels: [ 'כרטיסים שנפתחו','כרטיסים שנסגרו','חלקים שנמכרו','עבודות שהתבצעו'],
+    labels: [ 'כרטיסים פתוחים','כרטיסים סגורים','חלקים שנמכרו','עבודות שהתבצעו'],
     axisX:{
       labelFontColor: "white"
     },
@@ -335,7 +335,7 @@ render() {
     animationEnabled: true,
     //exportEnabled: true,
     //theme: "light1", // "light1", "dark1", "dark2"
-    labels: [ 'כרטיסים שנפתחו','כרטיסים שנסגרו','חלקים שנמכרו','עבודות שהתבצעו'],
+    labels: [ 'כרטיסים פתוחים','כרטיסים סגורים','חלקים שנמכרו','עבודות שהתבצעו'],
     axisX:{
       labelFontColor: "white"
     },
@@ -358,7 +358,7 @@ render() {
       }]
   };
   const data_pie = {
-    labels: [ 'כרטיסים שנפתחו','כרטיסים שנסגרו','חלקים שנמכרו','עבודות שהתבצעו'],
+    labels: [ 'כרטיסים פתוחים','כרטיסים סגורים','חלקים שנמכרו','עבודות שהתבצעו'],
     datasets: [{
       fill: false,
       showpercentvalues: "1",

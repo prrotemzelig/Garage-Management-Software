@@ -933,8 +933,8 @@ currency = (num) => {
     return isNaN(num);
   }
   else{
-    num = num.toFixed(2);
-   //num = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'); // work but not in react
+    // num = num.toFixed(2);
+   num = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'); // work but not in react
     return num;
   }
 }

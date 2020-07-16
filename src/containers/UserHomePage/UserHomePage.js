@@ -96,19 +96,19 @@ class UserHomePage extends Component {
             <Column style= {{marginRight: "20px", marginTop: "10px",marginLeft: "20px"}}>
             <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="  משימות בעשייה" value={this.props.userTasksDOING.length} />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="משימות לעשות" value={this.props.userTasksTODO.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="  משימות בטיפול" value={this.props.userTasksDOING.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="משימות לטיפול" value={this.props.userTasksTODO.length} />
                 </Row>
                 <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="כרטיסים שנסגרו" value={this.props.closeCards.length} />
-                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="כרטיסים שנפתחו" value={this.props.cards.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor3} title="כרטיסים סגורים" value={this.props.closeCards.length} />
+                    <MiniCardComponent className={css(styles.miniCardContainer)} backgroundColor= {MiniCardColor4} title="כרטיסים פתוחים" value={this.props.cards.length} />
                 </Row>
             </Row>
 
           
             <Row horizontal="space-between" style={{display: "block"}} className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
                 <div style={this.props.backgroundColor === 'light' ? {fontSize: "18px", fontWeight: "bold", textAlign: "center"} 
-                : {fontSize: "18px", fontWeight: "bold", textAlign: "center",color: "white"} }> רשימת מטלות </div>
+                : {fontSize: "18px", fontWeight: "bold", textAlign: "center",color: "white"} }> רשימת משימות </div>
            
                 <TasksComponent 
                 
