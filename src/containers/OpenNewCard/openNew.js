@@ -4254,15 +4254,15 @@ onChange = date => this.setState({ date })
             </div>
             </div>
 
-        <form class="form-group" > 
+        <form class="form-group" style={{marginBottom: "5px"}}> 
         <span>    
         {this.state.found ?  
         
-        <div class="form-group">  
+        <div class="form-group" style={{marginBottom: "5px"}}>  
          
 
          {window.innerWidth > '500' ? 
-        <div class="form-row" style={{    placeContent: "center"}}>
+        <div class="form-row" >
 
 <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}   onClick= {( event ) => this.openWorkModal( event, 'workData')} disabled={!this.state.formIsValid} > עבודות </Button> 
      {' '}
@@ -4280,9 +4280,9 @@ onChange = date => this.setState({ date })
      <Button bsStyle="secondary" style={{borderColor: "black"}}  disabled={!this.state.formIsValid}  onClick={this.ModalCardCloseHandler}>סגירת כרטיס</Button> 
       </div> 
        :
-       <div class="form-group">
+       <div class="form-group" style={{marginBottom: "5px"}}>
 
-<div class="form-group" style={{    width: "100%", display: "inline-flex"}}>
+<div class="form-group" style={{    width: "100%", display: "inline-flex",marginBottom: "5px"}}>
 
 <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}   onClick= {( event ) => this.openWorkModal( event, 'workData')} disabled={!this.state.formIsValid} > עבודות </Button> 
      {' '}
@@ -4292,7 +4292,7 @@ onChange = date => this.setState({ date })
      {' '} 
    </div>
  
-   <div class="form-group" style={{    width: "100%", display: "inline-flex"}}>
+   <div class="form-group" style={{    width: "100%", display: "inline-flex",marginBottom: "5px"}}>
 
      <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
      {' '}
