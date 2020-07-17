@@ -248,12 +248,15 @@ class HeaderComponent extends Component {
                 </Button>
 
                 {this.props.shownotificationmodel && this.props.notification.length!==0 ? <ShowMessages /> : null }
-                <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
+                {this.state.modal ?
+                alert("אין הודעות חדשות",this.modalClose())
+                : null }
+                {/* <Modal show={this.state.modal} handleClose={e => this.modalClose(e)}>
             <div className="form-group">
                 אין הודעות חדשות
             </div>
             <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
-          </Modal>
+          </Modal> */}
                 </div>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">

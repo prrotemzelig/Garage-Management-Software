@@ -275,20 +275,34 @@ export  const  authSignUp = (token,userId,firstName,lastName,branchNumber,userPe
                     sidebarBackgroundColor: 'blue',
                     backgroundColor: 'light',
                     profileImage: 'anime7'
-                };             
+                };           
+                
+                let data = { // here we  prepare the user data for the state
+                    userPermissions: nodeUerPermissions,
+                    email: email
+                };   
 
                 const queryParams = '?auth=' + response.data.idToken ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
-                  axios.post(nodeBranchNumber + '/users.json' + queryParams , dataBaseUser )
-                    .then(res => { 
+                const requestOne = axios.post(nodeBranchNumber+ '/users.json' + queryParams, dataBaseUser);
+                const requestTwo = axios.post('allUsersEmail.json'  , data);
+                                             
+                //  axios.post(nodeBranchNumber + '/users.json' + queryParams , dataBaseUser )
+                axiosFireBase.all([requestOne, requestTwo]) //[requestOne, requestTwo]
+             //   .then(res => { 
+
+                    .then(axiosFireBase.spread((...responses) => { 
              
                          dispatch(AddNewUserModalClose());
                          dispatch(authSignUpSuccess());
                        // dispatch(AddNewUserModalClose());
                         dispatch(fetchUsers(token, userId))
 
-                    })
+                    }))
                     .catch(error => { // add nertwork problem!!! need to fix this rotem //post
-                    //    console.log(error);
+                       console.log(error);
+                       console.log(error.response);
+                       console.log(error.response.data);
+                       console.log(error.message);
                           dispatch(authSignUpFail(error)); //err.response.data.error
 
                     });

@@ -269,6 +269,13 @@ submitHandler = (event) => {
             <p>מתחבר...</p>
           </div>: null}
 
+          {this.props.loadingForgotPassword?
+          <div class="authent">
+            <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg' alt=""/>
+            <p>בבדיקה...</p>
+          </div>: null}
+
+
           {this.props.error?
           <div class="authent">
             {/* <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/puff.svg' alt=""/> */}
@@ -342,7 +349,14 @@ submitHandler = (event) => {
 
               <div class="login_fields__submit">
                 <div class="forgot">
-                  <a alt="">שכחת סיסמא? פנה למנהל</a>
+                  <a alt="">שכחת סיסמה? פנה למנהל</a>
+                </div>
+                <div class="forgot" style={!this.state.controls.email.valid ? {cursor: "not-allowed"}: {cursor: "pointer"}} >
+
+                {/* onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,1)}> */}
+
+
+                  <a alt="" onClick={this.state.controls.email.valid ? () => this.props.onResetPassword(this.state.controls.email.value) : null} >שחזור סיסמה עבור מנהל</a>
                 </div>
               </div>
             </div>
@@ -413,7 +427,8 @@ const mapStateToProps = state => { // for displat the spinner
         loading: state.auth.loading, // we take access to auth
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
-        authRedirectPath: state.auth.authRedirectPath
+        authRedirectPath: state.auth.authRedirectPath,
+        loadingForgotPassword: state.auth.loadingForgotPassword
     };
 };
 
@@ -422,11 +437,13 @@ const mapDispatchToProps = dispatch => { // we do this to be able to dispatch so
     return {
         onAuthSignIn: (email, password,branchNumber) => dispatch(actions.authSignIn(email, password,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
         //onAuth: (email, password, isSignup,branchNumber) => dispatch(actions.auth(email, password,isSignup,branchNumber)), // "onAuth" - is a method which holds a reference to a method where we will eventually dispatch our action - and we want to dispatch the auto action
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+        onResetPassword: (email) => dispatch(actions.resetPasswordForAdmin(email))
         
     };
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )(withErrorHandler(Auth,axios) );
+//export default connect( mapStateToProps, mapDispatchToProps )(withErrorHandler(Auth,axios) );
+export default connect( mapStateToProps, mapDispatchToProps )(Auth,axios );
 
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(openNew,axios));

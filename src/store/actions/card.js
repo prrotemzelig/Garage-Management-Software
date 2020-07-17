@@ -770,12 +770,7 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
     return dispatch => {
         const requestOne = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen);
      //   const requestTwo = axios2.patch("https://garage-management-softwa.firebaseio.com/" + branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , whoOpened);
-        // console.log(requestOne);
-        // console.log(requestTwo);
     //    async.eachLimit([requestOne,requestTwo],1,function(file,callback){
-        //console.log(requestOne);
-      //  console.log(requestTwo);
-
         // dispatch( markCardIsClosedStart() );
         axios.patch(branchNumber+'/cards/'+ identifiedCardID + '/.json?auth=' + token , isOpen) 
     //  axios2.all([file]) //[requestOne, requestTwo]
@@ -785,9 +780,6 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
 
             const responseOne = responses[0]
            // const responseTwo = responses[1]
-            // console.log(responseOne);     
-            // console.log(responseTwo);     
-            //console.log("780");
             dispatch(markCardIsClosedSuccess()); 
             dispatch(fetchCards(token, userId, branchNumber)); 
             dispatch(GetAllCardData(token,branchNumber ,userId,'cards', identifiedCardID)); 

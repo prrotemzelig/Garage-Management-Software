@@ -173,9 +173,16 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                             // console.log(error.response);
                         console.log(error);
                         console.log(error.message);
+                        let err ;
+                        if( error.message==='Network Error'){
+                            err = 'אין חיבור אינטרנט';
+                        }
+                        else{
+                            err = error.message;
+                        }
                         //console.log(error.response.data.error);
                         // dispatch(authSignInFail(error.response.data.error)); //err.response.data.error //get
-                        dispatch(authSignInFail(error.message)); //err.response.data.error //get
+                        dispatch(authSignInFail(err)); //err.response.data.error //get
 
                     }); //get
     };
@@ -354,9 +361,7 @@ export const resetPassword = (email) => {
         .then(response => {
             dispatch(resetPasswordSuccess()); 
             alert('נשלח מייל לשחזור סיסמא');
-
         })
-
         .catch(error => {
           console.log(error.message);
           dispatch(resetPasswordFail(error.message));
@@ -365,3 +370,58 @@ export const resetPassword = (email) => {
       
     };
 };
+
+export const resetPasswordForAdmin = (email) => {   
+    // firebase.initializeApp(config);
+  //  https://garage-management-software.firebaseapp.com/auth
+  let userFound = false;
+
+     return dispatch => {
+         dispatch( resetPasswordStart() ); 
+      axios2.get('/allUsersEmail.json/?email=' + email ) 
+      .then(res => { 
+          console.log(res);
+          console.log(res.data);
+          for ( let key in res.data ) {  
+              if(res.data[key].email === email && res.data[key].userPermissions === 'Admin' ){ 
+                //  console.log(res.request); //get
+                  userFound = true;
+                        firebase.auth().sendPasswordResetEmail(email, { url: 'http://localhost:3000/auth' })
+                        .then(response => {
+                            dispatch(resetPasswordSuccess()); 
+                            alert('נשלח מייל לשחזור סיסמא');
+                        })
+                        .catch(error => {
+                          console.log(error.message);
+                          dispatch(resetPasswordFail(error.message));
+                        })
+                  break; //get
+              }      
+              if(res.data[key].email === email && res.data[key].userPermissions !== 'Admin' ){ 
+                //  console.log(res.request); //get
+                dispatch(resetPasswordFail("משתמש לא בעל הרשאות מנהל")); //err.response.data.error //get
+                  userFound = true;         
+                  break; 
+              }          
+          } 
+          if(!userFound){
+              dispatch(resetPasswordFail("משתמש לא רשום")); //err.response.data.error //get
+          }
+          })
+          .catch(error => { 
+            console.log(error);
+            console.log(error.message);
+            let err ;
+            if( error.message==='Network Error'){
+                err = 'אין חיבור אינטרנט';
+            }
+            else{
+                err = error.message;
+            }
+            //console.log(error.response.data.error);
+            // dispatch(authSignInFail(error.response.data.error)); //err.response.data.error //get
+            dispatch(resetPasswordFail(err)); //err.response.data.error //get
+
+        });  
+     };
+ };

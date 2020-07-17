@@ -37,7 +37,8 @@ export {
     SettingOpening,
     SettingClose,
     updateSettingUser,
-    resetPassword
+    resetPassword,
+    resetPasswordForAdmin
 } from './auth';
 export {
     taskOpening,

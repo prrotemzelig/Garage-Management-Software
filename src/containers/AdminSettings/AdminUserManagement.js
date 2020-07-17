@@ -177,8 +177,8 @@ class AdminUserManagement extends Component {
       renderResetPasswordToUser = (email,firstName,lastName) => { 
         return(
             <>  
-            <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  onClick={() =>  
-                    this.props.onResetPassword(email)} >שיחזור סיסמא</Button>   { ' ' }
+            <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  
+            onClick={() => this.props.onResetPassword(email)} >שחזור סיסמה</Button>   { ' ' }
 
 
 

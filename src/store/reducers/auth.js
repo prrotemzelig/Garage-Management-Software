@@ -16,6 +16,7 @@ const initialState = { // javascript object
     userKey: null,
     error: null,
     loading: false,
+    loadingForgotPassword: false,
     showSettingModel: false,
     authRedirectPath: '/'
 };
@@ -125,13 +126,14 @@ const updateSettingUserSuccess = ( state, action ) => {
 
 
 const resetPasswordStart = ( state, action ) => {
-    return updateObject( state, { loading: true } ); 
+    return updateObject( state, { loadingForgotPassword: true, error: null } ); 
 };
 
 
 const resetPasswordSuccess = ( state, action ) => {     
         return updateObject( state, {
-            loading: false
+            loadingForgotPassword: false,
+            error: null
         });
     
 };
@@ -140,7 +142,7 @@ const resetPasswordSuccess = ( state, action ) => {
 
 const resetPasswordFail = ( state, action ) => {
     return updateObject( state, {
-         loading: false,
+        loadingForgotPassword: false,
          error: action.error
         } );
 };
