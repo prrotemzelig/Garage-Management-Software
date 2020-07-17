@@ -15,7 +15,7 @@ class ImageUpload extends React.Component {
   }
   
     fileSelectedHandler = (e) => {
-     console.log(e.target.files[0].type);
+    // console.log(e.target.files[0].type);
         this.setState({ files: [...this.state.files, ...e.target.files]})
 
     }

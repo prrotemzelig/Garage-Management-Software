@@ -1,4 +1,6 @@
 import * as actionTypes from './actionTypes';
+import * as actions from './index';
+
 import axios from '../../axios-cards';
 import axios2 from 'axios';
 var async = require("async");
@@ -231,6 +233,9 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
             dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
              dispatch(GetAllCardData(token,branchNumber ,userId,'cards', response.data.name)); 
+             dispatch(actions.getImages(userId ,token,branchNumber,response.data.name,cardData.cardData.ticketNumber,'/images'));
+             dispatch(actions.getDocs(userId ,token,branchNumber,response.data.name,cardData.cardData.ticketNumber,'/docs'));
+
 
             if(node==='cards'){
                 alert('כרטיס נשמר בהצלחה');
@@ -768,7 +773,7 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
         // console.log(requestOne);
         // console.log(requestTwo);
     //    async.eachLimit([requestOne,requestTwo],1,function(file,callback){
-        console.log(requestOne);
+        //console.log(requestOne);
       //  console.log(requestTwo);
 
         // dispatch( markCardIsClosedStart() );
@@ -776,7 +781,7 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
     //  axios2.all([file]) //[requestOne, requestTwo]
         .then(axios2.spread((...responses) => {   
             dispatch( markCardIsClosedStart() );
-            console.log("779");
+           // console.log("779");
 
             const responseOne = responses[0]
            // const responseTwo = responses[1]

@@ -1919,7 +1919,7 @@ cardCloseHandler = ( event ) => {
         this.props.onCardDelete(this.props.token, this.props.branchNumber, this.state.identifiedCardID,'cards',this.props.userId);  
         this.props.onCardOpening(card,this.props.userId, this.props.token, this.props.branchNumber,'closeCards');  
         this.setTheStates('');
-        console.log(this.state.cardForm.licenseNumber.value);
+      //  console.log(this.state.cardForm.licenseNumber.value);
         const notification={};
         notification['type']='closeCard';
         notification['description']=this.state.cardForm.licenseNumber.value;
@@ -2121,7 +2121,7 @@ setTheStates = (licenseNumber) => {
 
 check(data,licenseNumber){
 //console.log(data.cardData.licenseNumber);
-console.log(licenseNumber);
+//console.log(licenseNumber);
   if(data.cardData.licenseNumber===licenseNumber){
     if(data.isTheCardOpenByUser){
       
@@ -2167,7 +2167,7 @@ console.log(licenseNumber);
 
   else if(data.cardData.licenseNumber!==licenseNumber && this.state.dataBaseCarNumber !== data.cardData.licenseNumber ){
     if(this.state.identifiedCardID !== ''){
-      console.log(this.state.identifiedCardID);
+    //  console.log(this.state.identifiedCardID);
       this.props.onMarkCardIsClosed(this.props.token,this.props.branchNumber, this.props.userId, this.state.identifiedCardID);
     }
    // this.setTheStates(licenseNumber);
@@ -2806,8 +2806,8 @@ updateCarInputValue=(evt,i)=> {
 }
 
 updateCardInputValue=(evt,i)=> {
-  console.log(evt.target.value);
-  console.log(evt.target.id);
+ // console.log(evt.target.value);
+//  console.log(evt.target.id);
   evt.preventDefault(); 
     this.state.card_data[i]=evt.target.value;
 
@@ -3253,7 +3253,7 @@ sendEmail(e) {
       this.setState ({
           emailStatus: xhr.responseText
       });
-      console.log( xhr.responseText);
+     // console.log( xhr.responseText);
   });
   //'http://api.ruvictor.com/sendemail/index.php?sendto='
   // open the request with the verb and the url

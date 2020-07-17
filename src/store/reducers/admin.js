@@ -182,13 +182,13 @@ const purchaseToastCancel = ( state, action ) => {
 
 
 const taskOpeningStart = ( state, action ) => {
-    console.log("170");
+ //   console.log("170");
     return updateObject( state, { loading: true } ); 
 };
 
 
 const taskOpeningSuccess = ( state, action ) => {
-    console.log("176");
+  //  console.log("176");
 
    // const newTask = updateObject( action.taskData, { taskKey: action.taskId } ); 
         return updateObject( state, {

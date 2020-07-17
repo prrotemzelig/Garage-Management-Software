@@ -658,13 +658,13 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
         formData['openedByLastName'] = this.props.AdminLastName;
     
     this.props.onTaskOpening(formData,token, userBranchNumber, userKey,list); // this contains all the data of card 
-    console.log(userKey);
+   // console.log(userKey);
     let notification={};
     notification['type']='task';
     notification['description']=this.state.taskForm.newTaskForUser.title;
     notification['openedBy'] = this.props.AdminFirstName+' '+this.props.AdminLastName;
     notification['show']='false';
-    console.log(userKey+"  "+userBranchNumber);
+   // console.log(userKey+"  "+userBranchNumber);
     this.props.onNotificationOpening(notification,token, userBranchNumber, userKey);
     //this.closeAddNewTaskModal();
     let updateTaskForm =  { 

@@ -121,7 +121,7 @@ class HeaderComponent extends Component {
      }
     componentDidMount() { 
         this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumber
-        console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId);
+    //    console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId);
 
         this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
     }
@@ -159,8 +159,8 @@ class HeaderComponent extends Component {
                     openedBy: this.props.notification[i].openedBy,
                     show: 'true'
                 }
-                console.log(notificationData);
-                console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId+"  "+this.props.notification[i].id);
+              //  console.log(notificationData);
+             //   console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId+"  "+this.props.notification[i].id);
                 this.props.onNotificationUpdate(notificationData, this.props.token, this.props.branchnumber, this.props.UserKey,this.props.userId,this.props.notification[i].id); // this contains all the data of card 
             }
         }

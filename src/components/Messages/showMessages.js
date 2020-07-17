@@ -30,7 +30,7 @@ class showMessages extends Component {
 deleteAllNotification = () =>{
   let notification=this.props.notification;
   for(var i=0;i<notification.length;i++){
-      console.log(this.props.branchnumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
+    //  console.log(this.props.branchnumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
       this.props.onNotificationDelete(this.props.token,this.props.branchnumber,this.props.UserKey,notification[i].id,this.props.userId);
   }
 }

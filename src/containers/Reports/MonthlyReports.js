@@ -151,18 +151,18 @@ createMountlyReport(data,month){
     } 
   }
 
-  console.log(this.state.arr);
+ // console.log(this.state.arr);
   this.state.yearReports.push(this.state.arr);
   //console.log(this.state.yearReports);
 
  // return this.state.arr;
 }
 createYearReport(data){
-  console.log(data);
+ // console.log(data);
   for(var i=0; i<data.length; i++){
     let closeDate=data[i].closeDate;
 
-    console.log(data[i].invoiceClosureData.totalPayment)
+   // console.log(data[i].invoiceClosureData.totalPayment)
     if(closeDate.includes(this.state.year)){
       if(data[i].invoiceClosureData.totalPayment === undefined || data[i].invoiceClosureData.totalPayment === null || data[i].invoiceClosureData.totalPayment === ''){
       }
@@ -263,7 +263,7 @@ CustomGroupFooter = () => (`סכום הכנסות כולל:  ${(this.state.count
 render() {
   let cards=[];
   let is_mobile=this.isMobile();
-  console.log(is_mobile);
+  //console.log(is_mobile);
   if(this.props.cards !==''){
     this.state.card=this.props.cards;
     this.state.closeCard=this.props.closeCards; 
@@ -288,7 +288,7 @@ render() {
       for(var i=1;i<13;i++){
         this.createMountlyReport(cards,i);
       }
-      console.log(this.state.yearReports);
+    //  console.log(this.state.yearReports);
 
       if(this.state.counter===0){this.modalOpen();}
       if(this.state.month===1){this.state.hebrewMonth="ינואר"};
@@ -489,7 +489,7 @@ else{
       month: 'דצמבר'
     }
   ];
-  console.log(dataExcelYear); 
+ // console.log(dataExcelYear); 
 }
 
      return (

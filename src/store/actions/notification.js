@@ -70,11 +70,11 @@ export const notificationOpening = ( notificationData, token,branchNumber, userK
 
     return dispatch => {
         dispatch( notificationOpeningStart() ); // dispatch to the store
-        console.log(branchNumber+"  j  "+userKey);
+        //console.log(branchNumber+"  j  "+userKey);
         axios.post(branchNumber + '/users/' + userKey + '/notification.json' ,notificationData ) // send the HTTP request 
 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            console.log(response.data)
+         //   console.log(response.data)
             dispatch(notificationOpeningSuccess(response.data.name, notificationData)); 
 
         } )
@@ -111,13 +111,13 @@ export const fetchNotificationStart = () => {
 export const fetchNotification = (token, userId,branchNumber,userKey) => { //here we run our async code
     return dispatch => {
         dispatch(fetchNotificationStart()); // we need to do that to set loading to true!
-        console.log(branchNumber);
-        console.log(userKey);
+       // console.log(branchNumber);
+       // console.log(userKey);
     //    const queryParams = '?auth=' + token ; //+ '&orderBy="userId"&equalTo="' + userId + '"'; 
         axios.get(branchNumber + '/users/'+ userKey +'/notification.json' ) // we use axios to get my cards, // this referring to that cards node on my backend (firebase node)
             .then( res => { // when the data is there (in the node of cards in firebase)
                const fetchedNotification = [] ; 
-              console.log(res.data);
+            //  console.log(res.data);
         
                 for ( let key in res.data ) { //in the cards node in the firebase, I'm not getting an array but I'll get back a javascript object
                 fetchedNotification.push( {
@@ -170,7 +170,7 @@ export const notificationDelete = ( token,branchNumber,userKey,notificationKey ,
         axios.delete(branchNumber + '/users/'+ userKey +'/notification/' + notificationKey + '.json?x-http-method-override=DELETE',null )
 
         .then(res => {
-        console.log(res.data);
+      //  console.log(res.data);
         dispatch(notificationDeleteSuccess(res.data)); 
         dispatch(fetchNotification(token, userId, branchNumber,userKey));
 
@@ -214,12 +214,12 @@ export const notificationUpdate = ( updateData, token,branchNumber,userKey ,user
 
     return dispatch => {
         dispatch( notificationUpdateStart() ); // dispatch to the store
-        console.log(branchNumber +" "+userKey +" "+notificationKey+" "+ updateData);
-        console.log( updateData);
+        //console.log(branchNumber +" "+userKey +" "+notificationKey+" "+ updateData);
+       // console.log( updateData);
         axios.patch(branchNumber + '/users/'+ userKey +'/notification/'+notificationKey+'/.json' , updateData)
 
         .then(res => {
-        console.log(res.data);
+       // console.log(res.data);
         dispatch(notificationUpdateSuccess(res.data.name, updateData)); 
         })
         .catch( error => {

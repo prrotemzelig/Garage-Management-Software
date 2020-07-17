@@ -60,7 +60,7 @@ return dispatch => {
        // promises.push(file1);
     let type=file.type;
     let finalNode;
-    if(type.includes("image/jpeg")){
+    if(type.includes('image/jpeg') || type.includes('image/gif') || type.includes('image/png')){ //'image/gif', 'image/jpeg', 'image/png'
          finalNode = 'images';
        }
        else{
@@ -163,6 +163,7 @@ export const getImagesFail = ( error ) => {
 
 
 export const getImages = ( userId ,token,branchNumber,cardKey,ticketNumber,node) => { 
+  
     return dispatch => {
             dispatch( getImagesStart() ); 
     // create a Reference to that folder:
@@ -209,13 +210,15 @@ export const getImages = ( userId ,token,branchNumber,cardKey,ticketNumber,node)
                 //   }    
           })
           .catch(error => {
-                    dispatch(getImagesFail(error));
+            console.log(error);
+            dispatch(getImagesFail(error));
           }) 
       });
   }    
 ) 
     .catch(error => {
-                dispatch(getImagesFail(error));
+        console.log(error);
+        dispatch(getImagesFail(error));
     })
     };
 };
@@ -287,6 +290,7 @@ export const getDocsFail = ( error ) => {
 
 
 export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) => { 
+
     return dispatch => {
             dispatch( getDocsStart() ); 
     var listRef = storageRef.child(branchNumber + "/" + ticketNumber + node ); 

@@ -128,7 +128,7 @@ createReport(data){
           else{
           this.state.countWork+=1;
           this.state.countRevenue+=parseInt(work_card[k].net, 10) ;
-          console.log(parseInt(work_card[k].net, 10)+ work_card[k].workDescription);
+         // console.log(parseInt(work_card[k].net, 10)+ work_card[k].workDescription);
           this.state.counter=1;
           }
         }
@@ -150,7 +150,7 @@ export = () => {
 render() {
   let cards=[];
   let is_mobile=this.isMobile();
-  console.log(is_mobile);
+ // console.log(is_mobile);
   if(this.props.cards !==''){
     this.state.card=this.props.cards;
     this.state.closeCard=this.props.closeCards; 

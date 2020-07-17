@@ -292,7 +292,7 @@ export const updateSettingUser = (updateData,field,token,branchNumber,userKey,us
     finalUpdateField = {  profileImage: updateData};
 }
 
-console.log(finalUpdateField);
+//console.log(finalUpdateField);
     return dispatch => {
         dispatch( updateSettingUserStart() ); // dispatch to the store
         //'/carData.json?auth=' + token,
@@ -300,7 +300,7 @@ console.log(finalUpdateField);
 //        axios.patch(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '/.json'  , finalUpdateField)
 
         .then(res => {
-        console.log(res.data);
+       // console.log(res.data);
         dispatch(updateSettingUserSuccess(res.data, updateData,field)); 
        // dispatch(fetchTasks(token, userId, branchNumber,userKey));
         if(field === 'sidebarBackgroundColor'){

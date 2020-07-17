@@ -50,7 +50,7 @@ export const taskOpening = ( taskData, token,branchNumber, userKey,list) => {
         axios.post(branchNumber + '/users/' + userKey + '/taskData/' + list + '.json' ,taskData ) // send the HTTP request 
 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            console.log(response.data)
+          //  console.log(response.data)
             dispatch(taskOpeningSuccess(response.data.name, taskData,list)); 
 
             // this.props.history.push( '/' ); // here we navigate away
@@ -183,7 +183,7 @@ export const taskUpdate = ( updateData, token,branchNumber,userKey,taskKey ,list
         //axios.patch(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '/' + field + '/.json'  , finalTag)
 
         .then(res => {
-        console.log(res.data);
+       // console.log(res.data);
         dispatch(taskUpdateSuccess(res.data, updateData,list)); 
         dispatch(fetchTasks(token, userId, branchNumber,userKey));
 
@@ -232,7 +232,7 @@ export const taskDelete = ( token,branchNumber,userKey,taskKey ,list,userId) => 
         axios.delete(branchNumber + '/users/'+ userKey +'/taskData/' + list + '/' + taskKey + '.json?x-http-method-override=DELETE',null )
 
         .then(res => {
-        console.log(res.data);
+       // console.log(res.data);
         dispatch(taskDeleteSuccess(res.data,list)); 
         dispatch(fetchTasks(token, userId, branchNumber,userKey));
 
