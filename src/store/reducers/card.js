@@ -20,6 +20,25 @@ const initialState = {
 };
 
 
+const logoutCardReducers = (state, action) => {
+    return updateObject(state, {     
+        cards: [], // all my cards
+        closeCards: [],
+        loading: false, // we want to know if we are in a process of open new card or if we are done - true if we done open card **
+        purchased: false,
+        showWorkModel: false,   
+        showPartModel: false,
+        showSuccessCase: false,   
+        showCloseCardSuccessCase: false,
+        showUpdateSuccessCase: false,
+        workData: [],
+        partsData: [],
+        currentCardKey: '',
+        currentTicketNumber: '',
+        loadingMarkCardIsClosed: false
+    }); 
+};
+
 
 const purchaseSetCurrentCardKey = ( state, action ) => {
     return updateObject( state, { currentCardKey: '',currentTicketNumber: '' } );
@@ -362,6 +381,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.GET_ALL_CARD_DATA_START: return GetAllCardDataStart( state, action );
         case actionTypes.GET_ALL_CARD_DATA_SUCCESS: return GetAllCardDataSuccess( state, action ); //GetAllCardDataSuccess
         case actionTypes.GET_ALL_CARD_DATA_FAIL: return GetAllCardDataFail( state, action );
+
+
+        case actionTypes.AUTH_LOGOUT_CARD: return logoutCardReducers( state, action );
         
         default: return state; // return the current state
     }

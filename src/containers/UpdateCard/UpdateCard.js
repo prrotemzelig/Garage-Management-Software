@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import axios from '../../axios-cards';
+import * as actions from '../../store/actions/index';
 import './UpdateCard.css'
 import Search from './SearchEngine.js';
 import SearchIcon from "@material-ui/icons/Search";
+
 
 
 class SearchBar extends Component {
@@ -13,6 +17,10 @@ class SearchBar extends Component {
       };
   }
  
+  componentDidMount(){
+    this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+  
+  }
 
   onInputChange(term){
     const name = this.props.searchBoxName || undefined
@@ -33,7 +41,7 @@ class SearchBar extends Component {
                 name={name} className="search-input" 
                 id="search" 
                 type="text" autocomplete="off"
-                placeholder="הכנס מספר רכב" 
+                placeholder="הכנס מספר רישוי" 
                 value2={this.state.term}
                 onChange={event=>this.onInputChange(event.target.value)} 
                 onKeyPress={this.props.onKeyPress|| null}/>
@@ -50,4 +58,23 @@ class SearchBar extends Component {
     }
 }
  
-export default SearchBar;
+//export default SearchBar;
+
+const mapStateToProps = state => { // here we get the state and return a javascript object
+  return {
+      token: state.auth.token,
+      userId: state.auth.userId,
+      branchNumber: state.auth.branchNumber,
+      UserKey: state.auth.userKey
+  };
+};
+
+
+const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
+  return {
+      // onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) ),
+      onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
+  };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps)( SearchBar, axios  );

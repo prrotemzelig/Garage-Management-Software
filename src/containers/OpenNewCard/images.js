@@ -15,14 +15,12 @@ class ImageUpload extends React.Component {
   }
   
     fileSelectedHandler = (e) => {
-    // console.log(e.target.files[0].type);
         this.setState({ files: [...this.state.files, ...e.target.files]})
 
     }
 
     
     render() {
-      //console.log(this.state.files);
 
       if(this.props.value==="image"){
         return (

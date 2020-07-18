@@ -30,7 +30,6 @@ class showMessages extends Component {
 deleteAllNotification = () =>{
   let notification=this.props.notification;
   for(var i=0;i<notification.length;i++){
-    //  console.log(this.props.branchnumber+" "+this.props.UserKey+" "+notification[i].id+" "+this.props.userId);
       this.props.onNotificationDelete(this.props.token,this.props.branchnumber,this.props.UserKey,notification[i].id,this.props.userId);
   }
 }
@@ -164,7 +163,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       backgroundColor: state.auth.backgroundColor,
       profileImage: state.auth.profileImage,
       sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
-      notification: state.notification.notification,
+      notification: state.notification.notification
+ 
 
      
 

@@ -808,3 +808,10 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
    // });
         }
 };
+
+
+export const logoutCardReducers = () => { 
+    return {
+        type: actionTypes.AUTH_LOGOUT_CARD
+    };
+};

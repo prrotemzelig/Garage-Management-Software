@@ -237,6 +237,9 @@ export  const  authSignUp = (token,userId,firstName,lastName,branchNumber,userPe
     else if(userPermissions === 'משתמש'){
         nodeUerPermissions= 'User'
     }
+    else if(userPermissions === 'מאסטר'){
+        nodeUerPermissions= 'Master'
+    }
     // else if(userPermissions === 'בסיסי'){
     //     nodeUerPermissions= 'basic'
     // }
@@ -459,5 +462,13 @@ export const notificationOpeningForUser = ( notificationData, token,branchNumber
             dispatch(notificationOpeningFail(error));
             //console.log(error);
         } );
+    };
+};
+
+
+
+export const logoutAdminReducers = () => { 
+    return {
+        type: actionTypes.AUTH_LOGOUT_ADMIN
     };
 };

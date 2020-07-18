@@ -59,6 +59,8 @@ class App extends Component {
   componentDidMount () {
     this.props.onTryAutoSignup();
     window.addEventListener('resize', this.resize);
+    // this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
+
   }
 
   componentWillUnmount() {
@@ -117,13 +119,19 @@ class App extends Component {
 
 const mapStateToProps = state => { 
   return {
-    isAuthenticated: state.auth.token !== null
+    isAuthenticated: state.auth.token !== null,
+    // branchnumber: state.auth.branchNumber,
+    // token: state.auth.token,
+    // UserKey: state.auth.userKey,
+    // userId: state.auth.userId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onTryAutoSignup: () => dispatch( actions.authCheckState() )
+    // onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
+
   };
 };
 

@@ -28,9 +28,7 @@ class FixedPlugin extends Component {
 
   
   handleSidebarBgClick = (color,kind) => {
-  //  console.log(color);
     this.props.onUpdateSettingUser(color,kind,this.props.token,this.props.branchNumber,this.props.userKey,this.props.userId); // this contains all the data of card
-     
 
   };
 

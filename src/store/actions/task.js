@@ -244,3 +244,10 @@ export const taskDelete = ( token,branchNumber,userKey,taskKey ,list,userId) => 
 
     };
 };
+
+
+export const logoutTaskReducers = () => { 
+    return {
+        type: actionTypes.AUTH_LOGOUT_TASK
+    };
+};

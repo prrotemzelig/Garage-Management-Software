@@ -10,6 +10,16 @@ const initialState = {
 };
 
 
+const logoutTaskReducers = (state, action) => {
+    return updateObject(state, {
+        todo: [],
+        doing:[],
+        done:[],
+        loading: false 
+    }); 
+};
+
+
 const taskInit = ( state, action ) => {
     return updateObject( state );
 };
@@ -154,6 +164,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.TASK_DELETE_START: return taskDeleteStart( state, action );
         case actionTypes.TASK_DELETE_SUCCESS: return taskDeleteFail( state, action );
         case actionTypes.TASK_DELETE_FAIL: return taskDeleteSuccess( state, action );
+
+
+        case actionTypes.AUTH_LOGOUT_TASK: return logoutTaskReducers( state, action );
 
         default: return state; // return the current state
     }

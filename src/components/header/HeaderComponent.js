@@ -1,6 +1,7 @@
 //import React from 'react';
 import React, {Component} from 'react';
 import * as actions from '../../store/actions/index';
+import { updateObject, checkValidity} from '../../shared/utility'; //checkFormatNumbers
 
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
         }
     },
     title: {
+        alignSelf: 'center',
         fontFamily: 'Alef Hebrew',
         fontStyle: 'normal',
         fontWeight: 'bold',
@@ -89,7 +91,9 @@ const styles = StyleSheet.create({
             //position: 'fixed'
         },
         '@media (min-width: 769px)': {
-            position: 'fixed'
+            marginRight: 25, // marginLeft: 36
+
+            // position: 'fixed'
 
         }
     },
@@ -112,6 +116,7 @@ class HeaderComponent extends Component {
         super(props);
         this.state = {
           backgroundcolor: "blue",
+          branchChangeForMaster: null,
           modal: false,
           notificationLength: 0,
           fileId:[],
@@ -120,11 +125,10 @@ class HeaderComponent extends Component {
         };
      }
     componentDidMount() { 
-        this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumber
-    //    console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId);
-
-        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchnumber,this.props.UserKey); 
+        this.props.onFetchUsers(this.props.token, this.props.userid); //, this.props.branchNumber //, this.allBranchsNumber
+        this.props.onFetchNotification(this.props.token, this.props.userid, this.props.branchnumber,this.props.userkey); 
     }
+
     componentDidUpdate(prevProps, prevState){
         this.state.notificationLength=0;
         for(var i=0;i<this.props.notification.length;i++){
@@ -152,30 +156,47 @@ class HeaderComponent extends Component {
     onNotificationClick = () =>  {
         this.setState({notificationLength: 0});
         for(var i=0;i<this.props.notification.length;i++){
-            if(this.props.notification[i].show=="false"){
+            if(this.props.notification[i].show==="false"){
                 const notificationData={
                     type: this.props.notification[i].type,
                     description: this.props.notification[i].description,
                     openedBy: this.props.notification[i].openedBy,
                     show: 'true'
                 }
-              //  console.log(notificationData);
-             //   console.log(this.props.branchnumber+"  "+this.props.UserKey+"  "+this.props.userId+"  "+this.props.notification[i].id);
-                this.props.onNotificationUpdate(notificationData, this.props.token, this.props.branchnumber, this.props.UserKey,this.props.userId,this.props.notification[i].id); // this contains all the data of card 
+                this.props.onNotificationUpdate(notificationData, this.props.token, this.props.branchnumber, this.props.userkey,this.props.userid,this.props.notification[i].id); // this contains all the data of card 
             }
         }
 
         if(!this.props.shownotificationmodel){
             this.setState({notificationLength: 0});
-            this.props.onNotificationOpening(); // this contains all the data of card 
+            this.props.onNotificationOpening(); 
         }
         else{
-            this.props.onNotificationClose(); // this contains all the data of card 
+            this.props.onNotificationClose(); 
         }
+        document.getElementById("header").reset(); 
+        this.forceUpdate();
+
+        this.setState(prevState => {
+            return {notificationLength: 0};
+            });
     } 
+
+
+
+inputCarChangedHandler = (event) => { 
+        event.preventDefault(); 
+        const updatedCardForm = updateObject(this.state, { 
+            [event.target.id]: event.target.value 
+        });
+        this.setState({state: updatedCardForm}); 
+        this.setState(prevState => {
+            return {branchChangeForMaster: this.state.branchChangeForMaster };
+            });
+  }
+  
     
     render(){   
-        //console.log(this.props.notification);
         let not=this.props.notification;
         this.state.notificationLength=0;
         for(var i=0;i<this.props.notification.length;i++){
@@ -183,7 +204,6 @@ class HeaderComponent extends Component {
                 this.state.notificationLength+=1;
             }
         }
-        
         //this.state.notificationLength=this.props.notification.length;
        if(this.props.notification.length===0 && this.props.shownotificationmodel){
         this.state.modal=true;
@@ -224,21 +244,52 @@ class HeaderComponent extends Component {
         else if(this.props.profileimage==='anime13'){
             userProfileImage = require("../../assets/anime13.jpg");
         }
-
-
-
         const { icon, title, ...otherProps } = this.props;
-        // console.log(this.state.fileId);
     return (
-        <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
+        <Row   className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
             <Row vertical="center" style={{position: "left"}}>
+            <div style={{display: "flex"}}>  
 
+            {window.innerWidth > '500' ?
             <span className={this.props.backgroundcolor==='light' ?
                 css(styles.title)
                 : css(styles.title, styles.titleDark)} >סניף {thisUserBranchNumber}</span>
+               
+                :
+
+                <span className={this.props.backgroundcolor==='light' ?
+                css(styles.title)
+                : css(styles.title, styles.titleDark)} >{thisUserBranchNumber}</span>
+    }
+{/* 
+                {this.props.userPermissions ==='Master'  ?
+
+<form style={{marginBottom: "2px"}}>
+{(() => {
+  
+//     this.state.vehicleData.manufactureYear.value= this.state.carDetails.manufactureYear;
+//        if(this.state.car_data[9] !== undefined ){
+//     this.state.vehicleData.manufactureYear.value = this.state.car_data[9]; 
+// } 
+      
+ })()}
+  <label for="branchChangeForMaster">שינוי סניף</label>
+  <select  id="branchChangeForMaster" class="form-control"    
+   value={ this.state.branchChangeForMaster}  
+   onChange={(event) => this.inputCarChangedHandler(event)}>
+    <option></option>
+        <option>תלפיות</option>
+        <option>גבעת שאול</option>
+        <option>מודיעין</option> 
+  </select>
+</form>
+             : null       
+           
+                } */}
+                </div>
                </Row>
             <Row vertical="center" style={{position: "left"}}>
-                <div className={css(styles.iconStyles)}>
+                <form id="header" className={css(styles.iconStyles)}>
 
                 <Button style={{fontSize:"large",color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)",fontsize: "9rem",borderRadius: "4px",boxSizing: "content-box",padding: "8px 16px", margin: "4px"}}
                 onClick={this.onNotificationClick}>
@@ -257,7 +308,7 @@ class HeaderComponent extends Component {
             </div>
             <Button bsStyle="secondary" style={{borderColor: "black"}}  onClick={e => this.modalClose(e)} >סגור</Button> 
           </Modal> */}
-                </div>
+                </form>
                 <div className={css(styles.separator)}></div> 
                 <Row vertical="center">
                     <span className={this.props.backgroundcolor==='light' ?
@@ -329,21 +380,25 @@ const mapStateToProps = state => {
         profileimage: state.auth.profileImage,
         token: state.auth.token,
         notification: state.notification.notification,
-        UserKey: state.auth.userKey,
-        userId: state.auth.userId,
-        notificationKey: state.notification.notificationId,
+        userkey: state.auth.userKey,
+        userid: state.auth.userId,
+        notificationkey: state.notification.notificationId,
         loading: state.notification.loading,
-        shownotificationmodel: state.notification.showNotificationModel
+        shownotificationmodel: state.notification.showNotificationModel,
+        userpermissions: state.auth.userPermissions
+    
 
     };
 };
+
+
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
     onSettingOpening: () => dispatch( actions.SettingOpening() ),
     onSettingClose: () => dispatch( actions.SettingClose() ),
     onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
-    onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId)),
+    // onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId)),
     onFetchUsers: (token,userId) => dispatch( actions.fetchUsers(token, userId)), 
     onNotificationOpening: () => dispatch( actions.NotificationOpening() ),
     onNotificationClose: () => dispatch( actions.NotificationClose() ),

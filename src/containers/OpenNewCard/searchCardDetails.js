@@ -6,7 +6,6 @@ var temp=0;
 
 const cardSearch = ( props ) => {
     const number=props.data;
-    //console.log(number);
     if(props.cardData.licenseNumber===number){
         const cardDetails = []; // this is a code to transform each of my open card into an array of all the open cards.
         temp=1;

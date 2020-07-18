@@ -55,6 +55,8 @@ class showData extends Component   {
   
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
       }
 
    
@@ -297,8 +299,7 @@ closePartsModal = (event) => {
 
 
 renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
-// console.log(this.props.workData);
-// console.log(this.props.partsData);
+
   let workButtons;
   let { isAddNewWorkOrPartOpen } = this.state;
   let { isUpdateWorkOrPartOpen } = this.state;
@@ -983,7 +984,6 @@ switchShowImagesAndDoc = () => {
 }
 
       check(data){
-        // console.log(data);
         if(data.cardData.licenseNumber===this.state.CarNumber && data.cardData.ticketNumber===this.state.ticketNumber){
           this.state.carDetails=data.carData;
           this.state.cardDetails=data.cardData;
@@ -992,11 +992,15 @@ switchShowImagesAndDoc = () => {
           this.state.rentalCompanyReplacementVehicle=data.rentalCompanyReplacementData;
           this.state.alternateVehicleTaken=data.alternateVehicleTaken;
           this.state.closeDate=data.closeDate;
-          this.state.worksDetails = data.workData;
-          this.state.partsDetails = data.partsData;
+          
           this.state.invoiceClosureData = data.invoiceClosureData;
           
-
+          if(data.workData !== undefined){
+            this.state.worksDetails = data.workData;
+          }
+          if(data.partsData !== undefined){
+            this.state.partsDetails = data.partsData;
+          }
 
           let part=[];
           let parts_card;
@@ -1030,7 +1034,6 @@ switchShowImagesAndDoc = () => {
         this.state.CarNumber=this.props.value;
         //let cards;
         if(this.state.userCarNumber!==""){
-          // console.log("761"); //cards = 
           this.props.cards.map( card => (
             this.check(card)
           ))
@@ -1458,7 +1461,7 @@ switchShowImagesAndDoc = () => {
           <div class="form-group col-md-3" >
         
 
-                <label for="replacementVehicleNumber" >מספר רכב</label>
+                <label for="replacementVehicleNumber" >מספר רישוי</label>
                 <input type="text" id="replacementVehicleNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}}  aria-describedby="passwordHelpInline" 
                 value={this.state.garageReplacementVehicle.replacementVehicleNumber}/>
               </div>
@@ -1603,7 +1606,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
             workData: state.card.workData,
             partsData: state.card.partsData,
             imagesForCard: state.storage.fetchedImages,
-            docsForCard: state.storage.fetchedDocs
+            docsForCard: state.storage.fetchedDocs,
+            UserKey: state.auth.userKey,
         };
       };
       
@@ -1616,6 +1620,7 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
           onPartsModalClose: (token ) =>  dispatch(actions.partModalClose(token)),
           onDownloadDoc:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadDoc(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
           onDownloadImage:(userId,token,branchNumber,cardKey,ticketNumber, node,name) => dispatch( actions.downloadImage(userId,token,branchNumber,cardKey,ticketNumber, node, name)),
+          onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
         };
       };
       

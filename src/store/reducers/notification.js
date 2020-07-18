@@ -9,6 +9,16 @@ const initialState = {
 };
 
 
+const logoutNotificationReducers = (state, action) => {
+    return updateObject(state, {         
+        notification:[],
+        showNotificationModel: false,
+        loading: false
+    }); 
+};
+
+
+
 const notificationInit = ( state, action ) => {
     return updateObject( state );
 };
@@ -106,6 +116,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.NOTIFICATION_UPDATE_START: return notificationUpdateStart( state, action );
         case actionTypes.NOTIFICATION_UPDATE_SUCCESS: return notificationUpdateSuccess( state, action );
         case actionTypes.NOTIFICATION_UPDATE_FAIL: return notificationUpdateFail( state, action );
+
+
+        case actionTypes.AUTH_LOGOUT_NOTIFICATION: return logoutNotificationReducers( state, action );
 
         default: return state; // return the current state
     }

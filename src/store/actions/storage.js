@@ -504,3 +504,10 @@ export const downloadImage = ( userId ,token,branchNumber,cardKey,ticketNumber,n
               });
     };
 };
+
+
+export const logoutStorageReducers = () => { 
+    return {
+        type: actionTypes.AUTH_LOGOUT_STORAGE
+    };
+};

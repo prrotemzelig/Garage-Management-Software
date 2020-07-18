@@ -18,7 +18,8 @@ export {
     setCurrentCardKey,
     changeVehicleNumber,
     markCardIsOpen,
-    markCardIsClosed
+    markCardIsClosed,
+    logoutCardReducers
 } from './card';
 export {
     imageOrDocUploading,
@@ -27,7 +28,8 @@ export {
     deleteImages,
     deleteDocs,
     downloadDoc,
-    downloadImage
+    downloadImage,
+    logoutStorageReducers
 } from './storage';
 export {
     authSignIn,
@@ -38,13 +40,15 @@ export {
     SettingClose,
     updateSettingUser,
     resetPassword,
-    resetPasswordForAdmin
+    resetPasswordForAdmin,
+    branchChangeForMaster
 } from './auth';
 export {
     taskOpening,
     fetchTasks,
     taskUpdate,
-    taskDelete
+    taskDelete,
+    logoutTaskReducers
 } from './task';
 export {
     authSignUp, // import the auth method itself
@@ -57,7 +61,8 @@ export {
     // deleteUserModalOpening,
     deleteUserModalClose,
     taskOpeningForUser,
-    notificationOpeningForUser
+    notificationOpeningForUser,
+    logoutAdminReducers
 
 } from './admin';
 export {
@@ -67,5 +72,6 @@ export {
     NotificationOpening,
     NotificationClose,
     notificationUpdate,
+    logoutNotificationReducers
 } from './notification';
 

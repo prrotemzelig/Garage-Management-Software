@@ -119,9 +119,6 @@ class AdminSettings extends Component {
     }
 
     submitHandler = (event) => {
-      //  console.log(this.state.controls.branchNumber.value);
-     //   console.log(this.state.controls.userPermissions.value);
-
         event.preventDefault(); // we call this to prevent the reloading of the page
         this.props.onAuth(this.state.controls.firstName.value,this.state.controls.lastName.value,this.state.controls.branchNumber.value,this.state.controls.userPermissions.value, this.state.controls.email.value, this.state.controls.password.value); // pass email value and password value
         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value

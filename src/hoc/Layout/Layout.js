@@ -9,7 +9,7 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer.js';
 import HeaderComponent from '../../components/header/HeaderComponent';
-import Header from '../../components/header/Header';
+// import Header from '../../components/header/Header';
 
 
 const styles = StyleSheet.create({

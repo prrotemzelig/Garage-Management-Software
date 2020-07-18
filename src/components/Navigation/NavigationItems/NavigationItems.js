@@ -70,13 +70,13 @@ const navigationItems = (props ) => (
             {props.isAuthenticated ? <NavigationItem  icon={IconCollection} link="/updateTicketStatus">כרטיס עבודה    </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconAgents} link="/openCards">כרטיסים פתוחים   </NavigationItem> : null}
             {props.isAuthenticated ? <NavigationItem icon={IconHistory} link="/carHistory">היסטוריית רכב   </NavigationItem> : null}
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconArchive} link="/dailyReports" > דוחות יומיים   </NavigationItem>  : null}
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconCalendar3} link="/MonthlyReports">דוחות חודשיים   </NavigationItem> : null}
+            {(props.isAuthenticated && (props.userPermissions ==='Admin' || props.userPermissions ==='Master') ) ? <NavigationItem icon={IconArchive} link="/dailyReports" > דוחות יומיים   </NavigationItem>  : null}
+            {(props.isAuthenticated && (props.userPermissions ==='Admin' || props.userPermissions ==='Master')) ? <NavigationItem icon={IconCalendar3} link="/MonthlyReports">דוחות חודשיים   </NavigationItem> : null}
             {/* {props.isAuthenticated ? <NavigationItem icon={IconAgents} link="/ordersToCheck">הזמנות לטיפול   </NavigationItem> : null} */}
            
             <div className={classes.separator}></div>
 
-            {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconPerson} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
+            {(props.isAuthenticated && (props.userPermissions ==='Admin' || props.userPermissions ==='Master')) ? <NavigationItem icon={IconPerson} link="/AdminUserManagement">ניהול משתמשים   </NavigationItem> : null}
 
             {/* {(props.isAuthenticated && props.userPermissions ==='Admin') ? <NavigationItem icon={IconSettings} link="/AdminSettings">הגדרות מנהל ישן   </NavigationItem> : null} */}
 

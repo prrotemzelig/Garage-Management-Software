@@ -18,6 +18,7 @@ class AdminUserManagement extends Component {
     state = {
         allFormIsValid: false,
         taskIsValid: false,
+        branchChangeForMaster: null,
         controls: {
             firstName: {
                 elementType: 'input',
@@ -66,6 +67,7 @@ class AdminUserManagement extends Component {
                 elementType: 'select',
                 elementConfig: {
                     options: [
+                        {value: 'Master', displayValue: 'מאסטר'},
                         {value: 'Admin', displayValue: 'מנהל'},
                         {value: 'User', displayValue: 'משתמש'}
                         // {value: 'basic', displayValue: 'בסיסי'}
@@ -120,6 +122,8 @@ class AdminUserManagement extends Component {
     
     componentDidMount() { 
         this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumbers
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
         //ariel
         //this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
     }
@@ -138,6 +142,30 @@ class AdminUserManagement extends Component {
     //         );
     //   }
 
+    inputBranchChangeForMasterHandler = (event) => { 
+        event.preventDefault(); 
+        const updatedCardForm = updateObject(this.state, { 
+            [event.target.id]: event.target.value 
+        });
+        this.setState({state: updatedCardForm}); 
+
+        let newBranchNumber;
+        if(event.target.value === 'תלפיות'){
+            newBranchNumber = 'Talpiot';
+        }
+        else if(event.target.value === 'גבעת שאול'){
+            newBranchNumber = "GivatShaul";
+        }
+        else if(event.target.value === 'מודיעין'){
+            newBranchNumber = 'Modiin';
+        }
+        this.setState(prevState => {
+            return {branchChangeForMaster: this.state.branchChangeForMaster };
+            });
+            this.props.onBranchChangeForMaster(newBranchNumber); 
+
+            
+  }
 
 //this.props.onDeleteUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)}
       renderDeleteUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
@@ -370,6 +398,7 @@ setTheStates = () => {
             elementType: 'select',
             elementConfig: {
                 options: [
+                    {value: 'Master', displayValue: 'מאסטר'},
                     {value: 'Admin', displayValue: 'מנהל'},
                     {value: 'User', displayValue: 'משתמש'}
                     // {value: 'basic', displayValue: 'בסיסי'}
@@ -443,7 +472,6 @@ inputTaskChangedHandler = (event) => {
     }
 
 inputChangedHandler = (event) => { 
-   // console.log(this.state.controls);
     const updatedFormElement = updateObject(this.state.controls[event.target.id], { 
         value: event.target.value,
         valid: checkValidity(event.target.value, this.state.controls[event.target.id].validation),
@@ -561,7 +589,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                    style={{marginLeft: "10px"}}  value={this.state.controls.userPermissions.value}>
                             <option selected>בחר/י סוג הרשאות</option>
                             <option selected>{this.state.controls.userPermissions.elementConfig.options[0].displayValue}</option>
-                            <option>{this.state.controls.userPermissions.elementConfig.options[1].displayValue}</option>
+                            <option selected>{this.state.controls.userPermissions.elementConfig.options[1].displayValue}</option>
+                            <option>{this.state.controls.userPermissions.elementConfig.options[2].displayValue}</option>
                             {/* <option>{this.state.controls.userPermissions.elementConfig.options[2].displayValue}</option> */}
                     </select>
                  </form>
@@ -592,21 +621,9 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
   }
 
 
-  alertModal = (list) => { ///*** add new user modal! ****
-    // console.log(this.props.loading);
-    // console.log(this.props.loadingFetchUsers);
-    // console.log(this.props.showSuccessCase);
-    // console.log(this.props.showAddNewUserModel);
-
-    
-        //alert(list);
+  alertModal = (list) => { 
         this.props.onToastModalClose(); 
-        // console.log(this.props.showSuccessCase);
-        // console.log(this.props.showAddNewUserModel);
-        alert(list);
-
-    //this.props.onAddNewUserModalClose(this.props.token); 
-         
+        alert(list);         
   }
 
   renderToastModal = (message) => { ///*** TOAST modal! ****
@@ -658,14 +675,12 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
         formData['openedByLastName'] = this.props.AdminLastName;
     
     this.props.onTaskOpening(formData,token, userBranchNumber, userKey,list); // this contains all the data of card 
-   // console.log(userKey);
     let notification={};
     notification['type']='task';
     notification['description']=this.state.taskForm.newTaskForUser.title;
     notification['openedBy'] = this.props.AdminFirstName+' '+this.props.AdminLastName;
     notification['show']='false';
-   // console.log(userKey+"  "+userBranchNumber);
-    this.props.onNotificationOpening(notification,token, userBranchNumber, userKey);
+    this.props.onNotificationOpening(notification,token, userBranchNumber, userKey,this.props.userId,this.props.userkey);
     //this.closeAddNewTaskModal();
     let updateTaskForm =  { 
             newTaskForUser: {  
@@ -775,8 +790,20 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
   
 
     render () {
+
+        if(this.props.branchNumber === 'Talpiot'){
+            this.state.branchChangeForMaster = 'תלפיות';
+
+        }
+        else if(this.props.branchNumber === 'GivatShaul'){
+            this.state.branchChangeForMaster = 'גבעת שאול';
+
+        }
+        else if(this.props.branchNumber === 'Modiin'){
+            this.state.branchChangeForMaster = 'מודיעין';
+
+        }
         // let cards;
-        //console.log(window.innerWidth);
 
         // if (this.props.loading) {
         //     cards = <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>;
@@ -794,41 +821,55 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
         // }
         return (
             <div class="form-row" > 
-
          <div  class="form-group col-md-12">
             {
                 this.props.loadingFetchUsers ? 
                 <div style= {{textAlign: "center",position: "center"}}><Spinner/></div>
             :
             <div> 
-            <Button bsStyle="secondary" style={{borderColor: "black"}} onClick= {( event ) => this.openAddNewUserModal( event)}>פתיחת משתמש חדש</Button> 
+            <div class="form-row" style={{direction: "rtl"}} >
+            <div    >       
+            <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "20px"}} onClick= {( event ) => this.openAddNewUserModal( event)}>פתיחת משתמש חדש</Button> 
+            </div>
+
+            <div    >       
+            {this.props.userPermissions ==='Master'  ?
+            <div style={{display: "flex"}}>
+            <div  style={{ marginLeft: "5px"}}  >       
+            <label for="branchChangeForMaster">שינוי סניף להצגת כל הנתונים</label>
+            </div>
+            <div   >       
+            <select  id="branchChangeForMaster" class="form-control"    
+            value={ this.state.branchChangeForMaster}  
+            onChange={(event) => this.inputBranchChangeForMasterHandler(event)}>
+                    <option>תלפיות</option>
+                    <option>גבעת שאול</option>
+                    <option>מודיעין</option> 
+            </select>
+            </div>
+            </div>
+            : null       
+                }
+           </div>
+
+            </div>
             {this.props.showAddNewUserModel?
-               
-
                 this.renderAddNewUserModal()
-
             :null} 
               { this.props.showSuccessCase && !this.props.loading && !this.props.showAddNewUserModel ?
                     this.alertModal('משתמש נפתח בהצלחה')
-            //  this.renderToastModal( 'משתמש נפתח בהצלחה')
-
               :null }
             {/* { this.props.showDeleteSuccessCase ?
                         this.renderToastModal( 'משתמש נמחק בהצלחה')
 
                         :null } */}
             { this.props.showAddTaskSuccessCase && !this.props.loading ?
-                            this.alertModal('משימה הוספה בהצלחה')
-
-                        // this.renderToastModal( 'משימה הוספה בהצלחה')
-
+                this.alertModal('משימה הוספה בהצלחה')
                         :null }
-
             { this.props.error ?
                     this.alertModal(this.props.error)  :
                     null
              }
-
 
             <p> </p>
          
@@ -846,7 +887,6 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                     <th  scope="col" style={{ textAlign: "right"}}>מייל</th>
                     <th  scope="col" style={{ textAlign: "right",width:"30%"}}>פעולות</th> 
                 </tr>
-
             :
             <tr style={{fontWeight: "bold", fontSize: "18px"}}>
             <th  scope="col" style={{ textAlign: "right"}}>פרטים</th>
@@ -854,10 +894,6 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
             <th  scope="col" style={{ textAlign: "right"}}>פעולות</th> 
             </tr> }
             </>
-
-               
-
-
             </thead>
             <tbody>
 
@@ -867,84 +903,119 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                     <tr> 
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות</td>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
+                    {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
                     {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
+                        null
+                    }
+                    {user.userPermissions ==='User'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
                     }
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
                         {' '}
-                       
-                        {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                        {' '}
-                       
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
-                       
                         {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                        {' '}                
+                        {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
                     </td>
                     </tr>      
                     :
                     <tr>
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
+                    {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
                     {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
-                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                        null
                     }
+                    {user.userPermissions ==='User'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
+                    }
+
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                        {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                        {' '}
                         {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                         {' '}
                         {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                        {' '}
+                        {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     </td>
                     </tr>
                     }
-                     </>
-               
-                 ))
-
-                 
+                     </> 
+                 ))     
             }
 
             {this.props.GivatShaulUsers.map( user =>  (
-        
                 <>
                 {window.innerWidth > '376' ?
                 <tr> 
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>גבעת שאול</td>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
-                {user.userPermissions ==='Admin'? 
+                {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
+                    {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
-                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                        null
                     }
+                    {user.userPermissions ==='User'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
+                    }
+
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                    {' '}
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                 </td>
                 </tr>      
                 :
                 <tr>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>גבעת שאול<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
-                {user.userPermissions ==='Admin'? 
+                {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
+                    {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
+                        null
+                    }
+                    {user.userPermissions ==='User'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
                     }
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                    {' '}
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)} 
                 </td>
                 </tr>
                 }
@@ -959,34 +1030,55 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                 <tr> 
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מודיעין</td>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.firstName}{' '}{user.lastName}</td>
-                {user.userPermissions ==='Admin'? 
+                {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
+                    {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
+                        null
+                    }
+                    {user.userPermissions ==='User'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
                     }
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>{user.email}</td>  
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                    {' '}
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                 </td>
                 </tr>      
                 :
                 <tr>
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מודיעין<br/>{user.firstName}{' '}{user.lastName}<br/>{user.email}</td>
-                {user.userPermissions ==='Admin'? 
+                {user.userPermissions ==='Master'? 
+                        <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מאסטר</td>
+                      : 
+                        null
+                    }
+                    {user.userPermissions ==='Admin'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>מנהל</td>
                       : 
+                        null
+                    }
+                    {user.userPermissions ==='User'? 
                         <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>משתמש</td>
+                      : 
+                    null
                     }
                 <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word",width: "100%"}}>
-                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
-                    {' '}
+                    
                     {this.renderAddTaskToUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                     {' '}
                     {this.renderResetPasswordToUser(user.email,user.firstName,user.lastName)}
+                     {' '}
+                    {this.renderDeleteUser(user.keyUser,user.branchNumber,user.userToken,user.firstName,user.lastName)}
                 </td>
                 </tr>
                 }
@@ -1045,7 +1137,10 @@ const mapStateToProps = state => {
         userToken: state.admin.userToken,
         firstName: state.admin.firstName,
         lastName: state.admin.lastName,
-        backgroundColor: state.auth.backgroundColor
+        backgroundColor: state.auth.backgroundColor,
+        userPermissions: state.auth.userPermissions
+
+        
         //notification: state.notification.notification,
         //notificationKey: state.notification.notificationId
 
@@ -1067,12 +1162,14 @@ const mapDispatchToProps = dispatch => {
         onDeleteUserModalClose: ( ) =>  dispatch(actions.deleteUserModalClose()),
 
         onUserSignUp: (token,userId,firstName,lastName,branchNumber,userPermissions,email, password) => dispatch(actions.authSignUp(token,userId,firstName,lastName,branchNumber,userPermissions,email, password)),
+        onBranchChangeForMaster: (newBranchNumber) => dispatch(actions.branchChangeForMaster(newBranchNumber)),
         onToastModalClose: ( ) =>  dispatch(actions.toastModalClose()),
         onTaskOpening: (task, token,branchNumber,userKey,list) => dispatch(actions.taskOpeningForUser(task, token, branchNumber,userKey,list)),
         onResetPassword: (email) => dispatch(actions.resetPassword(email)),
 
         
-        onNotificationOpening: (notification, token,branchNumber,userKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey)),
+        onNotificationOpening: (notification, token,branchNumber,userKey,userId,userLoggedInKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey,userId,userLoggedInKey)),
+        onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
         //onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey)),
         //onNotificationDelete:(token,branchNumber,userKey,notificationKey ,userId)=>dispatch(actions.notificationDelete(token,branchNumber,userKey,notificationKey ,userId))
     };

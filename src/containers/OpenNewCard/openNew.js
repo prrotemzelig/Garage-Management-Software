@@ -103,8 +103,8 @@ class openNew extends Component   {
         value: '',
         validation: {
           required: true,
-          minLength: 3, //need to change to 7 
-          maxLength: 10, //need to change to 8 
+          minLength: 7, //need to change to 7 
+          maxLength: 8, //need to change to 8 
           isNumeric: true
       },
         valid: false
@@ -349,6 +349,7 @@ componentDidUpdate(prevProps,prevState) {
 componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
   // console.log("212");
   this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+  this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
   this.props.onFetchUsers(this.props.token, this.props.userId); //, this.props.branchNumber //, this.allBranchsNumbers
   window.addEventListener('beforeunload', this.beforePageReloadHandler.bind(this));
   // console.log("346");
@@ -1291,7 +1292,7 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
       for(var i=0;i<this.props.TalpiotUsers.length;i++){
         if(this.props.TalpiotUsers[i].keyUser===this.props.UserKey){}
         else{
-          this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser);
+          this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser,this.props.userId,this.props.userkey);
         }
       }
   }
@@ -1299,7 +1300,7 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
     for(var j=0;j<this.props.GivatShaulUsers.length;j++){
       if(this.props.GivatShaulUsers[j].keyUser===this.props.UserKey){}
       else{
-        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser);
+        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser,this.props.userkey);
       }
     }
   }
@@ -1307,7 +1308,7 @@ this.state.rentalCompanyReplacementVehicle['isTaken'].value=this.state.rentalCom
     for(var k=0;k<this.props.ModiinUsers.length;k++){
       if(this.props.ModiinUsers[k].keyUser===this.props.UserKey){}
       else{
-        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser);
+        this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser,this.props.userkey);
       }
     }
   }
@@ -1342,7 +1343,6 @@ inputChangedHandler = (event) => {
   });
 
   let formIsValid = true;
-
   if (event.target.id === 'licenseNumber'   ) { // the user must enter valid car number! the rest does not matter
       formIsValid = updatedCardForm[event.target.id].valid;  
   }
@@ -1373,7 +1373,7 @@ inputChangedHandler = (event) => {
 
     for(var i=0; i < this.props.cards.length ; i++){
       if(this.check(this.props.cards[i],event.target.value)){
-        console.log("369");
+        // console.log("369");
         break;
       }
     }
@@ -1388,7 +1388,7 @@ inputChangedHandler = (event) => {
   }
 
   if(this.state.found === false && event.target.id==='licenseNumber'){
-    console.log("361");
+    // console.log("361");
     this.setTheStates(event.target.value);
   }
 
@@ -1523,7 +1523,7 @@ inputNewWorkChangedHandler = (event) => {
         });
         
         this.setState({cardWork: updatedCardForm}); 
-        console.log(this.state.cardWork);
+        // console.log(this.state.cardWork);
   }
   
   else{
@@ -1715,7 +1715,7 @@ workOrPartsUpdateHandler = ( event,kind ) => {
       itemData['kind'] = kind;
       itemData['isExteriorWork'] = !isExteriorWork ; 
 
-    console.log(itemData);
+    // console.log(itemData);
 
     let cardKey = this.state.identifiedCardID;
     let itemKey = this.state.itemKeyForUpdateWorkOrPart;
@@ -1929,7 +1929,7 @@ cardCloseHandler = ( event ) => {
           for(var i=0;i<this.props.TalpiotUsers.length;i++){
             if(this.props.TalpiotUsers[i].keyUser===this.props.UserKey){}
             else{
-              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser);
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.TalpiotUsers[i].keyUser,this.props.userkey);
             }
           }
         }
@@ -1937,7 +1937,7 @@ cardCloseHandler = ( event ) => {
           for(var j=0;j<this.props.GivatShaulUsers.length;j++){
             if(this.props.GivatShaulUsers[j].keyUser===this.props.UserKey){}
             else{
-              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser);
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.GivatShaulUsers[j].keyUser,this.props.userkey);
             }
           }
         }
@@ -1945,7 +1945,7 @@ cardCloseHandler = ( event ) => {
           for(var k=0;k<this.props.ModiinUsers.length;k++){
             if(this.props.ModiinUsers[k].keyUser===this.props.UserKey){}
             else{
-              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser);
+              this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, this.props.ModiinUsers[k].keyUser,this.props.userkey);
             }
           }
         }
@@ -1953,12 +1953,12 @@ cardCloseHandler = ( event ) => {
 }
 //    this.setState({cardForm: updatedCardForm, formIsValid: formIsValid,userCarNumber: event.target.value, found: true,dataBaseCarNumber:data.cardData.licenseNumber });
 createNotification(notification,userKey){
-    this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, userKey);
+    this.props.onNotificationOpening(notification,this.props.token, this.props.branchNumber, userKey,this.props.userkey);
 
 }
 
 setTheStates = (licenseNumber) => {
-  console.log("1876");
+  // console.log("1876");
   let valueLicenseNumber;
   if(licenseNumber !== ''){
     valueLicenseNumber = licenseNumber;
@@ -1971,8 +1971,8 @@ setTheStates = (licenseNumber) => {
             value: valueLicenseNumber,
           validation: {
             required: true,
-            minLength: 3,
-            maxLength: 10,
+            minLength: 7,
+            maxLength: 8,
             isNumeric: true
         },
           valid: false
@@ -4062,7 +4062,7 @@ onChange = date => this.setState({ date })
                     }    
                  })()}  
 
-                  <label for="replacementVehicleNumber" >מספר רכב</label>
+                  <label for="replacementVehicleNumber" >מספר רישוי</label>
                   <input type="text" id="replacementVehicleNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
                   defaultValue={this.state.garageReplacementVehicle.replacementVehicleNumber.value}
                   onChange={!this.state.found ? (event) => this.inputGarageReplacementChangedHandler(event) : (evt) => this.updateGarageReplacementInputValue(evt,0)}/>
@@ -4273,7 +4273,7 @@ onChange = date => this.setState({ date })
    
  
        
-     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+     <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רישוי</Button> 
      {' '}
      <Button bsStyle="secondary" style={{borderColor: "black",marginLeft: "5px"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
      {' '}
@@ -4294,7 +4294,7 @@ onChange = date => this.setState({ date })
  
    <div class="form-group" style={{    width: "100%", display: "inline-flex",marginBottom: "5px"}}>
 
-     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רכב</Button> 
+     <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.changeVehicleNumberHandler}>שינוי מספר רישוי</Button> 
      {' '}
      <Button bsStyle="secondary" style={{borderColor: "black",width: "100%",marginLeft: "5px",fontSize: "13px"}}  disabled={!this.state.formIsValid} onClick={this.cardUpdateHandler}>עדכון כרטיס</Button> 
      {' '}
@@ -4413,7 +4413,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
 
       TalpiotUsers: state.admin.TalpiotUsers,
       GivatShaulUsers: state.admin.GivatShaulUsers,
-      ModiinUsers: state.admin.ModiinUsers,
+      ModiinUsers: state.admin.ModiinUsers
+
 
 
   };
@@ -4450,7 +4451,8 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
 
     onChangeVehicleNumber:(newNumberInput, token, branchNumber,identifiedCardID,userId) => dispatch(actions.changeVehicleNumber(newNumberInput, token, branchNumber,identifiedCardID,userId)) ,
     onFetchUsers: (token,userId) => dispatch( actions.fetchUsers(token, userId)), //allBranchsNumbers 
-    onNotificationOpening: (notification, token,branchNumber,userKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey)),
+    onNotificationOpening: (notification, token,branchNumber,userKey,userId,userLoggedInKey) => dispatch(actions.notificationOpening(notification, token, branchNumber,userKey,userId,userLoggedInKey)),
+    onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
 
 
 

@@ -7,7 +7,7 @@ import {Bar,Pie,Line} from 'react-chartjs-2';
 import Date from './DatePic';
 import {Grid} from "@material-ui/core";
 //import LineChart from 'react-linechart';
-import { Modal ,Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap'; //Modal ,
 
 import {ExcelExport,ExcelExportColumn,ExcelExportColumnGroup} from '@progress/kendo-react-excel-export';
 
@@ -56,6 +56,8 @@ class BarChart extends Component {
   }
 componentDidMount(){
   this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
+  this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
 }
 componentWillMount(){
   this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
@@ -128,7 +130,6 @@ createReport(data){
           else{
           this.state.countWork+=1;
           this.state.countRevenue+=parseInt(work_card[k].net, 10) ;
-         // console.log(parseInt(work_card[k].net, 10)+ work_card[k].workDescription);
           this.state.counter=1;
           }
         }
@@ -150,7 +151,6 @@ export = () => {
 render() {
   let cards=[];
   let is_mobile=this.isMobile();
- // console.log(is_mobile);
   if(this.props.cards !==''){
     this.state.card=this.props.cards;
     this.state.closeCard=this.props.closeCards; 
@@ -330,7 +330,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       loading: state.card.loading,
       token: state.auth.token,
       userId: state.auth.userId,
-      branchNumber: state.auth.branchNumber
+      branchNumber: state.auth.branchNumber,
+      UserKey: state.auth.userKey
   };
 };
 
@@ -338,7 +339,9 @@ const mapStateToProps = state => { // here we get the state and return a javascr
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
       onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) ),
-      onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) )
+      onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
+      onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
+
       //onFetch: (token,userId,branchNumber) => dispatch( actions.fetchData(token, userId,branchNumber) ),
 
   };

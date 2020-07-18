@@ -66,16 +66,19 @@ export const notificationOpeningStart = () => {
 
 //this is the async action one
 //this is the action we dispatched from the container once we click that save card button.
-export const notificationOpening = ( notificationData, token,branchNumber, userKey) => { 
+export const notificationOpening = ( notificationData, token,branchNumber, userKey,userId,userLoggedInKey) => { 
 
     return dispatch => {
         dispatch( notificationOpeningStart() ); // dispatch to the store
         //console.log(branchNumber+"  j  "+userKey);
         axios.post(branchNumber + '/users/' + userKey + '/notification.json' ,notificationData ) // send the HTTP request 
-
+        
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
          //   console.log(response.data)
+         console.log(userKey);
+         console.log(userLoggedInKey);
             dispatch(notificationOpeningSuccess(response.data.name, notificationData)); 
+            dispatch(fetchNotification(token, userId,branchNumber,userLoggedInKey)); 
 
         } )
         .catch( error => {
@@ -221,11 +224,18 @@ export const notificationUpdate = ( updateData, token,branchNumber,userKey ,user
         .then(res => {
        // console.log(res.data);
         dispatch(notificationUpdateSuccess(res.data.name, updateData)); 
+        dispatch(fetchNotification(token, userId,branchNumber,userKey)); 
         })
         .catch( error => {
             dispatch(notificationUpdateFail(error));
             console.log(error);
         } );
 
+    };
+};
+
+export const logoutNotificationReducers = () => { 
+    return {
+        type: actionTypes.AUTH_LOGOUT_NOTIFICATION
     };
 };

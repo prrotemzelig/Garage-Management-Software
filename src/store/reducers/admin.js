@@ -24,6 +24,26 @@ const initialState = {
 };
 
 
+const logoutAdminReducers = (state, action) => {
+    return updateObject(state, {     showSuccessCase: false, 
+        loadingFetchUsers:false,
+        error: null,
+        loading: false,
+        showAddNewUserModel: false,   
+        showAddNewTaskModal: false,
+        showDeleteUserModal: false,
+        showAddTaskSuccessCase:false,
+        TalpiotUsers: [],
+        GivatShaulUsers: [],
+        ModiinUsers: [],
+        userKey: null,
+        userBranchNumber: null,
+        userToken: null,
+        firstName: null,
+        lastName: null
+    }); 
+};
+
 const fetchUsersStart = ( state, action ) => { 
     return updateObject( state, { loadingFetchUsers: true } );
 };
@@ -170,6 +190,12 @@ const authSignUpSuccess = (state, action) => {
      } );
 };
 
+
+
+
+
+
+
 const purchaseToastCancel = ( state, action ) => {
     return updateObject( state, {
         error: null,
@@ -207,6 +233,8 @@ const taskOpeningFail = ( state, action ) => {
     return updateObject( state, { loading: false } );
 };
 
+
+
 //state = initialState - we must to do like that because otherwise it's undefined at the beginning 
 const reducer = ( state = initialState, action ) => { // receiving the state and the action
     switch ( action.type ) {
@@ -239,6 +267,11 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.TASK_OPENING_FOR_USER_START: return taskOpeningStart( state, action );
         case actionTypes.TASK_OPENING_FOR_USER_SUCCESS: return taskOpeningSuccess( state, action );
         case actionTypes.TASK_OPENING_FOR_USER_FAIL: return taskOpeningFail( state, action );
+
+
+        case actionTypes.AUTH_LOGOUT_ADMIN: return logoutAdminReducers( state, action );
+
+
         default: return state;
     }
 };

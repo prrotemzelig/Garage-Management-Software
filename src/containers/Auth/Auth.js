@@ -103,7 +103,6 @@ class Auth extends Component {
 //             alert('נא להכניס סיסמא'); 
 //         }
 //         else{
-//         //console.log("71" + this.state.controls.branchNumber.value);
         
 //         this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, this.state.controls.branchNumber.value); // pass email value and password value
 //         //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
@@ -163,15 +162,7 @@ inputChangedHandler = ( event ) => {
     this.setState( { controls: updatedControls,formIsValid: formIsValid } );
     }
 
-    // let formIsValid = false;
-    // if(this.state.controls.branchNumber.valid && this.state.controls.email.valid && this.state.controls.password.valid){
-    //   formIsValid = true;
-    //   console.log(formIsValid);
-    // }
-    // console.log(formIsValid);
 
-    // this.setState( { controls: updatedControls,formIsValid: formIsValid } );
-    // console.log(this.state.controls);
 }
 
 submitHandler = (event) => {
@@ -187,10 +178,6 @@ submitHandler = (event) => {
         alert('נא להכניס סיסמא'); 
     }
     else{
-    //console.log("71" + this.state.controls.branchNumber.value);
-    // console.log(this.state.controls.email.value);
-    // console.log(this.state.controls.password.value);
-    // console.log(this.state.controls.branchNumber.value);
     let branchNumber;
     if( this.state.controls.branchNumber.value==='תלפיות')
         branchNumber='Talpiot';
@@ -199,7 +186,6 @@ submitHandler = (event) => {
     else if( this.state.controls.branchNumber.value==='מודיעין')
         branchNumber= 'Modiin';
 
-    // console.log(branchNumber);
     this.props.onAuthSignIn(this.state.controls.email.value, this.state.controls.password.value, branchNumber); // pass email value and password value
     //this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup, this.state.controls.branchNumber.value); // pass email value and password value
 }
@@ -348,9 +334,9 @@ submitHandler = (event) => {
               </div>
 
               <div class="login_fields__submit">
-                <div class="forgot">
+                {/* <div class="forgot">
                   <a alt="">שכחת סיסמה? פנה למנהל</a>
-                </div>
+                </div> */}
                 <div class="forgot" style={!this.state.controls.email.valid ? {cursor: "not-allowed"}: {cursor: "pointer"}} >
 
                 {/* onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,1)}> */}

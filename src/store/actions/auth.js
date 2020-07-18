@@ -383,7 +383,7 @@ export const resetPasswordForAdmin = (email) => {
           console.log(res);
           console.log(res.data);
           for ( let key in res.data ) {  
-              if(res.data[key].email === email && res.data[key].userPermissions === 'Admin' ){ 
+              if(res.data[key].email === email && (res.data[key].userPermissions === 'Admin' || res.data[key].userPermissions === 'Master')){ 
                 //  console.log(res.request); //get
                   userFound = true;
                         firebase.auth().sendPasswordResetEmail(email, { url: 'http://localhost:3000/auth' })
@@ -397,7 +397,7 @@ export const resetPasswordForAdmin = (email) => {
                         })
                   break; //get
               }      
-              if(res.data[key].email === email && res.data[key].userPermissions !== 'Admin' ){ 
+              if(res.data[key].email === email && (res.data[key].userPermissions !== 'Admin' || res.data[key].userPermissions === 'Master') ){ 
                 //  console.log(res.request); //get
                 dispatch(resetPasswordFail("משתמש לא בעל הרשאות מנהל")); //err.response.data.error //get
                   userFound = true;         
@@ -411,6 +411,7 @@ export const resetPasswordForAdmin = (email) => {
           .catch(error => { 
             console.log(error);
             console.log(error.message);
+            console.log(error.response);
             let err ;
             if( error.message==='Network Error'){
                 err = 'אין חיבור אינטרנט';
@@ -425,3 +426,19 @@ export const resetPasswordForAdmin = (email) => {
         });  
      };
  };
+
+
+
+ export const branchChangeForMasterSuccess = (newBranchNumber) => {
+    return {
+        type: actionTypes.BRANCH_CHANGE_FOR_MASTER_SUCCESS,
+        newBranchNumber: newBranchNumber
+    };
+};
+
+
+export const branchChangeForMaster = (newBranchNumber) => { 
+    return dispatch => {
+        dispatch( branchChangeForMasterSuccess(newBranchNumber) ); 
+    };
+};

@@ -40,6 +40,46 @@ const initialState = {
 
 
 
+const logoutStorageReducers = (state, action) => {
+    return updateObject(state, {
+        fetchedImages: [], 
+        resizeImages: [],
+        numberOfImages: 0,
+        numberOfDocs: 0,
+        fetchedDocs: [],
+        loading: false,
+        loadingImages: false,
+        loadingResizeImages: false,
+        loadingDocs: false,
+        showSuccessCase: false,
+        cardStorage: [],
+        payload:0,
+        error: '',
+        errorImages: '',
+        errorDocs: '',
+        showGetSuccessCase: false,
+        emptyStorage: false,
+        emptyImagesStorage: false,
+        emptyDocsStorage: false,
+        alert: '',
+        alertImages: '',
+        alertDocs: '',
+        loadingDeleteImages: false,
+        showDeleteImagesCase: false,
+        loadingDeleteDocs: false,
+        showDeleteDocsCase: false,
+        loadingDownloadDocs: false,
+        errorDownloadDocs: false,
+        loadingDownloadImage: false,
+        errorDownloadImage: false,
+        currentFileUploaded :'',
+        isUploading: false,
+        currentUploadNumber :''
+    }); 
+};
+
+
+
 const imageOrDocUploadingStart = ( state, action ) => {
     return updateObject( state, {
         isUploading: true,
@@ -343,6 +383,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.DOWNLOAD_IMAGE_START: return downloadImageStart( state, action );
         case actionTypes.DOWNLOAD_IMAGE_SUCCESS: return downloadImageSuccess( state, action );
         case actionTypes.DOWNLOAD_IMAGE_FAIL: return downloadImageFail( state, action );
+
+
+        case actionTypes.AUTH_LOGOUT_STORAGE: return logoutStorageReducers( state, action );
 
         default: return state; 
     }

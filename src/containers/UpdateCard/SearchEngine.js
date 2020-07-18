@@ -33,6 +33,8 @@ class Search extends Component {
   
   componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
       this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber); 
+      this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
   }
 
   onChildClicked(data,num) {
@@ -41,16 +43,13 @@ class Search extends Component {
   }
 
   check(data){
-    // console.log(data);
     if(data.cardData.licenseNumber===this.state.carNumber){
     //  this.setState({ found: true });
       
       this.state.found=true;
     }
-    // console.log(this.state.found);
 
     // else{
-    //   console.log("51");
     //   this.state.found=false;
 
     // }
@@ -72,7 +71,6 @@ class Search extends Component {
 
 //      this.setState({ carNumber: this.props.value });
      this.state.carNumber= this.props.value;
-      // console.log(this.props.value);
           if(this.state.carNumber!== "" ){
             if ( !this.props.loading ) { // if it not true - if we not loading
               cards= this.props.cards.map( card => (
@@ -91,11 +89,9 @@ class Search extends Component {
               ))
             }
 
-            // console.log(this.state.found);
           }
       
       if(!this.state.found && this.state.carNumber!==''){
-        // console.log("83");
 
         return ( 
           // alert("לא נמצאה היסטוריה עבור רכב זה");
@@ -106,7 +102,6 @@ class Search extends Component {
     
       if(this.state.found && this.state.carNumber!=='' && !this.state.click ){
         //this.state.found=false;
-        // console.log("93");
       return (
         <div class="table-wrapper" style={this.props.backgroundColor=== 'light' ?
             {direction: "rtl", backgroundColor: "white"}
@@ -115,7 +110,7 @@ class Search extends Component {
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",tableLayout: "fixed"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "16px"}}>
-                        <td>מספר רכב</td> 
+                        <td>מספר רישוי</td> 
                         <td>שם לקוח</td>
                         <td>מספר כרטיס</td>
                         <td>תאריך פתיחה</td>
@@ -133,7 +128,6 @@ class Search extends Component {
       }
       if(this.state.found && this.state.click){
         //this.state.found=false;
-        // console.log("121");
 
         return(
           <div  >
@@ -164,7 +158,7 @@ class Search extends Component {
             <table class="table table-bordered" style={{marginBottom: "1px",direction: "rtl",fontFamily: "Alef Hebrew",tableLayout: "fixed"}} >
                 <thead>
                     <tr style={{fontWeight: "bold", fontSize: "16px"}}>
-                        <td>מספר רכב</td>
+                        <td>מספר רישוי</td>
                         <td>שם לקוח</td>
                         <td>מספר כרטיס</td>
                         <td>תאריך פתיחה</td>
@@ -204,6 +198,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
       onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber)),
+      onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
+
   };
 };
 

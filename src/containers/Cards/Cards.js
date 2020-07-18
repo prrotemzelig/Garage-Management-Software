@@ -12,6 +12,8 @@ class Cards extends Component {
 
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber); 
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
     }
     // here we want to output multiple cards, as many cards as needed
     //and the cards I need to output of curse should be fetched from the backend
@@ -83,13 +85,16 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         token: state.auth.token,
         userId: state.auth.userId,
         branchNumber: state.auth.branchNumber,
-        backgroundColor: state.auth.backgroundColor
+        backgroundColor: state.auth.backgroundColor,
+        UserKey: state.auth.userKey
     };
 };
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
     return {
-        onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId, branchNumber) ) //  return a map to map my props to dispatchable functions
+        onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId, branchNumber) ), //  return a map to map my props to dispatchable functions
+        onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
+
         //here we want to execute an anonymous function where we eventually dispatch the action we just created it
         // note - we need to execute this function - "fetchCards()" to really get the action
     };

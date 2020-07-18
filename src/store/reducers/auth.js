@@ -147,6 +147,13 @@ const resetPasswordFail = ( state, action ) => {
         } );
 };
 
+const branchChangeForMasterSuccess = (state, action) => {
+    return updateObject( state, { 
+        branchNumber: action.newBranchNumber
+     } );
+};
+
+
 
 //state = initialState - we must to do like that because otherwise it's undefined at the beginning 
 const reducer = ( state = initialState, action ) => { // receiving the state and the action
@@ -171,6 +178,8 @@ const reducer = ( state = initialState, action ) => { // receiving the state and
         case actionTypes.RESET_PASSWORD_SUCCESS: return resetPasswordSuccess( state, action );
         case actionTypes.RESET_PASSWORD_FAIL: return resetPasswordFail( state, action );
         
+        case actionTypes.BRANCH_CHANGE_FOR_MASTER_SUCCESS: return branchChangeForMasterSuccess( state, action );
+
 
         
         default: return state;

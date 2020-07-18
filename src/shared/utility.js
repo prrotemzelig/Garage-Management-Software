@@ -132,7 +132,7 @@ export const checkFormatNumbers = (number) => {
     
     
 
-    console.log(newNumber);
+    // console.log(newNumber);
 
     return newNumber;
 }

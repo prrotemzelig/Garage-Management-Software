@@ -70,6 +70,8 @@ class UserHomePage extends Component {
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchCards(this.props.token, this.props.userId, this.props.branchNumber);
         this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
+
       }
     
     render() { 
@@ -133,7 +135,8 @@ const mapStateToProps = state => { // here we get the state and return a javascr
         userTasksTODO: state.task.todo,
         userTasksDOING: state.task.doing,
         backgroundColor: state.auth.backgroundColor,
-        sidebarBackgroundColor: state.auth.sidebarBackgroundColor
+        sidebarBackgroundColor: state.auth.sidebarBackgroundColor,
+        UserKey: state.auth.userKey
 
     };
   };
@@ -142,7 +145,9 @@ const mapStateToProps = state => { // here we get the state and return a javascr
     return {
       
       onFetchCards: (token,userId,branchNumber) => dispatch( actions.fetchCards(token, userId,branchNumber) ),
-      onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) )
+      onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) ),
+      onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
+
 
     };
   };

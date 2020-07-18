@@ -1,5 +1,9 @@
 {
   "rules": {
+	"allUsersEmail":{   
+		".read": true,
+		".write": true
+	},
     "Talpiot":{   
     		"cards": {
       		".read": "auth != null",

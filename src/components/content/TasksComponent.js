@@ -120,6 +120,8 @@ class TasksComponent extends React.Component {
 
     componentDidMount() { // we want to fetch all the cards. so for doing that, I need to implement componentDidMount
         this.props.onFetchTasks(this.props.token, this.props.userId, this.props.branchNumber,this.props.userKey);
+        this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.userKey); 
+
       }
 
     renderTask = (title, tag  , index, checked, taskKey, list,isEdit) => {
@@ -189,7 +191,6 @@ class TasksComponent extends React.Component {
     }
 
     if(tag !== 'רגיל' && tag !== 'דחוף' && tag !== 'חדש'){
-        // console.log(tag);
         backgroundColor = '#666666';
         color = 'white'; 
     }
@@ -317,7 +318,6 @@ class TasksComponent extends React.Component {
       };
 
       closeAddButton = () => {
-        //  console.log("393");
         this.setState( { isEditOpen: false } );
       };
 
@@ -384,7 +384,6 @@ class TasksComponent extends React.Component {
             formData['isEdit'] = false;
             formData['openedByFirstName'] = this.props.firstName;
             formData['openedByLastName'] = this.props.lastName;
-         //   console.log(this.state.taskForm.toDoNewTask.tag.text);
 
         }
         else if(list === 'doing'){
@@ -523,8 +522,8 @@ const mapDispatchToProps = dispatch => { // for this to work we need to connect 
     onTaskOpening: (task, token,branchNumber,userKey,list) => dispatch(actions.taskOpening(task, token, branchNumber,userKey,list)),
     onFetchTasks: (token,userId,branchNumber,userKey) => dispatch( actions.fetchTasks(token, userId,branchNumber,userKey) ),
     onTaskUpdate: (updateData,token,branchNumber,userKey,taskKey,list,field,userId) => dispatch( actions.taskUpdate(updateData,token,branchNumber,userKey,taskKey,list,field,userId) ),
-    onTaskDelete: (token, branchNumber, userKey,taskKey ,list,userId) => dispatch( actions.taskDelete(token,branchNumber,userKey,taskKey,list,userId) )
-
+    onTaskDelete: (token, branchNumber, userKey,taskKey ,list,userId) => dispatch( actions.taskDelete(token,branchNumber,userKey,taskKey,list,userId) ),
+    onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
   };
 };
 
