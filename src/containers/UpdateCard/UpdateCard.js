@@ -36,7 +36,7 @@ setTheStates = () => {
   }
 
     render() {
-      console.log(this.props.showHistorySearchModel);
+      // console.log(this.props.showHistorySearchModel);
       const name = this.props.searchBoxName || undefined
         return (
           <div>

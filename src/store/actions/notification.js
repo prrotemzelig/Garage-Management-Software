@@ -75,15 +75,15 @@ export const notificationOpening = ( notificationData, token,branchNumber, userK
         
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
          //   console.log(response.data)
-         console.log(userKey);
-         console.log(userLoggedInKey);
+        //  console.log(userKey);
+        //  console.log(userLoggedInKey);
             dispatch(notificationOpeningSuccess(response.data.name, notificationData)); 
             dispatch(fetchNotification(token, userId,branchNumber,userLoggedInKey)); 
 
         } )
         .catch( error => {
             dispatch(notificationOpeningFail(error));
-            console.log(error);
+            // console.log(error);
         } );
     };
 };
@@ -132,7 +132,7 @@ export const fetchNotification = (token, userId,branchNumber,userKey) => { //her
                 dispatch(fetchNotificationSuccess(fetchedNotification,"notification"));
             } )
             .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
-                console.log(err);
+                // console.log(err);
                 dispatch(fetchNotificationFail(err));
             } );
     };
@@ -180,7 +180,7 @@ export const notificationDelete = ( token,branchNumber,userKey,notificationKey ,
         })
         .catch( error => {
             dispatch(notificationDeleteFail(error));
-            console.log(error);
+            // console.log(error);
         } );
 
     };
@@ -228,7 +228,7 @@ export const notificationUpdate = ( updateData, token,branchNumber,userKey ,user
         })
         .catch( error => {
             dispatch(notificationUpdateFail(error));
-            console.log(error);
+            // console.log(error);
         } );
 
     };

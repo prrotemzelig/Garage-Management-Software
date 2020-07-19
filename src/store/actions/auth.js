@@ -4,6 +4,7 @@ import * as actionTypes from './actionTypes';
 //import { database } from 'firebase';
 import firebase from "firebase/app";
 import "firebase/auth";
+//import "firebase/admin";
 //import firebase from 'firebase';
 import 'firebase/firestore';
 // import config from "../../config";
@@ -153,8 +154,8 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                                 else{
                                     error = err.message;
                                 }
-                                console.log(err.response.data.error.message);
-                                console.log(err.message); //err.message
+                                // console.log(err.response.data.error.message);
+                                // console.log(err.message); //err.message
 
                                 dispatch(authSignInFail(error)); //err.response.data.error //post
                             }); //post
@@ -171,8 +172,8 @@ export const authSignIn = (email, password, branchNumber) => { // that will  be 
                         // console.log(error.response.message);
                         // console.log(error.message);
                             // console.log(error.response);
-                        console.log(error);
-                        console.log(error.message);
+                        // console.log(error);
+                        // console.log(error.message);
                         let err ;
                         if( error.message==='Network Error'){
                             err = 'אין חיבור אינטרנט';
@@ -322,7 +323,7 @@ export const updateSettingUser = (updateData,field,token,branchNumber,userKey,us
         })
         .catch( error => {
             dispatch(updateSettingUserFail(error));
-            console.log(error);
+            // console.log(error);
         } );
 
     };
@@ -363,7 +364,7 @@ export const resetPassword = (email) => {
             alert('נשלח מייל לשחזור סיסמא');
         })
         .catch(error => {
-          console.log(error.message);
+        //   console.log(error.message);
           dispatch(resetPasswordFail(error.message));
 
         })
@@ -380,8 +381,8 @@ export const resetPasswordForAdmin = (email) => {
          dispatch( resetPasswordStart() ); 
       axios2.get('/allUsersEmail.json/?email=' + email ) 
       .then(res => { 
-          console.log(res);
-          console.log(res.data);
+        //   console.log(res);
+        //   console.log(res.data);
           for ( let key in res.data ) {  
               if(res.data[key].email === email && (res.data[key].userPermissions === 'Admin' || res.data[key].userPermissions === 'Master')){ 
                 //  console.log(res.request); //get
@@ -392,7 +393,7 @@ export const resetPasswordForAdmin = (email) => {
                             alert('נשלח מייל לשחזור סיסמא');
                         })
                         .catch(error => {
-                          console.log(error.message);
+                        //   console.log(error.message);
                           dispatch(resetPasswordFail(error.message));
                         })
                   break; //get
@@ -409,9 +410,9 @@ export const resetPasswordForAdmin = (email) => {
           }
           })
           .catch(error => { 
-            console.log(error);
-            console.log(error.message);
-            console.log(error.response);
+            // console.log(error);
+            // console.log(error.message);
+            // console.log(error.response);
             let err ;
             if( error.message==='Network Error'){
                 err = 'אין חיבור אינטרנט';

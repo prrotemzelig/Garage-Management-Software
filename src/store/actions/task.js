@@ -57,7 +57,7 @@ export const taskOpening = ( taskData, token,branchNumber, userKey,list) => {
         } )
         .catch( error => {
             dispatch(taskOpeningFail(error));
-            console.log(error);
+            // console.log(error);
         } );
     };
 };
@@ -128,7 +128,7 @@ export const fetchTasks = (token, userId,branchNumber,userKey) => { //here we ru
                 dispatch(fetchTasksSuccess(todo,doing,done));
             } )
             .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
-                console.log(err);
+              //  console.log(err);
                 dispatch(fetchTasksFail(err));
             } );
     };
@@ -190,7 +190,7 @@ export const taskUpdate = ( updateData, token,branchNumber,userKey,taskKey ,list
         })
         .catch( error => {
             dispatch(taskUpdateFail(error));
-            console.log(error);
+         //   console.log(error);
         } );
 
     };
@@ -239,7 +239,7 @@ export const taskDelete = ( token,branchNumber,userKey,taskKey ,list,userId) => 
         })
         .catch( error => {
             dispatch(taskDeleteFail(error));
-            console.log(error);
+         //   console.log(error);
         } );
 
     };

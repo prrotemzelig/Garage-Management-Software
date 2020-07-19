@@ -210,14 +210,14 @@ export const getImages = ( userId ,token,branchNumber,cardKey,ticketNumber,node)
                 //   }    
           })
           .catch(error => {
-            console.log(error);
+            // console.log(error);
             dispatch(getImagesFail(error));
           }) 
       });
   }    
 ) 
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         dispatch(getImagesFail(error));
     })
     };
@@ -330,7 +330,7 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
 
                     
                 }).catch(function(error) {
-                    console.log(error);
+                    // console.log(error);
                     dispatch(getDocsFail(error));
                 });
                 // fetchedDocs.push( {
@@ -353,7 +353,7 @@ export const getDocs = ( userId ,token,branchNumber,cardKey,ticketNumber,node) =
   }    
 ) 
     .catch(error => {
-                 console.log(error);
+                //  console.log(error);
                 dispatch(getDocsFail(error));
     });
 
@@ -457,7 +457,7 @@ export const downloadDoc = ( userId ,token,branchNumber,cardKey,ticketNumber,nod
 
               
               }).catch(function(error) {
-                  console.log(error);
+                //   console.log(error);
                   dispatch(downloadDocFail(error));
 
               });

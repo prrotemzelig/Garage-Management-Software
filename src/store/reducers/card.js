@@ -77,7 +77,7 @@ const cardOpeningStart = ( state, action ) => {
 };
 
 const cardOpeningSuccess = ( state, action ) => {
-    console.log(action.currentTicketNumber);
+   // console.log(action.currentTicketNumber);
 
     if(action.node === 'cards'){
     const newCard = updateObject( action.cardData, { id: action.cardId } ); // here we marge the id of the card and also the details of the card to 1 object, that come separate from action-card.js
@@ -316,13 +316,13 @@ const markCardIsClosedFail = ( state, action ) => {
 
 
 const changeModalHistorySuccess = ( state, action ) => {
-    console.log(action.mode);
+   // console.log(action.mode);
     if(action.mode){
-        console.log(action.mode);
+      //  console.log(action.mode);
         return updateObject( state, { showHistorySearchModel: false } );
     }
     else if(!action.mode){
-        console.log(action.mode);
+       // console.log(action.mode);
         return updateObject( state, { showHistorySearchModel: true } );
     }    
 };

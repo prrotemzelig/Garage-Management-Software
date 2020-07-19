@@ -169,6 +169,11 @@ class AdminUserManagement extends Component {
 
 //this.props.onDeleteUserModalOpening(userKey,userBranchNumber,userToken,firstName,lastName)}
       renderDeleteUser = (userKey,userBranchNumber,userToken,firstName,lastName) => { 
+        //   console.log(userKey);
+        // //   console.log(userBranchNumber);
+        //   console.log(userToken);
+        //   console.log(firstName);
+        // //   console.log(lastName);
         return(
             <>
             <Button bsStyle="secondary" style={{borderColor: "black",color: "white",fontVariant: "all-petite-caps", width: "auto"}}  
@@ -227,9 +232,9 @@ class AdminUserManagement extends Component {
     //         );
     //   }
       
-onDeleteUserClick = (userKey,userBranchNumber,userToken) =>  {
-   this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken); 
-}  
+// onDeleteUserClick = (userKey,userBranchNumber,userToken) =>  {
+//    this.props.onUserDelete(this.props.token, userBranchNumber,userKey ,this.props.userId,userToken); 
+// }  
   
 
 openAddNewUserModal = (event) => { // add new USER to the system
@@ -899,6 +904,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
 
             {this.props.TalpiotUsers.map( user =>  (
                 <>
+                {user.email !== this.props.email ?
+                <>
                     {window.innerWidth > '376' ?
                     <tr> 
                     <td style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-Word"}}>תלפיות</td>
@@ -957,11 +964,15 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                     </td>
                     </tr>
                     }
+                    </>
+                    :null}
                      </> 
                  ))     
             }
 
             {this.props.GivatShaulUsers.map( user =>  (
+                <>
+                 {user.email !== this.props.email ?
                 <>
                 {window.innerWidth > '376' ?
                 <tr> 
@@ -1019,12 +1030,17 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                 </td>
                 </tr>
                 }
+                       </>
+                    :null}
+
                 </>
             ))
             }
 
             {this.props.ModiinUsers.map( user =>  (
         
+                <>
+                  {user.email !== this.props.email ?
                 <>
                 {window.innerWidth > '376' ?
                 <tr> 
@@ -1082,6 +1098,8 @@ renderAddNewUserModal = (list) => { ///*** add new user modal! ****
                 </td>
                 </tr>
                 }
+                     </>
+                    :null}
                 </>
             ))
             }
@@ -1138,7 +1156,8 @@ const mapStateToProps = state => {
         firstName: state.admin.firstName,
         lastName: state.admin.lastName,
         backgroundColor: state.auth.backgroundColor,
-        userPermissions: state.auth.userPermissions
+        userPermissions: state.auth.userPermissions,
+        email: state.auth.email
 
         
         //notification: state.notification.notification,

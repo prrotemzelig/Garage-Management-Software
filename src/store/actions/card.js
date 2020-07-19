@@ -183,7 +183,7 @@ export const cardUpdate = ( carData,cardData,customerData,garageReplacementData,
         dispatch(cardUpdateSuccess(res.data.name, alternateVehicleTaken)); 
         })
         .catch( error => {
-            console.log(error);
+            // console.log(error);
             dispatch(cardUpdateFail(error));
         } )
 
@@ -229,7 +229,7 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
 
         axios.post(branchNumber + '/' + node + '.json?auth=' + token, cardData ) // send the HTTP request 
         .then( response => {// once we got the response so that we were successful, I will dispatch my 
-            console.log(response);
+            // console.log(response);
             dispatch(cardOpeningSuccess(response.data.name, cardData, node,cardData.cardData.ticketNumber)); 
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
              dispatch(GetAllCardData(token,branchNumber ,userId,'cards', response.data.name)); 
@@ -247,12 +247,12 @@ export const cardOpening = ( cardData,userId ,token,branchNumber,node ) => {
             // this.props.history.push( '/' ); // here we navigate away
         } )
         .catch( error => {
-            console.log(error);
+            // console.log(error);
             dispatch(cardOpeningFail(error));
         } )
         
         .finally(function(){
-            console.log("189");
+            // console.log("189");
             dispatch(fetchCards(token, userId, branchNumber));  // maybe we dont need this
         });
     };
@@ -389,7 +389,7 @@ export const cardDelete = ( token,branchNumber,cardKey ,node,userId) => {
      
         })
         .catch( error => {
-            console.log(error);
+            // console.log(error);
             dispatch(cardDeleteFail(error));
         } );
 
@@ -447,7 +447,7 @@ export const workOrPartsOpening = ( formData, token,branchNumber, userId,kind,ca
         } )
         .catch( error => {
             dispatch(workOrPartsOpeningFail(error));
-            console.log(error);
+            // console.log(error);
         } );
     };
 };
@@ -511,7 +511,7 @@ export const GetAllCardData = (token,branchNumber,userId, kind,cardKey) => { //h
             //dispatch(GetAllCardDataSuccess(cardData,carData , customerData, workData ));
             } )
             .catch( err => { // catch any potential errors. and show this on the screen by wrap withErrorHandler
-                console.log(err);
+                // console.log(err);
                 dispatch(GetAllCardDataFail(err));
             } );
     };
@@ -563,7 +563,7 @@ export const WorkOrPartDelete = (token,branchNumber,cardKey,itemKey,list,userId)
         })
         .catch( error => {
             dispatch(WorkOrPartDeleteFail(error));
-            console.log(error);
+            // console.log(error);
         } );
 
     };
@@ -610,7 +610,7 @@ export const workOrPartUpdate = ( itemData, token,branchNumber,userId,list,kind,
         })
         .catch( error => {
             dispatch(workOrPartUpdateFail(error));
-            console.log(error);
+            // console.log(error);
         } );
     };
 };
@@ -788,7 +788,7 @@ export const markCardIsClosed = ( token, branchNumber,userId,identifiedCardID) =
 
         }))
         .catch( error => {
-            console.log(error);
+            // console.log(error);
             dispatch(markCardIsClosedFail(error));
            // callback(null);
 
@@ -828,7 +828,7 @@ export const changeModalHistorySuccess = (mode) => {
 };
 
 export const changeModalHistory = (mode) => {  
-    console.log(mode);
+    // console.log(mode);
     return dispatch => {
         dispatch( changeModalHistorySuccess(mode)); 
         
