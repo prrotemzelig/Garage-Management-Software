@@ -845,7 +845,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
 
               <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                 <label for="allWorksNet">נטו</label>
-                <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
+                <input type="text" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
                 value={this.state.invoiceClosureData.allWorksNet} />
               </form>
                </div>
@@ -872,7 +872,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
               </form>
 
               <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
-                <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                <input type="text" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
                 value={this.state.invoiceClosureData.allExteriorWorksNet} />
               </form>
              </div> 
@@ -901,7 +901,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
 
                   <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">נטו</label> */}
-                  <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                  <input type="text" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
                   value={this.state.invoiceClosureData.allPartsNet} />
                   </form>
                   </div> 
@@ -935,7 +935,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
                       </form>
 
                       <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
-                      <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                      <input type="text" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
                       value={this.state.invoiceClosureData.totalNet} />
                       </form>
                       </div> 
@@ -951,7 +951,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
 
                     <div class="form-group col-md-3"  >
                     <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
-                    <input type="number" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
+                    <input type="text" id="amountOfVAT" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} 
                         value={this.state.invoiceClosureData.amountOfVAT}/>
                   </div>
 
@@ -960,7 +960,7 @@ renderShowCloseModal = () => { ///*** invoice closure modal! ****
                           <div for="totalPayment" style={{fontWeight: "bold"}}>סה"כ לתשלום</div>
                           
                       <div  style={{ padding:"10px", backgroundColor: "gray"}}>
-                              <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  
+                              <input type="text" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}}  
                               value={this.state.invoiceClosureData.totalPayment} />
                               </div>
 
@@ -994,6 +994,12 @@ switchShowImagesAndDoc = () => {
           this.state.closeDate=data.closeDate;
           
           this.state.invoiceClosureData = data.invoiceClosureData;
+          console.log(this.state.invoiceClosureData);
+
+          for(var i=0;i< this.state.invoiceClosureData.length;i++){
+            console.log(this.state.invoiceClosureData[i]);
+       
+        }
           
           if(data.workData !== undefined){
             this.state.worksDetails = data.workData;
@@ -1001,6 +1007,7 @@ switchShowImagesAndDoc = () => {
           if(data.partsData !== undefined){
             this.state.partsDetails = data.partsData;
           }
+          console.log(this.state.invoiceClosureData);
 
           let part=[];
           let parts_card;

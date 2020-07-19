@@ -976,6 +976,14 @@ currency = (num) => {
     this.state.invoiceClosure.totalPayment.value=(parseFloat(this.state.invoiceClosure.totalNet.value) + parseFloat(this.state.invoiceClosure.amountOfVAT.value)).toFixed(2) ;
     this.state.invoiceClosureIsCalculated =true;
     }
+    
+    this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalPayment.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.state.invoiceClosure.amountOfVAT.value=this.state.invoiceClosure.amountOfVAT.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.state.invoiceClosure.allWorksNet.value=this.state.invoiceClosure.allWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.state.invoiceClosure.allExteriorWorksNet.value=this.state.invoiceClosure.allExteriorWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.state.invoiceClosure.allPartsNet.value=this.state.invoiceClosure.allPartsNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.state.invoiceClosure.totalNet.value=this.state.invoiceClosure.totalNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
 
     let workButtons =
         <div class="form-group" style={{marginBottom: "4px"}}>
@@ -1056,7 +1064,7 @@ currency = (num) => {
                  <div class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksGross">ברוטו</label>
                   <input type="number" id="allWorksGross" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.invoiceClosure.allWorksGross.value} />
+                  value={this.state.invoiceClosure.allWorksGross.value}       />
                 </div>
 
                 <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
@@ -1071,13 +1079,13 @@ currency = (num) => {
                 <div class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksDiscountAmount">סכום ההנחה</label>
                   <input type="number" id="allWorksDiscountAmount" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
-                  value={this.state.invoiceClosure.allWorksDiscountAmount.value}
+                  value={this.state.invoiceClosure.allWorksDiscountAmount.value} 
                   onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoiceWorksGrossChangedHandler(event) : null} />
                 </div>
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksNet">נטו</label>
-                  <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="text" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksNet.value} />
                 </form>
                  </div>
@@ -1110,7 +1118,7 @@ currency = (num) => {
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">נטו</label> */}
-                  <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="text" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allExteriorWorksNet.value} />
                 </form>
                </div> 
@@ -1128,7 +1136,7 @@ currency = (num) => {
 
                     <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">הנחה</label> */}
-                    <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    <input type="text" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsDiscount.value}
                     onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoicePartsGrossChangedHandler(event) : null} />
                     </form>
@@ -1142,7 +1150,7 @@ currency = (num) => {
 
                     <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">נטו</label> */}
-                    <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    <input type="text" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsNet.value} />
                     </form>
                     </div> 
@@ -1164,7 +1172,7 @@ currency = (num) => {
 
                         <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                         {/* <label for="cellphone">סה"כ</label> */}
-                        <input type="number" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="text" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         value={this.state.invoiceClosure.totalGross.value} />
                         </form>
 
@@ -1183,7 +1191,7 @@ currency = (num) => {
                         </form>
 
                         <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
-                        <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="text" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         value={this.state.invoiceClosure.totalNet.value} />
                         </form>
                         </div> 
@@ -1200,7 +1208,7 @@ currency = (num) => {
 
                       <div class="form-group col-md-3"  >
                       <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
-                      <input type="number" id="amountOfVAT" class="form-control"  autocomplete="off" style={{backgroundColor: "white"}} 
+                      <input type="text" id="amountOfVAT" class="form-control"  autocomplete="off" style={{backgroundColor: "white"}} 
                           value={this.state.invoiceClosure.amountOfVAT.value}
                       />
                     </div>
@@ -1210,7 +1218,7 @@ currency = (num) => {
                             <div for="totalPayment" style={{fontWeight: "bold"}}>סה"כ לתשלום</div>
                             
                         <div  style={{ padding:"10px", backgroundColor: "gray"}}>
-                                <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                                <input type="text" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                                 value={this.state.invoiceClosure.totalPayment.value} />
                                 </div>
 
@@ -3654,7 +3662,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,5)}/>
                 </div> */}
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.customerName.value= this.state.customer_details.customerName;
@@ -3664,12 +3672,12 @@ onChange = date => this.setState({ date })
                     }    
                  })()}
                   <label for="customerName">שם לקוח</label>
-                  <input type="text" id="customerName" class="form-control"  autocomplete="off"
+                  <input type="text" id="customerName" class="form-control"  autocomplete="off" 
                   defaultValue={this.state.customerDetails.customerName.value} disabled={!this.state.formIsValid} style={{backgroundColor: "white"}}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,3)}/>
-                </div>
+                </form>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){ 
                     this.state.customerDetails.address.value= this.state.customer_details.address;
@@ -3682,9 +3690,9 @@ onChange = date => this.setState({ date })
                   <input type="text" id="address" class="form-control" autocomplete="off"  style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.address.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,0)}/>
-                </div>
+                </form>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.city.value= this.state.customer_details.city;
@@ -3697,7 +3705,7 @@ onChange = date => this.setState({ date })
                   <input type="text"  id="city" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.city.value}  
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,2)}/>
-                </div>
+                </form>
 
 
                 <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
@@ -3715,7 +3723,7 @@ onChange = date => this.setState({ date })
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,10)}/>
                 </div>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.homePhone.value= this.state.customer_details.homePhone;
@@ -3728,9 +3736,9 @@ onChange = date => this.setState({ date })
                   <input type="number" id="homePhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.homePhone.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,6)}/>
-                </div>
+                </form>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.cellphone.value= this.state.customer_details.cellphone;
@@ -3743,9 +3751,9 @@ onChange = date => this.setState({ date })
                   <input type="number" id="cellphone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.cellphone.value} 
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,1)}/>
-                </div>
+                </form>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.workingPhone.value= this.state.customer_details.workingPhone;
@@ -3758,9 +3766,9 @@ onChange = date => this.setState({ date })
                   <input type="number"  id="workingPhone" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.workingPhone.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,11)}/>
-                </div>
+                </form>
                 
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.identificationNumber.value= this.state.customer_details.identificationNumber;
@@ -3773,9 +3781,9 @@ onChange = date => this.setState({ date })
                   <input ref="identificationNumber" type="text" id="identificationNumber" class="form-control " autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} aria-describedby="passwordHelpInline" 
                   defaultValue={this.state.customerDetails.identificationNumber.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,7)}/>
-                </div>
+                </form>
   
-                <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
+                <form class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
                    if(this.state.found){
                     this.state.customerDetails.mailAdress.value= this.state.customer_details.mailAdress;
@@ -3788,7 +3796,7 @@ onChange = date => this.setState({ date })
                   <input type="text" id="mailAdress" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   defaultValue={this.state.customerDetails.mailAdress.value}
                   onChange={!this.state.found ? (event) => this.inputCusChangedHandler(event) : (evt) => this.updateCustomerInputValue(evt,8)}/>
-                </div>
+                </form>
   
                 <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                 {(() => {
