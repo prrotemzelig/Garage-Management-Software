@@ -15,7 +15,8 @@ const initialState = {
     partsData: [],
     currentCardKey: '',
     currentTicketNumber: '',
-    loadingMarkCardIsClosed: false
+    loadingMarkCardIsClosed: false,
+    showHistorySearchModel: true
 
 };
 
@@ -314,6 +315,18 @@ const markCardIsClosedFail = ( state, action ) => {
 };
 
 
+const changeModalHistorySuccess = ( state, action ) => {
+    console.log(action.mode);
+    if(action.mode){
+        console.log(action.mode);
+        return updateObject( state, { showHistorySearchModel: false } );
+    }
+    else if(!action.mode){
+        console.log(action.mode);
+        return updateObject( state, { showHistorySearchModel: true } );
+    }    
+};
+
 
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) { // here Ill write my different cases
@@ -385,6 +398,9 @@ const reducer = ( state = initialState, action ) => {
 
         case actionTypes.AUTH_LOGOUT_CARD: return logoutCardReducers( state, action );
         
+
+        case actionTypes.CHANGE_MODAL_HISTORY_SUCCESS: return changeModalHistorySuccess( state, action );
+
         default: return state; // return the current state
     }
 };

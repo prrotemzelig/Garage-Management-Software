@@ -6,10 +6,7 @@ import './UpdateCard.css'
 import Search from './SearchEngine.js';
 import SearchIcon from "@material-ui/icons/Search";
 
-
-
 class SearchBar extends Component {
-  
   constructor(props){
     super(props);
     this.state={
@@ -17,10 +14,18 @@ class SearchBar extends Component {
       };
   }
  
-  componentDidMount(){
+componentDidMount(){
     this.props.onFetchNotification(this.props.token, this.props.userId, this.props.branchNumber,this.props.UserKey); 
-  
+    this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
   }
+
+componentWillUnmount() {
+    this.setTheStates('');
+}
+
+setTheStates = () => {
+  this.setState({term: ''});
+}
 
   onInputChange(term){
     const name = this.props.searchBoxName || undefined
@@ -29,12 +34,13 @@ class SearchBar extends Component {
       this.props.onSearchTermChange({name,term})
     }
   }
-  
 
     render() {
+      console.log(this.props.showHistorySearchModel);
       const name = this.props.searchBoxName || undefined
         return (
           <div>
+            {this.props.showHistorySearchModel === true ?
             <div className="search-box">
               <div style={{direction: "rtl" ,color: "gray"}}>
                 <input 
@@ -48,10 +54,14 @@ class SearchBar extends Component {
                 <SearchIcon style={{ fontSize: 25 }} />
               </div>
             </div>
-            <div>  
+            :null
+            }
+            <div> 
+              {this.state.term.length >=7 &&  this.state.term.length <=8 ?
               <Search
                 value={this.state.term}
                 />
+                : null}
             </div>
           </div>
         );
@@ -65,14 +75,15 @@ const mapStateToProps = state => { // here we get the state and return a javascr
       token: state.auth.token,
       userId: state.auth.userId,
       branchNumber: state.auth.branchNumber,
-      UserKey: state.auth.userKey
+      UserKey: state.auth.userKey,
+      showHistorySearchModel: state.card.showHistorySearchModel
   };
 };
-
 
 const mapDispatchToProps = dispatch => { // for this to work we need to connect this constant "mapDispatchToProps" with our component 
   return {
       // onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber) ),
+      onFetchCloseCards: (token,userId,branchNumber) => dispatch( actions.fetchCloseCards(token, userId,branchNumber)),
       onFetchNotification: (token, userId,branchNumber,userKey)=>dispatch(actions.fetchNotification(token, userId,branchNumber,userKey))
   };
 };

@@ -19,7 +19,8 @@ export {
     changeVehicleNumber,
     markCardIsOpen,
     markCardIsClosed,
-    logoutCardReducers
+    logoutCardReducers,
+    changeModalHistory
 } from './card';
 export {
     imageOrDocUploading,

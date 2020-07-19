@@ -14,29 +14,27 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
                 return req;
             });
             this.resInterceptor = axios.interceptors.response.use(res => res, error => {
-                console.log(error);
+                // console.log(error);
                 let errorInHebrew;
-                console.log(error);
-                console.log(error.message);
-                console.log(error.response);
+                // console.log(error);
+                // console.log(error.message);
+                // console.log(error.response);
                 if(error.response !== undefined ){
                 if(error.response.data.error === 'Auth token is expired'){
                     errorInHebrew='פג תוקף המשתמש, נא להתחבר מחדש';
-                    console.log(errorInHebrew);
+                    // console.log(errorInHebrew);
 
                 }
             }
 
                 else if(error.message === 'Network Error'){
                     errorInHebrew='אין חיבור אינטרנט'; 
-                    console.log(errorInHebrew);
 
                 }
-                console.log(errorInHebrew);
                 
             //    console.log(error.response.data.error);
-               console.log(error);
-               console.log(error.response);
+            //    console.log(error);
+            //    console.log(error.response);
             //    console.log(error.response.data);
                 this.setState({error: errorInHebrew});
             });

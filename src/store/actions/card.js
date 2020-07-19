@@ -815,3 +815,22 @@ export const logoutCardReducers = () => {
         type: actionTypes.AUTH_LOGOUT_CARD
     };
 };
+
+
+
+
+
+export const changeModalHistorySuccess = (mode) => { 
+    return {
+        type: actionTypes.CHANGE_MODAL_HISTORY_SUCCESS ,
+        mode: mode
+    };
+};
+
+export const changeModalHistory = (mode) => {  
+    console.log(mode);
+    return dispatch => {
+        dispatch( changeModalHistorySuccess(mode)); 
+        
+    };
+};
