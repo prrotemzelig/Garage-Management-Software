@@ -977,12 +977,12 @@ currency = (num) => {
     this.state.invoiceClosureIsCalculated =true;
     }
     
-    this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalPayment.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    this.state.invoiceClosure.amountOfVAT.value=this.state.invoiceClosure.amountOfVAT.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    this.state.invoiceClosure.allWorksNet.value=this.state.invoiceClosure.allWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    this.state.invoiceClosure.allExteriorWorksNet.value=this.state.invoiceClosure.allExteriorWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    this.state.invoiceClosure.allPartsNet.value=this.state.invoiceClosure.allPartsNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    this.state.invoiceClosure.totalNet.value=this.state.invoiceClosure.totalNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.totalPayment.value=this.state.invoiceClosure.totalPayment.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.amountOfVAT.value=this.state.invoiceClosure.amountOfVAT.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.allWorksNet.value=this.state.invoiceClosure.allWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.allExteriorWorksNet.value=this.state.invoiceClosure.allExteriorWorksNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.allPartsNet.value=this.state.invoiceClosure.allPartsNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    // this.state.invoiceClosure.totalNet.value=this.state.invoiceClosure.totalNet.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
 
     let workButtons =
@@ -1085,7 +1085,7 @@ currency = (num) => {
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   <label for="allWorksNet">נטו</label>
-                  <input type="text" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="allWorksNet" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allWorksNet.value} />
                 </form>
                  </div>
@@ -1118,7 +1118,7 @@ currency = (num) => {
 
                 <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                   {/* <label for="cellphone">נטו</label> */}
-                  <input type="text" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                  <input type="number" id="allExteriorWorksNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                   value={this.state.invoiceClosure.allExteriorWorksNet.value} />
                 </form>
                </div> 
@@ -1136,7 +1136,7 @@ currency = (num) => {
 
                     <form class="form-group col-md-2" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">הנחה</label> */}
-                    <input type="text" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    <input type="number" id="allPartsDiscount" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsDiscount.value}
                     onChange={!this.state.isPercentTotalEntered ? (event) => this.inputInvoicePartsGrossChangedHandler(event) : null} />
                     </form>
@@ -1150,7 +1150,7 @@ currency = (num) => {
 
                     <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                     {/* <label for="cellphone">נטו</label> */}
-                    <input type="text" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                    <input type="number" id="allPartsNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                     value={this.state.invoiceClosure.allPartsNet.value} />
                     </form>
                     </div> 
@@ -1172,7 +1172,7 @@ currency = (num) => {
 
                         <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
                         {/* <label for="cellphone">סה"כ</label> */}
-                        <input type="text" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="number" id="totalGross" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         value={this.state.invoiceClosure.totalGross.value} />
                         </form>
 
@@ -1191,7 +1191,7 @@ currency = (num) => {
                         </form>
 
                         <form class="form-group col-md-3" style={{ marginBottom: "1rem"}}>
-                        <input type="text" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                        <input type="number" id="totalNet" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                         value={this.state.invoiceClosure.totalNet.value} />
                         </form>
                         </div> 
@@ -1201,14 +1201,14 @@ currency = (num) => {
 
                         <div class="form-group col-md-3" style={{marginBottom: "2px"}}>
                         <label for="customerParticipation">השתתפות הלקוח</label>
-                        <input type="text"  id="customerParticipation" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
+                        <input type="number"  id="customerParticipation" class="form-control" autocomplete="off" style={{backgroundColor: "white"}} 
                         defaultValue={this.state.cardForm.customerParticipation.value}
                         onChange={!this.state.found ? (event) => this.inputChangedHandler(event) : (evt) => this.updateCardInputValue(evt,3)}/>
                       </div>
 
                       <div class="form-group col-md-3"  >
                       <label for="amountOfVAT" style={{textAlign: "right"}}> מע"מ 17%</label>
-                      <input type="text" id="amountOfVAT" class="form-control"  autocomplete="off" style={{backgroundColor: "white"}} 
+                      <input type="number" id="amountOfVAT" class="form-control"  autocomplete="off" style={{backgroundColor: "white"}} 
                           value={this.state.invoiceClosure.amountOfVAT.value}
                       />
                     </div>
@@ -1218,7 +1218,7 @@ currency = (num) => {
                             <div for="totalPayment" style={{fontWeight: "bold"}}>סה"כ לתשלום</div>
                             
                         <div  style={{ padding:"10px", backgroundColor: "gray"}}>
-                                <input type="text" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
+                                <input type="number" id="totalPayment" class="form-control" aria-describedby="passwordHelpInline" autocomplete="off" style={{backgroundColor: "white"}} disabled={!this.state.formIsValid} 
                                 value={this.state.invoiceClosure.totalPayment.value} />
                                 </div>
 
