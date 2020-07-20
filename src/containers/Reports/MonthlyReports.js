@@ -329,8 +329,8 @@ render() {
       this.state.countMonthOpen=0;
       this.state.countMonthWork=0;
       this.state.countMonthParts=0;
-      this.state.countMonthRevenue=0;
       this.state.countYearRevenue=0;
+      this.state.countMonthRevenue=0;
       this.state.counter=0;
 
       for(var i=0;i<this.state.card.length;i++){

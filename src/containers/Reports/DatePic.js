@@ -24,7 +24,7 @@ class Datepic extends React.Component {
                 startDate: new Date()
                 
         };
-        this.props.getData(new Date().getUTCDate()+'.'+(new Date().getMonth()+1)+'.'+new Date().getFullYear(),new Date().getMonth()+1,new Date().getFullYear());
+        this.props.getData(new Date().getUTCDate()+1 +'.'+(new Date().getMonth()+1)+'.'+new Date().getFullYear(),new Date().getMonth()+1,new Date().getFullYear());
         this.handleChange = this.handleChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.chartTypeSelected= this.chartTypeSelected.bind(this);
@@ -32,7 +32,7 @@ class Datepic extends React.Component {
 
         handleChange(date) {
         this.setState({startDate: date})
-        this.props.getData(date.getUTCDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear(),date.getMonth()+1,date.getFullYear());
+        this.props.getData(date.getUTCDate()+1 +'.'+(date.getMonth()+1)+'.'+date.getFullYear(),date.getMonth()+1,date.getFullYear());
         }
         
         onFormSubmit(e) {
