@@ -65,31 +65,26 @@ componentDidMount(){
 componentWillMount(){
   this.props.onFetchCloseCards(this.props.token, this.props.userId,this.props.branchNumber);
 }
+
 chartSelected(data){
     if(data==='עוגה'){this.state.chartType="Pie";}
     if(data==='מקלות'){this.state.chartType="Bar";}
     if(data==='גרף'){this.state.chartType="Line";}
 }
 
-createMountlyReport(data,month){
+createMountlyYearReport(data,month){
   this.state.arr=[0,0,0,0,0];
   var t=0;
   for(var i=0; i<data.length; i++){
     let openingDate=data[i].cardData.openingDate;
     let closeDate=data[i].closeDate;
-    //countYearRevenue
     if(openingDate.includes(month+"."+this.state.year)){
-      this.state.countMonthOpen+=1;
       this.state.arr[0]+=1;
-      this.state.counter=1;
       if(closeDate === undefined || closeDate === null || closeDate === ''){
       }
       else{
         if(closeDate.includes(month+"."+this.state.year)){
-          this.state.countMonthClose+=1;
           this.state.arr[1]+=1;
-
-          this.state.counter=1;
         }
       }
     }
@@ -108,17 +103,13 @@ createMountlyReport(data,month){
         for(var j=0;j<parts_card.length;j++){
           if(parts_card[j].amount === undefined || parts_card[j].amount === null || parts_card[j].amount === ''){}
           else{
-            this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
-            this.state.arr[2]+=parseInt(parts_card[j].amount, 10) ;
+            this.state.arr[2]+=parseInt(parts_card[j].amount, 10);
 
-            this.state.counter=1;
           }
           if(parts_card[j].net === undefined || parts_card[j].net === null || parts_card[j].net === ''){}
           else{
-            this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
-            this.state.arr[4]+=parseInt(parts_card[j].net, 10) ;
+            this.state.arr[4]+=parseInt(parts_card[j].net, 10);
 
-            this.state.counter=1;
           }
         }
       }
@@ -140,13 +131,9 @@ createMountlyReport(data,month){
           if(work_card[z].net === undefined || work_card[z].net === null || work_card[z].net === ''){
           }
           else{
-          this.state.countMonthWork+=1;
           this.state.arr[3]+=1;
-
-          this.state.countMonthRevenue+=parseInt(work_card[z].net, 10) ;
           this.state.arr[4]+=parseInt(work_card[z].net, 10) ;
 
-          this.state.counter=1;
           }
         }
       }
@@ -154,6 +141,78 @@ createMountlyReport(data,month){
   }
 
   this.state.yearReports.push(this.state.arr);
+}
+
+createMountlyReport(data,month){
+  for(var i=0; i<data.length; i++){
+    let openingDate=data[i].cardData.openingDate;
+    let closeDate=data[i].closeDate;
+    //countYearRevenue
+    if(openingDate.includes(month+"."+this.state.year)){
+      this.state.countMonthOpen+=1;
+      this.state.counter=1;
+      if(closeDate === undefined || closeDate === null || closeDate === ''){
+      }
+      else{
+        if(closeDate.includes(month+"."+this.state.year)){
+          this.state.countMonthClose+=1;
+          this.state.counter=1;
+        }
+      }
+    }
+  }
+  for(var k=0; k<data.length; k++){
+    let parts=[];
+    let parts_card;
+    parts=data[k].partsData;
+
+    let openingDate=data[k].cardData.openingDate;
+    if(openingDate.includes(month+"."+this.state.year)){
+      if(parts === undefined || parts === null || parts === ''){
+      }
+      else{
+        parts_card=Object.values(data[k].partsData);
+        for(var j=0;j<parts_card.length;j++){
+          if(parts_card[j].amount === undefined || parts_card[j].amount === null || parts_card[j].amount === ''){}
+          else{
+            this.state.countMonthParts+=parseInt(parts_card[j].amount, 10) ;
+            this.state.counter=1;
+          }
+          if(parts_card[j].net === undefined || parts_card[j].net === null || parts_card[j].net === ''){}
+          else{
+            this.state.countMonthRevenue+=parseInt(parts_card[j].net, 10) ;
+            this.state.counter=1;
+          }
+        }
+      }
+    }  
+  }
+  for(var s=0; s<data.length; s++){
+    let work=[];
+    let work_card;
+    work=data[s].workData;
+
+    let openingDate=data[s].cardData.openingDate;
+    if(openingDate.includes(month+"."+this.state.year)){
+      if(work === undefined || work === null || work === ''){
+      }
+      else{
+        work_card=Object.values(data[s].workData);
+        for(var z=0;z<work_card.length;z++){
+          if(work_card[z].net === undefined || work_card[z].net === null || work_card[z].net === ''){
+          }
+          else{
+          this.state.countMonthWork+=1;
+
+          this.state.countMonthRevenue+=parseInt(work_card[z].net, 10) ;
+          this.state.counter=1;
+          }
+        }
+      }
+    } 
+  }
+
+  //this.state.yearReports.push(this.state.arr);
 
  // return this.state.arr;
 }
@@ -281,9 +340,13 @@ render() {
         cards.push(this.state.closeCard[j]);
       }
       this.createYearReport(this.state.closeCard);
+      this.createMountlyReport(cards,this.state.month);
       for(var i=1;i<13;i++){
-        this.createMountlyReport(cards,i);
+        this.createMountlyYearReport(cards,i);
       }
+      console.log(this.state.countMonthOpen);
+      console.log(this.state.month);
+
 
       if(this.state.counter===0){this.modalOpen();}
       if(this.state.month===1){this.state.hebrewMonth="ינואר"};
@@ -577,12 +640,6 @@ else{
                     <ExcelExportColumn field="revenue" title="סכום ההכנסות" width={150} />
                    
                     <ExcelExportColumnGroup title="Availability" headerCellOptions={{ textAlign: 'center' }}></ExcelExportColumnGroup>
-                    <ExcelExportColumn
-                        field="Discontinued"
-                        title="Discontinued"
-                        hidden={false}
-                        groupHeader={this.CustomGroupHeader}
-                    />
         </ExcelExport>
       
          </Grid>
