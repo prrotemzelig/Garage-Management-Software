@@ -114,6 +114,7 @@ this.props.onPartModalOpening( ); // this contains all the data of card //this.p
 
 onMultipleImagesDownload(node) {
   Object.keys(this.state.imagesArrayForCheck).map((key, i) => {
+    console.log(this.props.userId + this.props.token + this.props.branchNumber + this.state.identifiedCardID + this.state.cardDetails['ticketNumber'] + node + key);
     this.props.onDownloadImage(this.props.userId ,this.props.token,this.props.branchNumber,this.state.identifiedCardID,this.state.cardDetails['ticketNumber'], node,key);   
      delete this.state.imagesArrayForCheck[key];
     })

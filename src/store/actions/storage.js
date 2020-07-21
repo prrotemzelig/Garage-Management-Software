@@ -487,6 +487,7 @@ export const downloadImageFail = ( error ) => {
 
 
 export const downloadImage = ( userId ,token,branchNumber,cardKey,ticketNumber,node,name) => { 
+    console.log( userId + token + branchNumber + cardKey + ticketNumber + node+name);
     return dispatch => {
             dispatch( downloadImageStart() ); 
             storageRef.child(branchNumber + "/" + ticketNumber + "/" + node + "/" + name).getDownloadURL().then(function(url) {

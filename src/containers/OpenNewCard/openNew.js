@@ -2278,7 +2278,7 @@ renderWorksModal = (list) => { ///*** workkkkkkk modal! ****
 
             <div class="form-group col-md-2"  style={{ marginBottom: "4px"}}  >
              <label for="gross">ברוטו</label>
-             <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" 
+             <input type="number"   id="gross" class="form-control" autocomplete="off" value={this.state.cardWork.gross.value} aria-describedby="passwordHelpInline" 
               onChange = {(event) => this.inputNewWorkChangedHandler(event)}/>
               </div>
 
